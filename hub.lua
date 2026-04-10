@@ -350,11 +350,14 @@ if game.PlaceId == 893973440 then
 	})
 
 	task.spawn(function()
-		while task.wait(10) do
+		while task.wait(5) do
 			UpdateBeastESP()
 			UpdatePlrESP()
 		end
 	end)
+
+	UpdateBeastESP()
+	UpdatePlrESP()
 
 	local FTFUtilsSection = FTFTab:CreateSection("Utils")
 
