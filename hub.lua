@@ -447,10 +447,14 @@ if game.PlaceId == 893973440 then
 			for i, v in pairs(game.Workspace:GetDescendants()) do
 				if v.Name == "FreezePod" then
 					local pod = v:FindFirstChild("PodTrigger")
-					local dist = dist3d(plrPos, pod.Position)
-					if dist < best_pod_dist and dist > 20 then
-						best_pod = pod
-						best_pod_dist = dist
+					local capturedTorsoValue = pod:FindFirstChild("CapturedTorso")
+
+					if capturedTorsoValue.Value == nil then
+						local dist = dist3d(plrPos, pod.Position)
+						if dist < best_pod_dist and dist > 20 then
+							best_pod = pod
+							best_pod_dist = dist
+						end
 					end
 				end
 			end
