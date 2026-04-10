@@ -15,6 +15,57 @@ local function WaitForGameAndPlayer()
 	end
 end
 
+local function dist3d(pos1, pos2)
+	return math.sqrt((pos2.x - pos1.x) ^ 2 + (pos2.y - pos1.y) ^ 2 + (pos2.z - pos1.z) ^ 2)
+end
+
+local function breakVelocity()
+	task.spawn(function()
+		local speaker = game:GetService("Players").LocalPlayer
+		local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
+		task.spawn(function()
+			task.wait(1)
+			BeenASecond = true
+		end)
+		while not BeenASecond do
+			for _, v in ipairs(speaker.Character:GetDescendants()) do
+				if v:IsA("BasePart") then
+					v.Velocity, v.RotVelocity = V3, V3
+				end
+			end
+			task.wait()
+		end
+	end)
+end
+
+function getRoot(char)
+	if char and char:FindFirstChildOfClass("Humanoid") then
+		return char:FindFirstChildOfClass("Humanoid").RootPart
+	else
+		return nil
+	end
+end
+
+local function tweenGotoPart(part)
+	local speaker = game:GetService("Players").LocalPlayer
+	local TweenService = game:GetService("TweenService")
+
+	if part:IsA("BasePart") then
+		if
+			speaker.Character:FindFirstChildOfClass("Humanoid")
+			and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
+		then
+			speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
+			task.wait(0.1)
+		end
+		task.wait(0.1)
+		TweenService
+			:Create(getRoot(speaker.Character), TweenInfo.new(1, Enum.EasingStyle.Linear), { CFrame = part.CFrame })
+			:Play()
+	end
+	breakVelocity()
+end
+
 WaitForGameAndPlayer()
 
 local looped_functions = {}
@@ -378,6 +429,33 @@ if game.PlaceId == 893973440 then
 		Flag = nil,
 		Callback = function(value)
 			no_fog_toggled = value
+		end,
+	})
+
+	local FTFFreezePodKeybind = FTFTab:CreateKeybind({
+		Name = "Teleport to Freeze Pod",
+		CurrentKeybind = "F",
+		HoldToInteract = false,
+		Flag = "FTFFreezePodKeybind", -- A flag is the identifier for the configuration file. Make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+		Callback = function()
+			local best_pod
+			local best_pod_dist = 99999999
+
+			local char = game:GetService("Players").LocalPlayer.Character
+			local plrPos = char.HumanoidRootPart.Position
+
+			for i, v in pairs(game.Workspace:GetDescendants()) do
+				if v.Name == "FreezePod" then
+					local pod = v:FindFirstChild("PodTrigger")
+					local dist = dist3d(plrPos, pod.Position)
+					if dist < best_pod_dist and dist > 20 then
+						best_pod = pod
+						best_pod_dist = dist
+					end
+				end
+			end
+
+			tweenGotoPart(best_pod)
 		end,
 	})
 
