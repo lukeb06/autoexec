@@ -354,10 +354,10 @@ if game.PlaceId == 893973440 then
 			UpdateBeastESP()
 			UpdatePlrESP()
 		end
-	end)
 
-	UpdateBeastESP()
-	UpdatePlrESP()
+		UpdateBeastESP()
+		UpdatePlrESP()
+	end)
 
 	local FTFUtilsSection = FTFTab:CreateSection("Utils")
 
