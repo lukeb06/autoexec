@@ -368,10 +368,29 @@ if game.PlaceId == 893973440 then
 		end,
 	})
 
+	local no_fog_toggled = true
+	local FTFNoFog = FTFTab:CreateToggle({
+		Name = "No Fog",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			no_fog_toggled = value
+		end,
+	})
+
 	task.spawn(function()
 		while task.wait() do
 			if no_errors_toggled then
 				game.ReplicatedStorage.RemoteEvent:FireServer("SetPlayerMinigameResult", true)
+			end
+
+			if no_fog_toggled then
+				game:GetService("Lighting").Atmosphere.Density = 0
+				game:GetService("Lighting").Atmosphere.Offset = 0
+				game:GetService("Lighting").Atmosphere.Glare = 0
+				game:GetService("Lighting").Atmosphere.Haze = 0
+				game:GetService("Lighting").Blur.Enabled = false
+				game:GetService("Lighting").DepthOfField.Enabled = false
 			end
 		end
 	end)
