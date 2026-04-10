@@ -38,7 +38,7 @@ local function breakVelocity()
 	end)
 end
 
-function getRoot(char)
+local function getRoot(char)
 	if char and char:FindFirstChildOfClass("Humanoid") then
 		return char:FindFirstChildOfClass("Humanoid").RootPart
 	else
@@ -251,6 +251,30 @@ local UniversalESPToggle = UniversalTab:CreateToggle({
 	end,
 })
 
+local ussPlr = game:GetService("Players").LocalPlayer
+local ussChar = ussPlr and ussPlr.Character
+local ussHum = ussChar and ussChar.Humanoid
+
+local ussSpeed = (ussHum and ussHum.WalkSpeed) or 16
+
+task.spawn(function()
+	while task.wait() do
+		game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = ussSpeed
+	end
+end)
+
+local UniversalSpeedSlider = UniversalTab:CreateSlider({
+	Name = "Speed",
+	Range = { 0, 100 },
+	Increment = 1,
+	Suffix = "",
+	CurrentValue = ussSpeed,
+	Flag = nil, -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(value)
+		ussSpeed = value
+	end,
+})
+
 -- Flee The Facility
 
 if game.PlaceId == 893973440 then
@@ -432,6 +456,16 @@ if game.PlaceId == 893973440 then
 		end,
 	})
 
+	local better_cam_toggled = true
+	local FTFBetterCam = FTFTab:CreateToggle({
+		Name = "Better Camera",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			better_cam_toggled = value
+		end,
+	})
+
 	local FTFFreezePodKeybind = FTFTab:CreateKeybind({
 		Name = "Teleport to Freeze Pod",
 		CurrentKeybind = "F",
@@ -476,6 +510,14 @@ if game.PlaceId == 893973440 then
 				game:GetService("Lighting").Atmosphere.Haze = 0
 				game:GetService("Lighting").Blur.Enabled = false
 				game:GetService("Lighting").DepthOfField.Enabled = false
+			end
+
+			if better_cam_toggled then
+				local player = game:GetService("Players").LocalPlayer
+				if player then
+					player.CameraMode = Enum.CameraMode.Classic
+					player.CameraMaxZoomDistance = 30
+				end
 			end
 		end
 	end)
