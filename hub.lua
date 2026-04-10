@@ -11,7 +11,7 @@ local function WaitForGameAndPlayer()
 			playerLoaded = true
 		end
 
-		wait()
+		task.wait()
 	end
 end
 
@@ -149,6 +149,8 @@ local PathSlider = UniversalTab:CreateSlider({
 
 local DelSection = UniversalTab:CreateSection("Ctrl+Click Delete")
 
+local CtrlClickInstructions = UniversalTab:CreateLabel("Ctrl+Left-Click a part to delete. Ctrl+Right-Click to restore")
+
 local CtrlClickDelToggle = UniversalTab:CreateToggle({
 	Name = "Ctrl+Click Delete",
 	CurrentValue = true,
@@ -157,6 +159,225 @@ local CtrlClickDelToggle = UniversalTab:CreateToggle({
 		ctrl_click_delete_toggled = value
 	end,
 })
+
+local UniversalESPSection = UniversalTab:CreateSection("Universal ESP")
+
+function updateUniversalESP(highlights, color, enabled)
+	for i, v in pairs(highlights) do
+		if not enabled then
+			table.remove(highlights, i)
+			v:Destroy()
+		elseif v.Adornee == nil or v.Adornee.Parent == nil then
+			table.remove(highlights, i)
+			v:Destroy()
+		end
+	end
+
+	if enabled then
+		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+			if v.Character and v ~= game:GetService("Players").LocalPlayer then
+				local NewHighlight = Instance.new("Highlight")
+				NewHighlight.Adornee = v.Character
+				NewHighlight.FillColor = color
+				NewHighlight.Parent = v.Character
+				table.insert(highlights, NewHighlight)
+			end
+		end
+	else
+		for i, v in pairs(highlights) do
+			v:Destroy()
+		end
+	end
+end
+
+local universal_esp_highlights = {}
+local UniversalESPToggle = UniversalTab:CreateToggle({
+	Name = "Universal ESP",
+	CurrentValue = false,
+	Flag = nil,
+	Callback = function(value)
+		updateUniversalESP(universal_esp_highlights, Color3.fromRGB(255, 0, 0), value)
+	end,
+})
+
+-- Flee The Facility
+
+if game.PlaceId == 893973440 then
+	local FTFTab = Window:CreateTab("Flee The Facility", "gamepad-2")
+	local FTFESPSection = FTFTab:CreateSection("ESP")
+
+	local BeastHighlights = {}
+	local beast_esp_toggled = true
+	function UpdateBeastESP()
+		for i, v in pairs(BeastHighlights) do
+			if not beast_esp_toggled then
+				table.remove(BeastHighlights, i)
+				v:Destroy()
+			elseif v.Adornee == nil then
+				table.remove(BeastHighlights, i)
+				v:Destroy()
+			end
+		end
+		if beast_esp_toggled then
+			for i, v in pairs(game.Players:GetPlayers()) do
+				if v.Character and v.Character:FindFirstChild("BeastPowers") and v ~= game.Players.LocalPlayer then
+					local NewHighlight = Instance.new("Highlight")
+					NewHighlight.Adornee = v.Character
+					NewHighlight.Parent = v.Character
+					table.insert(BeastHighlights, NewHighlight)
+				end
+			end
+		else
+			for i, v in pairs(BeastHighlights) do
+				v:Destroy()
+			end
+		end
+	end
+
+	local FTFBeastEspToggle = FTFTab:CreateToggle({
+		Name = "Beast ESP",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			beast_esp_toggled = value
+			UpdateBeastESP()
+		end,
+	})
+
+	local PlrHighlights = {}
+	local player_esp_toggled = true
+	function UpdatePlrESP()
+		for i, v in pairs(PlrHighlights) do
+			if not player_esp_toggled then
+				table.remove(PlrHighlights, i)
+				v:Destroy()
+			elseif v.Adornee == nil or v.Adornee.Parent == nil or v.Adornee.Parent:FindFirstChild("BeastPowers") then
+				table.remove(PlrHighlights, i)
+				v:Destroy()
+			end
+		end
+		if player_esp_toggled then
+			for i, v in pairs(game.Players:GetPlayers()) do
+				if v.Character and not v.Character:FindFirstChild("BeastPowers") and v ~= game.Players.LocalPlayer then
+					local NewHighlight = Instance.new("Highlight")
+					NewHighlight.Adornee = v.Character
+					NewHighlight.FillColor = Color3.fromRGB(0, 255, 0)
+					NewHighlight.Parent = v.Character
+					table.insert(PlrHighlights, NewHighlight)
+				end
+			end
+		else
+			for i, v in pairs(PlrHighlights) do
+				v:Destroy()
+			end
+		end
+	end
+
+	local FTFPlayerEspToggle = FTFTab:CreateToggle({
+		Name = "Player ESP",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			player_esp_toggled = value
+			UpdatePlrESP()
+		end,
+	})
+
+	local PCHighlights = {}
+	local computer_esp_toggled = true
+
+	local Comp = 0
+
+	task.spawn(function()
+		while task.wait() do
+			local GotComputers = 0
+			for i, v in pairs(game.Workspace:GetChildren()) do
+				if v:FindFirstChild("MapThumbnail") then
+					for i2, v2 in pairs(v:GetChildren()) do
+						if v2.Name == "ComputerTable" and v2:FindFirstChild("Screen") then
+							GotComputers += 1
+							if computer_esp_toggled then
+								local Found = false
+								for i3, v3 in pairs(PCHighlights) do
+									if v3.Adornee == v2 then
+										v3.FillColor = v2.Screen.Color
+										Found = true
+									end
+								end
+								if Found == false then
+									local NewHighlight = Instance.new("Highlight")
+									NewHighlight.FillColor = v2.Screen.Color
+									NewHighlight.Adornee = v2
+									NewHighlight.Parent = v2
+									table.insert(PCHighlights, NewHighlight)
+								end
+							else
+								for i3, v3 in pairs(PCHighlights) do
+									table.remove(PCHighlights, i3)
+									v3:Destroy()
+								end
+							end
+						end
+					end
+				end
+			end
+
+			if GotComputers ~= Comp then
+				coroutine.wrap(function()
+					if GotComputers == 0 then
+						task.wait(1)
+						UpdatePlrESP()
+						UpdateBeastESP()
+					else
+						task.wait(3)
+						UpdatePlrESP()
+						task.wait(15)
+						UpdateBeastESP()
+					end
+				end)()
+				Comp = GotComputers
+			end
+		end
+	end)
+
+	local FTFPCEspToggle = FTFTab:CreateToggle({
+		Name = "Computer ESP",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			computer_esp_toggled = value
+		end,
+	})
+
+	task.spawn(function()
+		while task.wait(10) do
+			UpdateBeastESP()
+			UpdatePlrESP()
+		end
+	end)
+
+	local FTFUtilsSection = FTFTab:CreateSection("Utils")
+
+	local no_errors_toggled = true
+	local FTFNoErrorToggle = FTFTab:CreateToggle({
+		Name = "No Errors",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			no_errors_toggled = value
+		end,
+	})
+
+	task.spawn(function()
+		while task.wait() do
+			if no_errors_toggled then
+				game.ReplicatedStorage.RemoteEvent:FireServer("SetPlayerMinigameResult", true)
+			end
+		end
+	end)
+end
+
+-- Externals
 
 local DexTab = Window:CreateTab("Dex", "telescope")
 
@@ -214,8 +435,10 @@ end
 
 path_vertical_offset = PathSlider.CurrentValue
 
-while wait() do
-	for i, v in pairs(looped_functions) do
-		task.spawn(v)
+task.spawn(function()
+	while task.wait() do
+		for i, v in pairs(looped_functions) do
+			task.spawn(v)
+		end
 	end
-end
+end)
