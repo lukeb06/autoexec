@@ -565,6 +565,8 @@ if game.PlaceId == 893973440 then
 		local oldPosV
 		local oldPathToggled = false
 
+		local beast_max_dist = 15
+
 		while task.wait() do
 			if no_errors_toggled then
 				game.ReplicatedStorage.RemoteEvent:FireServer("SetPlayerMinigameResult", true)
@@ -596,24 +598,28 @@ if game.PlaceId == 893973440 then
 					if char then
 						local dist = dist3d(char.HumanoidRootPart.Position, beastChar.HumanoidRootPart.Position)
 
-						if dist < 15 then
+						if dist < beast_max_dist then
 							if not hidingFromBeast then
 								oldPos = char.HumanoidRootPart.CFrame
 								oldPosV = char.HumanoidRootPart.Position
 								oldPathToggled = path_toggled
 								enableNoclip()
+
+								local newPos = char.HumanoidRootPart.CFrame * CFrame.new(0, -beast_max_dist, 0)
+
+								char.HumanoidRootPart.CFrame = newPos
+
+								hidingFromBeast = true
+								path_toggled = true
+							else
+								local newPos = char.HumanoidRootPart.CFrame * CFrame.new(0, -1, 0)
+
+								char.HumanoidRootPart.CFrame = newPos
 							end
-
-							local newPos = char.HumanoidRootPart.CFrame * CFrame.new(0, -1, 0)
-
-							char.HumanoidRootPart.CFrame = newPos
-
-							hidingFromBeast = true
-							path_toggled = true
 						elseif hidingFromBeast then
 							local testDist = dist3d(oldPosV, beastChar.HumanoidRootPart.Position)
 
-							if testDist >= 15 then
+							if testDist >= beast_max_dist then
 								char.HumanoidRootPart.CFrame = oldPos
 								path_toggled = oldPathToggled
 								hidingFromBeast = false
