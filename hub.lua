@@ -559,19 +559,13 @@ if game.PlaceId == 893973440 then
 		return nil
 	end
 
-	local function getAvoidanceDir(avoidee)
-		local avoideeRoot = avoidee.HumanoidRootPart
-
-		return avoideeRoot.CFrame.LookVector * -1
-	end
-
 	task.spawn(function()
 		local hidingFromBeast = false
 		local oldPos
 		local oldPosV
 		local oldGravity = game.Workspace.Gravity
 
-		local beast_max_dist = 10
+		local beast_max_dist = 15
 
 		local V3 = Vector3.new(0, 0, 0)
 
@@ -637,9 +631,7 @@ if game.PlaceId == 893973440 then
 					end
 
 					if hidingFromBeast then
-						local dir = getAvoidanceDir(beastChar)
-
-						local newPos = beastChar.HumanoidRootPart.CFrame * CFrame.new(dir * beast_max_dist)
+						local newPos = beastChar.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
 						char.HumanoidRootPart.CFrame = newPos
 
 						for _, v in ipairs(char:GetDescendants()) do
