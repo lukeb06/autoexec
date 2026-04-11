@@ -560,7 +560,7 @@ if game.PlaceId == 142823291 then
 							plr.CameraMode = Enum.CameraMode.LockFirstPerson
 							local pos = root.CFrame
 
-							task.wait(0.1)
+							task.wait(1)
 
 							root.CFrame = pRoot.CFrame * CFrame.new(0, 0, 1)
 
