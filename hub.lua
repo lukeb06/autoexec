@@ -443,27 +443,28 @@ if game.PlaceId == 142823291 then
 				local knifePlayer = plr.Character:FindFirstChild("Knife")
 
 				if knifePlayer then
-					for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-						local pChar = v.Character
+					task.spawn(function()
+						local running = true
+						task.spawn(function()
+							task.wait(1)
+							running = false
+						end)
+						while running do
+							for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+								local pChar = v.Character
 
-						if pChar and v ~= game:GetService("Players").LocalPlayer then
-							removeCollisions(pChar)
-							pChar.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -3)
-							pChar.HumanoidRootPart.Anchored = true
+								if pChar and v ~= game:GetService("Players").LocalPlayer then
+									pChar.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -3)
+								end
+							end
+
+							task.wait()
 						end
-					end
+					end)
 
 					task.wait()
 
 					knifePlayer:Activate()
-
-					for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-						local pChar = v.Character
-
-						if pChar and v ~= game:GetService("Players").LocalPlayer then
-							pChar.HumanoidRootPart.Anchored = false
-						end
-					end
 				end
 			end
 		end,
