@@ -551,46 +551,50 @@ if game.PlaceId == 893973440 then
 			end
 
 			if auto_hide_toggled then
-				local beast = findBeast()
-				local beastChar = beast and beast.Character
-				local plr = game:GetService("Players").LocalPlayer
-				local char = plr and plr.Character
-				if beastChar then
-					if char then
-						local dist = dist3d(char.HumanoidRootPart.Position, beastChar.HumanoidRootPart.Position)
+				task.spawn(function()
+					local beast = findBeast()
+					local beastChar = beast and beast.Character
+					local plr = game:GetService("Players").LocalPlayer
+					local char = plr and plr.Character
+					if beastChar then
+						if char then
+							local dist = dist3d(char.HumanoidRootPart.Position, beastChar.HumanoidRootPart.Position)
 
-						local dir = (beastChar.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Unit
+							local dir = (beastChar.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Unit
 
-						if dist < beast_max_dist then
-							if not hidingFromBeast then
-								oldPos = char.HumanoidRootPart.CFrame
-								oldPosV = char.HumanoidRootPart.Position
+							if dist < beast_max_dist then
+								if not hidingFromBeast then
+									oldPos = char.HumanoidRootPart.CFrame
+									oldPosV = char.HumanoidRootPart.Position
 
-								local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir * beast_max_dist)
-								char.HumanoidRootPart.CFrame = newPos
+									local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir * beast_max_dist)
+									char.HumanoidRootPart.CFrame = newPos
 
-								char.HumanoidRootPart.Anchored = true
+									task.wait()
+									char.HumanoidRootPart.Anchored = true
 
-								hidingFromBeast = true
-							else
-								local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir)
-								char.HumanoidRootPart.CFrame = newPos
-							end
-						elseif hidingFromBeast then
-							local testDist = dist3d(oldPosV, beastChar.HumanoidRootPart.Position)
+									hidingFromBeast = true
+								else
+									local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir)
+									char.HumanoidRootPart.CFrame = newPos
+								end
+							elseif hidingFromBeast then
+								local testDist = dist3d(oldPosV, beastChar.HumanoidRootPart.Position)
 
-							if testDist >= beast_max_dist then
-								char.HumanoidRootPart.Anchored = false
-								char.HumanoidRootPart.CFrame = oldPos
-								hidingFromBeast = false
+								if testDist >= beast_max_dist then
+									char.HumanoidRootPart.Anchored = false
+									task.wait()
+									char.HumanoidRootPart.CFrame = oldPos
+									hidingFromBeast = false
+								end
 							end
 						end
+					elseif hidingFromBeast then
+						hidingFromBeast = false
+						char.HumanoidRootPart.CFrame = oldPos
+						char.HumanoidRootPart.Anchored = false
 					end
-				elseif hidingFromBeast then
-					hidingFromBeast = false
-					char.HumanoidRootPart.CFrame = oldPos
-					char.HumanoidRootPart.Anchored = false
-				end
+				end)
 			end
 		end
 	end)
