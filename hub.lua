@@ -591,54 +591,52 @@ if game.PlaceId == 893973440 then
 			end
 
 			if auto_hide_toggled then
-				task.spawn(function()
-					local beast = findBeast()
-					local beastChar = beast and beast.Character
-					local plr = game:GetService("Players").LocalPlayer
-					local char = plr and plr.Character
-					if beastChar then
-						if char then
-							local dist = dist3d(char.HumanoidRootPart.Position, beastChar.HumanoidRootPart.Position)
+				local beast = findBeast()
+				local beastChar = beast and beast.Character
+				local plr = game:GetService("Players").LocalPlayer
+				local char = plr and plr.Character
+				if beastChar then
+					if char then
+						local dist = dist3d(char.HumanoidRootPart.Position, beastChar.HumanoidRootPart.Position)
 
-							if dist < beast_max_dist then
-								if not hidingFromBeast then
-									oldPos = char.HumanoidRootPart.CFrame
-									oldPosV = char.HumanoidRootPart.Position
-									game.Workspace.Gravity = 0
+						if dist < beast_max_dist then
+							if not hidingFromBeast then
+								oldPos = char.HumanoidRootPart.CFrame
+								oldPosV = char.HumanoidRootPart.Position
+								game.Workspace.Gravity = 0
 
-									enableNoclip()
+								enableNoclip()
 
-									hidingFromBeast = true
-								end
-							elseif hidingFromBeast then
-								local testDist = dist3d(oldPosV, beastChar.HumanoidRootPart.Position)
-
-								if testDist >= beast_max_dist then
-									char.HumanoidRootPart.CFrame = oldPos
-									game.Workspace.Gravity = 196.21
-									disableNoclip()
-									hidingFromBeast = false
-								end
+								hidingFromBeast = true
 							end
 						end
-					elseif hidingFromBeast then
+					end
+				elseif hidingFromBeast then
+					char.HumanoidRootPart.CFrame = oldPos
+					game.Workspace.Gravity = 196.2
+					disableNoclip()
+					hidingFromBeast = false
+				end
+
+				if hidingFromBeast then
+					local testDist = dist3d(oldPosV, beastChar.HumanoidRootPart.Position)
+
+					if testDist >= beast_max_dist then
 						char.HumanoidRootPart.CFrame = oldPos
-						game.Workspace.Gravity = 196.2
+						game.Workspace.Gravity = 196.21
 						disableNoclip()
 						hidingFromBeast = false
 					end
 
-					if hidingFromBeast then
-						local newPos = beastChar.HumanoidRootPart.CFrame * CFrame.new(0, -10, 0)
-						char.HumanoidRootPart.CFrame = newPos
+					local newPos = beastChar.HumanoidRootPart.CFrame * CFrame.new(0, -10, 0)
+					char.HumanoidRootPart.CFrame = newPos
 
-						for _, v in ipairs(char:GetDescendants()) do
-							if v:IsA("BasePart") then
-								v.Velocity, v.RotVelocity = V3, V3
-							end
+					for _, v in ipairs(char:GetDescendants()) do
+						if v:IsA("BasePart") then
+							v.Velocity, v.RotVelocity = V3, V3
 						end
 					end
-				end)
+				end
 			end
 		end
 	end)
