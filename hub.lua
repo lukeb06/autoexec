@@ -569,12 +569,12 @@ if game.PlaceId == 893973440 then
 									oldPos = char.HumanoidRootPart.CFrame
 									oldPosV = char.HumanoidRootPart.Position
 
-									local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir * beast_max_dist)
+									local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir * -beast_max_dist)
 									char.HumanoidRootPart.CFrame = newPos
 
 									hidingFromBeast = true
 								else
-									local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir)
+									local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir * -1)
 									char.HumanoidRootPart.CFrame = newPos
 								end
 							elseif hidingFromBeast then
