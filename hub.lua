@@ -567,10 +567,8 @@ if game.PlaceId == 142823291 then
 							local connection
 
 							connection = game:GetService("RunService").RenderStepped:Connect(function()
-								if tick() - startTime > 0.5 then -- how long to force the look (0.2 seconds here)
+								if tick() - startTime > 0.25 then -- how long to force the look (0.2 seconds here)
 									connection:Disconnect()
-									root.CFrame = pos -- return to original position
-									plr.CameraMode = Enum.CameraMode.Classic
 									return
 								end
 
@@ -581,9 +579,14 @@ if game.PlaceId == 142823291 then
 								camera.CFrame = CFrame.lookAt(camPos, pRoot.Position)
 							end)
 
-							task.wait(0.2)
+							task.wait(0.1)
 
 							gunPlayer:Activate()
+
+							task.wait(0.2)
+
+							root.CFrame = pos -- return to original position
+							plr.CameraMode = Enum.CameraMode.Classic
 
 							task.wait(5)
 						end
