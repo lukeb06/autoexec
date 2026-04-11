@@ -643,6 +643,14 @@ if game.PlaceId == 893973440 then
 						end
 					end
 				end
+			elseif hidingFromBeast then
+				local plr = game:GetService("Players").LocalPlayer
+				local char = plr and plr.Character
+
+				char.HumanoidRootPart.CFrame = oldPos
+				game.Workspace.Gravity = 196.21
+				disableNoclip()
+				hidingFromBeast = false
 			end
 		end
 	end)
