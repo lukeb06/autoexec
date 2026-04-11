@@ -320,7 +320,7 @@ task.spawn(function()
 	while task.wait() do
 		local plr = game:GetService("Players").LocalPlayer
 		local char = plr and plr.Character
-		local hum = char and char.Humanoid
+		local hum = char and char:FindFirstChild("Humanoid")
 
 		if hum then
 			hum.WalkSpeed = ussSpeed
@@ -349,7 +349,7 @@ if game.PlaceId == 142823291 then
 	local function updatePlayerESP(enabled)
 		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
 			if v.Character and v ~= game:GetService("Players").LocalPlayer then
-				local backpack = v.Backpack
+				local backpack = v:FindFirstChild("Backpack")
 				local char = v.Character
 
 				local gunBackpack = backpack and backpack:FindFirstChild("Gun")
@@ -480,22 +480,110 @@ if game.PlaceId == 142823291 then
 		end,
 	})
 	task.spawn(function()
+		local pickupGun = true
+
 		while task.wait() do
 			if mm_grab_gun_toggled then
 				local gun = game.Workspace:FindFirstChild("GunDrop", true)
 
-				if gun then
-					task.wait(1)
+				if not gun and not pickupGun then
+					pickupGun = true
+				end
 
+				if gun and pickupGun then
 					local plr = game:GetService("Players").LocalPlayer
 					local char = plr and plr.Character
 					local root = char and char.HumanoidRootPart
 					local pos = root and root.CFrame
 
 					if root then
+						task.wait(2)
 						root.CFrame = gun.CFrame
 						task.wait(0.2)
 						root.CFrame = pos
+					end
+
+					pickupGun = false
+				end
+			end
+		end
+	end)
+
+	local mm_kill_murderer_toggled = true
+	local MMKillMurdererToggle = MMTab:CreateToggle({
+		Name = "Auto Kill Murderer",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			mm_kill_murderer_toggled = value
+		end,
+	})
+	task.spawn(function()
+		while task.wait() do
+			if mm_kill_murderer_toggled then
+				local plr = game:GetService("Players").LocalPlayer
+				local char = plr and plr.Character
+				local hum = char and char:FindFirstChild("Humanoid")
+				local root = char and char:FindFirstChild("HumanoidRootPart")
+				local backpack = plr and plr.Backpack
+
+				if hum then
+					local gunBackpack = backpack and backpack:FindFirstChild("Gun")
+
+					if gunBackpack then
+						hum:EquipTool(gunBackpack)
+						task.wait()
+					end
+
+					local gunPlayer = char and char:FindFirstChild("Gun")
+
+					local camera = workspace.CurrentCamera
+
+					if gunPlayer and root and camera then
+						local murderer
+						for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+							local pBackpack = v.Backpack
+							local pChar = v.Character
+
+							local knifeBackpack = pBackpack and pBackpack:FindFirstChild("Knife")
+							local knifePlayer = pChar and pChar:FindFirstChild("Knife")
+
+							if knifeBackpack or knifePlayer then
+								murderer = v
+							end
+						end
+
+						local pChar = murderer and murderer.Character
+						local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
+
+						if pRoot then
+							plr.CameraMode = Enum.CameraMode.LockFirstPerson
+							task.wait(0.5)
+
+							local pos = root.CFrame
+							root.CFrame = pRoot.CFrame * CFrame.new(0, 0, 1)
+
+							local startTime = tick()
+							local connection
+
+							connection = game:GetService("RunService").RenderStepped:Connect(function()
+								if tick() - startTime > 0.2 then -- how long to force the look (0.2 seconds here)
+									connection:Disconnect()
+									root.CFrame = pos -- return to original position
+									return
+								end
+
+								-- Better first-person feel: look from roughly head height
+								local head = plr.Character:FindFirstChild("Head")
+								local camPos = head and head.Position or root.Position + Vector3.new(0, 1.5, 0)
+
+								camera.CFrame = CFrame.lookAt(camPos, pRoot.Position)
+							end)
+
+							task.wait()
+
+							gunPlayer:Activate()
+						end
 					end
 				end
 			end
