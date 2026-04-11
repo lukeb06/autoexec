@@ -141,9 +141,10 @@ table.insert(looped_functions, function()
 
 		if root and hum then
 			local i = root.Position
+			local s = root.Size.Y
 			local h = hum.HipHeight
 
-			p.Position = Vector3.new(i.x, i.y - h, i.z)
+			p.Position = Vector3.new(i.x, (i.y - s / 2) - h + path_vertical_offset, i.z)
 		end
 	end
 end)
@@ -241,11 +242,11 @@ local PathKeybind = UniversalTab:CreateKeybind({
 
 local PathSlider = UniversalTab:CreateSlider({
 	Name = "Vertical Offset",
-	Range = { -5, 0 },
+	Range = { -2, 0 },
 	Increment = 0.1,
 	Suffix = "",
-	CurrentValue = -3.5,
-	Flag = "PathVerticalOffsetSlider", -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	CurrentValue = -0.5,
+	Flag = "PathVerticalOffset", -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
 		path_vertical_offset = value
 	end,
@@ -447,12 +448,15 @@ if game.PlaceId == 142823291 then
 
 						if pChar and v ~= game:GetService("Players").LocalPlayer then
 							removeCollisions(pChar)
-							pChar.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -3)
+							enableNoclip()
+							pChar.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -1)
 							pChar.HumanoidRootPart.Anchored = true
 						end
 					end
 
 					knifePlayer:Activate()
+
+					disableNoclip()
 
 					for i, v in pairs(game:GetService("Players"):GetPlayers()) do
 						local pChar = v.Character
@@ -488,9 +492,11 @@ if game.PlaceId == 142823291 then
 					local root = char and char.HumanoidRootPart
 					local pos = root and root.CFrame
 
-					root.CFrame = gun.CFrame
-					task.wait(0.2)
-					root.CFrame = pos
+					if root then
+						root.CFrame = gun.CFrame
+						task.wait(0.2)
+						root.CFrame = pos
+					end
 				end
 			end
 		end
