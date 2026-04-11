@@ -528,6 +528,8 @@ if game.PlaceId == 893973440 then
 
 		local beast_max_dist = 20
 
+		local V3 = Vector3.new(0, 0, 0)
+
 		while task.wait() do
 			if no_errors_toggled then
 				game.ReplicatedStorage.RemoteEvent:FireServer("SetPlayerMinigameResult", true)
@@ -570,9 +572,6 @@ if game.PlaceId == 893973440 then
 									local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir * beast_max_dist)
 									char.HumanoidRootPart.CFrame = newPos
 
-									task.wait()
-									char.HumanoidRootPart.Anchored = true
-
 									hidingFromBeast = true
 								else
 									local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir)
@@ -582,8 +581,6 @@ if game.PlaceId == 893973440 then
 								local testDist = dist3d(oldPosV, beastChar.HumanoidRootPart.Position)
 
 								if testDist >= beast_max_dist then
-									char.HumanoidRootPart.Anchored = false
-									task.wait()
 									char.HumanoidRootPart.CFrame = oldPos
 									hidingFromBeast = false
 								end
@@ -593,6 +590,14 @@ if game.PlaceId == 893973440 then
 						hidingFromBeast = false
 						char.HumanoidRootPart.CFrame = oldPos
 						char.HumanoidRootPart.Anchored = false
+					end
+
+					if hidingFromBeast then
+						for _, v in ipairs(char:GetDescendants()) do
+							if v:IsA("BasePart") then
+								v.Velocity, v.RotVelocity = V3, V3
+							end
+						end
 					end
 				end)
 			end
