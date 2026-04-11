@@ -433,7 +433,8 @@ if game.PlaceId == 142823291 then
 			local hum = char and char:FindFirstChild("Humanoid")
 
 			if hum then
-				local knifeBackpack = plr.Backpack:FindFirstChild("Knife")
+				local backpack = plr:FindFirstChild("Backpack")
+				local knifeBackpack = backpack and backpack:FindFirstChild("Knife")
 
 				if knifeBackpack then
 					hum:EquipTool(knifeBackpack)
@@ -525,7 +526,7 @@ if game.PlaceId == 142823291 then
 				local char = plr and plr.Character
 				local hum = char and char:FindFirstChild("Humanoid")
 				local root = char and char:FindFirstChild("HumanoidRootPart")
-				local backpack = plr and plr.Backpack
+				local backpack = plr and plr:FindFirstChild("Backpack")
 
 				if hum then
 					local gunBackpack = backpack and backpack:FindFirstChild("Gun")
@@ -542,7 +543,7 @@ if game.PlaceId == 142823291 then
 					if gunPlayer and root and camera then
 						local murderer
 						for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-							local pBackpack = v.Backpack
+							local pBackpack = v:FindFirstChild("Backpack")
 							local pChar = v.Character
 
 							local knifeBackpack = pBackpack and pBackpack:FindFirstChild("Knife")
