@@ -565,10 +565,11 @@ if game.PlaceId == 893973440 then
 							if not hidingFromBeast then
 								oldPos = char.HumanoidRootPart.CFrame
 								oldPosV = char.HumanoidRootPart.Position
-								char.HumanoidRootPart.Anchored = true
 
 								local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir * beast_max_dist)
 								char.HumanoidRootPart.CFrame = newPos
+
+								char.HumanoidRootPart.Anchored = true
 
 								hidingFromBeast = true
 							else
@@ -579,9 +580,9 @@ if game.PlaceId == 893973440 then
 							local testDist = dist3d(oldPosV, beastChar.HumanoidRootPart.Position)
 
 							if testDist >= beast_max_dist then
+								char.HumanoidRootPart.Anchored = false
 								char.HumanoidRootPart.CFrame = oldPos
 								hidingFromBeast = false
-								char.HumanoidRootPart.Anchored = false
 							end
 						end
 					end
