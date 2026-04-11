@@ -563,7 +563,6 @@ if game.PlaceId == 893973440 then
 		local hidingFromBeast = false
 		local oldPos
 		local oldPosV
-		local oldGravity = game.Workspace.Gravity
 
 		local beast_max_dist = 15
 
@@ -605,7 +604,6 @@ if game.PlaceId == 893973440 then
 								if not hidingFromBeast then
 									oldPos = char.HumanoidRootPart.CFrame
 									oldPosV = char.HumanoidRootPart.Position
-									oldGravity = game.Workspace.Gravity
 									game.Workspace.Gravity = 0
 
 									enableNoclip()
@@ -617,7 +615,7 @@ if game.PlaceId == 893973440 then
 
 								if testDist >= beast_max_dist then
 									char.HumanoidRootPart.CFrame = oldPos
-									game.Workspace.Gravity = oldGravity
+									game.Workspace.Gravity = 196.21
 									disableNoclip()
 									hidingFromBeast = false
 								end
@@ -625,7 +623,7 @@ if game.PlaceId == 893973440 then
 						end
 					elseif hidingFromBeast then
 						char.HumanoidRootPart.CFrame = oldPos
-						game.Workspace.Gravity = oldGravity
+						game.Workspace.Gravity = 196.2
 						disableNoclip()
 						hidingFromBeast = false
 					end
