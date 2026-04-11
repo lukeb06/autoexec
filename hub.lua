@@ -497,7 +497,7 @@ if game.PlaceId == 142823291 then
 					local pos = root and root.CFrame
 
 					if root then
-						task.wait(2)
+						task.wait(1)
 						root.CFrame = gun.CFrame
 						task.wait(0.2)
 						root.CFrame = pos
@@ -558,7 +558,7 @@ if game.PlaceId == 142823291 then
 
 						if pRoot then
 							plr.CameraMode = Enum.CameraMode.LockFirstPerson
-							task.wait(0.5)
+							task.wait()
 
 							local pos = root.CFrame
 							root.CFrame = pRoot.CFrame * CFrame.new(0, 0, 1)
@@ -570,6 +570,7 @@ if game.PlaceId == 142823291 then
 								if tick() - startTime > 0.2 then -- how long to force the look (0.2 seconds here)
 									connection:Disconnect()
 									root.CFrame = pos -- return to original position
+									plr.CameraMode = Enum.CameraMode.Classic
 									return
 								end
 
@@ -583,6 +584,8 @@ if game.PlaceId == 142823291 then
 							task.wait()
 
 							gunPlayer:Activate()
+
+							task.wait(5)
 						end
 					end
 				end
