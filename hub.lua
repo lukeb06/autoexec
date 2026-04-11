@@ -448,15 +448,14 @@ if game.PlaceId == 142823291 then
 
 						if pChar and v ~= game:GetService("Players").LocalPlayer then
 							removeCollisions(pChar)
-							enableNoclip()
-							pChar.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -1)
+							pChar.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -3)
 							pChar.HumanoidRootPart.Anchored = true
 						end
 					end
 
-					knifePlayer:Activate()
+					task.wait()
 
-					disableNoclip()
+					knifePlayer:Activate()
 
 					for i, v in pairs(game:GetService("Players"):GetPlayers()) do
 						local pChar = v.Character
@@ -558,9 +557,10 @@ if game.PlaceId == 142823291 then
 
 						if pRoot then
 							plr.CameraMode = Enum.CameraMode.LockFirstPerson
-							task.wait()
-
 							local pos = root.CFrame
+
+							task.wait(0.1)
+
 							root.CFrame = pRoot.CFrame * CFrame.new(0, 0, 1)
 
 							local startTime = tick()
