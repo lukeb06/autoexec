@@ -19,6 +19,42 @@ local function dist3d(pos1, pos2)
 	return math.sqrt((pos2.x - pos1.x) ^ 2 + (pos2.y - pos1.y) ^ 2 + (pos2.z - pos1.z) ^ 2)
 end
 
+local Noclipping = nil
+local Clip = true
+
+local function enableNoclip()
+	local speaker = game:GetService("Players").LocalPlayer
+	local RunService = game:GetService("RunService")
+
+	Clip = false
+	task.wait(0.1)
+	local function NoclipLoop()
+		if Clip == false and speaker.Character ~= nil then
+			for _, child in pairs(speaker.Character:GetDescendants()) do
+				if child:IsA("BasePart") and child.CanCollide == true then
+					child.CanCollide = false
+				end
+			end
+		end
+	end
+	Noclipping = RunService.Stepped:Connect(NoclipLoop)
+end
+
+local function disableNoclip()
+	if Noclipping then
+		Noclipping:Disconnect()
+	end
+	Clip = true
+end
+
+local function toggleNoclip()
+	if Clip then
+		enableNoclip()
+	else
+		disableNoclip()
+	end
+end
+
 local function breakVelocity()
 	task.spawn(function()
 		local speaker = game:GetService("Players").LocalPlayer
@@ -491,13 +527,15 @@ if game.PlaceId == 893973440 then
 			for i, v in pairs(game.Workspace:GetDescendants()) do
 				if v.Name == "FreezePod" then
 					local pod = v:FindFirstChild("PodTrigger")
-					local capturedTorsoValue = pod:FindFirstChild("CapturedTorso")
+					if pod then
+						local capturedTorsoValue = pod:FindFirstChild("CapturedTorso")
 
-					if capturedTorsoValue.Value == nil then
-						local dist = dist3d(plrPos, pod.Position)
-						if dist < best_pod_dist and dist > 20 then
-							best_pod = pod
-							best_pod_dist = dist
+						if capturedTorsoValue.Value == nil then
+							local dist = dist3d(plrPos, pod.Position)
+							if dist < best_pod_dist and dist > 20 then
+								best_pod = pod
+								best_pod_dist = dist
+							end
 						end
 					end
 				end
@@ -521,11 +559,11 @@ if game.PlaceId == 893973440 then
 		return nil
 	end
 
-	local function getHorizontalDir(pos2, pos1) {
-		local v2 = Vector3.new(pos2.x, 0, pos2.z)
-		local v1 = Vector3.new(pos1.x, 0, pos1.z)
-		local dir = (v2 - v1).Unit
-	}
+	local function getAvoidanceDir(avoidee)
+		local avoideeRoot = avoidee.HumanoidRootPart
+
+		return avoideeRoot.CFrame.LookVector * -1
+	end
 
 	task.spawn(function()
 		local hidingFromBeast = false
@@ -569,21 +607,16 @@ if game.PlaceId == 893973440 then
 						if char then
 							local dist = dist3d(char.HumanoidRootPart.Position, beastChar.HumanoidRootPart.Position)
 
-							local dir = getHorizontalDir(beastChar.HumanoidRootPart.Position, char.HumanoidRootPart.Position)
-
 							if dist < beast_max_dist then
 								if not hidingFromBeast then
 									oldPos = char.HumanoidRootPart.CFrame
 									oldPosV = char.HumanoidRootPart.Position
 									oldGravity = game.Workspace.Gravity
+									game.Workspace.Gravity = 0
 
-									local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir * -beast_max_dist)
-									char.HumanoidRootPart.CFrame = newPos
+									enableNoclip()
 
 									hidingFromBeast = true
-								else
-									local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir * -1)
-									char.HumanoidRootPart.CFrame = newPos
 								end
 							elseif hidingFromBeast then
 								local testDist = dist3d(oldPosV, beastChar.HumanoidRootPart.Position)
@@ -591,18 +624,24 @@ if game.PlaceId == 893973440 then
 								if testDist >= beast_max_dist then
 									char.HumanoidRootPart.CFrame = oldPos
 									game.Workspace.Gravity = oldGravity
+									disableNoclip()
 									hidingFromBeast = false
 								end
 							end
 						end
 					elseif hidingFromBeast then
-						hidingFromBeast = false
 						char.HumanoidRootPart.CFrame = oldPos
 						game.Workspace.Gravity = oldGravity
-						char.HumanoidRootPart.Anchored = false
+						disableNoclip()
+						hidingFromBeast = false
 					end
 
 					if hidingFromBeast then
+						local dir = getAvoidanceDir(beastChar)
+
+						local newPos = beastChar.HumanoidRootPart.CFrame * CFrame.new(dir * beast_max_dist)
+						char.HumanoidRootPart.CFrame = newPos
+
 						for _, v in ipairs(char:GetDescendants()) do
 							if v:IsA("BasePart") then
 								v.Velocity, v.RotVelocity = V3, V3
