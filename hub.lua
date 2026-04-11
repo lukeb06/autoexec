@@ -607,6 +607,7 @@ if game.PlaceId == 893973440 then
 
 								enableNoclip()
 
+								task.wait(0.1)
 								hidingFromBeast = true
 							end
 						end
@@ -626,14 +627,14 @@ if game.PlaceId == 893973440 then
 						game.Workspace.Gravity = 196.21
 						disableNoclip()
 						hidingFromBeast = false
-					end
+					else
+						local newPos = beastChar.HumanoidRootPart.CFrame * CFrame.new(0, -10, 0)
+						char.HumanoidRootPart.CFrame = newPos
 
-					local newPos = beastChar.HumanoidRootPart.CFrame * CFrame.new(0, -10, 0)
-					char.HumanoidRootPart.CFrame = newPos
-
-					for _, v in ipairs(char:GetDescendants()) do
-						if v:IsA("BasePart") then
-							v.Velocity, v.RotVelocity = V3, V3
+						for _, v in ipairs(char:GetDescendants()) do
+							if v:IsA("BasePart") then
+								v.Velocity, v.RotVelocity = V3, V3
+							end
 						end
 					end
 				end
