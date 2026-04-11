@@ -564,7 +564,7 @@ if game.PlaceId == 893973440 then
 		local oldPos
 		local oldPosV
 
-		local beast_max_dist = 15
+		local beast_max_dist = 20
 
 		local V3 = Vector3.new(0, 0, 0)
 
