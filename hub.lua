@@ -19,51 +19,13 @@ local function dist3d(pos1, pos2)
 	return math.sqrt((pos2.x - pos1.x) ^ 2 + (pos2.y - pos1.y) ^ 2 + (pos2.z - pos1.z) ^ 2)
 end
 
-local Noclipping = nil
-local Clip = true
-
-local function enableNoclip()
-	local speaker = game:GetService("Players").LocalPlayer
-	local RunService = game:GetService("RunService")
-
-	Clip = false
-	task.wait(0.1)
-	local function NoclipLoop()
-		if Clip == false and speaker.Character ~= nil then
-			for _, child in pairs(speaker.Character:GetDescendants()) do
-				if child:IsA("BasePart") and child.CanCollide == true then
-					child.CanCollide = false
-				end
-			end
-		end
-	end
-	Noclipping = RunService.Stepped:Connect(NoclipLoop)
-end
-
-local function disableNoclip()
-	if Noclipping then
-		Noclipping:Disconnect()
-	end
-	Clip = true
-end
-
-local function toggleNoclip()
-	if Clip then
-		enableNoclip()
-	else
-		disableNoclip()
-	end
-end
-
 local function breakVelocity()
 	task.spawn(function()
 		local speaker = game:GetService("Players").LocalPlayer
 		local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
-		enableNoclip()
 		task.spawn(function()
 			task.wait(1)
 			BeenASecond = true
-			disableNoclip()
 		end)
 		while not BeenASecond do
 			for _, v in ipairs(speaker.Character:GetDescendants()) do
@@ -563,9 +525,8 @@ if game.PlaceId == 893973440 then
 		local hidingFromBeast = false
 		local oldPos
 		local oldPosV
-		local oldPathToggled = false
 
-		local beast_max_dist = 15
+		local beast_max_dist = 20
 
 		while task.wait() do
 			if no_errors_toggled then
@@ -602,18 +563,14 @@ if game.PlaceId == 893973440 then
 							if not hidingFromBeast then
 								oldPos = char.HumanoidRootPart.CFrame
 								oldPosV = char.HumanoidRootPart.Position
-								oldPathToggled = path_toggled
-								enableNoclip()
+								char.HumanoidRootPart.Anchored = true
 
 								local newPos = char.HumanoidRootPart.CFrame * CFrame.new(0, -beast_max_dist, 0)
-
 								char.HumanoidRootPart.CFrame = newPos
 
 								hidingFromBeast = true
-								path_toggled = true
 							else
 								local newPos = char.HumanoidRootPart.CFrame * CFrame.new(0, -1, 0)
-
 								char.HumanoidRootPart.CFrame = newPos
 							end
 						elseif hidingFromBeast then
@@ -621,9 +578,8 @@ if game.PlaceId == 893973440 then
 
 							if testDist >= beast_max_dist then
 								char.HumanoidRootPart.CFrame = oldPos
-								path_toggled = oldPathToggled
 								hidingFromBeast = false
-								disableNoclip()
+								char.HumanoidRootPart.Anchored = false
 							end
 						end
 					end
