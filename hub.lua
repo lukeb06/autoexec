@@ -525,8 +525,9 @@ if game.PlaceId == 893973440 then
 		local hidingFromBeast = false
 		local oldPos
 		local oldPosV
+		local oldGravity = game.Workspace.Gravity
 
-		local beast_max_dist = 20
+		local beast_max_dist = 10
 
 		local V3 = Vector3.new(0, 0, 0)
 
@@ -568,6 +569,7 @@ if game.PlaceId == 893973440 then
 								if not hidingFromBeast then
 									oldPos = char.HumanoidRootPart.CFrame
 									oldPosV = char.HumanoidRootPart.Position
+									oldGravity = game.Workspace.Gravity
 
 									local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir * -beast_max_dist)
 									char.HumanoidRootPart.CFrame = newPos
@@ -582,6 +584,7 @@ if game.PlaceId == 893973440 then
 
 								if testDist >= beast_max_dist then
 									char.HumanoidRootPart.CFrame = oldPos
+									game.Workspace.Gravity = oldGravity
 									hidingFromBeast = false
 								end
 							end
@@ -589,6 +592,7 @@ if game.PlaceId == 893973440 then
 					elseif hidingFromBeast then
 						hidingFromBeast = false
 						char.HumanoidRootPart.CFrame = oldPos
+						game.Workspace.Gravity = oldGravity
 						char.HumanoidRootPart.Anchored = false
 					end
 
