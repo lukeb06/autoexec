@@ -22,6 +22,14 @@ end
 local Noclipping = nil
 local Clip = true
 
+local function removeCollisions(char)
+	for _, child in pairs(char:GetDescendants()) do
+		if child:IsA("BasePart") and child.CanCollide == true then
+			child.CanCollide = false
+		end
+	end
+end
+
 local function enableNoclip()
 	local speaker = game:GetService("Players").LocalPlayer
 	local RunService = game:GetService("RunService")
@@ -438,6 +446,7 @@ if game.PlaceId == 142823291 then
 						local pChar = v.Character
 
 						if pChar and v ~= game:GetService("Players").LocalPlayer then
+							removeCollisions(pChar)
 							pChar.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -3)
 							pChar.HumanoidRootPart.Anchored = true
 						end
