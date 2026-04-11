@@ -521,6 +521,12 @@ if game.PlaceId == 893973440 then
 		return nil
 	end
 
+	local function getHorizontalDir(pos2, pos1) {
+		local v2 = Vector3.new(pos2.x, 0, pos2.z)
+		local v1 = Vector3.new(pos1.x, 0, pos1.z)
+		local dir = (v2 - v1).Unit
+	}
+
 	task.spawn(function()
 		local hidingFromBeast = false
 		local oldPos
@@ -563,7 +569,7 @@ if game.PlaceId == 893973440 then
 						if char then
 							local dist = dist3d(char.HumanoidRootPart.Position, beastChar.HumanoidRootPart.Position)
 
-							local dir = (beastChar.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Unit
+							local dir = getHorizontalDir(beastChar.HumanoidRootPart.Position, char.HumanoidRootPart.Position)
 
 							if dist < beast_max_dist then
 								if not hidingFromBeast then
