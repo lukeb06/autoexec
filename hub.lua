@@ -553,11 +553,13 @@ if game.PlaceId == 893973440 then
 			if auto_hide_toggled then
 				local beast = findBeast()
 				local beastChar = beast and beast.Character
+				local plr = game:GetService("Players").LocalPlayer
+				local char = plr and plr.Character
 				if beastChar then
-					local plr = game:GetService("Players").LocalPlayer
-					local char = plr and plr.Character
 					if char then
 						local dist = dist3d(char.HumanoidRootPart.Position, beastChar.HumanoidRootPart.Position)
+
+						local dir = (beastChar.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Unit
 
 						if dist < beast_max_dist then
 							if not hidingFromBeast then
@@ -565,12 +567,12 @@ if game.PlaceId == 893973440 then
 								oldPosV = char.HumanoidRootPart.Position
 								char.HumanoidRootPart.Anchored = true
 
-								local newPos = char.HumanoidRootPart.CFrame * CFrame.new(0, -beast_max_dist, 0)
+								local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir * beast_max_dist)
 								char.HumanoidRootPart.CFrame = newPos
 
 								hidingFromBeast = true
 							else
-								local newPos = char.HumanoidRootPart.CFrame * CFrame.new(0, -1, 0)
+								local newPos = char.HumanoidRootPart.CFrame * CFrame.new(dir)
 								char.HumanoidRootPart.CFrame = newPos
 							end
 						elseif hidingFromBeast then
@@ -583,6 +585,10 @@ if game.PlaceId == 893973440 then
 							end
 						end
 					end
+				elseif hidingFromBeast then
+					hidingFromBeast = false
+					char.HumanoidRootPart.CFrame = oldPos
+					char.HumanoidRootPart.Anchored = false
 				end
 			end
 		end
