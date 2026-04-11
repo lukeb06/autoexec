@@ -19,13 +19,51 @@ local function dist3d(pos1, pos2)
 	return math.sqrt((pos2.x - pos1.x) ^ 2 + (pos2.y - pos1.y) ^ 2 + (pos2.z - pos1.z) ^ 2)
 end
 
+local Noclipping = nil
+local Clip = true
+
+local function enableNoclip()
+	local speaker = game:GetService("Players").LocalPlayer
+	local RunService = game:GetService("RunService")
+
+	Clip = false
+	task.wait(0.1)
+	local function NoclipLoop()
+		if Clip == false and speaker.Character ~= nil then
+			for _, child in pairs(speaker.Character:GetDescendants()) do
+				if child:IsA("BasePart") and child.CanCollide == true then
+					child.CanCollide = false
+				end
+			end
+		end
+	end
+	Noclipping = RunService.Stepped:Connect(NoclipLoop)
+end
+
+local function disableNoclip()
+	if Noclipping then
+		Noclipping:Disconnect()
+	end
+	Clip = true
+end
+
+local function toggleNoclip()
+	if Clip then
+		enableNoclip()
+	else
+		disableNoclip()
+	end
+end
+
 local function breakVelocity()
 	task.spawn(function()
 		local speaker = game:GetService("Players").LocalPlayer
 		local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
+		enableNoclip()
 		task.spawn(function()
 			task.wait(1)
 			BeenASecond = true
+			disableNoclip()
 		end)
 		while not BeenASecond do
 			for _, v in ipairs(speaker.Character:GetDescendants()) do
@@ -447,7 +485,7 @@ if game.PlaceId == 893973440 then
 	})
 
 	local no_fog_toggled = true
-	local FTFNoFog = FTFTab:CreateToggle({
+	local FTFNoFogToggle = FTFTab:CreateToggle({
 		Name = "No Fog",
 		CurrentValue = true,
 		Flag = nil,
@@ -457,12 +495,22 @@ if game.PlaceId == 893973440 then
 	})
 
 	local better_cam_toggled = true
-	local FTFBetterCam = FTFTab:CreateToggle({
+	local FTFBetterCamToggle = FTFTab:CreateToggle({
 		Name = "Better Camera",
 		CurrentValue = true,
 		Flag = nil,
 		Callback = function(value)
 			better_cam_toggled = value
+		end,
+	})
+
+	local auto_hide_toggled = true
+	local FTFAutoHideToggle = FTFTab:CreateToggle({
+		Name = "Avoid Beast",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			auto_hide_toggled = value
 		end,
 	})
 
@@ -497,7 +545,26 @@ if game.PlaceId == 893973440 then
 		end,
 	})
 
+	local function findBeast()
+		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+			if
+				v.Character
+				and v.Character:FindFirstChild("BeastPowers")
+				and v ~= game:GetService("Players").LocalPlayer
+			then
+				return v
+			end
+		end
+
+		return nil
+	end
+
 	task.spawn(function()
+		local hidingFromBeast = false
+		local oldPos
+		local oldPosV
+		local oldPathToggled = false
+
 		while task.wait() do
 			if no_errors_toggled then
 				game.ReplicatedStorage.RemoteEvent:FireServer("SetPlayerMinigameResult", true)
@@ -517,6 +584,43 @@ if game.PlaceId == 893973440 then
 				if player then
 					player.CameraMode = Enum.CameraMode.Classic
 					player.CameraMaxZoomDistance = 30
+				end
+			end
+
+			if auto_hide_toggled then
+				local beast = findBeast()
+				local beastChar = beast and beast.Character
+				if beastChar then
+					local plr = game:GetService("Players").LocalPlayer
+					local char = plr and plr.Character
+					if char then
+						local dist = dist3d(char.HumanoidRootPart.Position, beastChar.HumanoidRootPart.Position)
+
+						if dist < 15 then
+							if not hidingFromBeast then
+								oldPos = char.HumanoidRootPart.CFrame
+								oldPosV = char.HumanoidRootPart.Position
+								oldPathToggled = path_toggled
+								enableNoclip()
+							end
+
+							local newPos = char.HumanoidRootPart.CFrame * CFrame.new(0, -1, 0)
+
+							char.HumanoidRootPart.CFrame = newPos
+
+							hidingFromBeast = true
+							path_toggled = true
+						elseif hidingFromBeast then
+							local testDist = dist3d(oldPosV, beastChar.HumanoidRootPart.Position)
+
+							if testDist >= 15 then
+								char.HumanoidRootPart.CFrame = oldPos
+								path_toggled = oldPathToggled
+								hidingFromBeast = false
+								disableNoclip()
+							end
+						end
+					end
 				end
 			end
 		end
