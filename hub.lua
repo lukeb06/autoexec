@@ -631,7 +631,7 @@ if game.PlaceId == 893973440 then
 					end
 
 					if hidingFromBeast then
-						local newPos = beastChar.HumanoidRootPart.CFrame * CFrame.new(0, 0, 6)
+						local newPos = beastChar.HumanoidRootPart.CFrame * CFrame.new(0, 0, 15)
 						char.HumanoidRootPart.CFrame = newPos
 
 						for _, v in ipairs(char:GetDescendants()) do
