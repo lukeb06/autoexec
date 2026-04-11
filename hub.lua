@@ -126,8 +126,17 @@ table.insert(looped_functions, function()
 		Instance.new("NumberValue", p).Name = "Age"
 		p.Size = Vector3.new(5, 1, 5)
 		p.Anchored = true
-		local i = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position
-		p.Position = Vector3.new(i.x, i.y + path_vertical_offset, i.z)
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char.HumanoidRootPart
+		local hum = char and char.Humanoid
+
+		if root and hum then
+			local i = root.Position
+			local h = hum.HipHeight
+
+			p.Position = Vector3.new(i.x, i.y - h, i.z)
+		end
 	end
 end)
 
@@ -249,53 +258,64 @@ local CtrlClickDelToggle = UniversalTab:CreateToggle({
 
 local UniversalESPSection = UniversalTab:CreateSection("Universal ESP")
 
-function updateUniversalESP(highlights, color, enabled)
-	for i, v in pairs(highlights) do
+local function updateESP(obj, color, enabled)
+	local oldHl = obj:FindFirstChild("ESPHL")
+	if oldHl then
 		if not enabled then
-			table.remove(highlights, i)
-			v:Destroy()
-		elseif v.Adornee == nil or v.Adornee.Parent == nil then
-			table.remove(highlights, i)
-			v:Destroy()
+			oldHl:Destroy()
+		elseif color ~= oldHl.FillColor then
+			oldHl.FillColor = color
 		end
+	elseif enabled then
+		local hl = Instance.new("Highlight")
+		hl.Name = "ESPHL"
+		hl.Adornee = obj
+		hl.FillColor = color
+		hl.Parent = obj
 	end
+end
 
-	if enabled then
-		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-			if v.Character and v ~= game:GetService("Players").LocalPlayer then
-				local NewHighlight = Instance.new("Highlight")
-				NewHighlight.Adornee = v.Character
-				NewHighlight.FillColor = color
-				NewHighlight.Parent = v.Character
-				table.insert(highlights, NewHighlight)
-			end
-		end
-	else
-		for i, v in pairs(highlights) do
-			v:Destroy()
+local function updateUniversalESP(enabled)
+	for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+		if v.Character and v ~= game:GetService("Players").LocalPlayer then
+			updateESP(v.Character, Color3.fromRGB(255, 0, 0), enabled)
 		end
 	end
 end
 
-local universal_esp_highlights = {}
+local universal_esp_toggled = false
 local UniversalESPToggle = UniversalTab:CreateToggle({
 	Name = "Universal ESP",
 	CurrentValue = false,
 	Flag = nil,
 	Callback = function(value)
-		updateUniversalESP(universal_esp_highlights, Color3.fromRGB(255, 0, 0), value)
+		universal_esp_toggled = value
+		updateUniversalESP(universal_esp_toggled)
 	end,
 })
+task.spawn(function()
+	while task.wait() do
+		if universal_esp_toggled then
+			updateUniversalESP(universal_esp_toggled)
+		end
+	end
+end)
 
 local ussPlr = game:GetService("Players").LocalPlayer
 local ussChar = ussPlr and ussPlr.Character
-local ussHum = ussChar and ussChar.Humanoid
+local ussHum = ussChar and ussChar:FindFirstChild("Humanoid")
 
 local ussSpeed = (ussHum and ussHum.WalkSpeed) or 16
 
 task.spawn(function()
 	while task.wait() do
-		game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = ussSpeed
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local hum = char and char.Humanoid
+
+		if hum then
+			hum.WalkSpeed = ussSpeed
+		end
 	end
 end)
 
@@ -311,36 +331,174 @@ local UniversalSpeedSlider = UniversalTab:CreateSlider({
 	end,
 })
 
+-- Murder Mystery 2
+
+if game.PlaceId == 142823291 then
+	local MMTab = Window:CreateTab("Murder Mystery 2", "gamepad-2")
+	local MMESPSection = MMTab:CreateSection("ESP")
+
+	local function updatePlayerESP(enabled)
+		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+			if v.Character and v ~= game:GetService("Players").LocalPlayer then
+				local backpack = v.Backpack
+				local char = v.Character
+
+				local gunBackpack = backpack and backpack:FindFirstChild("Gun")
+				local knifeBackpack = backpack and backpack:FindFirstChild("Knife")
+				local gunPlayer = char and char:FindFirstChild("Gun")
+				local knifePlayer = char and char:FindFirstChild("Knife")
+
+				if gunBackpack or gunPlayer then
+					updateESP(v.Character, Color3.fromRGB(0, 0, 255), enabled)
+				end
+				if knifeBackpack or knifePlayer then
+					updateESP(v.Character, Color3.fromRGB(255, 0, 0), enabled)
+				end
+				if not knifeBackpack and not knifePlayer and not gunPlayer and not gunBackpack then
+					updateESP(v.Character, Color3.fromRGB(0, 255, 0), enabled)
+				end
+			end
+		end
+	end
+
+	local mm_player_esp_toggled = true
+	local MMPlayerEspToggle = MMTab:CreateToggle({
+		Name = "Player ESP",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			mm_player_esp_toggled = value
+			updatePlayerESP(value)
+		end,
+	})
+	task.spawn(function()
+		while task.wait() do
+			if mm_player_esp_toggled then
+				updatePlayerESP(mm_player_esp_toggled)
+			end
+		end
+	end)
+
+	local function updateCoinESP(enabled)
+		local coins = game.Workspace:FindFirstChild("CoinContainer", true)
+
+		if coins then
+			for i, v in pairs(coins:GetChildren()) do
+				-- if v.Name == "Coin_Server" then
+				-- 	updateESP(v, Color3.fromRGB(255, 200, 0), enabled)
+				-- end
+				if v.Name == "CollectedCoin" then
+					v:Destroy()
+				end
+			end
+
+			updateESP(coins, Color3.fromRGB(255, 200, 0), enabled)
+		end
+	end
+
+	local mm_coin_esp_toggled = true
+	local MMCoinEspToggle = MMTab:CreateToggle({
+		Name = "Coin ESP",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			mm_coin_esp_toggled = value
+			updateCoinESP(value)
+		end,
+	})
+	task.spawn(function()
+		while task.wait() do
+			if mm_coin_esp_toggled then
+				updateCoinESP(mm_coin_esp_toggled)
+			end
+		end
+	end)
+
+	local MMUtilsSection = MMTab:CreateSection("Utils")
+
+	local MMKillAllButton = MMTab:CreateButton({
+		Name = "Kill All (Murderer)",
+		Callback = function()
+			local plr = game:GetService("Players").LocalPlayer
+			local char = plr and plr.Character
+			local hum = char and char:FindFirstChild("Humanoid")
+
+			if hum then
+				local knifeBackpack = plr.Backpack:FindFirstChild("Knife")
+
+				if knifeBackpack then
+					hum:EquipTool(knifeBackpack)
+					task.wait()
+				end
+
+				local knifePlayer = plr.Character:FindFirstChild("Knife")
+
+				if knifePlayer then
+					for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+						local pChar = v.Character
+
+						if pChar and v ~= game:GetService("Players").LocalPlayer then
+							pChar.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -3)
+							pChar.HumanoidRootPart.Anchored = true
+						end
+					end
+
+					knifePlayer:Activate()
+
+					for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+						local pChar = v.Character
+
+						if pChar and v ~= game:GetService("Players").LocalPlayer then
+							pChar.HumanoidRootPart.Anchored = false
+						end
+					end
+				end
+			end
+		end,
+	})
+
+	local mm_grab_gun_toggled = true
+	local MMGrabGunToggle = MMTab:CreateToggle({
+		Name = "Auto Grab Gun",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			mm_grab_gun_toggled = value
+		end,
+	})
+	task.spawn(function()
+		while task.wait() do
+			if mm_grab_gun_toggled then
+				local gun = game.Workspace:FindFirstChild("GunDrop", true)
+
+				if gun then
+					task.wait(1)
+
+					local plr = game:GetService("Players").LocalPlayer
+					local char = plr and plr.Character
+					local root = char and char.HumanoidRootPart
+					local pos = root and root.CFrame
+
+					root.CFrame = gun.CFrame
+					task.wait(0.2)
+					root.CFrame = pos
+				end
+			end
+		end
+	end)
+end
+
 -- Flee The Facility
 
 if game.PlaceId == 893973440 then
 	local FTFTab = Window:CreateTab("Flee The Facility", "gamepad-2")
 	local FTFESPSection = FTFTab:CreateSection("ESP")
 
-	local BeastHighlights = {}
 	local beast_esp_toggled = true
 	function UpdateBeastESP()
-		for i, v in pairs(BeastHighlights) do
-			if not beast_esp_toggled then
-				table.remove(BeastHighlights, i)
-				v:Destroy()
-			elseif v.Adornee == nil then
-				table.remove(BeastHighlights, i)
-				v:Destroy()
-			end
-		end
-		if beast_esp_toggled then
-			for i, v in pairs(game.Players:GetPlayers()) do
-				if v.Character and v.Character:FindFirstChild("BeastPowers") and v ~= game.Players.LocalPlayer then
-					local NewHighlight = Instance.new("Highlight")
-					NewHighlight.Adornee = v.Character
-					NewHighlight.Parent = v.Character
-					table.insert(BeastHighlights, NewHighlight)
-				end
-			end
-		else
-			for i, v in pairs(BeastHighlights) do
-				v:Destroy()
+		for i, v in pairs(game.Players:GetPlayers()) do
+			if v.Character and v.Character:FindFirstChild("BeastPowers") and v ~= game.Players.LocalPlayer then
+				updateESP(v.Character, Color3.fromRGB(255, 0, 0), beast_esp_toggled)
 			end
 		end
 	end
@@ -355,31 +513,11 @@ if game.PlaceId == 893973440 then
 		end,
 	})
 
-	local PlrHighlights = {}
 	local player_esp_toggled = true
 	function UpdatePlrESP()
-		for i, v in pairs(PlrHighlights) do
-			if not player_esp_toggled then
-				table.remove(PlrHighlights, i)
-				v:Destroy()
-			elseif v.Adornee == nil or v.Adornee.Parent == nil or v.Adornee.Parent:FindFirstChild("BeastPowers") then
-				table.remove(PlrHighlights, i)
-				v:Destroy()
-			end
-		end
-		if player_esp_toggled then
-			for i, v in pairs(game.Players:GetPlayers()) do
-				if v.Character and not v.Character:FindFirstChild("BeastPowers") and v ~= game.Players.LocalPlayer then
-					local NewHighlight = Instance.new("Highlight")
-					NewHighlight.Adornee = v.Character
-					NewHighlight.FillColor = Color3.fromRGB(0, 255, 0)
-					NewHighlight.Parent = v.Character
-					table.insert(PlrHighlights, NewHighlight)
-				end
-			end
-		else
-			for i, v in pairs(PlrHighlights) do
-				v:Destroy()
+		for i, v in pairs(game.Players:GetPlayers()) do
+			if v.Character and not v.Character:FindFirstChild("BeastPowers") and v ~= game.Players.LocalPlayer then
+				updateESP(v.Character, Color3.fromRGB(0, 255, 0), player_esp_toggled)
 			end
 		end
 	end
