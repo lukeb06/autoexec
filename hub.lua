@@ -580,6 +580,11 @@ if game.PlaceId == 893973440 then
 				game:GetService("Lighting").Atmosphere.Haze = 0
 				game:GetService("Lighting").Blur.Enabled = false
 				game:GetService("Lighting").DepthOfField.Enabled = false
+				game:GetService("Lighting").Brightness = 2
+				game:GetService("Lighting").ClockTime = 14
+				game:GetService("Lighting").FogEnd = 100000
+				game:GetService("Lighting").GlobalShadows = false
+				game:GetService("Lighting").OutdoorAmbient = Color3.fromRGB(128, 128, 128)
 			end
 
 			if better_cam_toggled then
