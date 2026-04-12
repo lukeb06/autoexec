@@ -115,7 +115,6 @@ WaitForGameAndPlayer()
 local looped_functions = {}
 
 local path_toggled = false
-local path_vertical_offset = -3.5
 table.insert(looped_functions, function()
 	if path_toggled == true then
 		local paths = game.Workspace:FindFirstChild("PATHS")
@@ -125,7 +124,7 @@ table.insert(looped_functions, function()
 
 		for i, v in pairs(paths:GetChildren()) do
 			v.Age.Value = v.Age.Value + 1
-			if v.Age.Value > 3 then
+			if v.Age.Value > 0 then
 				v:Destroy()
 			end
 		end
@@ -136,15 +135,27 @@ table.insert(looped_functions, function()
 		p.Anchored = true
 		local plr = game:GetService("Players").LocalPlayer
 		local char = plr and plr.Character
-		local root = char and char.HumanoidRootPart
-		local hum = char and char.Humanoid
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+		local hum = char and char:FindFirstChild("Humanoid")
+		local rig = hum and hum.RigType
 
 		if root and hum then
-			local i = root.Position
-			local s = root.Size.Y
-			local h = hum.HipHeight
+			if rig == Enum.HumanoidRigType.R15 then
+				local i = root.Position
+				local s = root.Size.Y
+				local h = hum.HipHeight
 
-			p.Position = Vector3.new(i.x, (i.y - s / 2) - h + path_vertical_offset, i.z)
+				p.Position = Vector3.new(i.x, (i.y - s / 2) - h - 0.5, i.z)
+			else
+				local leg = char and char:FindFirstChild("Left Leg")
+				if leg then
+					local i = root.Position
+					local s = root.Size.Y
+					local h = leg.Size.Y
+
+					p.Position = Vector3.new(i.x, (i.y - s / 2) - h - 0.5, i.z)
+				end
+			end
 		end
 	end
 end)
@@ -237,18 +248,6 @@ local PathKeybind = UniversalTab:CreateKeybind({
 	Flag = "PathKeybind", -- A flag is the identifier for the configuration file. Make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function()
 		path_toggled = not path_toggled
-	end,
-})
-
-local PathSlider = UniversalTab:CreateSlider({
-	Name = "Vertical Offset",
-	Range = { -2, 0 },
-	Increment = 0.1,
-	Suffix = "",
-	CurrentValue = -0.5,
-	Flag = "PathVerticalOffset", -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(value)
-		path_vertical_offset = value
 	end,
 })
 
@@ -561,7 +560,7 @@ if game.PlaceId == 142823291 then
 							plr.CameraMode = Enum.CameraMode.LockFirstPerson
 							local pos = root.CFrame
 
-							task.wait(1)
+							task.wait(2)
 
 							root.CFrame = pRoot.CFrame * CFrame.new(0, 0, 1)
 
@@ -590,7 +589,11 @@ if game.PlaceId == 142823291 then
 							root.CFrame = pos -- return to original position
 							plr.CameraMode = Enum.CameraMode.Classic
 
-							task.wait(5)
+							task.wait(0.2)
+
+							root.CFrame = pos -- return to original position
+
+							task.wait(3)
 						end
 					end
 				end
@@ -960,8 +963,6 @@ if IYToggle.CurrentValue then
 	iy_injected = true
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
 end
-
-path_vertical_offset = PathSlider.CurrentValue
 
 task.spawn(function()
 	while task.wait() do
