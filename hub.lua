@@ -170,11 +170,17 @@ local function initCtrlClickDelete()
 
 	local index = 1
 
+	local function isControlDown()
+		local UIS = game:GetService("UserInputService")
+
+		return UIS:IsKeyDown(Enum.KeyCode.LeftControl) or UIS:IsKeyDown(Enum.KeyCode.LeftMeta)
+	end
+
 	Mouse.Button1Down:connect(function()
 		if not ctrl_click_delete_toggled then
 			return
 		end
-		if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftControl) then
+		if not isControlDown() then
 			return
 		end
 		if not Mouse.Target then
@@ -195,7 +201,7 @@ local function initCtrlClickDelete()
 		if not ctrl_click_delete_toggled then
 			return
 		end
-		if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftControl) then
+		if not isControlDown() then
 			return
 		end
 		deletedParts:GetChildren()[#deletedParts:GetChildren()].Value.Position =
@@ -430,6 +436,7 @@ if game.PlaceId == 142823291 then
 			local plr = game:GetService("Players").LocalPlayer
 			local char = plr and plr.Character
 			local hum = char and char:FindFirstChild("Humanoid")
+			local root = char and char:FindFirstChild("HumanoidRootPart")
 
 			if hum then
 				local backpack = plr:FindFirstChild("Backpack")
@@ -452,9 +459,10 @@ if game.PlaceId == 142823291 then
 						while running do
 							for i, v in pairs(game:GetService("Players"):GetPlayers()) do
 								local pChar = v.Character
+								local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
 
 								if pChar and v ~= game:GetService("Players").LocalPlayer then
-									pChar.HumanoidRootPart.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -3)
+									pRoot.CFrame = root.CFrame * CFrame.new(0, 0, -3)
 								end
 							end
 
@@ -493,7 +501,7 @@ if game.PlaceId == 142823291 then
 				if gun and pickupGun then
 					local plr = game:GetService("Players").LocalPlayer
 					local char = plr and plr.Character
-					local root = char and char.HumanoidRootPart
+					local root = char and char:FindFirstChild("HumanoidRootPart")
 					local pos = root and root.CFrame
 
 					if root then
@@ -556,42 +564,55 @@ if game.PlaceId == 142823291 then
 						local pChar = murderer and murderer.Character
 						local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
 
+						local hasFired = false
+
 						if pRoot then
 							plr.CameraMode = Enum.CameraMode.LockFirstPerson
+							plr.CameraMinZoomDistance = 0.5
+							plr.CameraMaxZoomDistance = 0.5
+
+							task.wait(1)
+
 							local pos = root.CFrame
-
-							task.wait(2)
-
-							root.CFrame = pRoot.CFrame * CFrame.new(0, 0, 1)
+							root.CFrame = pRoot.CFrame * CFrame.new(0, 0, 5)
 
 							local startTime = tick()
 							local connection
 
 							connection = game:GetService("RunService").RenderStepped:Connect(function()
-								if tick() - startTime > 0.25 then -- how long to force the look (0.2 seconds here)
+								local elapsed = tick() - startTime
+
+								if elapsed > 0.35 then -- how long to force the look (0.2 seconds here)
+									root.CFrame = pos -- return to original position
+									plr.CameraMode = Enum.CameraMode.Classic
+									plr.CameraMinZoomDistance = 0.5
+									plr.CameraMaxZoomDistance = 128
 									connection:Disconnect()
 									return
 								end
 
 								-- Better first-person feel: look from roughly head height
-								local head = plr.Character:FindFirstChild("Head")
+								local head = char:FindFirstChild("Head")
 								local camPos = head and head.Position or root.Position + Vector3.new(0, 1.5, 0)
 
+								root.CFrame =
+									CFrame.lookAt(root.Position, Vector3.new(pRoot.Position.X, 0, pRoot.Position.Z))
 								camera.CFrame = CFrame.lookAt(camPos, pRoot.Position)
+
+								-- local handle = gunPlayer:FindFirstChild("Handle")
+								-- if handle then
+								-- 	handle.CFrame = CFrame.lookAt(handle.Position, pRoot.Position)
+								-- end
+
+								if elapsed > 0.18 and not hasFired then
+									gunPlayer:Activate()
+									local mouse = plr:GetMouse()
+									if mouse then
+										print(mouse.Target)
+									end
+									hasFired = true
+								end
 							end)
-
-							task.wait(0.1)
-
-							gunPlayer:Activate()
-
-							task.wait(0.2)
-
-							root.CFrame = pos -- return to original position
-							plr.CameraMode = Enum.CameraMode.Classic
-
-							task.wait(0.2)
-
-							root.CFrame = pos -- return to original position
 
 							task.wait(3)
 						end
@@ -774,7 +795,8 @@ if game.PlaceId == 893973440 then
 			local best_pod_dist = 99999999
 
 			local char = game:GetService("Players").LocalPlayer.Character
-			local plrPos = char.HumanoidRootPart.Position
+			local root = char and char:FindFirstChild("HumanoidRootPart")
+			local plrPos = root and root.Position
 
 			for i, v in pairs(game.Workspace:GetDescendants()) do
 				if v.Name == "FreezePod" then
@@ -850,16 +872,20 @@ if game.PlaceId == 893973440 then
 			if auto_hide_toggled then
 				local beast = findBeast()
 				local beastChar = beast and beast.Character
+				local beastRoot = beastChar and beastChar:FindFirstChild("HumanoidRootPart")
+
 				local plr = game:GetService("Players").LocalPlayer
 				local char = plr and plr.Character
+				local root = char and char:FindFirstChild("HumanoidRootPart")
+
 				if beastChar then
 					if char then
-						local dist = dist3d(char.HumanoidRootPart.Position, beastChar.HumanoidRootPart.Position)
+						local dist = dist3d(root.Position, beastRoot.Position)
 
 						if dist < beast_max_dist then
 							if not hidingFromBeast then
-								oldPos = char.HumanoidRootPart.CFrame
-								oldPosV = char.HumanoidRootPart.Position
+								oldPos = root.CFrame
+								oldPosV = root.Position
 								game.Workspace.Gravity = 0
 
 								enableNoclip()
@@ -870,23 +896,23 @@ if game.PlaceId == 893973440 then
 						end
 					end
 				elseif hidingFromBeast then
-					char.HumanoidRootPart.CFrame = oldPos
+					root.CFrame = oldPos
 					game.Workspace.Gravity = 196.2
 					disableNoclip()
 					hidingFromBeast = false
 				end
 
 				if hidingFromBeast then
-					local testDist = dist3d(oldPosV, beastChar.HumanoidRootPart.Position)
+					local testDist = dist3d(oldPosV, beastRoot.Position)
 
 					if testDist >= beast_max_dist then
-						char.HumanoidRootPart.CFrame = oldPos
+						root.CFrame = oldPos
 						game.Workspace.Gravity = 196.21
 						disableNoclip()
 						hidingFromBeast = false
 					else
-						local newPos = beastChar.HumanoidRootPart.CFrame * CFrame.new(0, -10, 0)
-						char.HumanoidRootPart.CFrame = newPos
+						local newPos = beastRoot.CFrame * CFrame.new(0, -10, 0)
+						root.CFrame = newPos
 
 						for _, v in ipairs(char:GetDescendants()) do
 							if v:IsA("BasePart") then
@@ -898,8 +924,12 @@ if game.PlaceId == 893973440 then
 			elseif hidingFromBeast then
 				local plr = game:GetService("Players").LocalPlayer
 				local char = plr and plr.Character
+				local root = char and char:FindFirstChild("HumanoidRootPart")
 
-				char.HumanoidRootPart.CFrame = oldPos
+				if root then
+					root.CFrame = oldPos
+				end
+
 				game.Workspace.Gravity = 196.21
 				disableNoclip()
 				hidingFromBeast = false
