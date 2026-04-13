@@ -63,12 +63,12 @@ local function toggleNoclip()
 	end
 end
 
-local function breakVelocity()
+local function breakVelocity(t)
 	task.spawn(function()
 		local speaker = game:GetService("Players").LocalPlayer
 		local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
 		task.spawn(function()
-			task.wait(1)
+			task.wait(t)
 			BeenASecond = true
 		end)
 		while not BeenASecond do
@@ -91,23 +91,44 @@ local function getRoot(char)
 end
 
 local function tweenGotoPart(part)
-	local speaker = game:GetService("Players").LocalPlayer
 	local TweenService = game:GetService("TweenService")
 
+	local plr = game:GetService("Players").LocalPlayer
+	local char = plr and plr.Character
+	local root = char and char:FindFirstChild("HumanoidRootPart")
+	local hum = char and char:FindFirstChildOfClass("Humanoid")
+
 	if part:IsA("BasePart") then
-		if
-			speaker.Character:FindFirstChildOfClass("Humanoid")
-			and speaker.Character:FindFirstChildOfClass("Humanoid").SeatPart
-		then
-			speaker.Character:FindFirstChildOfClass("Humanoid").Sit = false
+		if hum and hum.SeatPart then
+			hum.Sit = false
 			task.wait(0.1)
 		end
 		task.wait(0.1)
-		TweenService
-			:Create(getRoot(speaker.Character), TweenInfo.new(1, Enum.EasingStyle.Linear), { CFrame = part.CFrame })
-			:Play()
+		TweenService:Create(root, TweenInfo.new(1, Enum.EasingStyle.Linear), { CFrame = part.CFrame }):Play()
 	end
-	breakVelocity()
+	breakVelocity(1)
+end
+
+local function safeTweenToPart(part)
+	local TweenService = game:GetService("TweenService")
+
+	local plr = game:GetService("Players").LocalPlayer
+	local char = plr and plr.Character
+	local root = char and char:FindFirstChild("HumanoidRootPart")
+	local hum = char and char:FindFirstChildOfClass("Humanoid")
+
+	local dist = dist3d(root.Position, part.Position)
+	local t = dist / hum.WalkSpeed
+
+	if part:IsA("BasePart") then
+		if hum and hum.SeatPart then
+			hum.Sit = false
+			task.wait(0.1)
+		end
+		task.wait(0.1)
+		TweenService:Create(root, TweenInfo.new(t, Enum.EasingStyle.Linear), { CFrame = part.CFrame }):Play()
+	end
+	breakVelocity(t)
 end
 
 WaitForGameAndPlayer()
@@ -667,6 +688,25 @@ if game.PlaceId == 893973440 then
 		end,
 	})
 
+	local function getCurrentMap()
+		for i, v in pairs(game.Workspace:GetChildren()) do
+			if v:FindFirstChild("MapThumbnail") then
+				return v
+			end
+		end
+
+		return nil
+	end
+
+	local function getCurrentMapChildren()
+		local map = getCurrentMap()
+		if not map then
+			return {}
+		end
+
+		return map:GetChildren()
+	end
+
 	local PCHighlights = {}
 	local computer_esp_toggled = true
 
@@ -675,32 +715,28 @@ if game.PlaceId == 893973440 then
 	task.spawn(function()
 		while task.wait() do
 			local GotComputers = 0
-			for i, v in pairs(game.Workspace:GetChildren()) do
-				if v:FindFirstChild("MapThumbnail") then
-					for i2, v2 in pairs(v:GetChildren()) do
-						if v2.Name == "ComputerTable" and v2:FindFirstChild("Screen") then
-							GotComputers += 1
-							if computer_esp_toggled then
-								local Found = false
-								for i3, v3 in pairs(PCHighlights) do
-									if v3.Adornee == v2 then
-										v3.FillColor = v2.Screen.Color
-										Found = true
-									end
-								end
-								if Found == false then
-									local NewHighlight = Instance.new("Highlight")
-									NewHighlight.FillColor = v2.Screen.Color
-									NewHighlight.Adornee = v2
-									NewHighlight.Parent = v2
-									table.insert(PCHighlights, NewHighlight)
-								end
-							else
-								for i3, v3 in pairs(PCHighlights) do
-									table.remove(PCHighlights, i3)
-									v3:Destroy()
-								end
+			for _, v in pairs(getCurrentMapChildren()) do
+				if v.Name == "ComputerTable" and v:FindFirstChild("Screen") then
+					GotComputers += 1
+					if computer_esp_toggled then
+						local Found = false
+						for i3, v3 in pairs(PCHighlights) do
+							if v3.Adornee == v then
+								v3.FillColor = v.Screen.Color
+								Found = true
 							end
+						end
+						if Found == false then
+							local NewHighlight = Instance.new("Highlight")
+							NewHighlight.FillColor = v.Screen.Color
+							NewHighlight.Adornee = v
+							NewHighlight.Parent = v
+							table.insert(PCHighlights, NewHighlight)
+						end
+					else
+						for i3, v3 in pairs(PCHighlights) do
+							table.remove(PCHighlights, i3)
+							v3:Destroy()
 						end
 					end
 				end
@@ -785,6 +821,301 @@ if game.PlaceId == 893973440 then
 		end,
 	})
 
+	local function isCloseToModel(model, ddist)
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		local base = model.PrimaryPart
+
+		if root and base then
+			local dist = dist3d(root.Position, base.Position)
+			return dist <= ddist
+		end
+
+		return false
+	end
+
+	local function isCloseToModelName(name, ddist)
+		for i, v in pairs(getCurrentMapChildren()) do
+			if v.Name == name then
+				if isCloseToModel(v, ddist) then
+					return true, v
+				end
+			end
+		end
+
+		return false, nil
+	end
+
+	local function isCloseToComputer()
+		return isCloseToModelName("ComputerTable", 10)
+	end
+
+	local function isCloseToFreezePod()
+		return isCloseToModelName("FreezePod", 10)
+	end
+
+	local computerUnhacked = Color3.fromRGB(13, 105, 172)
+	local computerErrored = Color3.fromRGB(196, 40, 28)
+	local function getClosestComputer(includeHacked)
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		local best = nil
+		local best_dist = 99999999
+
+		if root then
+			for i, v in pairs(getCurrentMapChildren()) do
+				if v.Name == "ComputerTable" then
+					local base = v.PrimaryPart
+
+					if base then
+						local dist = dist3d(root.Position, base.Position)
+
+						if includeHacked then
+							if dist < best_dist then
+								best_dist = dist
+								best = v
+							end
+						else
+							local screen = v:FindFirstChild("Screen")
+							if screen and (screen.Color == computerUnhacked or screen.Color == computerErrored) then
+								if dist < best_dist then
+									best_dist = dist
+									best = v
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+
+		return best
+	end
+
+	local function getValidSpot(computer)
+		local screen = computer:FindFirstChild("Screen")
+		if screen and (screen.Color == computerUnhacked or screen.Color == computerErrored) then
+			local trigger1 = computer:FindFirstChild("ComputerTrigger1")
+			local trigger2 = computer:FindFirstChild("ComputerTrigger2")
+			local trigger3 = computer:FindFirstChild("ComputerTrigger3")
+
+			local triggers = { trigger1, trigger2, trigger3 }
+
+			for _, t in pairs(triggers) do
+				local aSign = t:FindFirstChild("ActionSign")
+
+				if aSign then
+					if aSign.Value ~= 0 then
+						return t
+					end
+				end
+			end
+		end
+
+		return nil
+	end
+
+	local function findBeast()
+		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+			if
+				v.Character
+				and v.Character:FindFirstChild("BeastPowers")
+				and v ~= game:GetService("Players").LocalPlayer
+			then
+				return v
+			end
+		end
+
+		return nil
+	end
+
+	local function getDistToBeast()
+		local beast = findBeast()
+		local beastChar = beast and beast.Character
+		local beastRoot = beastChar and beastChar:FindFirstChild("HumanoidRootPart")
+
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		if beastRoot and root then
+			return dist3d(root.Position, beastRoot.Position)
+		end
+
+		return 99999999
+	end
+
+	local function isGameActive()
+		return game.ReplicatedStorage.IsGameActive.Value and game.ReplicatedStorage.GameTimer.Value ~= 0
+	end
+
+	local function isBeast()
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+
+		if isGameActive() and char then
+			task.wait()
+			return char:FindFirstChild("BeastPowers")
+		end
+
+		return false
+	end
+
+	local function getActivePlayers()
+		local players = {}
+
+		local plr = game:GetService("Players").LocalPlayer
+		local pgui = plr and plr:FindFirstChild("PlayerGui")
+		local sgui = pgui and pgui:FindFirstChild("ScreenGui")
+		local sbars = sgui and sgui:FindFirstChild("StatusBars")
+
+		local bars = sbars:GetChildren()
+
+		for i, v in pairs(bars) do
+			if v:IsA("TextLabel") then
+				local name = v.ContentText
+				local player = game:GetService("Players"):FindFirstChild(name)
+
+				if player then
+					table.insert(players, player)
+				end
+			end
+		end
+
+		return players
+	end
+
+	local function isInGame()
+		local plr = game:GetService("Players").LocalPlayer
+		local players = getActivePlayers()
+
+		if plr and players then
+			for i, v in pairs(players) do
+				if v == plr then
+					return true
+				end
+			end
+		end
+
+		return false
+	end
+
+	local beast_max_dist = 20
+	local hidingFromBeast = false
+	local function isInDanger()
+		return getDistToBeast() <= beast_max_dist
+	end
+
+	local auto_e_toggled = true
+	local quick_hack_toggled = true
+	local auto_hack_toggled = false
+
+	local FTFAutoEToggle
+	FTFAutoEToggle = FTFTab:CreateToggle({
+		Name = "Auto E",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			auto_e_toggled = value
+
+			if quick_hack_toggled and not value then
+				FTFAutoEToggle:Set(true)
+			end
+		end,
+	})
+
+	local FTFQuickHackToggle
+	FTFQuickHackToggle = FTFTab:CreateToggle({
+		Name = "Easy Hack (Requires Auto E)",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			quick_hack_toggled = value
+			if value then
+				FTFAutoEToggle:Set(true)
+			end
+
+			if auto_hack_toggled and not value then
+				FTFQuickHackToggle:Set(true)
+			end
+		end,
+	})
+
+	local FTFAutoHackToggle = FTFTab:CreateToggle({
+		Name = "Auto Hack (Requires Easy Hack)",
+		CurrentValue = false,
+		Flag = nil,
+		Callback = function(value)
+			auto_hack_toggled = value
+			if value then
+				FTFQuickHackToggle:Set(true)
+			end
+		end,
+	})
+	task.spawn(function()
+		local last_computer = nil
+
+		while task.wait(0.1) do
+			local ictc, computer = isCloseToComputer()
+			local ictfp, freeze_pod = isCloseToFreezePod()
+
+			if (isInGame() and auto_e_toggled and (ictc or ictfp)) or (isBeast() and auto_e_toggled and ictfp) then
+				game.ReplicatedStorage.RemoteEvent:FireServer("Input", "Action", true)
+				task.wait(0.1)
+				game.ReplicatedStorage.RemoteEvent:FireServer("Input", "Action", false)
+			end
+
+			if
+				isInGame()
+				and quick_hack_toggled
+				and ictc
+				and last_computer ~= computer
+				and not isInDanger()
+				and not hidingFromBeast
+			then
+				local plr = game:GetService("Players").LocalPlayer
+				local char = plr and plr.Character
+				local root = char and char:FindFirstChild("HumanoidRootPart")
+
+				if root then
+					local spot = getValidSpot(computer)
+
+					task.spawn(function()
+						local running = true
+
+						task.spawn(function()
+							while running and not isInDanger() and not hidingFromBeast do
+								root.CFrame = spot.CFrame * CFrame.new(0, 0, 0.1)
+								task.wait()
+							end
+						end)
+
+						task.delay(1.5, function()
+							running = false
+						end)
+					end)
+				end
+			end
+
+			if isInGame() and auto_hack_toggled and not isInDanger() and not hidingFromBeast then
+				local cComp = getClosestComputer(false)
+
+				if cComp then
+					if cComp ~= computer then
+						local spot = getValidSpot(cComp)
+						safeTweenToPart(spot)
+					end
+				end
+			end
+
+			last_computer = computer
+		end
+	end)
+
 	local FTFFreezePodKeybind = FTFTab:CreateKeybind({
 		Name = "Teleport to Freeze Pod",
 		CurrentKeybind = "F",
@@ -819,26 +1150,9 @@ if game.PlaceId == 893973440 then
 		end,
 	})
 
-	local function findBeast()
-		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-			if
-				v.Character
-				and v.Character:FindFirstChild("BeastPowers")
-				and v ~= game:GetService("Players").LocalPlayer
-			then
-				return v
-			end
-		end
-
-		return nil
-	end
-
 	task.spawn(function()
-		local hidingFromBeast = false
 		local oldPos
 		local oldPosV
-
-		local beast_max_dist = 20
 
 		local V3 = Vector3.new(0, 0, 0)
 
@@ -880,9 +1194,7 @@ if game.PlaceId == 893973440 then
 
 				if beastChar then
 					if char then
-						local dist = dist3d(root.Position, beastRoot.Position)
-
-						if dist < beast_max_dist then
+						if isInDanger() then
 							if not hidingFromBeast then
 								oldPos = root.CFrame
 								oldPosV = root.Position
@@ -982,6 +1294,27 @@ local IYToggle = IYTab:CreateToggle({
 	Callback = function(value) end,
 })
 
+local RSTab = Window:CreateTab("RS", "search")
+
+local rs_injected = false
+local RSButton = RSTab:CreateButton({
+	Name = "Inject Remote Spy",
+	Callback = function()
+		if rs_injected then
+			return
+		end
+		rs_injected = true
+		loadstring(game:HttpGet("https://paste.ee/r/hK1Q4D65"))()
+	end,
+})
+
+local RSToggle = RSTab:CreateToggle({
+	Name = "Load RS on Startup",
+	CurrentValue = false,
+	Flag = "LoadRSOnStartup", -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(value) end,
+})
+
 Rayfield:LoadConfiguration()
 
 if DexToggle.CurrentValue then
@@ -992,6 +1325,11 @@ end
 if IYToggle.CurrentValue then
 	iy_injected = true
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+end
+
+if RSToggle.CurrentValue then
+	rs_injected = true
+	loadstring(game:HttpGet("https://paste.ee/r/hK1Q4D65"))()
 end
 
 task.spawn(function()
