@@ -109,6 +109,7 @@ local function tweenGotoPart(part)
 	breakVelocity(1)
 end
 
+local safeTweening = false
 local function safeTweenToPart(part)
 	local TweenService = game:GetService("TweenService")
 
@@ -118,15 +119,20 @@ local function safeTweenToPart(part)
 	local hum = char and char:FindFirstChildOfClass("Humanoid")
 
 	local dist = dist3d(root.Position, part.Position)
-	local t = dist / hum.WalkSpeed
+	local t = dist / 16
 
 	if part:IsA("BasePart") then
+		safeTweening = true
 		if hum and hum.SeatPart then
 			hum.Sit = false
 			task.wait(0.1)
 		end
 		task.wait(0.1)
 		TweenService:Create(root, TweenInfo.new(t, Enum.EasingStyle.Linear), { CFrame = part.CFrame }):Play()
+
+		task.delay(t, function()
+			safeTweening = false
+		end)
 	end
 	breakVelocity(t)
 end
@@ -973,15 +979,17 @@ if game.PlaceId == 893973440 then
 		local sgui = pgui and pgui:FindFirstChild("ScreenGui")
 		local sbars = sgui and sgui:FindFirstChild("StatusBars")
 
-		local bars = sbars:GetChildren()
+		local bars = sbars and sbars:GetChildren()
 
-		for i, v in pairs(bars) do
-			if v:IsA("TextLabel") then
-				local name = v.ContentText
-				local player = game:GetService("Players"):FindFirstChild(name)
+		if bars then
+			for i, v in pairs(bars) do
+				if v:IsA("TextLabel") then
+					local name = v.ContentText
+					local player = game:GetService("Players"):FindFirstChild(name)
 
-				if player then
-					table.insert(players, player)
+					if player then
+						table.insert(players, player)
+					end
 				end
 			end
 		end
@@ -1003,6 +1011,8 @@ if game.PlaceId == 893973440 then
 
 		return false
 	end
+
+	-- local function get
 
 	local beast_max_dist = 20
 	local hidingFromBeast = false
@@ -1104,11 +1114,9 @@ if game.PlaceId == 893973440 then
 			if isInGame() and auto_hack_toggled and not isInDanger() and not hidingFromBeast then
 				local cComp = getClosestComputer(false)
 
-				if cComp then
-					if cComp ~= computer then
-						local spot = getValidSpot(cComp)
-						safeTweenToPart(spot)
-					end
+				if not safeTweening and cComp and cComp ~= computer then
+					local spot = getValidSpot(cComp)
+					safeTweenToPart(spot)
 				end
 			end
 
