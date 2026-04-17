@@ -110,7 +110,7 @@ local function tweenGotoPart(part)
 end
 
 local safeTweening = false
-local function safeTweenToPart(part)
+local function safeTweenToPos(cframe: CFrame)
 	local TweenService = game:GetService("TweenService")
 
 	local plr = game:GetService("Players").LocalPlayer
@@ -118,23 +118,27 @@ local function safeTweenToPart(part)
 	local root = char and char:FindFirstChild("HumanoidRootPart")
 	local hum = char and char:FindFirstChildOfClass("Humanoid")
 
-	local dist = dist3d(root.Position, part.Position)
+	local dist = dist3d(root.Position, cframe.Position)
 	local t = dist / 16
 
-	if part:IsA("BasePart") then
-		safeTweening = true
-		if hum and hum.SeatPart then
-			hum.Sit = false
-			task.wait(0.1)
-		end
+	safeTweening = true
+	if hum and hum.SeatPart then
+		hum.Sit = false
 		task.wait(0.1)
-		TweenService:Create(root, TweenInfo.new(t, Enum.EasingStyle.Linear), { CFrame = part.CFrame }):Play()
-
-		task.delay(t, function()
-			safeTweening = false
-		end)
 	end
+	task.wait(0.1)
+	TweenService:Create(root, TweenInfo.new(t, Enum.EasingStyle.Linear), { CFrame = cframe }):Play()
+
+	task.delay(t, function()
+		safeTweening = false
+	end)
 	breakVelocity(t)
+end
+
+local function safeTweenToPart(part)
+	if part:IsA("BasePart") then
+		safeTweenToPos(part.CFrame)
+	end
 end
 
 WaitForGameAndPlayer()
@@ -306,12 +310,14 @@ local function updateESP(obj, color, enabled)
 			oldHl:Destroy()
 		elseif color ~= oldHl.FillColor then
 			oldHl.FillColor = color
+			oldHl.OutlineColor = color
 		end
 	elseif enabled then
 		local hl = Instance.new("Highlight")
 		hl.Name = "ESPHL"
 		hl.Adornee = obj
 		hl.FillColor = color
+		hl.OutlineColor = color
 		hl.Parent = obj
 	end
 end
@@ -334,11 +340,9 @@ local UniversalESPToggle = UniversalTab:CreateToggle({
 		updateUniversalESP(universal_esp_toggled)
 	end,
 })
-task.spawn(function()
-	while task.wait() do
-		if universal_esp_toggled then
-			updateUniversalESP(universal_esp_toggled)
-		end
+game:GetService("RunService").RenderStepped:Connect(function()
+	if universal_esp_toggled then
+		updateUniversalESP(universal_esp_toggled)
 	end
 end)
 
@@ -348,18 +352,6 @@ local ussHum = ussChar and ussChar:FindFirstChild("Humanoid")
 
 local ussSpeed = (ussHum and ussHum.WalkSpeed) or 16
 
-task.spawn(function()
-	while task.wait() do
-		local plr = game:GetService("Players").LocalPlayer
-		local char = plr and plr.Character
-		local hum = char and char:FindFirstChild("Humanoid")
-
-		if hum then
-			hum.WalkSpeed = ussSpeed
-		end
-	end
-end)
-
 local UniversalSpeedSlider = UniversalTab:CreateSlider({
 	Name = "Speed",
 	Range = { 0, 100 },
@@ -368,9 +360,78 @@ local UniversalSpeedSlider = UniversalTab:CreateSlider({
 	CurrentValue = ussSpeed,
 	Flag = nil, -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
-		ussSpeed = value
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local hum = char and char:FindFirstChildWhichIsA("Humanoid")
+
+		if hum then
+			hum.WalkSpeed = value
+		end
 	end,
 })
+
+local SpeedMod
+local LoopSpeedToggle = UniversalTab:CreateToggle({
+	Name = "Loop Speed",
+	CurrentValue = false,
+	Flag = nil,
+	Callback = function(value)
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local hum = char and char:FindFirstChildWhichIsA("Humanoid")
+
+		if value and hum then
+			local function SetWalkspeed()
+				local _plr = game:GetService("Players").LocalPlayer
+				local _char = _plr and _plr.Character
+				local _hum = _char and _char:FindFirstChildWhichIsA("Humanoid")
+
+				if _hum then
+					_hum.WalkSpeed = UniversalSpeedSlider.CurrentValue
+				end
+			end
+			SetWalkspeed()
+			SpeedMod = (SpeedMod and SpeedMod:Disconnect() and false)
+				or hum:GetPropertyChangedSignal("WalkSpeed"):Connect(SetWalkspeed)
+		else
+			SpeedMod = (SpeedMod and SpeedMod:Disconnect() and false) or nil
+		end
+	end,
+})
+
+-- Zoo or Oof
+if game.PlaceId == 139233844569220 then
+	local ZOOTab = Window:CreateTab("ZOO or OOF", "gamepad-2")
+	local ZOOESPSection = ZOOTab:CreateSection("ESP")
+
+	local function updateAnimalESP(enabled)
+		local gameplay = game.Workspace:FindFirstChild("Gameplay")
+		local dynamic = gameplay and gameplay:FindFirstChild("Dynamic")
+		local animals_ = dynamic and dynamic:FindFirstChild("Animals")
+		local animals = animals_ and animals_:GetChildren()
+
+		for i, v in pairs(animals) do
+			updateESP(v, Color3.fromRGB(0, 128, 255), enabled)
+		end
+	end
+
+	local zoo_esp_toggled = true
+	local ZOOESPToggle = ZOOTab:CreateToggle({
+		Name = "Animal ESP",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			zoo_esp_toggled = value
+			updateAnimalESP(value)
+		end,
+	})
+
+	game:GetService("RunService").RenderStepped:Connect(function()
+		if zoo_esp_toggled then
+			updateAnimalESP(zoo_esp_toggled)
+		end
+	end)
+end
 
 -- Murder Mystery 2
 
@@ -412,11 +473,9 @@ if game.PlaceId == 142823291 then
 			updatePlayerESP(value)
 		end,
 	})
-	task.spawn(function()
-		while task.wait() do
-			if mm_player_esp_toggled then
-				updatePlayerESP(mm_player_esp_toggled)
-			end
+	game:GetService("RunService").RenderStepped:Connect(function()
+		if mm_player_esp_toggled then
+			updatePlayerESP(mm_player_esp_toggled)
 		end
 	end)
 
@@ -447,11 +506,9 @@ if game.PlaceId == 142823291 then
 			updateCoinESP(value)
 		end,
 	})
-	task.spawn(function()
-		while task.wait() do
-			if mm_coin_esp_toggled then
-				updateCoinESP(mm_coin_esp_toggled)
-			end
+	game:GetService("RunService").RenderStepped:Connect(function()
+		if mm_coin_esp_toggled then
+			updateCoinESP(mm_coin_esp_toggled)
 		end
 	end)
 
@@ -713,58 +770,14 @@ if game.PlaceId == 893973440 then
 		return map:GetChildren()
 	end
 
-	local PCHighlights = {}
 	local computer_esp_toggled = true
-
-	local Comp = 0
-
-	task.spawn(function()
-		while task.wait() do
-			local GotComputers = 0
-			for _, v in pairs(getCurrentMapChildren()) do
-				if v.Name == "ComputerTable" and v:FindFirstChild("Screen") then
-					GotComputers += 1
-					if computer_esp_toggled then
-						local Found = false
-						for i3, v3 in pairs(PCHighlights) do
-							if v3.Adornee == v then
-								v3.FillColor = v.Screen.Color
-								Found = true
-							end
-						end
-						if Found == false then
-							local NewHighlight = Instance.new("Highlight")
-							NewHighlight.FillColor = v.Screen.Color
-							NewHighlight.Adornee = v
-							NewHighlight.Parent = v
-							table.insert(PCHighlights, NewHighlight)
-						end
-					else
-						for i3, v3 in pairs(PCHighlights) do
-							table.remove(PCHighlights, i3)
-							v3:Destroy()
-						end
-					end
-				end
-			end
-
-			if GotComputers ~= Comp then
-				coroutine.wrap(function()
-					if GotComputers == 0 then
-						task.wait(1)
-						UpdatePlrESP()
-						UpdateBeastESP()
-					else
-						task.wait(3)
-						UpdatePlrESP()
-						task.wait(15)
-						UpdateBeastESP()
-					end
-				end)()
-				Comp = GotComputers
+	local function updatePCESP()
+		for _, v in pairs(getCurrentMapChildren()) do
+			if v.Name == "ComputerTable" and v:FindFirstChild("Screen") then
+				updateESP(v, v.Screen.Color, computer_esp_toggled)
 			end
 		end
-	end)
+	end
 
 	local FTFPCEspToggle = FTFTab:CreateToggle({
 		Name = "Computer ESP",
@@ -772,17 +785,20 @@ if game.PlaceId == 893973440 then
 		Flag = nil,
 		Callback = function(value)
 			computer_esp_toggled = value
+			updatePCESP()
 		end,
 	})
 
 	task.spawn(function()
-		while task.wait(5) do
+		while task.wait(1) do
 			UpdateBeastESP()
 			UpdatePlrESP()
+			updatePCESP()
 		end
 
 		UpdateBeastESP()
 		UpdatePlrESP()
+		updatePCESP()
 	end)
 
 	local FTFUtilsSection = FTFTab:CreateSection("Utils")
@@ -855,7 +871,7 @@ if game.PlaceId == 893973440 then
 	end
 
 	local function isCloseToComputer()
-		return isCloseToModelName("ComputerTable", 10)
+		return isCloseToModelName("ComputerTable", 6)
 	end
 
 	local function isCloseToFreezePod()
@@ -911,15 +927,36 @@ if game.PlaceId == 893973440 then
 
 			local triggers = { trigger1, trigger2, trigger3 }
 
-			for _, t in pairs(triggers) do
-				local aSign = t:FindFirstChild("ActionSign")
+			local valid_triggers = {}
 
-				if aSign then
-					if aSign.Value ~= 0 then
-						return t
+			for _, t in pairs(triggers) do
+				local v = t:FindFirstChild("Value")
+
+				if v then
+					if not v.Value then
+						table.insert(valid_triggers, t)
 					end
 				end
 			end
+
+			local best_dist = 99999999
+			local best = nil
+
+			local plr = game:GetService("Players").LocalPlayer
+			local char = plr and plr.Character
+			local root = char and char:FindFirstChild("HumanoidRootPart")
+
+			if root then
+				for _, t in pairs(valid_triggers) do
+					local dist = dist3d(root.Position, t.Position)
+					if dist < best_dist then
+						best_dist = dist
+						best = t
+					end
+				end
+			end
+
+			return best
 		end
 
 		return nil
@@ -1099,7 +1136,9 @@ if game.PlaceId == 893973440 then
 
 						task.spawn(function()
 							while running and not isInDanger() and not hidingFromBeast do
-								root.CFrame = spot.CFrame * CFrame.new(0, 0, 0.1)
+								if spot then
+									root.CFrame = spot.CFrame * CFrame.new(0, 0, 0.1)
+								end
 								task.wait()
 							end
 						end)
@@ -1116,7 +1155,22 @@ if game.PlaceId == 893973440 then
 
 				if not safeTweening and cComp and cComp ~= computer then
 					local spot = getValidSpot(cComp)
-					safeTweenToPart(spot)
+
+					if spot then
+						safeTweening = true
+
+						task.delay(1, function()
+							local plr = game:GetService("Players").LocalPlayer
+							local char = plr and plr.Character
+							local root = char and char:FindFirstChild("HumanoidRootPart")
+
+							-- if root then
+							-- 	root.CFrame = CFrame.new(spot.Position.X, -40, spot.Position.Z)
+							-- end
+
+							safeTweenToPart(spot)
+						end)
+					end
 				end
 			end
 
