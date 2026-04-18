@@ -371,6 +371,7 @@ local UniversalSpeedSlider = UniversalTab:CreateSlider({
 })
 
 local SpeedMod
+local SpeedCA
 local LoopSpeedToggle = UniversalTab:CreateToggle({
 	Name = "Loop Speed",
 	CurrentValue = false,
@@ -393,8 +394,16 @@ local LoopSpeedToggle = UniversalTab:CreateToggle({
 			SetWalkspeed()
 			SpeedMod = (SpeedMod and SpeedMod:Disconnect() and false)
 				or hum:GetPropertyChangedSignal("WalkSpeed"):Connect(SetWalkspeed)
+			SpeedCA = (SpeedCA and SpeedCA:Disconnect() and false)
+				or plr.CharacterAdded:Connect(function(nChar)
+					char, hum = nChar, nChar:WaitForChild("Humanoid")
+					SetWalkspeed()
+					SpeedMod = (SpeedMod and SpeedMod:Disconnect() and false)
+						or hum:GetPropertyChangedSignal("WalkSpeed"):Connect(SetWalkspeed)
+				end)
 		else
 			SpeedMod = (SpeedMod and SpeedMod:Disconnect() and false) or nil
+			SpeedCA = (SpeedCA and SpeedCA:Disconnect() and false) or nil
 		end
 	end,
 })
@@ -651,7 +660,7 @@ if game.PlaceId == 142823291 then
 						local hasFired = false
 
 						if pRoot then
-							plr.CameraMode = Enum.CameraMode.LockFirstPerson
+							-- plr.CameraMode = Enum.CameraMode.LockFirstPerson
 							plr.CameraMinZoomDistance = 0.5
 							plr.CameraMaxZoomDistance = 0.5
 
@@ -663,37 +672,36 @@ if game.PlaceId == 142823291 then
 							local startTime = tick()
 							local connection
 
-							connection = game:GetService("RunService").RenderStepped:Connect(function()
+							connection = game:GetService("RunService").Heartbeat:Connect(function()
 								local elapsed = tick() - startTime
 
-								if elapsed > 0.35 then -- how long to force the look (0.2 seconds here)
+								if elapsed > 0.5 then -- how long to force the look (0.2 seconds here)
 									root.CFrame = pos -- return to original position
-									plr.CameraMode = Enum.CameraMode.Classic
+									-- plr.CameraMode = Enum.CameraMode.Classic
 									plr.CameraMinZoomDistance = 0.5
 									plr.CameraMaxZoomDistance = 128
 									connection:Disconnect()
 									return
 								end
 
-								-- Better first-person feel: look from roughly head height
 								local head = char:FindFirstChild("Head")
-								local camPos = head and head.Position or root.Position + Vector3.new(0, 1.5, 0)
 
-								root.CFrame =
-									CFrame.lookAt(root.Position, Vector3.new(pRoot.Position.X, 0, pRoot.Position.Z))
-								camera.CFrame = CFrame.lookAt(camPos, pRoot.Position)
+								local prePos = pRoot.Position + (pRoot.AssemblyLinearVelocity.Unit * 1)
+
+								root.CFrame = CFrame.lookAt(
+									(pRoot.CFrame * CFrame.new(0, 0, 5)).Position,
+									Vector3.new(prePos.X, 0, prePos.Z)
+								)
+								local camPos = head and head.Position or root.Position + Vector3.new(0, 1.5, 0)
+								camera.CFrame = CFrame.lookAt(camPos, prePos)
 
 								-- local handle = gunPlayer:FindFirstChild("Handle")
 								-- if handle then
 								-- 	handle.CFrame = CFrame.lookAt(handle.Position, pRoot.Position)
 								-- end
 
-								if elapsed > 0.18 and not hasFired then
+								if elapsed > 0.3 and not hasFired then
 									gunPlayer:Activate()
-									local mouse = plr:GetMouse()
-									if mouse then
-										print(mouse.Target)
-									end
 									hasFired = true
 								end
 							end)
