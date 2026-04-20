@@ -347,6 +347,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
 end)
 
 local ussPlr = game:GetService("Players").LocalPlayer
+local TweenService = game:GetService("TweenService")
 local ussChar = ussPlr and ussPlr.Character
 local ussHum = ussChar and ussChar:FindFirstChild("Humanoid")
 
@@ -370,8 +371,8 @@ local UniversalSpeedSlider = UniversalTab:CreateSlider({
 	end,
 })
 
-local SpeedMod
-local SpeedCA
+local SpeedMod = nil
+local SpeedCA = nil
 local LoopSpeedToggle = UniversalTab:CreateToggle({
 	Name = "Loop Speed",
 	CurrentValue = false,
@@ -396,7 +397,7 @@ local LoopSpeedToggle = UniversalTab:CreateToggle({
 				or hum:GetPropertyChangedSignal("WalkSpeed"):Connect(SetWalkspeed)
 			SpeedCA = (SpeedCA and SpeedCA:Disconnect() and false)
 				or plr.CharacterAdded:Connect(function(nChar)
-					char, hum = nChar, nChar:WaitForChild("Humanoid")
+					hum = nChar:WaitForChild("Humanoid")
 					SetWalkspeed()
 					SpeedMod = (SpeedMod and SpeedMod:Disconnect() and false)
 						or hum:GetPropertyChangedSignal("WalkSpeed"):Connect(SetWalkspeed)
@@ -610,10 +611,10 @@ if game.PlaceId == 142823291 then
 		end
 	end)
 
-	local mm_kill_murderer_toggled = true
+	local mm_kill_murderer_toggled = false
 	local MMKillMurdererToggle = MMTab:CreateToggle({
 		Name = "Auto Kill Murderer",
-		CurrentValue = true,
+		CurrentValue = false,
 		Flag = nil,
 		Callback = function(value)
 			mm_kill_murderer_toggled = value
@@ -661,8 +662,9 @@ if game.PlaceId == 142823291 then
 
 						if pRoot then
 							-- plr.CameraMode = Enum.CameraMode.LockFirstPerson
-							plr.CameraMinZoomDistance = 0.5
-							plr.CameraMaxZoomDistance = 0.5
+							-- plr.CameraMinZoomDistance = 0.5
+							-- plr.CameraMaxZoomDistance = 0.5
+							plr.DevEnableMouseLock = true
 
 							task.wait(1)
 
@@ -678,8 +680,8 @@ if game.PlaceId == 142823291 then
 								if elapsed > 0.5 then -- how long to force the look (0.2 seconds here)
 									root.CFrame = pos -- return to original position
 									-- plr.CameraMode = Enum.CameraMode.Classic
-									plr.CameraMinZoomDistance = 0.5
-									plr.CameraMaxZoomDistance = 128
+									-- plr.CameraMinZoomDistance = 0.5
+									-- plr.CameraMaxZoomDistance = 128
 									connection:Disconnect()
 									return
 								end
@@ -687,13 +689,16 @@ if game.PlaceId == 142823291 then
 								local head = char:FindFirstChild("Head")
 
 								local prePos = pRoot.Position + (pRoot.AssemblyLinearVelocity.Unit * 1)
+								prePos = (CFrame.new(prePos) * CFrame.new(1, 0, 0)).Position
 
-								root.CFrame = CFrame.lookAt(
-									(pRoot.CFrame * CFrame.new(0, 0, 5)).Position,
-									Vector3.new(prePos.X, 0, prePos.Z)
-								)
+								root.CFrame = CFrame.new((pRoot.CFrame * CFrame.new(0, 0, 5)).Position)
 								local camPos = head and head.Position or root.Position + Vector3.new(0, 1.5, 0)
-								camera.CFrame = CFrame.lookAt(camPos, prePos)
+								-- camera.CFrame = CFrame.lookAt(camPos, prePos)
+								TweenService:Create(
+									camera,
+									TweenInfo.new(0.02, Enum.EasingStyle.Linear),
+									{ CFrame = CFrame.lookAt(camPos, prePos) }
+								):Play()
 
 								-- local handle = gunPlayer:FindFirstChild("Handle")
 								-- if handle then
@@ -707,6 +712,36 @@ if game.PlaceId == 142823291 then
 							end)
 
 							task.wait(3)
+						end
+					end
+				end
+			end
+		end
+	end)
+
+	local mm_collect_coin_toggled = false
+	local MMCollectCoinToggle = MMTab:CreateToggle({
+		Name = "Collect Coins",
+		CurrentValue = false,
+		Flag = nil,
+		Callback = function(value)
+			mm_collect_coin_toggled = value
+		end,
+	})
+	task.spawn(function()
+		while task.wait() do
+			if mm_collect_coin_toggled and not safeTweening then
+				local plr = game:GetService("Players").LocalPlayer
+				local char = plr and plr.Character
+				local root = char and char:FindFirstChild("HumanoidRootPart")
+
+				if root then
+					local coins = game.Workspace:FindFirstChild("CoinContainer", true)
+
+					if coins then
+						local coin = coins:FindFirstChild("Coin_Server")
+						if coin then
+							safeTweenToPart(coin)
 						end
 					end
 				end
