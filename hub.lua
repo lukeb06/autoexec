@@ -441,6 +441,94 @@ if game.PlaceId == 139233844569220 then
 			updateAnimalESP(zoo_esp_toggled)
 		end
 	end)
+
+	local ZOOFarmSection = ZOOTab:CreateSection("Farm")
+
+	local function getTeam()
+		local plr = game:GetService("Players").LocalPlayer
+		return (plr and plr.Team) or { Name = "Not in game" }
+	end
+
+	local function isAnimal()
+		return getTeam().Name == "Animal"
+	end
+
+	local function isKeeper()
+		return getTeam().Name == "Keeper"
+	end
+
+	local function isInGame()
+		return getTeam().Name ~= "Not in game"
+	end
+
+	local function getKeeper()
+		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+			if v.Team.Name == "Keeper" then
+				return v
+			end
+		end
+
+		return nil
+	end
+
+	local zoo_farm_toggled = true
+	local ZOOFarmToggle = ZOOTab:CreateToggle({
+		Name = "Auto Farm",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			zoo_farm_toggled = value
+		end,
+	})
+	task.spawn(function()
+		local inGame = false
+		local isInvis = false
+
+		while task.wait() do
+			if zoo_farm_toggled then
+				if isInvis and not isInGame() then
+					isInvis = false
+				end
+
+				if isAnimal() and not isInvis then
+					local plr = game:GetService("Players").LocalPlayer
+					local char = plr and plr.Character
+					local root = char and char:FindFirstChild("HumanoidRootPart")
+
+					if root then
+						task.wait(2)
+						root.CFrame = CFrame.new(1, 51, 224)
+						task.wait(1)
+						isInvis = true
+					end
+				end
+
+				if isInvis then
+					local keeper = getKeeper()
+
+					if keeper then
+						local plr = game:GetService("Players").LocalPlayer
+						local char = plr and plr.Character
+						local root = char and char:FindFirstChild("HumanoidRootPart")
+
+						local kChar = keeper.Character
+						local kRoot = kChar and kChar:FindFirstChild("HumanoidRootPart")
+
+						if root and kRoot then
+							root.CFrame = kRoot.CFrame
+							local args = {
+								[1] = "Taunt.play",
+							}
+
+							game:GetService("ReplicatedStorage").Net:FireServer(unpack(args))
+						end
+					end
+				end
+			else
+				isInvis = false
+			end
+		end
+	end)
 end
 
 -- Murder Mystery 2
