@@ -141,6 +141,20 @@ local function safeTweenToPart(part)
 	end
 end
 
+local function aimbotToPart(part, smoothing)
+	local camera = workspace.CurrentCamera
+
+	if camera then
+		game:GetService("TweenService")
+			:Create(
+				camera,
+				TweenInfo.new(smoothing, Enum.EasingStyle.Linear),
+				{ CFrame = CFrame.new(camera.CFrame.Position, part.Position) }
+			)
+			:Play()
+	end
+end
+
 WaitForGameAndPlayer()
 
 local looped_functions = {}
@@ -409,6 +423,108 @@ local LoopSpeedToggle = UniversalTab:CreateToggle({
 	end,
 })
 
+-- Reminiscence Zombies
+if game.PlaceId == 2778230703 or game.PlaceId == 3554092380 then
+	local RZTab = Window:CreateTab("Reminiscence Zombies", "gamepad-2")
+	local RZESPSection = RZTab:CreateSection("ESP")
+
+	local function getZombies()
+		local zombies = game.Workspace:FindFirstChild("Zombies")
+		return (zombies and zombies:GetChildren()) or {}
+	end
+
+	local function updateZombieESP(enabled)
+		local zombies = getZombies()
+
+		for i, v in pairs(zombies) do
+			updateESP(v, Color3.fromRGB(255, 0, 255), enabled)
+		end
+	end
+
+	local zombie_esp_toggled = true
+	local RZESPToggle = RZTab:CreateToggle({
+		Name = "Zombie ESP",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			zombie_esp_toggled = value
+			updateZombieESP(value)
+		end,
+	})
+	game:GetService("RunService").RenderStepped:Connect(function()
+		if zombie_esp_toggled then
+			updateZombieESP(zombie_esp_toggled)
+		end
+	end)
+
+	local rz_bring_zombies_toggled = false
+	local RZBringZombiesKeybind = RZTab:CreateKeybind({
+		Name = "Bring Zombies",
+		CurrentKeybind = "H",
+		HoldToInteract = false,
+		Flag = "RZBringZombiesKeybind",
+		Callback = function()
+			rz_bring_zombies_toggled = not rz_bring_zombies_toggled
+		end,
+	})
+	game:GetService("RunService").RenderStepped:Connect(function()
+		if rz_bring_zombies_toggled then
+			local zombies = getZombies()
+
+			for i, v in pairs(zombies) do
+				local root = v:FindFirstChild("HumanoidRootPart") or v.PrimaryPart
+
+				if root then
+					local plr = game:GetService("Players").LocalPlayer
+					local char = plr and plr.Character
+					local pRoot = char and char:FindFirstChild("HumanoidRootPart")
+
+					if pRoot then
+						root.CFrame = pRoot.CFrame * CFrame.new(0, 0, -5)
+					end
+				end
+			end
+		end
+	end)
+
+	-- local RZAimbotKeybind = RZTab:CreateKeybind({
+	-- 	Name = "Aimbot Keybind",
+	-- 	CurrentKeybind = "H",
+	-- 	HoldToInteract = true,
+	-- 	Flag = "RZAimbotKeybind",
+	-- 	Callback = function(value)
+	-- 		if value then
+	-- 			local plr = game:GetService("Players").LocalPlayer
+	-- 			local char = plr and plr.Character
+	-- 			local root = char and char:FindFirstChild("HumanoidRootPart")
+	-- 			local zombies = getZombies()
+
+	-- 			local best = nil
+	-- 			local best_dist = 99999999
+
+	-- 			for i, v in pairs(zombies) do
+	-- 				local ppart = v.PrimaryPart
+	-- 				if ppart then
+	-- 					local dist = dist3d(root.Position, ppart.Position)
+
+	-- 					if dist < best_dist then
+	-- 						best_dist = dist
+	-- 						best = v
+	-- 					end
+	-- 				end
+	-- 			end
+
+	-- 			if best then
+	-- 				local head = best:FindFirstChild("Head") or best.PrimaryPart
+	-- 				if head then
+	-- 					aimbotToPart(head, 0.01)
+	-- 				end
+	-- 			end
+	-- 		end
+	-- 	end,
+	-- })
+end
+
 -- Zoo or Oof
 if game.PlaceId == 139233844569220 then
 	local ZOOTab = Window:CreateTab("ZOO or OOF", "gamepad-2")
@@ -481,7 +597,6 @@ if game.PlaceId == 139233844569220 then
 		end,
 	})
 	task.spawn(function()
-		local inGame = false
 		local isInvis = false
 
 		while task.wait() do
@@ -496,7 +611,7 @@ if game.PlaceId == 139233844569220 then
 					local root = char and char:FindFirstChild("HumanoidRootPart")
 
 					if root then
-						task.wait(2)
+						task.wait((plr.Name == "pathwise3" and 1) or 2)
 						root.CFrame = CFrame.new(1, 51, 224)
 						task.wait(1)
 						isInvis = true
@@ -526,6 +641,106 @@ if game.PlaceId == 139233844569220 then
 				end
 			else
 				isInvis = false
+			end
+		end
+	end)
+
+	local function getClosestAnimal()
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		local plrs = game:GetService("Players"):GetPlayers()
+
+		local best = nil
+		local best_dist = 99999999
+
+		for i, v in pairs(plrs) do
+			local vChar = v.Character
+			local vRoot = vChar and vChar:FindFirstChild("HumanoidRootPart")
+
+			if vRoot and root then
+				local dist = dist3d(root.Position, vRoot.Position)
+
+				if dist < best_dist and v ~= plr and v.Team.Name == "Animal" then
+					best_dist = dist
+					best = v
+				end
+			end
+		end
+
+		return best
+	end
+
+	local function getPlayersAnimal(plr)
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		if root then
+			local gameplay = game.Workspace:FindFirstChild("Gameplay")
+			local dynamic = gameplay and gameplay:FindFirstChild("Dynamic")
+			local animals_ = dynamic and dynamic:FindFirstChild("Animals")
+			local animals = animals_ and animals_:GetChildren()
+
+			if animals then
+				local best = nil
+				local best_dist = 99999999
+
+				for i, v in pairs(animals) do
+					local rootPart = v.PrimaryPart
+					if rootPart then
+						local dist = dist3d(root.Position, rootPart.Position)
+
+						if dist < best_dist then
+							best_dist = dist
+							best = v
+						end
+					end
+				end
+
+				return best
+			end
+		end
+
+		return nil
+	end
+
+	local auto_kill_toggled = true
+	local ZOOAutoKillToggle = ZOOTab:CreateToggle({
+		Name = "Auto Kill",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			auto_kill_toggled = value
+		end,
+	})
+	task.spawn(function()
+		while task.wait() do
+			if isKeeper() then
+				local plr = game:GetService("Players").LocalPlayer
+				local char = plr and plr.Character
+				local root = char and char:FindFirstChild("HumanoidRootPart")
+
+				local closestAnimal = getClosestAnimal()
+
+				if closestAnimal and root then
+					local bAnimal = getPlayersAnimal(closestAnimal)
+					local bRoot = bAnimal and bAnimal.PrimaryPart
+
+					if bRoot then
+						local args = {
+							[1] = "Shooting.shotPlayer",
+							[2] = root.CFrame,
+							[3] = bRoot.CFrame,
+							[4] = closestAnimal,
+							[5] = bRoot,
+							[6] = CFrame.new(0.8038291931152344, 0.09816551208496094, -0.000888824462890625)
+								* CFrame.Angles(3.1407759189605713, 1.3910810947418213, 3.129187822341919),
+						}
+
+						game:GetService("ReplicatedStorage").Net:FireServer(unpack(args))
+					end
+				end
 			end
 		end
 	end)
@@ -759,45 +974,53 @@ if game.PlaceId == 142823291 then
 							local pos = root.CFrame
 							root.CFrame = pRoot.CFrame * CFrame.new(0, 0, 5)
 
-							local startTime = tick()
-							local connection
+							task.wait(0.3)
+							local tdPos = camera:WorldToScreenPoint(pRoot.Position)
+							game:GetService("VirtualUser"):ClickButton1(Vector2.new(tdPos.X, tdPos.Y))
 
-							connection = game:GetService("RunService").Heartbeat:Connect(function()
-								local elapsed = tick() - startTime
+							task.wait(0.1)
 
-								if elapsed > 0.5 then -- how long to force the look (0.2 seconds here)
-									root.CFrame = pos -- return to original position
-									-- plr.CameraMode = Enum.CameraMode.Classic
-									-- plr.CameraMinZoomDistance = 0.5
-									-- plr.CameraMaxZoomDistance = 128
-									connection:Disconnect()
-									return
-								end
+							root.CFrame = pos
 
-								local head = char:FindFirstChild("Head")
+							-- local startTime = tick()
+							-- local connection
 
-								local prePos = pRoot.Position + (pRoot.AssemblyLinearVelocity.Unit * 1)
-								prePos = (CFrame.new(prePos) * CFrame.new(1, 0, 0)).Position
+							-- connection = game:GetService("RunService").Heartbeat:Connect(function()
+							-- 	local elapsed = tick() - startTime
 
-								root.CFrame = CFrame.new((pRoot.CFrame * CFrame.new(0, 0, 5)).Position)
-								local camPos = head and head.Position or root.Position + Vector3.new(0, 1.5, 0)
-								-- camera.CFrame = CFrame.lookAt(camPos, prePos)
-								TweenService:Create(
-									camera,
-									TweenInfo.new(0.02, Enum.EasingStyle.Linear),
-									{ CFrame = CFrame.lookAt(camPos, prePos) }
-								):Play()
+							-- 	if elapsed > 0.5 then -- how long to force the look (0.2 seconds here)
+							-- 		root.CFrame = pos -- return to original position
+							-- 		-- plr.CameraMode = Enum.CameraMode.Classic
+							-- 		-- plr.CameraMinZoomDistance = 0.5
+							-- 		-- plr.CameraMaxZoomDistance = 128
+							-- 		connection:Disconnect()
+							-- 		return
+							-- 	end
 
-								-- local handle = gunPlayer:FindFirstChild("Handle")
-								-- if handle then
-								-- 	handle.CFrame = CFrame.lookAt(handle.Position, pRoot.Position)
-								-- end
+							-- 	local head = char:FindFirstChild("Head")
 
-								if elapsed > 0.3 and not hasFired then
-									gunPlayer:Activate()
-									hasFired = true
-								end
-							end)
+							-- 	local prePos = pRoot.Position + (pRoot.AssemblyLinearVelocity.Unit * 1)
+							-- 	prePos = (CFrame.new(prePos) * CFrame.new(1, 0, 0)).Position
+
+							-- 	root.CFrame = CFrame.new((pRoot.CFrame * CFrame.new(0, 0, 5)).Position)
+							-- 	local camPos = head and head.Position or root.Position + Vector3.new(0, 1.5, 0)
+							-- 	-- camera.CFrame = CFrame.lookAt(camPos, prePos)
+							-- 	TweenService:Create(
+							-- 		camera,
+							-- 		TweenInfo.new(0.02, Enum.EasingStyle.Linear),
+							-- 		{ CFrame = CFrame.lookAt(camPos, prePos) }
+							-- 	):Play()
+
+							-- 	-- local handle = gunPlayer:FindFirstChild("Handle")
+							-- 	-- if handle then
+							-- 	-- 	handle.CFrame = CFrame.lookAt(handle.Position, pRoot.Position)
+							-- 	-- end
+
+							-- 	if elapsed > 0.3 and not hasFired then
+							-- 		gunPlayer:Activate()
+							-- 		hasFired = true
+							-- 	end
+							-- end)
 
 							task.wait(3)
 						end
@@ -827,9 +1050,21 @@ if game.PlaceId == 142823291 then
 					local coins = game.Workspace:FindFirstChild("CoinContainer", true)
 
 					if coins then
-						local coin = coins:FindFirstChild("Coin_Server")
-						if coin then
-							safeTweenToPart(coin)
+						local best = nil
+						local best_dist = 99999999
+
+						for i, v in pairs(coins:GetChildren()) do
+							if v.Name == "Coin_Server" then
+								local dist = dist3d(root.Position, v.Position)
+								if dist < best_dist then
+									best_dist = dist
+									best = v
+								end
+							end
+						end
+
+						if best then
+							safeTweenToPart(best)
 						end
 					end
 				end
