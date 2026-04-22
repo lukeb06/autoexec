@@ -433,6 +433,21 @@ if game.PlaceId == 2778230703 or game.PlaceId == 3554092380 then
 		return (zombies and zombies:GetChildren()) or {}
 	end
 
+	local function getBox()
+		local interactions = game.Workspace:FindFirstChild("Interactions")
+		return interactions and interactions:FindFirstChild("Mystery")
+	end
+
+	local function getPack()
+		local interactions = game.Workspace:FindFirstChild("Interactions")
+		return interactions and interactions:FindFirstChild("Pack-a-Punch")
+	end
+
+	local function getPowerups()
+		local powerups = game.Workspace:FindFirstChild("Power-ups")
+		return (powerups and powerups:GetChildren()) or {}
+	end
+
 	local function updateZombieESP(enabled)
 		local zombies = getZombies()
 
@@ -441,8 +456,24 @@ if game.PlaceId == 2778230703 or game.PlaceId == 3554092380 then
 		end
 	end
 
+	local function updateBoxESP(enabled)
+		local box = getBox()
+
+		if box then
+			updateESP(box, Color3.fromRGB(255, 255, 0), enabled)
+		end
+	end
+
+	local function updatePowerupESP(enabled)
+		local powerups = getPowerups()
+
+		for i, v in pairs(powerups) do
+			updateESP(v, Color3.fromRGB(107, 176, 255), enabled)
+		end
+	end
+
 	local zombie_esp_toggled = true
-	local RZESPToggle = RZTab:CreateToggle({
+	local RZZombieESPToggle = RZTab:CreateToggle({
 		Name = "Zombie ESP",
 		CurrentValue = true,
 		Flag = nil,
@@ -451,37 +482,161 @@ if game.PlaceId == 2778230703 or game.PlaceId == 3554092380 then
 			updateZombieESP(value)
 		end,
 	})
+
+	local box_esp_toggled = true
+	local RZBoxESPToggle = RZTab:CreateToggle({
+		Name = "Box ESP",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			box_esp_toggled = value
+			updateBoxESP(value)
+		end,
+	})
+
+	local powerup_esp_toggled = true
+	local RZPowerupESPToggle = RZTab:CreateToggle({
+		Name = "Powerup ESP",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			powerup_esp_toggled = value
+			updatePowerupESP(value)
+		end,
+	})
+
 	game:GetService("RunService").RenderStepped:Connect(function()
 		if zombie_esp_toggled then
 			updateZombieESP(zombie_esp_toggled)
 		end
+
+		if box_esp_toggled then
+			updateBoxESP(box_esp_toggled)
+		end
+
+		if powerup_esp_toggled then
+			updatePowerupESP(powerup_esp_toggled)
+		end
 	end)
 
-	local rz_bring_zombies_toggled = false
-	local RZBringZombiesKeybind = RZTab:CreateKeybind({
-		Name = "Bring Zombies",
-		CurrentKeybind = "H",
+	local RZUtilSection = RZTab:CreateSection("Utils")
+
+	local RZGotoBoxKeybind = RZTab:CreateKeybind({
+		Name = "TP to Box",
+		CurrentKeybind = "X",
 		HoldToInteract = false,
-		Flag = "RZBringZombiesKeybind",
+		Flag = "RZGotoBoxKeybind",
 		Callback = function()
-			rz_bring_zombies_toggled = not rz_bring_zombies_toggled
-		end,
-	})
-	game:GetService("RunService").RenderStepped:Connect(function()
-		if rz_bring_zombies_toggled then
-			local zombies = getZombies()
+			local box = getBox()
 
-			for i, v in pairs(zombies) do
-				local root = v:FindFirstChild("HumanoidRootPart") or v.PrimaryPart
+			if box then
+				local primary = box.PrimaryPart or box:FindFirstChildWhichIsA("BasePart")
 
-				if root then
+				if primary then
 					local plr = game:GetService("Players").LocalPlayer
 					local char = plr and plr.Character
-					local pRoot = char and char:FindFirstChild("HumanoidRootPart")
+					local root = char and char:FindFirstChild("HumanoidRootPart")
 
-					if pRoot then
-						root.CFrame = pRoot.CFrame * CFrame.new(0, 0, -5)
+					if root then
+						root.CFrame = primary.CFrame
 					end
+				end
+			end
+		end,
+	})
+
+	local RZGotoPackKeybind = RZTab:CreateKeybind({
+		Name = "TP to Pack",
+		CurrentKeybind = "Z",
+		HoldToInteract = false,
+		Flag = "RZGotoPackKeybind",
+		Callback = function()
+			local pack = getPack()
+
+			if pack then
+				local primary = pack.PrimaryPart or pack:FindFirstChildWhichIsA("BasePart")
+
+				if primary then
+					local plr = game:GetService("Players").LocalPlayer
+					local char = plr and plr.Character
+					local root = char and char:FindFirstChild("HumanoidRootPart")
+
+					if root then
+						root.CFrame = primary.CFrame
+					end
+				end
+			end
+		end,
+	})
+
+	local rz_bring_zombies_toggled = true
+	local RZBringZombiesToggle = RZTab:CreateToggle({
+		Name = "Bring Zombies (Right Click)",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			rz_bring_zombies_toggled = value
+		end,
+	})
+	task.spawn(function()
+		local plr = game:GetService("Players").LocalPlayer
+		local mouse = plr and plr:GetMouse()
+
+		local doBring = false
+
+		if mouse then
+			mouse.Button2Down:Connect(function()
+				doBring = true
+			end)
+
+			mouse.Button2Up:Connect(function()
+				doBring = false
+			end)
+		end
+
+		game:GetService("RunService").RenderStepped:Connect(function()
+			if rz_bring_zombies_toggled and doBring then
+				local zombies = getZombies()
+
+				for i, v in pairs(zombies) do
+					local root = v:FindFirstChild("HumanoidRootPart") or v.PrimaryPart
+
+					if root then
+						local plr = game:GetService("Players").LocalPlayer
+						local char = plr and plr.Character
+						local pRoot = char and char:FindFirstChild("HumanoidRootPart")
+
+						if pRoot then
+							root.CFrame = pRoot.CFrame * CFrame.new(0, 0, -5)
+						end
+					end
+				end
+			end
+		end)
+	end)
+
+	local grab_powerups_toggled = true
+	local RZGrabPowerups = RZTab:CreateToggle({
+		Name = "Auto Grab Powerups",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			grab_powerups_toggled = value
+		end,
+	})
+
+	game:GetService("RunService").RenderStepped:Connect(function()
+		if grab_powerups_toggled then
+			local powerups = getPowerups()
+
+			for i, v in pairs(powerups) do
+				local plr = game:GetService("Players").LocalPlayer
+				local char = plr and plr.Character
+				local root = char and char:FindFirstChild("HumanoidRootPart")
+				local primary = v.PrimaryPart or v:FindFirstChildWhichIsA("BasePart")
+
+				if primary and root then
+					primary.CFrame = root.CFrame
 				end
 			end
 		end
@@ -1690,7 +1845,7 @@ local DexButton = DexTab:CreateButton({
 			return
 		end
 		dex_injected = true
-		loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-DEX-Explorer-29920"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
 	end,
 })
 
