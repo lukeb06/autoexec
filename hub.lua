@@ -176,7 +176,7 @@ table.insert(looped_functions, function()
 
 		local p = Instance.new("Part", paths)
 		Instance.new("NumberValue", p).Name = "Age"
-		p.Size = Vector3.new(5, 1, 5)
+		p.Size = Vector3.new(3, 1, 3)
 		p.Anchored = true
 		local plr = game:GetService("Players").LocalPlayer
 		local char = plr and plr.Character
