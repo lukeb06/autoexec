@@ -109,6 +109,7 @@ local function tweenGotoPart(part)
 	breakVelocity(1)
 end
 
+local safeTweenSpeed = 16
 local safeTweening = false
 local function safeTweenToPos(cframe: CFrame)
 	local TweenService = game:GetService("TweenService")
@@ -119,7 +120,7 @@ local function safeTweenToPos(cframe: CFrame)
 	local hum = char and char:FindFirstChildOfClass("Humanoid")
 
 	local dist = dist3d(root.Position, cframe.Position)
-	local t = dist / 16
+	local t = dist / safeTweenSpeed
 
 	safeTweening = true
 	if hum and hum.SeatPart then
@@ -153,6 +154,102 @@ local function aimbotToPart(part, smoothing)
 			)
 			:Play()
 	end
+end
+
+local flinging = false
+local flingDied = nil
+local function Fling()
+	local speaker = game:GetService("Players").LocalPlayer
+	
+	flinging = false
+	for _, child in pairs(speaker.Character:GetDescendants()) do
+		if child:IsA("BasePart") then
+			child.CustomPhysicalProperties = PhysicalProperties.new(100, 0.3, 0.5)
+		end
+	end
+	enableNoclip()
+	wait(.1)
+	local bambam = Instance.new("BodyAngularVelocity")
+	bambam.Name = randomString()
+	bambam.Parent = getRoot(speaker.Character)
+	bambam.AngularVelocity = Vector3.new(0,99999,0)
+	bambam.MaxTorque = Vector3.new(0,math.huge,0)
+	bambam.P = math.huge
+	local Char = speaker.Character:GetChildren()
+	for i, v in next, Char do
+		if v:IsA("BasePart") then
+			v.CanCollide = false
+			v.Massless = true
+			v.Velocity = Vector3.new(0, 0, 0)
+		end
+	end
+	flinging = true
+	local function flingDiedF()
+		unfling()
+	end
+	flingDied = speaker.Character:FindFirstChildOfClass('Humanoid').Died:Connect(flingDiedF)
+	repeat
+		bambam.AngularVelocity = Vector3.new(0,99999,0)
+		wait(.2)
+		bambam.AngularVelocity = Vector3.new(0,0,0)
+		wait(.1)
+	until flinging == false
+end
+
+local function UnFling()
+	local speaker = game:GetService("Players").LocalPlayer
+	
+	disableNoclip()
+	if flingDied then
+		flingDied:Disconnect()
+	end
+	flinging = false
+	wait(.1)
+	local speakerChar = speaker.Character
+	if not speakerChar or not getRoot(speakerChar) then return end
+	for i,v in pairs(getRoot(speakerChar):GetChildren()) do
+		if v.ClassName == 'BodyAngularVelocity' then
+			v:Destroy()
+		end
+	end
+	for _, child in pairs(speakerChar:GetDescendants()) do
+		if child.ClassName == "Part" or child.ClassName == "MeshPart" then
+			child.CustomPhysicalProperties = PhysicalProperties.new(0.7, 0.3, 0.5)
+		end
+	end
+end
+
+local function flingCharacter(pChar)
+	local plr = game:GetService("Players").LocalPlayer
+	local char = plr and plr.Character
+	local root = char and char:FindFirstChild("HumanoidRootPart")
+
+	local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
+
+	if root and pRoot then
+		local pos = root.CFrame
+	
+		local dofling = true
+	
+		Fling()
+		task.spawn(function()
+			while dofling do
+				root.CFrame = pRoot.CFrame
+			end
+		end)
+	
+		task.delay(function()
+			dofling = false
+			wait(0.1)
+			root.CFrame = pos
+			UnFling()
+		end, 1)
+	end
+end
+
+local function flingPlayer(plr)
+	local char = plr and plr.Character
+	flingCharacter(char)
 end
 
 WaitForGameAndPlayer()
@@ -1203,37 +1300,38 @@ if game.PlaceId == 142823291 then
 		end
 	end)
 
-	local MMKillMurdererKeybind = MMTab:CreateKeybind({
-			Name = "Shoot Murderer",
-			CurrentKeybind = "G",
-			HoldToInteract = false,
-			Flag = "MMKillMurdererKeybind",
-			Callback = function()
-				local camera = game.Workspace.CurrentCamera
+	local function getMurderer()
+		local murderer = nil
+		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+			local pBackpack = v:FindFirstChild("Backpack")
+			local pChar = v.Character
 
-				local murderer
-				for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-					local pBackpack = v:FindFirstChild("Backpack")
-					local pChar = v.Character
+			local knifeBackpack = pBackpack and pBackpack:FindFirstChild("Knife")
+			local knifePlayer = pChar and pChar:FindFirstChild("Knife")
 
-					local knifeBackpack = pBackpack and pBackpack:FindFirstChild("Knife")
-					local knifePlayer = pChar and pChar:FindFirstChild("Knife")
-
-					if knifeBackpack or knifePlayer then
-						murderer = v
-					end
-				end
-
-				local pChar = murderer and murderer.Character
-				local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
-
-				if pRoot then
-					local tdPos = camera:WorldToScreenPoint(pRoot.Position)
-					game:GetService("VirtualUser"):ClickButton1(Vector2.new(tdPos.X, tdPos.Y))
-				end
+			if knifeBackpack or knifePlayer then
+				murderer = v
 			end
-	})
+		end
 
+		return murderer
+	end
+
+	local function flingMurderer()
+		local murderer = getMurderer()
+
+		if murderer then
+			flingPlayer(murderer)
+		end
+	end
+
+	local MMFlingMurdererButton = MMTab:CreateButton({
+		Name = "Fling Murderer",
+		Callback = function()
+			flingMurderer()
+		end,
+	})
+	
 	local mm_kill_murderer_toggled = false
 	local MMKillMurdererToggle = MMTab:CreateToggle({
 		Name = "Auto Kill Murderer",
