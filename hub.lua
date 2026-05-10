@@ -1209,7 +1209,7 @@ if game.PlaceId == 142823291 then
 			HoldToInteract = false,
 			Flag = "MMKillMurdererKeybind",
 			Callback = function()
-				local cam = game.Workspace.CurrentCamera
+				local camera = game.Workspace.CurrentCamera
 
 				local murderer
 				for i, v in pairs(game:GetService("Players"):GetPlayers()) do
