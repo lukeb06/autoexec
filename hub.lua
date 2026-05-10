@@ -1336,7 +1336,7 @@ if game.PlaceId == 142823291 then
 	end
 
 	local MMFlingMurdererButton = MMTab:CreateButton({
-		Name = "Fling Murderer 3",
+		Name = "Fling Murderer 4",
 		Callback = function()
 			flingMurderer()
 		end,
