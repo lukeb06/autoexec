@@ -235,12 +235,13 @@ local function flingCharacter(pChar)
 		task.spawn(function()
 			while dofling do
 				root.CFrame = pRoot.CFrame
+				task.wait()
 			end
 		end)
 	
 		task.delay(function()
 			dofling = false
-			wait(0.1)
+			task.wait(0.1)
 			root.CFrame = pos
 			UnFling()
 		end, 1)
