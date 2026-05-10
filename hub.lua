@@ -1203,6 +1203,37 @@ if game.PlaceId == 142823291 then
 		end
 	end)
 
+	local MMKillMurdererKeybind = MMTab:CreateKeybind({
+			Name = "Shoot Murderer",
+			CurrentKeybind = "G",
+			HoldToInteract = false,
+			Flag = "MMKillMurdererKeybind",
+			Callback = function()
+				local cam = game.Workspace.CurrentCamera
+
+				local murderer
+				for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+					local pBackpack = v:FindFirstChild("Backpack")
+					local pChar = v.Character
+
+					local knifeBackpack = pBackpack and pBackpack:FindFirstChild("Knife")
+					local knifePlayer = pChar and pChar:FindFirstChild("Knife")
+
+					if knifeBackpack or knifePlayer then
+						murderer = v
+					end
+				end
+
+				local pChar = murderer and murderer.Character
+				local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
+
+				if pRoot then
+					local tdPos = camera:WorldToScreenPoint(pRoot.Position)
+					game:GetService("VirtualUser"):ClickButton1(Vector2.new(tdPos.X, tdPos.Y))
+				end
+			end
+	})
+
 	local mm_kill_murderer_toggled = false
 	local MMKillMurdererToggle = MMTab:CreateToggle({
 		Name = "Auto Kill Murderer",
