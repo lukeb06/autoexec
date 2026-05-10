@@ -247,8 +247,9 @@ local function flingCharacter(pChar)
 			end
 		end)
 	
-		task.delay(1, function()
+		task.delay(3, function()
 			dofling = false
+			breakVelocity(1)
 			task.wait(0.1)
 			root.CFrame = pos
 			UnFling()
