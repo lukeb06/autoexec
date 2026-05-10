@@ -185,7 +185,7 @@ local function Fling()
 	end
 	flinging = true
 	local function flingDiedF()
-		unfling()
+		UnFling()
 	end
 	flingDied = speaker.Character:FindFirstChildOfClass('Humanoid').Died:Connect(flingDiedF)
 	repeat
