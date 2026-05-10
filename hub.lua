@@ -159,64 +159,72 @@ end
 local flinging = false
 local flingDied = nil
 local function Fling()
-	local speaker = game:GetService("Players").LocalPlayer
+	task.spawn(function()
+		local speaker = game:GetService("Players").LocalPlayer
 	
-	flinging = false
-	for _, child in pairs(speaker.Character:GetDescendants()) do
-		if child:IsA("BasePart") then
-			child.CustomPhysicalProperties = PhysicalProperties.new(100, 0.3, 0.5)
+		print("Flinging")
+		
+		flinging = false
+		for _, child in pairs(speaker.Character:GetDescendants()) do
+			if child:IsA("BasePart") then
+				child.CustomPhysicalProperties = PhysicalProperties.new(100, 0.3, 0.5)
+			end
 		end
-	end
-	enableNoclip()
-	wait(.1)
-	local bambam = Instance.new("BodyAngularVelocity")
-	bambam.Name = randomString()
-	bambam.Parent = getRoot(speaker.Character)
-	bambam.AngularVelocity = Vector3.new(0,99999,0)
-	bambam.MaxTorque = Vector3.new(0,math.huge,0)
-	bambam.P = math.huge
-	local Char = speaker.Character:GetChildren()
-	for i, v in next, Char do
-		if v:IsA("BasePart") then
-			v.CanCollide = false
-			v.Massless = true
-			v.Velocity = Vector3.new(0, 0, 0)
-		end
-	end
-	flinging = true
-	local function flingDiedF()
-		UnFling()
-	end
-	flingDied = speaker.Character:FindFirstChildOfClass('Humanoid').Died:Connect(flingDiedF)
-	repeat
-		bambam.AngularVelocity = Vector3.new(0,99999,0)
-		wait(.2)
-		bambam.AngularVelocity = Vector3.new(0,0,0)
+		enableNoclip()
 		wait(.1)
-	until flinging == false
+		local bambam = Instance.new("BodyAngularVelocity")
+		bambam.Name = randomString()
+		bambam.Parent = getRoot(speaker.Character)
+		bambam.AngularVelocity = Vector3.new(0,99999,0)
+		bambam.MaxTorque = Vector3.new(0,math.huge,0)
+		bambam.P = math.huge
+		local Char = speaker.Character:GetChildren()
+		for i, v in next, Char do
+			if v:IsA("BasePart") then
+				v.CanCollide = false
+				v.Massless = true
+				v.Velocity = Vector3.new(0, 0, 0)
+			end
+		end
+		flinging = true
+		local function flingDiedF()
+			UnFling()
+		end
+		flingDied = speaker.Character:FindFirstChildOfClass('Humanoid').Died:Connect(flingDiedF)
+		repeat
+			bambam.AngularVelocity = Vector3.new(0,99999,0)
+			wait(.2)
+			bambam.AngularVelocity = Vector3.new(0,0,0)
+			wait(.1)
+		until flinging == false
+	end)
 end
 
 local function UnFling()
-	local speaker = game:GetService("Players").LocalPlayer
+	task.spawn(function()
+		local speaker = game:GetService("Players").LocalPlayer
 	
-	disableNoclip()
-	if flingDied then
-		flingDied:Disconnect()
-	end
-	flinging = false
-	wait(.1)
-	local speakerChar = speaker.Character
-	if not speakerChar or not getRoot(speakerChar) then return end
-	for i,v in pairs(getRoot(speakerChar):GetChildren()) do
-		if v.ClassName == 'BodyAngularVelocity' then
-			v:Destroy()
+		print("Not Flinging")
+		
+		disableNoclip()
+		if flingDied then
+			flingDied:Disconnect()
 		end
-	end
-	for _, child in pairs(speakerChar:GetDescendants()) do
-		if child.ClassName == "Part" or child.ClassName == "MeshPart" then
-			child.CustomPhysicalProperties = PhysicalProperties.new(0.7, 0.3, 0.5)
+		flinging = false
+		wait(.1)
+		local speakerChar = speaker.Character
+		if not speakerChar or not getRoot(speakerChar) then return end
+		for i,v in pairs(getRoot(speakerChar):GetChildren()) do
+			if v.ClassName == 'BodyAngularVelocity' then
+				v:Destroy()
+			end
 		end
-	end
+		for _, child in pairs(speakerChar:GetDescendants()) do
+			if child.ClassName == "Part" or child.ClassName == "MeshPart" then
+				child.CustomPhysicalProperties = PhysicalProperties.new(0.7, 0.3, 0.5)
+			end
+		end
+	end)
 end
 
 local function flingCharacter(pChar)
@@ -1327,7 +1335,7 @@ if game.PlaceId == 142823291 then
 	end
 
 	local MMFlingMurdererButton = MMTab:CreateButton({
-		Name = "Fling Murderer 2",
+		Name = "Fling Murderer 3",
 		Callback = function()
 			flingMurderer()
 		end,
