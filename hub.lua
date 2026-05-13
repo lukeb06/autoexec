@@ -1716,7 +1716,7 @@ if game.PlaceId == 893973440 then
 	end
 
 	local function isCloseToComputer()
-		return isCloseToModelName("ComputerTable", 6)
+		return isCloseToModelName("ComputerTable", 8.5)
 	end
 
 	local function isCloseToFreezePod()
@@ -2044,7 +2044,7 @@ if game.PlaceId == 893973440 then
 							end
 						end)
 
-						task.delay(1.5, function()
+						task.delay(1.25, function()
 							running = false
 						end)
 					end)
