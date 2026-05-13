@@ -2044,7 +2044,7 @@ if game.PlaceId == 893973440 then
 							end
 						end)
 
-						task.delay(1.25, function()
+						task.delay(1, function()
 							running = false
 						end)
 					end)
