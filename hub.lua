@@ -109,7 +109,7 @@ local function tweenGotoPart(part)
 	breakVelocity(1)
 end
 
-local safeTweenSpeed = 16
+local safeTweenSpeed = 18
 local safeTweening = false
 local function safeTweenToPos(cframe: CFrame)
 	local TweenService = game:GetService("TweenService")
@@ -157,76 +157,6 @@ local function aimbotToPart(part, smoothing)
 end
 
 local flinging = false
-local flingDied = nil
-local function Fling()
-	task.spawn(function()
-		local speaker = game:GetService("Players").LocalPlayer
-	
-		print("Flinging")
-		
-		flinging = false
-		for _, child in pairs(speaker.Character:GetDescendants()) do
-			if child:IsA("BasePart") then
-				child.CustomPhysicalProperties = PhysicalProperties.new(100, 0.3, 0.5)
-			end
-		end
-		enableNoclip()
-		wait(.1)
-		local bambam = Instance.new("BodyAngularVelocity")
-		bambam.Name = randomString()
-		bambam.Parent = getRoot(speaker.Character)
-		bambam.AngularVelocity = Vector3.new(0,99999,0)
-		bambam.MaxTorque = Vector3.new(0,math.huge,0)
-		bambam.P = math.huge
-		local Char = speaker.Character:GetChildren()
-		for i, v in next, Char do
-			if v:IsA("BasePart") then
-				v.CanCollide = false
-				v.Massless = true
-				v.Velocity = Vector3.new(0, 0, 0)
-			end
-		end
-		flinging = true
-		local function flingDiedF()
-			UnFling()
-		end
-		flingDied = speaker.Character:FindFirstChildOfClass('Humanoid').Died:Connect(flingDiedF)
-		repeat
-			bambam.AngularVelocity = Vector3.new(0,99999,0)
-			wait(.2)
-			bambam.AngularVelocity = Vector3.new(0,0,0)
-			wait(.1)
-		until flinging == false
-	end)
-end
-
-local function UnFling()
-	task.spawn(function()
-		local speaker = game:GetService("Players").LocalPlayer
-	
-		print("Not Flinging")
-		
-		disableNoclip()
-		if flingDied then
-			flingDied:Disconnect()
-		end
-		flinging = false
-		wait(.1)
-		local speakerChar = speaker.Character
-		if not speakerChar or not getRoot(speakerChar) then return end
-		for i,v in pairs(getRoot(speakerChar):GetChildren()) do
-			if v.ClassName == 'BodyAngularVelocity' then
-				v:Destroy()
-			end
-		end
-		for _, child in pairs(speakerChar:GetDescendants()) do
-			if child.ClassName == "Part" or child.ClassName == "MeshPart" then
-				child.CustomPhysicalProperties = PhysicalProperties.new(0.7, 0.3, 0.5)
-			end
-		end
-	end)
-end
-
 local function flingCharacter(pChar)
 	local plr = game:GetService("Players").LocalPlayer
 	local char = plr and plr.Character
@@ -235,24 +165,97 @@ local function flingCharacter(pChar)
 	local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
 
 	if root and pRoot then
+		flinging = true
+
+		enableNoclip()
+
+		task.wait(0.2)
+
 		local pos = root.CFrame
-	
-		local dofling = true
-	
-		Fling()
+
+		task.wait(0.1)
+
+		for _, child in pairs(char:GetDescendants()) do
+			if child:IsA("BasePart") then
+				child.CustomPhysicalProperties = PhysicalProperties.new(100, 0.3, 0.5)
+			end
+		end
+
+		for i, v in char:GetChildren() do
+			if v:IsA("BasePart") then
+				v.CanCollide = false
+				v.Massless = true
+				v.Velocity = Vector3.new(0, 0, 0)
+			end
+		end
+
+		local power = 99999
+		local spin = power
+
+		local flingloop
+		flingloop = game:GetService("RunService").Heartbeat:Connect(function(dt)
+			if not pRoot or not pRoot.Parent then
+				return
+			end
+
+			local jitter = math.random(-100, 100)
+
+			local tVel = pRoot.AssemblyLinearVelocity
+
+			if tVel.Magnitude > 500 then
+				flingloop:Disconnect()
+			end
+
+			local tPos = pRoot.Position + (tVel * 0.08)
+
+			if tPos.Y <= game.Workspace.FallenPartsDestroyHeight + 50 then
+				return
+			end
+
+			root.CFrame = (CFrame.new(tPos + Vector3.new(0.1, 0, 0.1))) * (root.CFrame - root.CFrame.Position)
+
+			root.AssemblyLinearVelocity = Vector3.new(power + jitter, -100, power + jitter)
+			root.AssemblyAngularVelocity = Vector3.new(0, spin, 0)
+		end)
+
 		task.spawn(function()
-			while dofling do
-				root.CFrame = pRoot.CFrame
-				task.wait()
+			while flingloop.Connected do
+				spin = power
+				task.wait(0.2)
+				spin = 0
+				task.wait(0.1)
 			end
 		end)
-	
+
+		-- local att1 = Instance.new("Attachment", root)
+		-- local att2 = Instance.new("Attachment", pRoot)
+
+		-- local ap = Instance.new("AlignPosition", root)
+		-- ap.Attachment0 = att1
+		-- ap.Attachment1 = att2
+		-- -- ap.RigidityEnabled = true
+		-- ap.ReactionForceEnabled = false -- DON'T pull back on the player
+		-- ap.RigidityEnabled = false -- Use force instead of instant snapping
+		-- ap.MaxForce = 1e6 -- High enough to follow, but not infinite
+		-- ap.Responsiveness = 200
+
 		task.delay(3, function()
-			dofling = false
-			breakVelocity(1)
+			-- ap:Destroy()
+			-- att1:Destroy()
+			-- att2:Destroy()
+
+			for _, child in pairs(char:GetDescendants()) do
+				if child.ClassName == "Part" or child.ClassName == "MeshPart" then
+					child.CustomPhysicalProperties = PhysicalProperties.new(0.7, 0.3, 0.5)
+				end
+			end
+
+			disableNoclip()
+			flingloop:Disconnect()
+			breakVelocity(0.2)
 			task.wait(0.1)
 			root.CFrame = pos
-			UnFling()
+			flinging = false
 		end)
 	end
 end
@@ -328,7 +331,7 @@ local function initCtrlClickDelete()
 		return UIS:IsKeyDown(Enum.KeyCode.LeftControl) or UIS:IsKeyDown(Enum.KeyCode.LeftMeta)
 	end
 
-	Mouse.Button1Down:connect(function()
+	Mouse.Button1Down:Connect(function()
 		if not ctrl_click_delete_toggled then
 			return
 		end
@@ -349,7 +352,7 @@ local function initCtrlClickDelete()
 		index = index + 1
 	end)
 
-	Mouse.Button2Down:connect(function()
+	Mouse.Button2Down:Connect(function()
 		if not ctrl_click_delete_toggled then
 			return
 		end
@@ -1145,28 +1148,174 @@ end
 -- Murder Mystery 2
 
 if game.PlaceId == 142823291 then
+	local function plrHasItem(player, item)
+		local pBackpack = player:FindFirstChild("Backpack")
+		local pChar = player.Character
+
+		local itemBackpack = pBackpack and pBackpack:FindFirstChild(item)
+		local itemPlayer = pChar and pChar:FindFirstChild(item)
+
+		if itemBackpack or itemPlayer then
+			return true
+		end
+
+		return false
+	end
+
+	local function plrHasKnife(player)
+		return plrHasItem(player, "Knife")
+	end
+
+	local function plrHasGun(player)
+		return plrHasItem(player, "Gun")
+	end
+
+	local murderer = nil
+	local sheriff = nil
+
+	task.spawn(function()
+		game:GetService("ReplicatedStorage")
+			:WaitForChild("Remotes")
+			:WaitForChild("Gameplay")
+			:WaitForChild("PlayerDataChanged").OnClientEvent
+			:Connect(function(data)
+				murderer = nil
+				sheriff = nil
+
+				for k, v in pairs(data) do
+					local plr = game:GetService("Players"):FindFirstChild(k)
+
+					for vk, vv in pairs(v) do
+						if vk == "Role" then
+							if vv == "Murderer" then
+								-- is murderer
+								murderer = plr
+							end
+
+							if vv == "Sheriff" then
+								-- is sheriff
+								sheriff = plr
+							end
+						end
+					end
+				end
+			end)
+
+		game:GetService("ReplicatedStorage")
+			:WaitForChild("Remotes")
+			:WaitForChild("Gameplay")
+			:WaitForChild("RoundEndFade").OnClientEvent
+			:Connect(function(data)
+				murderer = nil
+				sheriff = nil
+			end)
+	end)
+
+	local function getMurderer()
+		if not murderer then
+			-- local murderer = nil
+			for i, plr in pairs(game:GetService("Players"):GetPlayers()) do
+				if plrHasKnife(plr) then
+					murderer = plr
+					break
+				end
+			end
+		end
+
+		return murderer
+	end
+
+	local function getSheriff()
+		-- local sheriff = nil
+
+		if not sheriff then
+			for i, plr in pairs(game:GetService("Players"):GetPlayers()) do
+				if plrHasGun(plr) then
+					sheriff = plr
+					break
+				end
+			end
+		end
+
+		return sheriff
+	end
+
+	local function shootPos(pos)
+		local plr = game:GetService("Players").LocalPlayer
+
+		if plrHasGun(plr) then
+			local char = plr and plr.Character
+			local gun = char and char:FindFirstChild("Gun")
+			local shoot = gun and gun:FindFirstChild("Shoot")
+			local handle = gun and gun:FindFirstChild("Handle")
+
+			if shoot and handle then
+				-- shoot:FireServer(handle.CFrame, cf)
+				shoot:FireServer(handle.CFrame, CFrame.new(pos))
+			end
+		end
+	end
+
+	local function shootPlayer(plr)
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+		local hum = char and char:FindFirstChildWhichIsA("Humanoid")
+
+		if root then
+			local latency = game:GetService("Players").LocalPlayer:GetNetworkPing() / 2
+			local tVel = root.AssemblyLinearVelocity
+			local tMov = hum and (hum.MoveDirection * hum.WalkSpeed)
+			tVel = tVel:Lerp(tMov, 0.5)
+			local tPos = root.Position + (tVel * latency)
+
+			shootPos(tPos)
+		end
+	end
+
+	local function tpShoot(other)
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		local otherChar = other and other.Character
+		local otherRoot = otherChar and otherChar:FindFirstChild("HumanoidRootPart")
+
+		local latency = plr:GetNetworkPing()
+		if root and otherRoot then
+			local pos = root.CFrame
+			task.wait(0.1)
+
+			root.CFrame = otherRoot.CFrame
+
+			task.wait(latency)
+
+			shootPlayer(other)
+
+			task.wait(latency)
+
+			root.CFrame = pos
+		end
+	end
+
 	local MMTab = Window:CreateTab("Murder Mystery 2", "gamepad-2")
 	local MMESPSection = MMTab:CreateSection("ESP")
 
 	local function updatePlayerESP(enabled)
+		local murderer = getMurderer()
+		local sheriff = getSheriff()
+
 		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-			if v.Character and v ~= game:GetService("Players").LocalPlayer then
-				local backpack = v:FindFirstChild("Backpack")
-				local char = v.Character
+			local char = v.Character
+			if char and v ~= game:GetService("Players").LocalPlayer then
+				local isMurderer = v == murderer
+				local isSheriff = v == sheriff
 
-				local gunBackpack = backpack and backpack:FindFirstChild("Gun")
-				local knifeBackpack = backpack and backpack:FindFirstChild("Knife")
-				local gunPlayer = char and char:FindFirstChild("Gun")
-				local knifePlayer = char and char:FindFirstChild("Knife")
-
-				if gunBackpack or gunPlayer then
-					updateESP(v.Character, Color3.fromRGB(0, 0, 255), enabled)
-				end
-				if knifeBackpack or knifePlayer then
-					updateESP(v.Character, Color3.fromRGB(255, 0, 0), enabled)
-				end
-				if not knifeBackpack and not knifePlayer and not gunPlayer and not gunBackpack then
-					updateESP(v.Character, Color3.fromRGB(0, 255, 0), enabled)
+				if isSheriff then
+					updateESP(char, Color3.fromRGB(0, 0, 255), enabled)
+				elseif isMurderer then
+					updateESP(char, Color3.fromRGB(255, 0, 0), enabled)
+				else
+					updateESP(char, Color3.fromRGB(0, 255, 0), enabled)
 				end
 			end
 		end
@@ -1271,6 +1420,19 @@ if game.PlaceId == 142823291 then
 		end,
 	})
 
+	local MMShootMurdererKeybind = MMTab:CreateKeybind({
+		Name = "Shoot Murderer",
+		CurrentKeybind = "G",
+		HoldToInteract = false,
+		Flag = "MMShootMurdererKeybind",
+		Callback = function()
+			local murderer = getMurderer()
+			if murderer then
+				tpShoot(murderer)
+			end
+		end,
+	})
+
 	local mm_grab_gun_toggled = true
 	local MMGrabGunToggle = MMTab:CreateToggle({
 		Name = "Auto Grab Gun",
@@ -1310,149 +1472,38 @@ if game.PlaceId == 142823291 then
 		end
 	end)
 
-	local function getMurderer()
-		local murderer = nil
-		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-			local pBackpack = v:FindFirstChild("Backpack")
-			local pChar = v.Character
-
-			local knifeBackpack = pBackpack and pBackpack:FindFirstChild("Knife")
-			local knifePlayer = pChar and pChar:FindFirstChild("Knife")
-
-			if knifeBackpack or knifePlayer then
-				murderer = v
-			end
-		end
-
-		return murderer
-	end
-
 	local function flingMurderer()
 		local murderer = getMurderer()
 
-		if murderer then
+		if murderer and murderer ~= game:GetService("Players").LocalPlayer then
 			flingPlayer(murderer)
 		end
 	end
 
 	local MMFlingMurdererButton = MMTab:CreateButton({
-		Name = "Fling Murderer 4",
+		Name = "Fling Murderer",
 		Callback = function()
 			flingMurderer()
 		end,
 	})
-	
-	local mm_kill_murderer_toggled = false
-	local MMKillMurdererToggle = MMTab:CreateToggle({
-		Name = "Auto Kill Murderer",
+
+	local mm_auto_fling_murderer_toggled = false
+	local MMAutoFlingMurdererToggle = MMTab:CreateToggle({
+		Name = "Auto Fling Murderer",
 		CurrentValue = false,
 		Flag = nil,
 		Callback = function(value)
-			mm_kill_murderer_toggled = value
+			mm_auto_fling_murderer_toggled = value
 		end,
 	})
 	task.spawn(function()
 		while task.wait() do
-			if mm_kill_murderer_toggled then
-				local plr = game:GetService("Players").LocalPlayer
-				local char = plr and plr.Character
-				local hum = char and char:FindFirstChild("Humanoid")
-				local root = char and char:FindFirstChild("HumanoidRootPart")
-				local backpack = plr and plr:FindFirstChild("Backpack")
+			if mm_auto_fling_murderer_toggled then
+				local murderer = getMurderer()
 
-				if hum then
-					local gunBackpack = backpack and backpack:FindFirstChild("Gun")
-
-					if gunBackpack then
-						hum:EquipTool(gunBackpack)
-						task.wait()
-					end
-
-					local gunPlayer = char and char:FindFirstChild("Gun")
-
-					local camera = workspace.CurrentCamera
-
-					if gunPlayer and root and camera then
-						local murderer
-						for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-							local pBackpack = v:FindFirstChild("Backpack")
-							local pChar = v.Character
-
-							local knifeBackpack = pBackpack and pBackpack:FindFirstChild("Knife")
-							local knifePlayer = pChar and pChar:FindFirstChild("Knife")
-
-							if knifeBackpack or knifePlayer then
-								murderer = v
-							end
-						end
-
-						local pChar = murderer and murderer.Character
-						local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
-
-						local hasFired = false
-
-						if pRoot then
-							-- plr.CameraMode = Enum.CameraMode.LockFirstPerson
-							-- plr.CameraMinZoomDistance = 0.5
-							-- plr.CameraMaxZoomDistance = 0.5
-							plr.DevEnableMouseLock = true
-
-							task.wait(1)
-
-							local pos = root.CFrame
-							root.CFrame = pRoot.CFrame * CFrame.new(0, 0, 5)
-
-							task.wait(0.3)
-							local tdPos = camera:WorldToScreenPoint(pRoot.Position)
-							game:GetService("VirtualUser"):ClickButton1(Vector2.new(tdPos.X, tdPos.Y))
-
-							task.wait(0.1)
-
-							root.CFrame = pos
-
-							-- local startTime = tick()
-							-- local connection
-
-							-- connection = game:GetService("RunService").Heartbeat:Connect(function()
-							-- 	local elapsed = tick() - startTime
-
-							-- 	if elapsed > 0.5 then -- how long to force the look (0.2 seconds here)
-							-- 		root.CFrame = pos -- return to original position
-							-- 		-- plr.CameraMode = Enum.CameraMode.Classic
-							-- 		-- plr.CameraMinZoomDistance = 0.5
-							-- 		-- plr.CameraMaxZoomDistance = 128
-							-- 		connection:Disconnect()
-							-- 		return
-							-- 	end
-
-							-- 	local head = char:FindFirstChild("Head")
-
-							-- 	local prePos = pRoot.Position + (pRoot.AssemblyLinearVelocity.Unit * 1)
-							-- 	prePos = (CFrame.new(prePos) * CFrame.new(1, 0, 0)).Position
-
-							-- 	root.CFrame = CFrame.new((pRoot.CFrame * CFrame.new(0, 0, 5)).Position)
-							-- 	local camPos = head and head.Position or root.Position + Vector3.new(0, 1.5, 0)
-							-- 	-- camera.CFrame = CFrame.lookAt(camPos, prePos)
-							-- 	TweenService:Create(
-							-- 		camera,
-							-- 		TweenInfo.new(0.02, Enum.EasingStyle.Linear),
-							-- 		{ CFrame = CFrame.lookAt(camPos, prePos) }
-							-- 	):Play()
-
-							-- 	-- local handle = gunPlayer:FindFirstChild("Handle")
-							-- 	-- if handle then
-							-- 	-- 	handle.CFrame = CFrame.lookAt(handle.Position, pRoot.Position)
-							-- 	-- end
-
-							-- 	if elapsed > 0.3 and not hasFired then
-							-- 		gunPlayer:Activate()
-							-- 		hasFired = true
-							-- 	end
-							-- end)
-
-							task.wait(3)
-						end
-					end
+				if murderer then
+					flingMurderer()
+					task.wait(4)
 				end
 			end
 		end
@@ -1886,6 +1937,62 @@ if game.PlaceId == 893973440 then
 		end,
 	})
 
+	local ftf_auto_save_toggled = false
+	local FTFAutoSaveToggle = FTFTab:CreateToggle({
+		Name = "Auto Save",
+		CurrentValue = false,
+		Flag = nil,
+		Callback = function(value)
+			ftf_auto_save_toggled = value
+		end,
+	})
+
+	local ftf_auto_saving = false
+	task.spawn(function()
+		while task.wait() do
+			if ftf_auto_save_toggled and isInGame() and not isBeast() then
+				local children = getCurrentMapChildren()
+
+				for i, v in pairs(children) do
+					if v.Name == "FreezePod" then
+						local pod = v:FindFirstChild("PodTrigger")
+
+						if pod then
+							local capturedTorsoValue = pod:FindFirstChild("CapturedTorso")
+							if capturedTorsoValue.Value ~= nil then
+								ftf_auto_saving = true
+								local plr = game:GetService("Players").LocalPlayer
+								local char = plr and plr.Character
+								local root = char and char:FindFirstChild("HumanoidRootPart")
+								local pos = root.CFrame
+
+								local closeToComputer, pc = isCloseToModelName("ComputerTable", 15)
+
+								task.wait(0.1)
+
+								root.CFrame = pod.CFrame
+
+								breakVelocity(0.5)
+								task.wait(0.1)
+								game.ReplicatedStorage.RemoteEvent:FireServer("Input", "Action", true)
+								task.wait(0.1)
+								game.ReplicatedStorage.RemoteEvent:FireServer("Input", "Action", false)
+								ftf_auto_saving = false
+
+								if closeToComputer then
+									-- safeTweenToPart(pc:FindFirstChildWhichIsA("BasePart"))
+									root.CFrame = root.CFrame * CFrame.new(0, 50, 0)
+								else
+									root.CFrame = pos
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end)
+
 	local FTFAutoHackToggle = FTFTab:CreateToggle({
 		Name = "Auto Hack (Requires Easy Hack)",
 		CurrentValue = false,
@@ -2039,7 +2146,7 @@ if game.PlaceId == 893973440 then
 				end
 			end
 
-			if auto_hide_toggled then
+			if auto_hide_toggled and not ftf_auto_saving then
 				local beast = findBeast()
 				local beastChar = beast and beast.Character
 				local beastRoot = beastChar and beastChar:FindFirstChild("HumanoidRootPart")
