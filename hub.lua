@@ -386,7 +386,7 @@ local Window = Rayfield:CreateWindow({
 
 	ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
 
-	DisableRayfieldPrompts = false,
+	DisableRayfieldPrompts = true,
 	DisableBuildWarnings = false, -- Prevents Rayfield from emitting warnings when the script has a version mismatch with the interface.
 
 	ConfigurationSaving = {
@@ -2109,7 +2109,9 @@ if game.PlaceId == 893973440 then
 				end
 			end
 
+			enableNoclip()
 			tweenGotoPart(best_pod)
+			task.delay(1, disableNoclip)
 		end,
 	})
 
