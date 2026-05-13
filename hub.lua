@@ -1780,7 +1780,7 @@ if game.PlaceId == 893973440 then
 
 				if v then
 					print("valid trigger", not v.Value)
-					if v.Value == 20 then
+					if v.Value ~= 0 then
 						table.insert(valid_triggers, t)
 					end
 				end
