@@ -1678,10 +1678,10 @@ if game.PlaceId == 893973440 then
 		end,
 	})
 
-	local auto_hide_toggled = true
+	local auto_hide_toggled = false
 	local FTFAutoHideToggle = FTFTab:CreateToggle({
 		Name = "Avoid Beast",
-		CurrentValue = true,
+		CurrentValue = false,
 		Flag = nil,
 		Callback = function(value)
 			auto_hide_toggled = value
