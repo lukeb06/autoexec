@@ -1775,11 +1775,9 @@ if game.PlaceId == 893973440 then
 			local valid_triggers = {}
 
 			for _, t in pairs(triggers) do
-				print("test vtrigger index", _)
 				local v = t:FindFirstChild("ActionSign")
 
 				if v then
-					print("valid trigger", not v.Value)
 					if v.Value ~= 0 then
 						table.insert(valid_triggers, t)
 					end
@@ -1793,26 +1791,15 @@ if game.PlaceId == 893973440 then
 			local char = plr and plr.Character
 			local root = char and char:FindFirstChild("HumanoidRootPart")
 
-			for i, v in pairs(valid_triggers) do
-				print("test index", i)
-				print("trigger", v.Name)
-			end
-
 			if root then
 				for i, t in pairs(valid_triggers) do
 					local dist = dist3d(root.Position, t.Position)
-					print("index", i)
-					print("Checking dist", dist)
-					print("Current best dist", best_dist)
 					if dist < best_dist then
 						best_dist = dist
 						best = t
 					end
 				end
 			end
-
-			print("Best dist", best_dist)
-			print("Best", best.Name)
 
 			return best
 		end
