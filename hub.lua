@@ -2153,28 +2153,31 @@ if game.GameId == 372226183 then
 								local plr = game:GetService("Players").LocalPlayer
 								local char = plr and plr.Character
 								local root = char and char:FindFirstChild("HumanoidRootPart")
-								local pos = root.CFrame
 
-								local closeToComputer, pc = isCloseToModelName("ComputerTable", 15)
+								if root then
+									local pos = root.CFrame
 
-								task.wait(0.1)
+									local closeToComputer, pc = isCloseToModelName("ComputerTable", 15)
 
-								root.CFrame = pod.CFrame
+									task.wait(0.1)
 
-								breakVelocity(0.5)
-								task.wait(0.1)
-								game.ReplicatedStorage.RemoteEvent:FireServer("Input", "Action", true)
-								task.wait(0.1)
-								game.ReplicatedStorage.RemoteEvent:FireServer("Input", "Action", false)
-								ftf_auto_saving = false
+									root.CFrame = pod.CFrame
 
-								if closeToComputer then
-									-- safeTweenToPart(pc:FindFirstChildWhichIsA("BasePart"))
-									local spot = getValidSpot(pc)
-									root.CFrame = spot.CFrame * CFrame.new(0, -50, 0)
-									safeTweenToPart(spot)
-								else
-									root.CFrame = pos
+									breakVelocity(0.5)
+									task.wait(0.1)
+									game.ReplicatedStorage.RemoteEvent:FireServer("Input", "Action", true)
+									task.wait(0.1)
+									game.ReplicatedStorage.RemoteEvent:FireServer("Input", "Action", false)
+									ftf_auto_saving = false
+
+									if closeToComputer then
+										-- safeTweenToPart(pc:FindFirstChildWhichIsA("BasePart"))
+										local spot = getValidSpot(pc)
+										root.CFrame = spot.CFrame * CFrame.new(0, -50, 0)
+										safeTweenToPart(spot)
+									else
+										root.CFrame = pos
+									end
 								end
 							end
 						end
