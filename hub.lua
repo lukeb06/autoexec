@@ -1010,7 +1010,7 @@ if game.PlaceId == 139233844569220 then
 					local root = char and char:FindFirstChild("HumanoidRootPart")
 
 					if root then
-						task.wait((plr.Name == "pathwise3" and 1) or 2)
+						task.wait((plr.Name == "pathwise4" and 1) or 2)
 						root.CFrame = CFrame.new(1, 51, 224)
 						task.wait(1)
 						isInvis = true
@@ -1554,7 +1554,7 @@ end
 
 -- Flee The Facility
 
-if game.PlaceId == 893973440 then
+if game.GameId == 372226183 then
 	local FTFTab = Window:CreateTab("Flee The Facility", "gamepad-2")
 	local FTFESPSection = FTFTab:CreateSection("ESP")
 
@@ -1678,29 +1678,45 @@ if game.PlaceId == 893973440 then
 		end,
 	})
 
-	local auto_hide_toggled = false
+	local auto_hide_toggled = game:GetService("Players").LocalPlayer.Name == "pathwise4"
 	local FTFAutoHideToggle = FTFTab:CreateToggle({
 		Name = "Avoid Beast",
-		CurrentValue = false,
+		CurrentValue = auto_hide_toggled,
 		Flag = nil,
 		Callback = function(value)
 			auto_hide_toggled = value
 		end,
 	})
 
+	local function partCloseToModel(part, model, ddist)
+		local base = model.PrimaryPart
+
+		if part and base then
+			local dist = dist3d(part.Position, base.Position)
+			return dist <= ddist
+		end
+
+		return false
+	end
+
 	local function isCloseToModel(model, ddist)
 		local plr = game:GetService("Players").LocalPlayer
 		local char = plr and plr.Character
 		local root = char and char:FindFirstChild("HumanoidRootPart")
 
-		local base = model.PrimaryPart
+		return partCloseToModel(root, model, ddist)
+	end
 
-		if root and base then
-			local dist = dist3d(root.Position, base.Position)
-			return dist <= ddist
+	local function partCloseToModelName(part, name, ddist)
+		for i, v in pairs(getCurrentMapChildren()) do
+			if v.Name == name then
+				if partCloseToModel(part, v, ddist) then
+					return true, v
+				end
+			end
 		end
 
-		return false
+		return false, nil
 	end
 
 	local function isCloseToModelName(name, ddist)
@@ -1715,12 +1731,118 @@ if game.PlaceId == 893973440 then
 		return false, nil
 	end
 
+	local function partCloseToComputer(part)
+		return partCloseToModelName(part, "ComputerTable", 20)
+	end
+
 	local function isCloseToComputer()
 		return isCloseToModelName("ComputerTable", 8.5)
 	end
 
 	local function isCloseToFreezePod()
 		return isCloseToModelName("FreezePod", 10)
+	end
+
+	local function getHammer()
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+
+		if char then
+			local hammer = char:FindFirstChild("Hammer")
+			return hammer
+		end
+
+		return nil
+	end
+
+	local function getHammerEvent()
+		local hammer = getHammer()
+
+		if hammer then
+			return hammer:FindFirstChild("HammerEvent")
+		end
+
+		return nil
+	end
+
+	local function clickHammer()
+		local hammerEvent = getHammerEvent()
+
+		if hammerEvent then
+			print("hammer click")
+			hammerEvent:FireServer("HammerClick", true)
+		end
+	end
+
+	local function hitCharacter(char)
+		local hammerEvent = getHammerEvent()
+		local torso = char and char:FindFirstChild("Torso")
+
+		print("torso", torso)
+		print("hammerEvent", hammerEvent)
+
+		if torso and hammerEvent then
+			clickHammer()
+			task.wait()
+			hammerEvent:FireServer("HammerHit", torso)
+		end
+	end
+
+	local function hitPlayer(plr)
+		local char = plr and plr.Character
+		hitCharacter(char)
+	end
+
+	local function tieCharacter(char)
+		local hammerEvent = getHammerEvent()
+		local torso = char and char:FindFirstChild("Torso")
+
+		if torso and hammerEvent then
+			clickHammer()
+			task.wait()
+			hammerEvent:FireServer("HammerTieUp", torso, torso.Position)
+		end
+	end
+
+	local function tiePlayer(plr)
+		local char = plr and plr.Character
+		tieCharacter(char)
+	end
+
+	local function hitAndTiePlayer(plr)
+		hitPlayer(plr)
+		task.wait(1)
+		tiePlayer(plr)
+	end
+
+	local function tpToPlayerIfSafe(plr)
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		local myPlr = game:GetService("Players").LocalPlayer
+		local myChar = myPlr and myPlr.Character
+		local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+
+		if root and myRoot then
+			if not partCloseToComputer(root) then
+				myRoot.CFrame = root.CFrame
+				return true
+			end
+		end
+
+		return false
+	end
+
+	local function tpHitAndTie(plr)
+		local hammer = getHammer()
+
+		if hammer then
+			local success = tpToPlayerIfSafe(plr)
+			if success then
+				print("tphitandtie success", success)
+				hitAndTiePlayer(plr)
+			end
+		end
 	end
 
 	local computerUnhacked = Color3.fromRGB(13, 105, 172)
@@ -1894,12 +2016,79 @@ if game.PlaceId == 893973440 then
 		return false
 	end
 
-	-- local function get
-
 	local beast_max_dist = 20
 	local hidingFromBeast = false
+
+	local function doBeastRaycast(part)
+		local beast = findBeast()
+		local beastChar = beast and beast.Character
+		local beastHead = beastChar and beastChar:FindFirstChild("Head")
+
+		if beastHead and part then
+			local origin = part.Position
+			local target = beastHead.Position
+
+			local dir = (target - origin) * 1.5
+
+			local plrs = game:GetService("Players"):GetPlayers()
+			local exclusions = { part, part.Parent }
+
+			for i, v in pairs(plrs) do
+				local char = v.Character
+				if char and v ~= beast then
+					table.insert(exclusions, char)
+				end
+			end
+
+			local params = RaycastParams.new()
+			params.FilterType = Enum.RaycastFilterType.Exclude
+			params.FilterDescendantsInstances = exclusions
+			params.IgnoreWater = true
+
+			local result = game.Workspace:Raycast(origin, dir, params)
+
+			if result then
+				local instance = result.Instance
+
+				if instance then
+					if instance:IsDescendantOf(beastChar) then
+						return true
+					end
+				end
+			end
+		end
+
+		return false
+	end
+
+	local function LOSToBeast()
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+		local head = char and char:FindFirstChild("Head")
+		local lleg = char and char:FindFirstChild("Left Leg")
+		local rleg = char and char:FindFirstChild("Right Leg")
+
+		local parts = { root, head, lleg, rleg }
+
+		for i, v in pairs(parts) do
+			if v then
+				if doBeastRaycast(v) then
+					return true
+				end
+			end
+		end
+
+		return false
+	end
+
 	local function isInDanger()
-		return getDistToBeast() <= beast_max_dist
+		return getDistToBeast() <= beast_max_dist and LOSToBeast()
+	end
+
+	local function shouldEasyHack()
+		return getDistToBeast() > 30 or not LOSToBeast()
 	end
 
 	local auto_e_toggled = true
@@ -1981,7 +2170,9 @@ if game.PlaceId == 893973440 then
 
 								if closeToComputer then
 									-- safeTweenToPart(pc:FindFirstChildWhichIsA("BasePart"))
-									root.CFrame = root.CFrame * CFrame.new(0, 50, 0)
+									local spot = getValidSpot(pc)
+									root.CFrame = spot.CFrame * CFrame.new(0, -50, 0)
+									safeTweenToPart(spot)
 								else
 									root.CFrame = pos
 								end
@@ -2011,7 +2202,10 @@ if game.PlaceId == 893973440 then
 			local ictc, computer = isCloseToComputer()
 			local ictfp, freeze_pod = isCloseToFreezePod()
 
-			if (isInGame() and auto_e_toggled and (ictc or ictfp)) or (isBeast() and auto_e_toggled and ictfp) then
+			if
+				(isInGame() and auto_e_toggled and (ictc or ictfp))
+				or (isBeast() and auto_e_toggled and ictfp) and shouldEasyHack()
+			then
 				game.ReplicatedStorage.RemoteEvent:FireServer("Input", "Action", true)
 				task.wait(0.1)
 				game.ReplicatedStorage.RemoteEvent:FireServer("Input", "Action", false)
@@ -2212,6 +2406,43 @@ if game.PlaceId == 893973440 then
 				hidingFromBeast = false
 			end
 		end
+	end)
+
+	local hitOptions = {}
+
+	local FTFHitDropdown
+
+	local function refreshHitOptions()
+		hitOptions = {}
+		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+			table.insert(hitOptions, v.Name)
+		end
+
+		if FTFHitDropdown then
+			FTFHitDropdown:Refresh(hitOptions)
+		end
+	end
+
+	refreshHitOptions()
+
+	FTFHitDropdown = FTFTab:CreateDropdown({
+		Name = "Hit Player",
+		Options = hitOptions,
+		CurrentOption = {},
+		MultipleOptions = false,
+		Flag = nil,
+		Callback = function(options)
+			local plr = game:GetService("Players"):FindFirstChild(options[1])
+			if plr then
+				tpHitAndTie(plr)
+			end
+		end,
+	})
+
+	game:GetService("Players").PlayerAdded:Connect(refreshHitOptions)
+	game:GetService("Players").PlayerRemoving:Connect(function()
+		task.wait(1)
+		refreshHitOptions()
 	end)
 end
 
