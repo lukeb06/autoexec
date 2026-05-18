@@ -1598,7 +1598,7 @@ if game.GameId == 372226183 then
 
 	local function getCurrentMap()
 		for i, v in pairs(game.Workspace:GetChildren()) do
-			if v:FindFirstChild("MapThumbnail") then
+			if v:FindFirstChild("Vents") then
 				return v
 			end
 		end
