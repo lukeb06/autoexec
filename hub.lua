@@ -1598,7 +1598,7 @@ if game.GameId == 372226183 then
 
 	local function getCurrentMap()
 		for i, v in pairs(game.Workspace:GetChildren()) do
-			if v:FindFirstChild("Vents") then
+			if v:FindFirstChild("_LightingSettings") then
 				return v
 			end
 		end
@@ -1613,6 +1613,10 @@ if game.GameId == 372226183 then
 		end
 
 		return map:GetChildren()
+	end
+
+	local function getExits()
+		local children = getCurrentMapChildren()
 	end
 
 	local computer_esp_toggled = true
