@@ -19,6 +19,19 @@ local function dist3d(pos1, pos2)
 	return math.sqrt((pos2.x - pos1.x) ^ 2 + (pos2.y - pos1.y) ^ 2 + (pos2.z - pos1.z) ^ 2)
 end
 
+local function isDev()
+	local plr = game:GetService("Players").LocalPlayer
+	local dev_names = { "pathwise4", "pathwise5" }
+
+	for i, v in pairs(dev_names) do
+		if plr.Name == v then
+			return true
+		end
+	end
+
+	return false
+end
+
 local Noclipping = nil
 local Clip = true
 
@@ -1010,7 +1023,7 @@ if game.PlaceId == 139233844569220 then
 					local root = char and char:FindFirstChild("HumanoidRootPart")
 
 					if root then
-						task.wait((plr.Name == "pathwise4" and 1) or 2)
+						task.wait((isDev() and 1) or 2)
 						root.CFrame = CFrame.new(1, 51, 224)
 						task.wait(1)
 						isInvis = true
@@ -1598,7 +1611,7 @@ if game.GameId == 372226183 then
 
 	local function getCurrentMap()
 		for i, v in pairs(game.Workspace:GetChildren()) do
-			if v:FindFirstChild("_LightingSettings") then
+			if v:FindFirstChild("ComputerTable") then
 				return v
 			end
 		end
@@ -1616,7 +1629,194 @@ if game.GameId == 372226183 then
 	end
 
 	local function getExits()
-		local children = getCurrentMapChildren()
+		local exits = {}
+		local map = getCurrentMapChildren()
+
+		for i, v in pairs(map) do
+			if v.Name == "ExitDoor" then
+				table.insert(exits, v)
+			end
+		end
+
+		return exits
+	end
+
+	local function getExitArea(exit)
+		local area = exit:FindFirstChild("ExitArea")
+		return area
+	end
+
+	local function getExitTrigger(exit)
+		local trigger = exit:FindFirstChild("ExitDoorTrigger")
+		return trigger
+	end
+
+	local function exitNeedsToOpen(exit)
+		local trigger = getExitTrigger(exit)
+		local value = trigger and trigger:FindFirstChild("ActionSign")
+
+		if value then
+			return value.Value ~= 0
+		end
+
+		return false
+	end
+
+	local function exitIsOpen(exit)
+		local trigger = getExitTrigger(exit)
+
+		if not trigger then
+			return true
+		end
+
+		return false
+	end
+
+	local function getClosestClosedExit()
+		local exits = getExits()
+		local closed_exits = {}
+
+		for i, v in pairs(exits) do
+			if not exitIsOpen(v) and exitNeedsToOpen(v) then
+				table.insert(closed_exits, v)
+			end
+		end
+
+		local best = nil
+		local best_dist = 99999999
+
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		if root then
+			for i, v in pairs(closed_exits) do
+				local dist = dist3d(v.Position, root.Position)
+				if dist < best_dist then
+					best_dist = dist
+					best = v
+				end
+			end
+		end
+
+		return best
+	end
+
+	local function findOpenExit()
+		local open_exits = {}
+
+		for i, v in pairs(getExits()) do
+			if exitIsOpen(v) then
+				table.insert(open_exits, v)
+			end
+		end
+
+		local best = nil
+		local best_dist = 99999999
+
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		if root then
+			for i, v in pairs(open_exits) do
+				local dist = dist3d(v.Position, root.Position)
+
+				if dist < best_dist then
+					best_dist = dist
+					best = v
+				end
+			end
+		end
+
+		return best
+	end
+
+	local function findBeast()
+		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+			if
+				v.Character
+				and v.Character:FindFirstChild("BeastPowers")
+				and v ~= game:GetService("Players").LocalPlayer
+			then
+				return v
+			end
+		end
+
+		return nil
+	end
+
+	local function isGameActive()
+		return game.ReplicatedStorage.IsGameActive.Value and game.ReplicatedStorage.GameTimer.Value ~= 0
+	end
+
+	local function isBeast()
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+
+		if isGameActive() and char then
+			task.wait()
+			return char:FindFirstChild("BeastPowers")
+		end
+
+		return false
+	end
+
+	local function getDistToBeast()
+		local beast = findBeast()
+		local beastChar = beast and beast.Character
+		local beastRoot = beastChar and beastChar:FindFirstChild("HumanoidRootPart")
+
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		if beastRoot and root then
+			return dist3d(root.Position, beastRoot.Position)
+		end
+
+		return 99999999
+	end
+
+	local function getActivePlayers()
+		local players = {}
+
+		local plr = game:GetService("Players").LocalPlayer
+		local pgui = plr and plr:FindFirstChild("PlayerGui")
+		local sgui = pgui and pgui:FindFirstChild("ScreenGui")
+		local sbars = sgui and sgui:FindFirstChild("StatusBars")
+
+		local bars = sbars and sbars:GetChildren()
+
+		if bars then
+			for i, v in pairs(bars) do
+				if v:IsA("TextLabel") then
+					local name = v.ContentText
+					local player = game:GetService("Players"):FindFirstChild(name)
+
+					if player then
+						table.insert(players, player)
+					end
+				end
+			end
+		end
+
+		return players
+	end
+
+	local function isInGame()
+		local plr = game:GetService("Players").LocalPlayer
+		local players = getActivePlayers()
+
+		if plr and players then
+			for i, v in pairs(players) do
+				if v == plr then
+					return true
+				end
+			end
+		end
+
+		return false
 	end
 
 	local computer_esp_toggled = true
@@ -1682,7 +1882,7 @@ if game.GameId == 372226183 then
 		end,
 	})
 
-	local auto_hide_toggled = game:GetService("Players").LocalPlayer.Name == "pathwise4"
+	local auto_hide_toggled = isDev()
 	local FTFAutoHideToggle = FTFTab:CreateToggle({
 		Name = "Avoid Beast",
 		CurrentValue = auto_hide_toggled,
@@ -1691,6 +1891,73 @@ if game.GameId == 372226183 then
 			auto_hide_toggled = value
 		end,
 	})
+
+	local auto_exit_toggled = isDev()
+	local FTFAutoExitToggle = FTFTab:CreateToggle({
+		Name = "Auto Exit",
+		CurrentValue = auto_exit_toggled,
+		Flag = nil,
+		Callback = function(value)
+			auto_exit_toggled = value
+		end,
+	})
+
+	task.spawn(function()
+		while task.wait() do
+			if auto_exit_toggled and isInGame() and not isBeast() then
+				local exit = findOpenExit()
+
+				if exit then
+					local area = getExitArea(exit)
+
+					local plr = game:GetService("Players").LocalPlayer
+					local char = plr and plr.Character
+					local root = char and char:FindFirstChild("HumanoidRootPart")
+
+					if root then
+						root.CFrame = area.CFrame
+					end
+				end
+			end
+		end
+	end)
+
+	local auto_open_exit_toggled = isDev()
+	local FTFAutoOpenExitToggle = FTFTab:CreateToggle({
+		Name = "Auto Open Exit",
+		CurrentValue = auto_open_exit_toggled,
+		Flag = nil,
+		Callback = function(value)
+			auto_open_exit_toggled = value
+		end,
+	})
+
+	task.spawn(function()
+		while task.wait() do
+			if auto_open_exit_toggled and isInGame() and not isBeast() then
+				local openExit = findOpenExit()
+				if openExit then
+					return
+				end
+
+				local exit = getClosestClosedExit()
+
+				if exit then
+					local trigger = getExitTrigger(exit)
+
+					if trigger then
+						local plr = game:GetService("Players").LocalPlayer
+						local char = plr and plr.Character
+						local root = char and char:FindFirstChild("HumanoidRootPart")
+
+						if root then
+							root.CFrame = trigger.CFrame
+						end
+					end
+				end
+			end
+		end
+	end)
 
 	local function partCloseToModel(part, model, ddist)
 		local base = model.PrimaryPart
@@ -1745,6 +2012,10 @@ if game.GameId == 372226183 then
 
 	local function isCloseToFreezePod()
 		return isCloseToModelName("FreezePod", 10)
+	end
+
+	local function isCloseToExit()
+		return isCloseToModelName("ExitDoor", 10)
 	end
 
 	local function getHammer()
@@ -1931,93 +2202,6 @@ if game.GameId == 372226183 then
 		end
 
 		return nil
-	end
-
-	local function findBeast()
-		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-			if
-				v.Character
-				and v.Character:FindFirstChild("BeastPowers")
-				and v ~= game:GetService("Players").LocalPlayer
-			then
-				return v
-			end
-		end
-
-		return nil
-	end
-
-	local function getDistToBeast()
-		local beast = findBeast()
-		local beastChar = beast and beast.Character
-		local beastRoot = beastChar and beastChar:FindFirstChild("HumanoidRootPart")
-
-		local plr = game:GetService("Players").LocalPlayer
-		local char = plr and plr.Character
-		local root = char and char:FindFirstChild("HumanoidRootPart")
-
-		if beastRoot and root then
-			return dist3d(root.Position, beastRoot.Position)
-		end
-
-		return 99999999
-	end
-
-	local function isGameActive()
-		return game.ReplicatedStorage.IsGameActive.Value and game.ReplicatedStorage.GameTimer.Value ~= 0
-	end
-
-	local function isBeast()
-		local plr = game:GetService("Players").LocalPlayer
-		local char = plr and plr.Character
-
-		if isGameActive() and char then
-			task.wait()
-			return char:FindFirstChild("BeastPowers")
-		end
-
-		return false
-	end
-
-	local function getActivePlayers()
-		local players = {}
-
-		local plr = game:GetService("Players").LocalPlayer
-		local pgui = plr and plr:FindFirstChild("PlayerGui")
-		local sgui = pgui and pgui:FindFirstChild("ScreenGui")
-		local sbars = sgui and sgui:FindFirstChild("StatusBars")
-
-		local bars = sbars and sbars:GetChildren()
-
-		if bars then
-			for i, v in pairs(bars) do
-				if v:IsA("TextLabel") then
-					local name = v.ContentText
-					local player = game:GetService("Players"):FindFirstChild(name)
-
-					if player then
-						table.insert(players, player)
-					end
-				end
-			end
-		end
-
-		return players
-	end
-
-	local function isInGame()
-		local plr = game:GetService("Players").LocalPlayer
-		local players = getActivePlayers()
-
-		if plr and players then
-			for i, v in pairs(players) do
-				if v == plr then
-					return true
-				end
-			end
-		end
-
-		return false
 	end
 
 	local beast_max_dist = 20
@@ -2208,9 +2392,10 @@ if game.GameId == 372226183 then
 		while task.wait(0.1) do
 			local ictc, computer = isCloseToComputer()
 			local ictfp, freeze_pod = isCloseToFreezePod()
+			local icte, exit = isCloseToExit()
 
 			if
-				(isInGame() and auto_e_toggled and (ictc or ictfp))
+				(isInGame() and auto_e_toggled and (ictc or ictfp or icte))
 				or (isBeast() and auto_e_toggled and ictfp) and shouldEasyHack()
 			then
 				game.ReplicatedStorage.RemoteEvent:FireServer("Input", "Action", true)
