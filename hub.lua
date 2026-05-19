@@ -1986,6 +1986,7 @@ if game.GameId == 372226183 then
 
 		while task.wait() do
 			if teleported and not isCloseToExit() then
+				task.wait(10)
 				teleported = false
 			end
 			if auto_exit_toggled and isInGame() and not isBeast() and not teleported and not isEscaped() then
