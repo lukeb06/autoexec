@@ -2393,10 +2393,14 @@ if game.GameId == 372226183 then
 									if closeToComputer then
 										-- safeTweenToPart(pc:FindFirstChildWhichIsA("BasePart"))
 										local spot = getValidSpot(pc)
-										root.CFrame = spot.CFrame * CFrame.new(0, -50, 0)
-										safeTweenToPart(spot)
+										if root and spot then
+											root.CFrame = spot.CFrame * CFrame.new(0, -50, 0)
+											safeTweenToPart(spot)
+										end
 									else
-										root.CFrame = pos
+										if root then
+											root.CFrame = pos
+										end
 									end
 								end
 							end
