@@ -1821,6 +1821,83 @@ if game.GameId == 372226183 then
 		return false
 	end
 
+	local function partCloseToModel(part, model, ddist)
+		local base = nil
+		if model.PrimaryPart then
+			base = model.PrimaryPart
+		else
+			local d = model:GetDescendants()
+			for i, v in pairs(d) do
+				if v:IsA("BasePart") then
+					base = v
+					break
+				end
+			end
+		end
+
+		if part and base then
+			local dist = dist3d(part.Position, base.Position)
+			return dist <= ddist
+		end
+
+		return false
+	end
+
+	local function isCloseToModel(model, ddist)
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		return partCloseToModel(root, model, ddist)
+	end
+
+	local function partCloseToModelName(part, name, ddist)
+		for i, v in pairs(getCurrentMapChildren()) do
+			if v.Name == name then
+				if partCloseToModel(part, v, ddist) then
+					return true, v
+				end
+			end
+		end
+
+		return false, nil
+	end
+
+	local function isCloseToModelName(name, ddist)
+		for i, v in pairs(getCurrentMapChildren()) do
+			if v.Name == name then
+				if isCloseToModel(v, ddist) then
+					return true, v
+				end
+			end
+		end
+
+		return false, nil
+	end
+
+	local function partCloseToComputer(part)
+		return partCloseToModelName(part, "ComputerTable", 20)
+	end
+
+	local function isCloseToComputer()
+		return isCloseToModelName("ComputerTable", 8.5)
+	end
+
+	local function isCloseToFreezePod()
+		return isCloseToModelName("FreezePod", 10)
+	end
+
+	local function isCloseToExit()
+		return isCloseToModelName("ExitDoor", 20)
+	end
+
+	local function isEscaped()
+		local plr = game:GetService("Players").LocalPlayer
+		local stats = plr and plr:FindFirstChild("TempPlayerStatsModule")
+		local escaped = stats and stats:FindFirstChild("Escaped")
+		return (escaped and escaped.Value) or false
+	end
+
 	local computer_esp_toggled = true
 	local function updatePCESP()
 		for _, v in pairs(getCurrentMapChildren()) do
@@ -1905,8 +1982,13 @@ if game.GameId == 372226183 then
 	})
 
 	task.spawn(function()
+		local teleported = false
+
 		while task.wait() do
-			if auto_exit_toggled and isInGame() and not isBeast() then
+			if teleported and not isCloseToExit() then
+				teleported = false
+			end
+			if auto_exit_toggled and isInGame() and not isBeast() and not teleported and not isEscaped() then
 				local exit = findOpenExit()
 
 				if exit then
@@ -1918,6 +2000,7 @@ if game.GameId == 372226183 then
 
 					if root then
 						root.CFrame = area.CFrame
+						teleported = true
 					end
 				end
 			end
@@ -1935,8 +2018,12 @@ if game.GameId == 372226183 then
 	})
 
 	task.spawn(function()
+		local teleported = false
 		while task.wait() do
-			if auto_open_exit_toggled and isInGame() and not isBeast() then
+			if teleported and not isCloseToExit() then
+				teleported = false
+			end
+			if auto_open_exit_toggled and isInGame() and not isBeast() and not teleported and not isEscaped() then
 				local openExit = findOpenExit()
 				if openExit then
 					return
@@ -1954,82 +2041,13 @@ if game.GameId == 372226183 then
 
 						if root then
 							root.CFrame = trigger.CFrame
+							teleported = true
 						end
 					end
 				end
 			end
 		end
 	end)
-
-	local function partCloseToModel(part, model, ddist)
-		local base = nil
-		if model.PrimaryPart then
-			base = model.PrimaryPart
-		else
-			local d = model:GetDescendants()
-			for i, v in pairs(d) do
-				if v:IsA("BasePart") then
-					base = v
-					break
-				end
-			end
-		end
-
-		if part and base then
-			local dist = dist3d(part.Position, base.Position)
-			return dist <= ddist
-		end
-
-		return false
-	end
-
-	local function isCloseToModel(model, ddist)
-		local plr = game:GetService("Players").LocalPlayer
-		local char = plr and plr.Character
-		local root = char and char:FindFirstChild("HumanoidRootPart")
-
-		return partCloseToModel(root, model, ddist)
-	end
-
-	local function partCloseToModelName(part, name, ddist)
-		for i, v in pairs(getCurrentMapChildren()) do
-			if v.Name == name then
-				if partCloseToModel(part, v, ddist) then
-					return true, v
-				end
-			end
-		end
-
-		return false, nil
-	end
-
-	local function isCloseToModelName(name, ddist)
-		for i, v in pairs(getCurrentMapChildren()) do
-			if v.Name == name then
-				if isCloseToModel(v, ddist) then
-					return true, v
-				end
-			end
-		end
-
-		return false, nil
-	end
-
-	local function partCloseToComputer(part)
-		return partCloseToModelName(part, "ComputerTable", 20)
-	end
-
-	local function isCloseToComputer()
-		return isCloseToModelName("ComputerTable", 8.5)
-	end
-
-	local function isCloseToFreezePod()
-		return isCloseToModelName("FreezePod", 10)
-	end
-
-	local function isCloseToExit()
-		return isCloseToModelName("ExitDoor", 20)
-	end
 
 	local function getHammer()
 		local plr = game:GetService("Players").LocalPlayer
