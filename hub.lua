@@ -1691,7 +1691,8 @@ if game.GameId == 372226183 then
 
 		if root then
 			for i, v in pairs(closed_exits) do
-				local dist = dist3d(v.Position, root.Position)
+				local trigger = getExitTrigger(v)
+				local dist = dist3d(trigger.Position, root.Position)
 				if dist < best_dist then
 					best_dist = dist
 					best = v
@@ -1720,7 +1721,8 @@ if game.GameId == 372226183 then
 
 		if root then
 			for i, v in pairs(open_exits) do
-				local dist = dist3d(v.Position, root.Position)
+				local area = getExitArea(v)
+				local dist = dist3d(area.Position, root.Position)
 
 				if dist < best_dist then
 					best_dist = dist
@@ -1960,7 +1962,18 @@ if game.GameId == 372226183 then
 	end)
 
 	local function partCloseToModel(part, model, ddist)
-		local base = model.PrimaryPart
+		local base = nil
+		if model.PrimaryPart then
+			base = model.PrimaryPart
+		else
+			local d = model:GetDescendants()
+			for i, v in pairs(d) do
+				if v:IsA("BasePart") then
+					base = v
+					break
+				end
+			end
+		end
 
 		if part and base then
 			local dist = dist3d(part.Position, base.Position)
@@ -2015,7 +2028,7 @@ if game.GameId == 372226183 then
 	end
 
 	local function isCloseToExit()
-		return isCloseToModelName("ExitDoor", 10)
+		return isCloseToModelName("ExitDoor", 20)
 	end
 
 	local function getHammer()
