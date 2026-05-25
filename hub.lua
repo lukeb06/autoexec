@@ -56,6 +56,10 @@ local function enableNoclip()
 			for _, child in pairs(speaker.Character:GetDescendants()) do
 				if child:IsA("BasePart") and child.CanCollide == true then
 					child.CanCollide = false
+					local couldCollide = Instance.new("BoolValue")
+					couldCollide.Name = "CouldCollide"
+					couldCollide.Value = true
+					couldCollide.Parent = child
 				end
 			end
 		end
@@ -69,6 +73,16 @@ local function disableNoclip()
 	end
 	if Noclipping then
 		Noclipping:Disconnect()
+		local speaker = game:GetService("Players").LocalPlayer
+		for _, child in pairs(speaker.Character:GetDescendants()) do
+			if child:IsA("BasePart") then
+				local couldCollideValue = child:FindFirstChild("CouldCollide")
+				if couldCollideValue then
+					child.CanCollide = true
+					couldCollideValue:Destroy()
+				end
+			end
+		end
 	end
 	Clip = true
 end
