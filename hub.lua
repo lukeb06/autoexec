@@ -414,7 +414,7 @@ local Window = Rayfield:CreateWindow({
 	LoadingTitle = "Luke's Script Hub",
 	LoadingSubtitle = "by @actuallyluke",
 	ShowText = "Rayfield", -- for mobile users to unhide Rayfield, change if you'd like
-	Theme = "Bloom", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+	Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
 	ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
 
@@ -445,6 +445,21 @@ local NoClipToggle = UniversalTab:CreateToggle({
 		else
 			disableNoclip()
 		end
+	end,
+})
+
+local ThemeSection = UniversalTab:CreateSection("Theme")
+
+local ThemeDropdown = UniversalTab:CreateDropdown({
+	Name = "Theme",
+	Options = { "Default", "Bloom", "AmberGlow", "Amethyst", "DarkBlue", "Green", "Light", "Ocean", "Serenity" },
+	CurrentOption = { "Default" },
+	MultipleOptions = false,
+	Flag = "ThemeDropdown",
+	Callback = function(options)
+		local option = options[1]
+
+		Window.ModifyTheme(option)
 	end,
 })
 
@@ -673,6 +688,13 @@ local UniversalSpeedSlider = UniversalTab:CreateSlider({
 		if hum then
 			hum.WalkSpeed = value
 		end
+	end,
+})
+
+local SetSpeedButton = UniversalTab:CreateButton({
+	Name = "Set to 18",
+	Callback = function()
+		UniversalSpeedSlider:Set(18)
 	end,
 })
 
