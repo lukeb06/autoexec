@@ -2673,7 +2673,6 @@ if game.GameId == 372226183 then
 		end
 	end)
 
-	local FTFChaseMusicSlider = FTFTab:CreateSlider({})
 	local FTFChaseMusicSlider = FTFTab:CreateSlider({
 		Name = "Chase Music Volume",
 		Range = { 0, 100 },
