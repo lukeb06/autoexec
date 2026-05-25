@@ -418,6 +418,8 @@ local Window = Rayfield:CreateWindow({
 
 local UniversalTab = Window:CreateTab("Universal", "globe")
 
+local NoclipSection = UniversalTab:CreateSection("Noclip")
+
 local NoClipToggle = UniversalTab:CreateToggle({
 	Name = "Toggle Noclip",
 	CurrentValue = false,
