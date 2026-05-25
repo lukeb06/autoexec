@@ -1787,7 +1787,7 @@ if game.GameId == 372226183 then
 		local music = getChaseMusic()
 
 		if music then
-			music.Volume = value
+			chaseMusicVolume = value
 		end
 	end
 
