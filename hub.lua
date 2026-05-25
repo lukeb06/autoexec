@@ -304,7 +304,7 @@ table.insert(looped_functions, function()
 		local plr = game:GetService("Players").LocalPlayer
 		local char = plr and plr.Character
 		local root = char and char:FindFirstChild("HumanoidRootPart")
-		local hum = char and char:FindFirstChild("Humanoid")
+		local hum = char and char:FindFirstChildWhichIsA("Humanoid")
 		local rig = hum and hum.RigType
 
 		if root and hum then
@@ -1748,6 +1748,49 @@ if game.GameId == 372226183 then
 		return nil
 	end
 
+	local function getHammer()
+		local beast = findBeast()
+		local char = beast and beast.Character
+		local hammer = char and char:FindFirstChild("Hammer")
+
+		return hammer
+	end
+
+	local function getHammerHandle()
+		local hammer = getHammer()
+		local handle = hammer and hammer:FindFirstChild("Handle")
+
+		return handle
+	end
+
+	local function getChaseMusic()
+		local handle = getHammerHandle()
+		local music = handle and handle:FindFirstChild("SoundChaseMusic")
+
+		return music
+	end
+
+	local defaultChaseMusicVolume = 0.4
+	local chaseMusicVolume = 0.4
+
+	task.spawn(function()
+		while task.wait() do
+			local music = getChaseMusic()
+
+			if music then
+				music.Volume = chaseMusicVolume
+			end
+		end
+	end)
+
+	local function updateChaseVolume(value)
+		local music = getChaseMusic()
+
+		if music then
+			music.Volume = value
+		end
+	end
+
 	local function isGameActive()
 		return game.ReplicatedStorage.IsGameActive.Value and game.ReplicatedStorage.GameTimer.Value ~= 0
 	end
@@ -1895,7 +1938,11 @@ if game.GameId == 372226183 then
 		local plr = game:GetService("Players").LocalPlayer
 		local stats = plr and plr:FindFirstChild("TempPlayerStatsModule")
 		local escaped = stats and stats:FindFirstChild("Escaped")
-		return (escaped and escaped.Value) or false
+		if escaped then
+			return escaped.Value
+		else
+			return false
+		end
 	end
 
 	local computer_esp_toggled = true
@@ -1984,11 +2031,12 @@ if game.GameId == 372226183 then
 	task.spawn(function()
 		local teleported = false
 
-		while task.wait() do
+		while task.wait(1) do
 			if teleported and not isCloseToExit() then
 				task.wait(10)
 				teleported = false
 			end
+			print("isEscaped", isEscaped())
 			if auto_exit_toggled and isInGame() and not isBeast() and not teleported and not isEscaped() then
 				local exit = findOpenExit()
 
@@ -2050,18 +2098,6 @@ if game.GameId == 372226183 then
 			end
 		end
 	end)
-
-	local function getHammer()
-		local plr = game:GetService("Players").LocalPlayer
-		local char = plr and plr.Character
-
-		if char then
-			local hammer = char:FindFirstChild("Hammer")
-			return hammer
-		end
-
-		return nil
-	end
 
 	local function getHammerEvent()
 		local hammer = getHammer()
@@ -2636,6 +2672,19 @@ if game.GameId == 372226183 then
 			end
 		end
 	end)
+
+	local FTFChaseMusicSlider = FTFTab:CreateSlider({})
+	local FTFChaseMusicSlider = FTFTab:CreateSlider({
+		Name = "Chase Music Volume",
+		Range = { 0, 100 },
+		Increment = 1,
+		Suffix = "%",
+		CurrentValue = 100,
+		Flag = nil,
+		Callback = function(value)
+			updateChaseVolume((value / 100) * defaultChaseMusicVolume)
+		end,
+	})
 
 	local hitOptions = {}
 
