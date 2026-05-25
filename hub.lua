@@ -425,7 +425,7 @@ local NoClipToggle = UniversalTab:CreateToggle({
 	CurrentValue = false,
 	Flag = nil,
 	Callback = function(value)
-		manual_noclip = true
+		manual_noclip = value
 		if value then
 			enableNoclip()
 		else
