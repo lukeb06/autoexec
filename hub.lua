@@ -35,6 +35,8 @@ end
 local Noclipping = nil
 local Clip = true
 
+local manual_noclip = false
+
 local function removeCollisions(char)
 	for _, child in pairs(char:GetDescendants()) do
 		if child:IsA("BasePart") and child.CanCollide == true then
@@ -62,6 +64,9 @@ local function enableNoclip()
 end
 
 local function disableNoclip()
+	if manual_noclip then
+		return
+	end
 	if Noclipping then
 		Noclipping:Disconnect()
 	end
@@ -395,7 +400,7 @@ local Window = Rayfield:CreateWindow({
 	LoadingTitle = "Luke's Script Hub",
 	LoadingSubtitle = "by @actuallyluke",
 	ShowText = "Rayfield", -- for mobile users to unhide Rayfield, change if you'd like
-	Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+	Theme = "Bloom", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
 	ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
 
@@ -412,6 +417,20 @@ local Window = Rayfield:CreateWindow({
 })
 
 local UniversalTab = Window:CreateTab("Universal", "globe")
+
+local NoClipToggle = UniversalTab:CreateToggle({
+	Name = "Toggle Noclip",
+	CurrentValue = false,
+	Flag = nil,
+	Callback = function(value)
+		manual_noclip = true
+		if value then
+			enableNoclip()
+		else
+			disableNoclip()
+		end
+	end,
+})
 
 local PathSection = UniversalTab:CreateSection("Path")
 
