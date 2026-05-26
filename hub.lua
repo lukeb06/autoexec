@@ -444,13 +444,6 @@ local function initCustomUI()
 				activeInput = input
 				dragStart = input.Position
 				startPos = el.Position
-
-				input.Changed:Connect(function()
-					if input.UserInputState == Enum.UserInputState.End then
-						dragging = false
-						activeInput = nil
-					end
-				end)
 			end
 		end)
 
@@ -463,6 +456,14 @@ local function initCustomUI()
 					startPos.Y.Scale,
 					startPos.Y.Offset + delta.Y
 				)
+			end
+		end)
+
+		-- Detect globally when the mouse lets go or the finger lifts up
+		game:GetService("UserInputService").InputEnded:Connect(function(input)
+			if input == activeInput then
+				dragging = false
+				activeInput = nil
 			end
 		end)
 
