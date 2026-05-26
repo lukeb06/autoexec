@@ -691,7 +691,14 @@ local UniversalSpeedSlider = UniversalTab:CreateSlider({
 	end,
 })
 
-local SetSpeedButton = UniversalTab:CreateButton({
+UniversalTab:CreateButton({
+	Name = "Set to 16",
+	Callback = function()
+		UniversalSpeedSlider:Set(16)
+	end,
+})
+
+UniversalTab:CreateButton({
 	Name = "Set to 18",
 	Callback = function()
 		UniversalSpeedSlider:Set(18)
