@@ -518,14 +518,14 @@ local function initCustomUI()
 		return obj
 	end
 
-	local noclipToggle = createMovingToggle("Noclip", false, function(value)
-		manual_noclip = value
-		if value then
-			enableNoclip()
-		else
-			disableNoclip()
-		end
-	end)
+	-- local noclipToggle = createMovingToggle("Noclip", false, function(value)
+	-- 	manual_noclip = value
+	-- 	if value then
+	-- 		enableNoclip()
+	-- 	else
+	-- 		disableNoclip()
+	-- 	end
+	-- end)
 
 	ui.Parent = game.CoreGui
 
