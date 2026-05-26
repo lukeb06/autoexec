@@ -432,43 +432,37 @@ local function initCustomUI()
 		uiPadding.Parent = el
 
 		local dragging = false
-		local dragInput, dragStart, startPos
+		local dragStart, startPos
+		local activeInput = nil
 
-		local function update(input)
-			local delta = input.Position - dragStart
-			el.Position =
-				UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-		end
-
-		el.InputBegan:Connect(function(input)
+		button.InputBegan:Connect(function(input)
 			if
 				input.UserInputType == Enum.UserInputType.MouseButton1
 				or input.UserInputType == Enum.UserInputType.Touch
 			then
 				dragging = true
+				activeInput = input
 				dragStart = input.Position
-				startPos = el.Position
+				startPos = button.Position
 
 				input.Changed:Connect(function()
 					if input.UserInputState == Enum.UserInputState.End then
 						dragging = false
+						activeInput = nil
 					end
 				end)
 			end
 		end)
 
-		el.InputChanged:Connect(function(input)
-			if
-				input.UserInputType == Enum.UserInputType.MouseMovement
-				or input.UserInputType == Enum.UserInputType.Touch
-			then
-				dragInput = input
-			end
-		end)
-
 		game:GetService("UserInputService").InputChanged:Connect(function(input)
-			if input == dragInput and dragging then
-				update(input)
+			if dragging and input == activeInput then
+				local delta = input.Position - dragStart
+				button.Position = UDim2.new(
+					startPos.X.Scale,
+					startPos.X.Offset + delta.X,
+					startPos.Y.Scale,
+					startPos.Y.Offset + delta.Y
+				)
 			end
 		end)
 
