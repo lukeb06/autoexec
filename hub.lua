@@ -447,7 +447,8 @@ local function initCustomUI()
 			end
 		end)
 
-		game:GetService("UserInputService").InputChanged:Connect(function(input)
+		-- Track movement on the button itself to bypass desktop input sinking
+		el.InputChanged:Connect(function(input)
 			if dragging and input == activeInput then
 				local delta = input.Position - dragStart
 				el.Position = UDim2.new(
@@ -459,13 +460,16 @@ local function initCustomUI()
 			end
 		end)
 
-		-- Detect globally when the mouse lets go or the finger lifts up
-		game:GetService("UserInputService").InputEnded:Connect(function(input)
+		-- Detect when the release happens directly on the button or globally
+		local function endDrag(input)
 			if input == activeInput then
 				dragging = false
 				activeInput = nil
 			end
-		end)
+		end
+
+		el.InputEnded:Connect(endDrag)
+		game:GetService("UserInputService").InputEnded:Connect(endDrag)
 
 		local obj = {
 			name = name,
