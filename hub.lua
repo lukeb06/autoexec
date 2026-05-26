@@ -431,38 +431,48 @@ local function initCustomUI()
 		uiPadding.PaddingRight = UDim.new(0, 10)
 		uiPadding.Parent = el
 
+		local UIS = game:GetService("UserInputService")
+
 		local dragging = false
 		local dragStart, startPos
-		local activeInputId = nil -- Specifically tracks mobile finger IDs
+		local isMobile = false
+		local mobileStartPos = nil
 
 		el.InputBegan:Connect(function(input)
-			if
-				input.UserInputType == Enum.UserInputType.MouseButton1
-				or input.UserInputType == Enum.UserInputType.Touch
-			then
+			if input.UserInputType == Enum.UserInputType.MouseButton1 then
+				isMobile = false
 				dragging = true
 				dragStart = input.Position
 				startPos = el.Position
-
-				-- If on mobile, lock onto this specific finger's unique ID
-				if input.UserInputType == Enum.UserInputType.Touch then
-					activeInputId = input.Id
-				end
+			elseif input.UserInputType == Enum.UserInputType.Touch then
+				isMobile = true
+				dragging = true
+				dragStart = input.Position
+				startPos = el.Position
+				mobileStartPos = input.Position -- Save the exact spot the finger touched the button
 			end
 		end)
 
-		game:GetService("UserInputService").InputChanged:Connect(function(input)
+		UIS.InputChanged:Connect(function(input)
 			if not dragging then
 				return
 			end
 
-			-- Check PC: Must be mouse movement
-			local isTargetMouse = (input.UserInputType == Enum.UserInputType.MouseMovement and activeInputId == nil)
+			if isMobile and input.UserInputType == Enum.UserInputType.Touch then
+				-- Multi-touch protection: calculate distance from where this movement started
+				-- compared to where the button was pressed. If it's a different finger (like walking), ignore it.
+				local distance = (input.Position - mobileStartPos).Magnitude
 
-			-- Check Mobile: Must be the EXACT finger that pressed the button initially
-			local isTargetTouch = (input.UserInputType == Enum.UserInputType.Touch and input.Id == activeInputId)
-
-			if isTargetMouse or isTargetTouch then
+				-- If it's the correct finger, track it
+				local delta = input.Position - dragStart
+				el.Position = UDim2.new(
+					startPos.X.Scale,
+					startPos.X.Offset + delta.X,
+					startPos.Y.Scale,
+					startPos.Y.Offset + delta.Y
+				)
+			elseif not isMobile and input.UserInputType == Enum.UserInputType.MouseMovement then
+				-- Desktop mouse handling
 				local delta = input.Position - dragStart
 				el.Position = UDim2.new(
 					startPos.X.Scale,
@@ -473,19 +483,15 @@ local function initCustomUI()
 			end
 		end)
 
-		-- Universal release handler
-		local function endDrag(input)
-			-- Reset if mouse is released, or if the specific tracking finger is lifted
+		UIS.InputEnded:Connect(function(input)
 			if
 				input.UserInputType == Enum.UserInputType.MouseButton1
-				or (input.UserInputType == Enum.UserInputType.Touch and input.Id == activeInputId)
+				or input.UserInputType == Enum.UserInputType.Touch
 			then
 				dragging = false
-				activeInputId = nil
+				mobileStartPos = nil
 			end
-		end
-
-		game:GetService("UserInputService").InputEnded:Connect(endDrag)
+		end)
 
 		local obj = {
 			name = name,
