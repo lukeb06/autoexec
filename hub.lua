@@ -433,23 +433,28 @@ local function initCustomUI()
 
 		local dragging = false
 		local dragStart, startPos
-		local activeInput = nil
 
 		el.InputBegan:Connect(function(input)
+			-- Check if it's a PC click or Mobile touch
 			if
 				input.UserInputType == Enum.UserInputType.MouseButton1
 				or input.UserInputType == Enum.UserInputType.Touch
 			then
 				dragging = true
-				activeInput = input
 				dragStart = input.Position
 				startPos = el.Position
 			end
 		end)
 
-		-- Track movement on the button itself to bypass desktop input sinking
-		el.InputChanged:Connect(function(input)
-			if dragging and input == activeInput then
+		game:GetService("UserInputService").InputChanged:Connect(function(input)
+			-- On PC, dragging switches type to MouseMovement. On Mobile, it stays Touch.
+			if
+				dragging
+				and (
+					input.UserInputType == Enum.UserInputType.MouseMovement
+					or input.UserInputType == Enum.UserInputType.Touch
+				)
+			then
 				local delta = input.Position - dragStart
 				el.Position = UDim2.new(
 					startPos.X.Scale,
@@ -460,16 +465,15 @@ local function initCustomUI()
 			end
 		end)
 
-		-- Detect when the release happens directly on the button or globally
-		local function endDrag(input)
-			if input == activeInput then
+		-- Detect globally when the mouse lets go or the finger lifts up
+		game:GetService("UserInputService").InputEnded:Connect(function(input)
+			if
+				input.UserInputType == Enum.UserInputType.MouseButton1
+				or input.UserInputType == Enum.UserInputType.Touch
+			then
 				dragging = false
-				activeInput = nil
 			end
-		end
-
-		el.InputEnded:Connect(endDrag)
-		game:GetService("UserInputService").InputEnded:Connect(endDrag)
+		end)
 
 		local obj = {
 			name = name,
