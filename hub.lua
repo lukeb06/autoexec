@@ -406,6 +406,111 @@ local function initCtrlClickDelete()
 end
 initCtrlClickDelete()
 
+local function initCustomUI()
+	local ui = Instance.new("ScreenGui")
+
+	local function createMovingToggle(name, currentValue, callback)
+		local el = Instance.new("TextButton")
+		el.Text = name
+		el.Size = UDim2.new(0, 0, 0, 50) -- X must be 0 for AutomaticSize to work
+		el.Position = UDim2.new(0.4, 0, 0.4, 0) -- Centered on screen by default
+		if currentValue then
+			el.BackgroundColor3 = Color3.fromRGB(0, 80, 0)
+		else
+			el.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
+		end
+		el.TextColor3 = Color3.fromRGB(255, 255, 255)
+		-- el.Font = Enum.Font.SourceSansBold
+		el.TextSize = 16
+		el.TextWrapped = false -- Prevents text from forcing a new line
+		el.AutomaticSize = Enum.AutomaticSize.X -- Force width to scale with text
+		el.Parent = ui
+
+		local uiPadding = Instance.new("UIPadding")
+		uiPadding.PaddingLeft = UDim.new(0, 10)
+		uiPadding.PaddingRight = UDim.new(0, 10)
+		uiPadding.Parent = el
+
+		local dragging = false
+		local dragInput, dragStart, startPos
+
+		local function update(input)
+			local delta = input.Position - dragStart
+			el.Position =
+				UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		end
+
+		el.InputBegan:Connect(function(input)
+			if
+				input.UserInputType == Enum.UserInputType.MouseButton1
+				or input.UserInputType == Enum.UserInputType.Touch
+			then
+				dragging = true
+				dragStart = input.Position
+				startPos = el.Position
+
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						dragging = false
+					end
+				end)
+			end
+		end)
+
+		el.InputChanged:Connect(function(input)
+			if
+				input.UserInputType == Enum.UserInputType.MouseMovement
+				or input.UserInputType == Enum.UserInputType.Touch
+			then
+				dragInput = input
+			end
+		end)
+
+		game:GetService("UserInputService").InputChanged:Connect(function(input)
+			if input == dragInput and dragging then
+				update(input)
+			end
+		end)
+
+		local obj = {
+			name = name,
+			currentValue = currentValue,
+			toggle = function(self)
+				self:set(not self.currentValue)
+			end,
+			set = function(self, value)
+				self.currentValue = value
+				callback(value)
+
+				if value then
+					el.BackgroundColor3 = Color3.fromRGB(0, 80, 0)
+				else
+					el.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
+				end
+			end,
+		}
+
+		el.MouseButton1Click:Connect(function()
+			obj:toggle()
+		end)
+
+		return obj
+	end
+
+	createMovingToggle("Noclip", false, function(value)
+		manual_noclip = value
+		if value then
+			enableNoclip()
+		else
+			disableNoclip()
+		end
+	end)
+
+	ui.Parent = game.CoreGui
+end
+
+local CustomUI = initCustomUI()
+
 local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 
 local Window = Rayfield:CreateWindow({
@@ -445,6 +550,31 @@ local NoClipToggle = UniversalTab:CreateToggle({
 		else
 			disableNoclip()
 		end
+	end,
+})
+
+local NoClipKeybind = UniversalTab:CreateKeybind({
+	Name = "Toggle Noclip",
+	CurrentKeybind = "V",
+	HoldToInteract = false,
+	Flag = "NoClipKeybind",
+	Callback = function()
+		if NoClipToggle.CurrentValue then
+			Rayfield:Notify({
+				Title = "Noclip Disabled",
+				Content = "Noclip is now disabled.",
+				Duration = 3,
+				Image = "rewind",
+			})
+		else
+			Rayfield:Notify({
+				Title = "Noclip Enabled",
+				Content = "Noclip is now enabled.",
+				Duration = 3,
+				Image = "rewind",
+			})
+		end
+		NoClipToggle:Set(not NoClipToggle.CurrentValue)
 	end,
 })
 
