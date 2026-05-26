@@ -435,7 +435,7 @@ local function initCustomUI()
 		local dragStart, startPos
 		local activeInput = nil
 
-		button.InputBegan:Connect(function(input)
+		el.InputBegan:Connect(function(input)
 			if
 				input.UserInputType == Enum.UserInputType.MouseButton1
 				or input.UserInputType == Enum.UserInputType.Touch
@@ -443,7 +443,7 @@ local function initCustomUI()
 				dragging = true
 				activeInput = input
 				dragStart = input.Position
-				startPos = button.Position
+				startPos = el.Position
 
 				input.Changed:Connect(function()
 					if input.UserInputState == Enum.UserInputState.End then
@@ -457,7 +457,7 @@ local function initCustomUI()
 		game:GetService("UserInputService").InputChanged:Connect(function(input)
 			if dragging and input == activeInput then
 				local delta = input.Position - dragStart
-				button.Position = UDim2.new(
+				el.Position = UDim2.new(
 					startPos.X.Scale,
 					startPos.X.Offset + delta.X,
 					startPos.Y.Scale,
