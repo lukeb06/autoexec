@@ -433,63 +433,53 @@ local function initCustomUI()
 
 		local UIS = game:GetService("UserInputService")
 
-		local dragging = false
-		local dragStart, startPos
-		local isMobile = false
-		local mobileStartPos = nil
+		local Dragging = nil
+		local DragInput = nil
+		local DragStart = nil
+		local StartPosition = nil
+
+		local function Update(input)
+			local Delta = input.Position - DragStart
+			local Position = UDim2.new(
+				StartPosition.X.Scale,
+				StartPosition.X.Offset + Delta.X,
+				StartPosition.Y.Scale,
+				StartPosition.Y.Offset + Delta.Y
+			)
+			-- Smooth Rayfield glide transition
+			game:GetService("TweenService"):Create(el, TweenInfo.new(0.15), { Position = Position }):Play()
+		end
 
 		el.InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 then
-				isMobile = false
-				dragging = true
-				dragStart = input.Position
-				startPos = el.Position
-			elseif input.UserInputType == Enum.UserInputType.Touch then
-				isMobile = true
-				dragging = true
-				dragStart = input.Position
-				startPos = el.Position
-				mobileStartPos = input.Position -- Save the exact spot the finger touched the button
-			end
-		end)
-
-		UIS.InputChanged:Connect(function(input)
-			if not dragging then
-				return
-			end
-
-			if isMobile and input.UserInputType == Enum.UserInputType.Touch then
-				-- Multi-touch protection: calculate distance from where this movement started
-				-- compared to where the button was pressed. If it's a different finger (like walking), ignore it.
-				local distance = (input.Position - mobileStartPos).Magnitude
-
-				-- If it's the correct finger, track it
-				local delta = input.Position - dragStart
-				el.Position = UDim2.new(
-					startPos.X.Scale,
-					startPos.X.Offset + delta.X,
-					startPos.Y.Scale,
-					startPos.Y.Offset + delta.Y
-				)
-			elseif not isMobile and input.UserInputType == Enum.UserInputType.MouseMovement then
-				-- Desktop mouse handling
-				local delta = input.Position - dragStart
-				el.Position = UDim2.new(
-					startPos.X.Scale,
-					startPos.X.Offset + delta.X,
-					startPos.Y.Scale,
-					startPos.Y.Offset + delta.Y
-				)
-			end
-		end)
-
-		UIS.InputEnded:Connect(function(input)
 			if
 				input.UserInputType == Enum.UserInputType.MouseButton1
 				or input.UserInputType == Enum.UserInputType.Touch
 			then
-				dragging = false
-				mobileStartPos = nil
+				Dragging = true
+				DragStart = input.Position
+				StartPosition = el.Position
+
+				-- Disables dragging when you release the mouse/finger
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						Dragging = false
+					end
+				end)
+			end
+		end)
+
+		el.InputChanged:Connect(function(input)
+			if
+				input.UserInputType == Enum.UserInputType.MouseMovement
+				or input.UserInputType == Enum.UserInputType.Touch
+			then
+				DragInput = input
+			end
+		end)
+
+		UIS.InputChanged:Connect(function(input)
+			if input == DragInput and Dragging then
+				Update(input)
 			end
 		end)
 
@@ -518,21 +508,21 @@ local function initCustomUI()
 		return obj
 	end
 
-	-- local noclipToggle = createMovingToggle("Noclip", false, function(value)
-	-- 	manual_noclip = value
-	-- 	if value then
-	-- 		enableNoclip()
-	-- 	else
-	-- 		disableNoclip()
-	-- 	end
-	-- end)
+	local noclipToggle = createMovingToggle("Noclip", false, function(value)
+		manual_noclip = value
+		if value then
+			enableNoclip()
+		else
+			disableNoclip()
+		end
+	end)
 
 	ui.Parent = game.CoreGui
 
 	return ui
 end
 
-local CustomUI = initCustomUI()
+-- local CustomUI = initCustomUI()
 
 local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 
@@ -587,14 +577,14 @@ local NoClipKeybind = UniversalTab:CreateKeybind({
 				Title = "Noclip Disabled",
 				Content = "Noclip is now disabled.",
 				Duration = 3,
-				Image = "rewind",
+				Image = "ban",
 			})
 		else
 			Rayfield:Notify({
 				Title = "Noclip Enabled",
 				Content = "Noclip is now enabled.",
 				Duration = 3,
-				Image = "rewind",
+				Image = "check",
 			})
 		end
 		NoClipToggle:Set(not NoClipToggle.CurrentValue)
@@ -643,80 +633,6 @@ local CtrlClickDelToggle = UniversalTab:CreateToggle({
 
 local UniversalESPSection = UniversalTab:CreateSection("Universal ESP")
 
-local TracersEnabled = false
-local TracersGUI = nil
-
-local function createTracerGUI()
-	if not TracersGUI then
-		TracersGUI = Instance.new("ScreenGui")
-		TracersGUI.Name = "TRACE"
-		TracersGUI.Parent = game.CoreGui
-	end
-end
-
-local function updateTracer(tracer, pos, color)
-	local camera = game.Workspace.CurrentCamera
-	local screenPos = camera:WorldToScreenPoint(pos)
-	if screenPos.Z < 0 then
-		tracer.Visible = false
-	else
-		tracer.Visible = true
-	end
-
-	screenPos = Vector2.new(screenPos.X, screenPos.Y)
-
-	local center = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
-
-	local delta = screenPos - center
-	local length = delta.Magnitude
-	local angle = math.deg(math.atan2(delta.Y, delta.X))
-
-	tracer.Size = UDim2.new(0, length, 0, 1)
-	tracer.Position = UDim2.new(0, (center.X + screenPos.X) / 2, 0, (center.Y + screenPos.Y) / 2)
-	tracer.Rotation = angle
-
-	tracer.BackgroundColor3 = color
-end
-
-local function drawTracerLine(pointA, pointB, color)
-	if not TracersGUI then
-		createTracerGUI()
-	end
-
-	local line = Instance.new("Frame")
-	line.AnchorPoint = Vector2.new(0.5, 0.5)
-	line.BorderSizePixel = 0
-	line.BackgroundColor3 = color or Color3.new(1, 1, 1)
-
-	local delta = pointB - pointA
-	local length = delta.Magnitude
-	local angle = math.deg(math.atan2(delta.Y, delta.X))
-
-	line.Size = UDim2.new(0, length, 0, 1)
-	line.Position = UDim2.new(0, (pointA.X + pointB.X) / 2, 0, (pointA.Y + pointB.Y) / 2)
-	line.Rotation = angle
-
-	line.Parent = TracersGUI
-	return line
-end
-
-local function drawTracer(pos, color)
-	local camera = game.Workspace.CurrentCamera
-	local screenPos = camera:WorldToScreenPoint(pos)
-
-	if screenPos.Z < 0 then
-		return nil
-	end
-
-	screenPos = Vector2.new(screenPos.X, screenPos.Y)
-
-	local center = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
-
-	local tracer = drawTracerLine(center, screenPos, color)
-
-	return tracer
-end
-
 local function updateESP(obj, color, enabled)
 	local oldHl = obj:FindFirstChild("ESPHL")
 	if oldHl then
@@ -733,56 +649,6 @@ local function updateESP(obj, color, enabled)
 		hl.FillColor = color
 		hl.OutlineColor = color
 		hl.Parent = obj
-	end
-
-	if TracersEnabled then
-		local oldTracerRef = obj:FindFirstChild("TracerRef")
-
-		if oldTracerRef then
-			local oldTracer = oldTracerRef.Value
-			if not oldTracer then
-				oldTracerRef:Destroy()
-			else
-				if not enabled then
-					if oldTracer then
-						oldTracer:Destroy()
-					end
-
-					oldTracerRef:Destroy()
-				else
-					local primary = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
-					if primary then
-						updateTracer(oldTracer, primary.Position, color)
-					end
-				end
-			end
-		elseif enabled then
-			local primary = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
-
-			if primary then
-				local tracer = drawTracer(primary.Position, color)
-
-				if tracer then
-					local tracerRef = Instance.new("ObjectValue")
-					tracerRef.Name = "TracerRef"
-					tracerRef.Value = tracer
-					tracerRef.Parent = obj
-
-					obj.AncestryChanged:Connect(function(_, parent)
-						if not parent then
-							local _tracerRef = obj:FindFirstChild("TracerRef")
-							if _tracerRef then
-								local _tracer = _tracerRef.Value
-
-								if _tracer then
-									_tracer:Destroy()
-								end
-							end
-						end
-					end)
-				end
-			end
-		end
 	end
 end
 
@@ -809,15 +675,6 @@ game:GetService("RunService").RenderStepped:Connect(function()
 		updateUniversalESP(universal_esp_toggled)
 	end
 end)
-
-local TracersToggle = UniversalTab:CreateToggle({
-	Name = "Tracers",
-	CurrentValue = false,
-	Flag = "TracersToggle",
-	Callback = function(value)
-		TracersEnabled = value
-	end,
-})
 
 local ussPlr = game:GetService("Players").LocalPlayer
 local TweenService = game:GetService("TweenService")
@@ -2194,6 +2051,37 @@ if game.GameId == 372226183 then
 	end)
 
 	local FTFUtilsSection = FTFTab:CreateSection("Utils")
+
+	task.spawn(function()
+		while task.wait() do
+			local plr = game:GetService("Players").LocalPlayer
+			local char = plr and plr.Character
+			local hum = char and char:FindFirstChildWhichIsA("Humanoid")
+
+			if hum then
+				hum.PlatformStand = false
+				hum.JumpPower = 36
+			end
+
+			if plr then
+				local stats = plr:FindFirstChild("TempPlayerStatsModule")
+				local ragdoll = stats and stats:FindFirstChild("Ragdoll")
+				if ragdoll then
+					ragdoll.Value = false
+				end
+			end
+		end
+	end)
+
+	local FTFFlingBeast = FTFTab:CreateButton({
+		Name = "Fling Beast",
+		Callback = function()
+			local beast = findBeast()
+			if beast then
+				flingPlayer(beast)
+			end
+		end,
+	})
 
 	local no_errors_toggled = true
 	local FTFNoErrorToggle = FTFTab:CreateToggle({
