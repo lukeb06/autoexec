@@ -1841,7 +1841,9 @@ if game.GameId == 372226183 then
 	end
 
 	local function getHammerHandle()
-		local hammer = getHammer()
+		local beast = findBeast()
+		local char = beast and beast.Character
+		local hammer = char and char:FindFirstChild("Hammer")
 		local handle = hammer and hammer:FindFirstChild("Handle")
 
 		return handle
@@ -2070,26 +2072,26 @@ if game.GameId == 372226183 then
 		updatePCESP()
 	end)
 
-	task.spawn(function()
-		while task.wait() do
-			local plr = game:GetService("Players").LocalPlayer
-			local char = plr and plr.Character
-			local hum = char and char:FindFirstChildWhichIsA("Humanoid")
+	-- task.spawn(function()
+	-- 	while task.wait() do
+	-- 		local plr = game:GetService("Players").LocalPlayer
+	-- 		local char = plr and plr.Character
+	-- 		local hum = char and char:FindFirstChildWhichIsA("Humanoid")
 
-			if hum then
-				hum.PlatformStand = false
-				hum.JumpPower = 36
-			end
+	-- 		if hum then
+	-- 			hum.PlatformStand = false
+	-- 			hum.JumpPower = 36
+	-- 		end
 
-			if plr then
-				local stats = plr:FindFirstChild("TempPlayerStatsModule")
-				local ragdoll = stats and stats:FindFirstChild("Ragdoll")
-				if ragdoll then
-					ragdoll.Value = false
-				end
-			end
-		end
-	end)
+	-- 		if plr then
+	-- 			local stats = plr:FindFirstChild("TempPlayerStatsModule")
+	-- 			local ragdoll = stats and stats:FindFirstChild("Ragdoll")
+	-- 			if ragdoll then
+	-- 				ragdoll.Value = false
+	-- 			end
+	-- 		end
+	-- 	end
+	-- end)
 
 	local FTFUtilsSection = FTFTab:CreateSection("Utils")
 
@@ -2340,14 +2342,12 @@ if game.GameId == 372226183 then
 
 	local function hitCharacter(char)
 		local hammerEvent = getHammerEvent()
-		local torso = char and char:FindFirstChild("Torso")
+		local torso = char and char:FindFirstChild("HumanoidRootPart")
 
 		print("torso", torso)
 		print("hammerEvent", hammerEvent)
 
 		if torso and hammerEvent then
-			clickHammer()
-			task.wait()
 			hammerEvent:FireServer("HammerHit", torso)
 		end
 	end
@@ -2391,6 +2391,12 @@ if game.GameId == 372226183 then
 			if not partCloseToComputer(root) then
 				myRoot.CFrame = root.CFrame
 				return true
+			else
+				safeTweenToPart(root)
+				while safeTweening do
+					task.wait()
+				end
+				return true
 			end
 		end
 
@@ -2401,11 +2407,13 @@ if game.GameId == 372226183 then
 		local hammer = getHammer()
 
 		if hammer then
-			local success = tpToPlayerIfSafe(plr)
-			if success then
-				print("tphitandtie success", success)
-				hitAndTiePlayer(plr)
-			end
+			task.spawn(function()
+				local success = tpToPlayerIfSafe(plr)
+				if success then
+					print("tphitandtie success", success)
+					hitAndTiePlayer(plr)
+				end
+			end)
 		end
 	end
 
