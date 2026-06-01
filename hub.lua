@@ -2123,15 +2123,15 @@ if game.GameId == 372226183 then
 		end,
 	})
 
-	local auto_tie_toggled = false
-	-- local FTFAutoTie = FTFTab:CreateToggle({
-	-- 	Name = "Auto Tie",
-	-- 	CurrentValue = true,
-	-- 	Flag = nil,
-	-- 	Callback = function(value)
-	-- 		auto_tie_toggled = value
-	-- 	end,
-	-- })
+	local auto_tie_toggled = true
+	local FTFAutoTie = FTFTab:CreateToggle({
+		Name = "Auto Tie",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			auto_tie_toggled = value
+		end,
+	})
 
 	local function GetCurrentBeastPEvent()
 		local beast = findBeast()
