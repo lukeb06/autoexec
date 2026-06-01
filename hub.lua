@@ -20,13 +20,12 @@ local function dist3d(pos1, pos2)
 end
 
 local function isDev()
-	local plr = game:GetService("Players").LocalPlayer
-	local dev_names = { "pathwise4", "pathwise5" }
+	local prefix = "pathwise"
 
-	for i, v in pairs(dev_names) do
-		if plr.Name == v then
-			return true
-		end
+	local plr = game:GetService("Players").LocalPlayer
+
+	if string.sub(plr.Name, 1, #prefix) == prefix then
+		return true
 	end
 
 	return false
@@ -2135,6 +2134,16 @@ if game.GameId == 372226183 then
 		end,
 	})
 
+	local auto_hit_toggled = isDev()
+	local FTFAutoHit = FTFTab:CreateToggle({
+		Name = "Auto Hit",
+		CurrentValue = auto_hit_toggled,
+		Flag = nil,
+		Callback = function(value)
+			auto_hit_toggled = value
+		end,
+	})
+
 	local function GetCurrentBeastPEvent()
 		local beast = findBeast()
 		local beastChar = beast and beast.Character
@@ -2210,6 +2219,40 @@ if game.GameId == 372226183 then
 		end
 	end)
 
+	task.spawn(function()
+		while task.wait() do
+			if auto_hit_toggled then
+				local plr = game:GetService("Players").LocalPlayer
+				local char = plr and plr.Character
+				local lroot = char and char:FindFirstChild("HumanoidRootPart")
+				local event = char and char:FindFirstChild("HammerEvent", true)
+				for _, p in pairs(game:GetService("Players"):GetPlayers()) do
+					if p ~= plr then
+						local Stats = p:FindFirstChild("TempPlayerStatsModule")
+						if not Stats then
+							continue
+						end
+
+						local PisRagdoll, PisCaptured =
+							Stats:FindFirstChild("Ragdoll"), Stats:FindFirstChild("Captured")
+						if not (PisRagdoll and PisCaptured) then
+							continue
+						end
+
+						if not (PisRagdoll.Value or PisCaptured.Value) then
+							local root = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+							if root and char and lroot and event then
+								if (root.Position - lroot.Position).Magnitude <= 15 then
+									event:FireServer("HammerHit", root)
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end)
+
 	local no_errors_toggled = true
 	local FTFNoErrorToggle = FTFTab:CreateToggle({
 		Name = "No Errors",
@@ -2250,7 +2293,7 @@ if game.GameId == 372226183 then
 		end,
 	})
 
-	local auto_exit_toggled = isDev()
+	local auto_exit_toggled = false
 	local FTFAutoExitToggle = FTFTab:CreateToggle({
 		Name = "Auto Exit",
 		CurrentValue = auto_exit_toggled,
@@ -2288,7 +2331,7 @@ if game.GameId == 372226183 then
 		end
 	end)
 
-	local auto_open_exit_toggled = isDev()
+	local auto_open_exit_toggled = false
 	local FTFAutoOpenExitToggle = FTFTab:CreateToggle({
 		Name = "Auto Open Exit",
 		CurrentValue = auto_open_exit_toggled,
@@ -2638,9 +2681,14 @@ if game.GameId == 372226183 then
 								local event = pod:FindFirstChild("Event")
 
 								if event then
-									local RemoteEvent = game:GetService("ReplicatedStorage").RemoteEvent
-									RemoteEvent:FireServer("Input", "Trigger", true, event)
-									RemoteEvent:FireServer("Input", "Action", true)
+									task.spawn(function()
+										local RemoteEvent = game:GetService("ReplicatedStorage").RemoteEvent
+										RemoteEvent:FireServer("Input", "Trigger", true, event)
+										RemoteEvent:FireServer("Input", "Action", true)
+										task.wait(1)
+										RemoteEvent:FireServer("Input", "Trigger", false, event)
+										RemoteEvent:FireServer("Input", "Action", false)
+									end)
 								end
 							end
 						end
