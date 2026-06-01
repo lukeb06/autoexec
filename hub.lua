@@ -2895,8 +2895,6 @@ local RSToggle = RSTab:CreateToggle({
 
 Rayfield:LoadConfiguration()
 
-TracersEnabled = TracersToggle.CurrentValue
-
 if DexToggle.CurrentValue then
 	dex_injected = true
 	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-DEX-Explorer-29920"))()
