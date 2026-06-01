@@ -1822,6 +1822,41 @@ if game.GameId == 372226183 then
 		return nil
 	end
 
+	local function findBeastIncludingLocal()
+		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+			if v.Character and v.Character:FindFirstChild("BeastPowers") then
+				return v
+			end
+		end
+
+		return nil
+	end
+
+	local function getHammer()
+		local beast = findBeastIncludingLocal()
+		local char = beast and beast.Character
+		local hammer = char and char:FindFirstChild("Hammer")
+
+		return hammer
+	end
+
+	local function getHammerHandle()
+		local hammer = getHammer()
+		local handle = hammer and hammer:FindFirstChild("Handle")
+
+		return handle
+	end
+
+	local function getHammerEvent()
+		local hammer = getHammer()
+
+		if hammer then
+			return hammer:FindFirstChild("HammerEvent")
+		end
+
+		return nil
+	end
+
 	local function getChaseMusic()
 		local handle = getHammerHandle()
 		local music = handle and handle:FindFirstChild("SoundChaseMusic")
@@ -2088,15 +2123,15 @@ if game.GameId == 372226183 then
 		end,
 	})
 
-	local auto_tie_toggled = true
-	local FTFAutoTie = FTFTab:CreateToggle({
-		Name = "Auto Tie",
-		CurrentValue = true,
-		Flag = nil,
-		Callback = function(value)
-			auto_tie_toggled = value
-		end,
-	})
+	local auto_tie_toggled = false
+	-- local FTFAutoTie = FTFTab:CreateToggle({
+	-- 	Name = "Auto Tie",
+	-- 	CurrentValue = true,
+	-- 	Flag = nil,
+	-- 	Callback = function(value)
+	-- 		auto_tie_toggled = value
+	-- 	end,
+	-- })
 
 	local function GetCurrentBeastPEvent()
 		local beast = findBeast()
@@ -2112,31 +2147,6 @@ if game.GameId == 372226183 then
 		local hammer = beastChar and beastChar:FindFirstChild("Hammer")
 		local event = hammer and hammer:FindFirstChild("HammerEvent")
 		return event
-	end
-
-	local function getHammer()
-		local beast = findBeast()
-		local char = beast and beast.Character
-		local hammer = char and char:FindFirstChild("Hammer")
-
-		return hammer
-	end
-
-	local function getHammerHandle()
-		local hammer = getHammer()
-		local handle = hammer and hammer:FindFirstChild("Handle")
-
-		return handle
-	end
-
-	local function getHammerEvent()
-		local hammer = getHammer()
-
-		if hammer then
-			return hammer:FindFirstChild("HammerEvent")
-		end
-
-		return nil
 	end
 
 	task.spawn(function()
