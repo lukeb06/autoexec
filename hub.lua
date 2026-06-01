@@ -36,14 +36,6 @@ local Clip = true
 
 local manual_noclip = false
 
-local function removeCollisions(char)
-	for _, child in pairs(char:GetDescendants()) do
-		if child:IsA("BasePart") and child.CanCollide == true then
-			child.CanCollide = false
-		end
-	end
-end
-
 local function enableNoclip()
 	local speaker = game:GetService("Players").LocalPlayer
 	local RunService = game:GetService("RunService")
@@ -54,11 +46,18 @@ local function enableNoclip()
 		if Clip == false and speaker.Character ~= nil then
 			for _, child in pairs(speaker.Character:GetDescendants()) do
 				if child:IsA("BasePart") and child.CanCollide == true then
-					child.CanCollide = false
 					local couldCollide = Instance.new("BoolValue")
 					couldCollide.Name = "CouldCollide"
-					couldCollide.Value = true
+					couldCollide.Value = child.CanCollide
 					couldCollide.Parent = child
+					child.CanCollide = false
+				end
+				if child:IsA("BasePart") and child.Transparency ~= 1 and child.Transparency ~= 0.5 then
+					local trans = Instance.new("NumberValue")
+					trans.Name = "Transparency"
+					trans.Value = child.Transparency
+					trans.Parent = child
+					child.Transparency = 0.5
 				end
 			end
 		end
@@ -77,8 +76,14 @@ local function disableNoclip()
 			if child:IsA("BasePart") then
 				local couldCollideValue = child:FindFirstChild("CouldCollide")
 				if couldCollideValue then
-					child.CanCollide = true
+					child.CanCollide = couldCollideValue.Value
 					couldCollideValue:Destroy()
+				end
+
+				local trans = child:FindFirstChild("Transparency")
+				if trans then
+					child.Transparency = trans.Value
+					trans:Destroy()
 				end
 			end
 		end
@@ -169,7 +174,50 @@ end
 
 local function safeTweenToPart(part)
 	if part:IsA("BasePart") then
-		safeTweenToPos(part.CFrame)
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+		local hum = char and char:FindFirstChildWhichIsA("Humanoid")
+
+		local dist = dist3d(root.Position, part.Position)
+		local t = dist / safeTweenSpeed
+
+		safeTweening = true
+		if hum and hum.SeatPart then
+			hum.Sit = false
+			task.wait(0.1)
+		end
+		task.wait(0.1)
+		local conn = nil
+		safeTweening = true
+		enableNoclip()
+		conn = game:GetService("RunService").Heartbeat:Connect(function(dt)
+			if not root or not part or not part.Parent then
+				conn:Disconnect()
+				safeTweening = false
+				disableNoclip()
+				return
+			end
+
+			local currentPos = root.Position
+			local targetPos = part.Position
+			local distance = dist3d(currentPos, targetPos)
+
+			local moveStep = safeTweenSpeed * dt
+
+			if distance <= moveStep then
+				root.CFrame = part.CFrame
+				conn:Disconnect()
+				safeTweening = false
+				disableNoclip()
+			else
+				local direction = (targetPos - currentPos).Unit
+				local newPosition = currentPos + (direction * moveStep)
+
+				root.CFrame = CFrame.new(newPosition) * (part.CFrame - part.CFrame.Position)
+			end
+		end)
+		breakVelocity(t)
 	end
 end
 
