@@ -2152,7 +2152,7 @@ if game.GameId == 372226183 then
 	end
 
 	task.spawn(function()
-		while task.wait(0.05) do
+		while task.wait() do
 			if slow_beast_toggled then
 				local event = GetCurrentBeastPEvent()
 				if event then
@@ -2163,7 +2163,7 @@ if game.GameId == 372226183 then
 	end)
 
 	task.spawn(function()
-		while task.wait(0.05) do
+		while task.wait() do
 			if untie_toggled then
 				local event = GetCurrentBeastHEvent()
 				if event then
@@ -2174,7 +2174,7 @@ if game.GameId == 372226183 then
 	end)
 
 	task.spawn(function()
-		while task.wait(0.15) do
+		while task.wait() do
 			if auto_tie_toggled then
 				local hammerEvent = getHammerEvent()
 				local plr = game:GetService("Players").LocalPlayer
@@ -2375,7 +2375,7 @@ if game.GameId == 372226183 then
 
 	local function hitAndTiePlayer(plr)
 		hitPlayer(plr)
-		task.wait(1)
+		task.wait(0.5)
 		tiePlayer(plr)
 	end
 
@@ -2390,6 +2390,7 @@ if game.GameId == 372226183 then
 		if root and myRoot then
 			if not partCloseToComputer(root) then
 				myRoot.CFrame = root.CFrame
+				task.wait(0.2)
 				return true
 			else
 				safeTweenToPart(root)
@@ -2634,39 +2635,12 @@ if game.GameId == 372226183 then
 						if pod then
 							local capturedTorsoValue = pod:FindFirstChild("CapturedTorso")
 							if capturedTorsoValue.Value ~= nil then
-								ftf_auto_saving = true
-								local plr = game:GetService("Players").LocalPlayer
-								local char = plr and plr.Character
-								local root = char and char:FindFirstChild("HumanoidRootPart")
+								local event = pod:FindFirstChild("Event")
 
-								if root then
-									local pos = root.CFrame
-
-									local closeToComputer, pc = isCloseToModelName("ComputerTable", 15)
-
-									task.wait(0.1)
-
-									root.CFrame = pod.CFrame
-
-									breakVelocity(0.5)
-									task.wait(0.1)
-									game.ReplicatedStorage.RemoteEvent:FireServer("Input", "Action", true)
-									task.wait(0.1)
-									game.ReplicatedStorage.RemoteEvent:FireServer("Input", "Action", false)
-									ftf_auto_saving = false
-
-									if closeToComputer then
-										-- safeTweenToPart(pc:FindFirstChildWhichIsA("BasePart"))
-										local spot = getValidSpot(pc)
-										if root and spot then
-											root.CFrame = spot.CFrame * CFrame.new(0, -50, 0)
-											safeTweenToPart(spot)
-										end
-									else
-										if root then
-											root.CFrame = pos
-										end
-									end
+								if event then
+									local RemoteEvent = game:GetService("ReplicatedStorage").RemoteEvent
+									RemoteEvent:FireServer("Input", "Trigger", true, event)
+									RemoteEvent:FireServer("Input", "Action", true)
 								end
 							end
 						end
