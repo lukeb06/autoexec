@@ -145,7 +145,7 @@ local function tweenGotoPart(part)
 	breakVelocity(1)
 end
 
-local safeTweenSpeed = 18
+local safeTweenSpeed = 20
 local safeTweening = false
 local function safeTweenToPos(cframe: CFrame)
 	local TweenService = game:GetService("TweenService")
