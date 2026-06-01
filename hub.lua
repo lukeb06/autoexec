@@ -1822,21 +1822,6 @@ if game.GameId == 372226183 then
 		return nil
 	end
 
-	local function getHammer()
-		local beast = findBeast()
-		local char = beast and beast.Character
-		local hammer = char and char:FindFirstChild("Hammer")
-
-		return hammer
-	end
-
-	local function getHammerHandle()
-		local hammer = getHammer()
-		local handle = hammer and hammer:FindFirstChild("Handle")
-
-		return handle
-	end
-
 	local function getChaseMusic()
 		local handle = getHammerHandle()
 		local music = handle and handle:FindFirstChild("SoundChaseMusic")
@@ -2050,8 +2035,6 @@ if game.GameId == 372226183 then
 		updatePCESP()
 	end)
 
-	local FTFUtilsSection = FTFTab:CreateSection("Utils")
-
 	task.spawn(function()
 		while task.wait() do
 			local plr = game:GetService("Players").LocalPlayer
@@ -2073,6 +2056,8 @@ if game.GameId == 372226183 then
 		end
 	end)
 
+	local FTFUtilsSection = FTFTab:CreateSection("Utils")
+
 	local FTFFlingBeast = FTFTab:CreateButton({
 		Name = "Fling Beast",
 		Callback = function()
@@ -2082,6 +2067,136 @@ if game.GameId == 372226183 then
 			end
 		end,
 	})
+
+	local slow_beast_toggled = false
+	local FTFSlowBeast = FTFTab:CreateToggle({
+		Name = "Slow Beast",
+		CurrentValue = false,
+		Flag = nil,
+		Callback = function(value)
+			slow_beast_toggled = value
+		end,
+	})
+
+	local untie_toggled = false
+	local FTFUntie = FTFTab:CreateToggle({
+		Name = "Make Beast Untie",
+		CurrentValue = false,
+		Flag = nil,
+		Callback = function(value)
+			untie_toggled = value
+		end,
+	})
+
+	local auto_tie_toggled = true
+	local FTFAutoTie = FTFTab:CreateToggle({
+		Name = "Auto Tie",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			auto_tie_toggled = value
+		end,
+	})
+
+	local function GetCurrentBeastPEvent()
+		local beast = findBeast()
+		local beastChar = beast and beast.Character
+		local powers = beastChar and beastChar:FindFirstChild("BeastPowers")
+		local event = powers and powers:FindFirstChild("PowersEvent")
+		return event
+	end
+
+	local function GetCurrentBeastHEvent()
+		local beast = findBeast()
+		local beastChar = beast and beast.Character
+		local hammer = beastChar and beastChar:FindFirstChild("Hammer")
+		local event = hammer and hammer:FindFirstChild("HammerEvent")
+		return event
+	end
+
+	local function getHammer()
+		local beast = findBeast()
+		local char = beast and beast.Character
+		local hammer = char and char:FindFirstChild("Hammer")
+
+		return hammer
+	end
+
+	local function getHammerHandle()
+		local hammer = getHammer()
+		local handle = hammer and hammer:FindFirstChild("Handle")
+
+		return handle
+	end
+
+	local function getHammerEvent()
+		local hammer = getHammer()
+
+		if hammer then
+			return hammer:FindFirstChild("HammerEvent")
+		end
+
+		return nil
+	end
+
+	task.spawn(function()
+		while task.wait(0.05) do
+			if slow_beast_toggled then
+				local event = GetCurrentBeastPEvent()
+				if event then
+					event:FireServer("Jumped")
+				end
+			end
+		end
+	end)
+
+	task.spawn(function()
+		while task.wait(0.05) do
+			if untie_toggled then
+				local event = GetCurrentBeastHEvent()
+				if event then
+					event:FireServer("HammerClick", true)
+				end
+			end
+		end
+	end)
+
+	task.spawn(function()
+		while task.wait(0.15) do
+			if auto_tie_toggled then
+				local hammerEvent = getHammerEvent()
+				local plr = game:GetService("Players").LocalPlayer
+				local p_char = plr and plr.Character
+				local p_root = p_char and p_char:FindFirstChild("HumanoidRootPart")
+
+				for _, p in pairs(game:GetService("Players"):GetPlayers()) do
+					if p ~= plr then
+						local Stats = p:FindFirstChild("TempPlayerStatsModule")
+						if not Stats then
+							continue
+						end
+
+						local PisRagdoll, PisCaptured =
+							Stats:FindFirstChild("Ragdoll"), Stats:FindFirstChild("Captured")
+
+						if not (PisRagdoll and PisCaptured) then
+							continue
+						end
+
+						if PisRagdoll.Value and not PisCaptured.Value then
+							local root = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+							if root and p_char and p_root and hammerEvent then
+								if (root.Position - p_root.Position).Magnitude <= 15 then
+									local pos = root.Position
+									hammerEvent:FireServer("HammerTieUp", root, pos)
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end)
 
 	local no_errors_toggled = true
 	local FTFNoErrorToggle = FTFTab:CreateToggle({
@@ -2203,16 +2318,6 @@ if game.GameId == 372226183 then
 			end
 		end
 	end)
-
-	local function getHammerEvent()
-		local hammer = getHammer()
-
-		if hammer then
-			return hammer:FindFirstChild("HammerEvent")
-		end
-
-		return nil
-	end
 
 	local function clickHammer()
 		local hammerEvent = getHammerEvent()
