@@ -15,8 +15,16 @@ local function WaitForGameAndPlayer()
 	end
 end
 
+local function diff3d(origin, target)
+	return target - origin
+end
+
 local function dist3d(pos1, pos2)
-	return math.sqrt((pos2.x - pos1.x) ^ 2 + (pos2.y - pos1.y) ^ 2 + (pos2.z - pos1.z) ^ 2)
+	return diff3d(pos1, pos2).Magnitude
+end
+
+local function dir3d(origin, target)
+	return diff3d(origin, target).Unit
 end
 
 local function isDev()
@@ -191,11 +199,13 @@ local function safeTweenToPart(part)
 		local conn = nil
 		safeTweening = true
 		enableNoclip()
+		game.Workspace.Gravity = 0
 		conn = game:GetService("RunService").Heartbeat:Connect(function(dt)
 			if not root or not part or not part.Parent then
 				conn:Disconnect()
 				safeTweening = false
 				disableNoclip()
+				game.Workspace.Gravity = 196.21
 				return
 			end
 
@@ -210,6 +220,7 @@ local function safeTweenToPart(part)
 				conn:Disconnect()
 				safeTweening = false
 				disableNoclip()
+				game.Workspace.Gravity = 196.21
 			else
 				local direction = (targetPos - currentPos).Unit
 				local newPosition = currentPos + (direction * moveStep)
