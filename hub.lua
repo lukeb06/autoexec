@@ -1915,7 +1915,7 @@ end
 local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 
 local Window = nil
-local UseNewUI = true
+local UseNewUI = isDev()
 local SETTINGS = {
 	Name = "Luke's Script Hub",
 	Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
