@@ -517,7 +517,7 @@ local function InitUI()
 				Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
 			inner_label.TextColor3 = Color3.fromRGB(255, 255, 255)
 			inner_label.BackgroundTransparency = 1
-			inner_label.Text = "Show Menu"
+			inner_label.Text = settings.ShowText
 			inner_label.AutomaticSize = Enum.AutomaticSize.XY
 
 			show_inner.InputBegan:Connect(function(input)
@@ -1916,35 +1916,32 @@ local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 
 local Window = nil
 local UseNewUI = true
+local SETTINGS = {
+	Name = "Luke's Script Hub",
+	Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+	LoadingTitle = "Luke's Script Hub",
+	LoadingSubtitle = "by @actuallyluke",
+	ShowText = "Show Menu", -- for mobile users to unhide Rayfield, change if you'd like
+	Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+
+	ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
+
+	DisableRayfieldPrompts = true,
+	DisableBuildWarnings = false, -- Prevents Rayfield from emitting warnings when the script has a version mismatch with the interface.
+
+	ConfigurationSaving = {
+		Enabled = true,
+		FolderName = nil, -- Create a custom folder for your hub/game
+		FileName = "Lukes Script Hub",
+	},
+
+	KeySystem = false, -- Set this to true to use our key system
+}
 if UseNewUI then
-	local ui = InitUI()
-	Window = ui:CreateWindow({
-		Name = "Luke's Script Hub",
-		Theme = "Bloom",
-		ToggleUIKeybind = "K",
-	})
+	local UI = InitUI()
+	Window = UI:CreateWindow(SETTINGS)
 else
-	Window = Rayfield:CreateWindow({
-		Name = "Luke's Script Hub",
-		Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-		LoadingTitle = "Luke's Script Hub",
-		LoadingSubtitle = "by @actuallyluke",
-		ShowText = "Rayfield", -- for mobile users to unhide Rayfield, change if you'd like
-		Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
-
-		ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
-
-		DisableRayfieldPrompts = true,
-		DisableBuildWarnings = false, -- Prevents Rayfield from emitting warnings when the script has a version mismatch with the interface.
-
-		ConfigurationSaving = {
-			Enabled = true,
-			FolderName = nil, -- Create a custom folder for your hub/game
-			FileName = "Lukes Script Hub",
-		},
-
-		KeySystem = false, -- Set this to true to use our key system
-	})
+	Window = Rayfield:CreateWindow(SETTINGS)
 end
 
 local UniversalTab = Window:CreateTab("Universal", "globe")
@@ -2081,6 +2078,8 @@ local ussChar = ussPlr and ussPlr.Character
 local ussHum = ussChar and ussChar:FindFirstChild("Humanoid")
 
 local ussSpeed = (ussHum and ussHum.WalkSpeed) or 16
+
+local UniversalSpeedSection = UniversalTab:CreateSection("Speed")
 
 local UniversalSpeedSlider = UniversalTab:CreateSlider({
 	Name = "Speed",
