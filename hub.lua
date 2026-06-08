@@ -3037,6 +3037,133 @@ if game.PlaceId == 142823291 then
 	end)
 end
 
+-- Agoraphobia
+
+if game.GameId == 7585283196 then
+	local AGTab = Window:CreateTab("Agoraphobia", "gamepad-2")
+	local AGESPSection = AGTab:CreateSection("ESP")
+
+	local function getMap()
+		local map = game.Workspace:FindFirstChild("Map")
+		return map
+	end
+
+	local function getFunctionals()
+		local map = getMap()
+		local funcs = map and map:FindFirstChild("Functionals")
+		return funcs
+	end
+
+	local function getComputers()
+		local funcs = getFunctionals()
+		local comps = funcs and funcs:FindFirstChild("Computers")
+		if comps then
+			return comps:GetChildren()
+		else
+			return {}
+		end
+	end
+
+	local function getComputerModel(pc)
+		local model = pc and pc:FindFirstChild("ComputerModel")
+		return model
+	end
+
+	local function getComputerScreen(pc)
+		local screen = pc and pc:FindFirstChild("Screen")
+		return screen
+	end
+
+	local function getComputerColor(pc)
+		local screen = getComputerScreen(pc)
+		local color = (screen and screen.Color) or Color3.fromRGB(0, 0, 255)
+		return color
+	end
+
+	local function getBeasts()
+		local beasts = game.Workspace:FindFirstChild("Beasts")
+		if beasts then
+			return beasts:GetChildren()
+		else
+			return {}
+		end
+	end
+
+	local function getSurvivors()
+		local survs = game.Workspace:FindFirstChild("Survivors")
+		if survs then
+			return survs:GetChildren()
+		else
+			return {}
+		end
+	end
+
+	local player_esp_toggled = true
+
+	local function updateSurvivorESP()
+		local survs = getSurvivors()
+		for i, v in pairs(survs) do
+			updateESP(v, Color3.fromRGB(0, 255, 0), player_esp_toggled)
+		end
+	end
+
+	local function updateBeastESP()
+		local beasts = getBeasts()
+		for i, v in pairs(beasts) do
+			updateESP(v, Color3.fromRGB(255, 0, 0), player_esp_toggled)
+		end
+	end
+
+	local function updatePlayerESP()
+		updateSurvivorESP()
+		updateBeastESP()
+	end
+
+	local computer_esp_toggled = true
+
+	local function updateComputerESP()
+		local comps = getComputers()
+
+		for i, v in pairs(comps) do
+			local model = getComputerModel(v)
+			local color = getComputerColor(v)
+			if model then
+				updateESP(model, color, computer_esp_toggled)
+			end
+		end
+	end
+
+	local AGESPToggle = AGTab:CreateToggle({
+		Name = "Player ESP",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			player_esp_toggled = value
+			updatePlayerESP()
+		end,
+	})
+
+	local AGPCESPToggle = AGTab:CreateToggle({
+		Name = "Computer ESP",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			computer_esp_toggled = value
+			updateComputerESP()
+		end,
+	})
+
+	task.spawn(function()
+		while task.wait(1) do
+			updatePlayerESP()
+			updateComputerESP()
+		end
+
+		updatePlayerESP()
+		updateComputerESP()
+	end)
+end
+
 -- Flee The Facility
 
 if game.GameId == 372226183 then
