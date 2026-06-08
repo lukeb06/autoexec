@@ -3522,6 +3522,49 @@ if game.GameId == 372226183 then
 		end,
 	})
 
+	local ftf_auto_save_toggled = false
+	local FTFAutoSaveToggle = FTFUtilsTab:CreateToggle({
+		Name = "Auto Save",
+		CurrentValue = false,
+		Flag = nil,
+		Callback = function(value)
+			ftf_auto_save_toggled = value
+		end,
+	})
+
+	local ftf_auto_saving = false
+	task.spawn(function()
+		while task.wait() do
+			if ftf_auto_save_toggled and isInGame() and not isBeast() then
+				local children = getCurrentMapChildren()
+
+				for i, v in pairs(children) do
+					if v.Name == "FreezePod" then
+						local pod = v:FindFirstChild("PodTrigger")
+
+						if pod then
+							local capturedTorsoValue = pod:FindFirstChild("CapturedTorso")
+							if capturedTorsoValue.Value ~= nil then
+								local event = pod:FindFirstChild("Event")
+
+								if event then
+									task.spawn(function()
+										local RemoteEvent = game:GetService("ReplicatedStorage").RemoteEvent
+										RemoteEvent:FireServer("Input", "Trigger", true, event)
+										RemoteEvent:FireServer("Input", "Action", true)
+										task.wait(1)
+										RemoteEvent:FireServer("Input", "Trigger", false, event)
+										RemoteEvent:FireServer("Input", "Action", false)
+									end)
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end)
+
 	local auto_tie_toggled = true
 	local FTFAutoTie = FTFUtilsTab:CreateToggle({
 		Name = "Auto Tie",
@@ -4052,49 +4095,6 @@ if game.GameId == 372226183 then
 			end
 		end,
 	})
-
-	local ftf_auto_save_toggled = false
-	local FTFAutoSaveToggle = FTFUtilsTab:CreateToggle({
-		Name = "Auto Save",
-		CurrentValue = false,
-		Flag = nil,
-		Callback = function(value)
-			ftf_auto_save_toggled = value
-		end,
-	})
-
-	local ftf_auto_saving = false
-	task.spawn(function()
-		while task.wait() do
-			if ftf_auto_save_toggled and isInGame() and not isBeast() then
-				local children = getCurrentMapChildren()
-
-				for i, v in pairs(children) do
-					if v.Name == "FreezePod" then
-						local pod = v:FindFirstChild("PodTrigger")
-
-						if pod then
-							local capturedTorsoValue = pod:FindFirstChild("CapturedTorso")
-							if capturedTorsoValue.Value ~= nil then
-								local event = pod:FindFirstChild("Event")
-
-								if event then
-									task.spawn(function()
-										local RemoteEvent = game:GetService("ReplicatedStorage").RemoteEvent
-										RemoteEvent:FireServer("Input", "Trigger", true, event)
-										RemoteEvent:FireServer("Input", "Action", true)
-										task.wait(1)
-										RemoteEvent:FireServer("Input", "Trigger", false, event)
-										RemoteEvent:FireServer("Input", "Action", false)
-									end)
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end)
 
 	local FTFAutoHackToggle = FTFUtilsTab:CreateToggle({
 		Name = "Auto Hack (Requires Easy Hack)",
