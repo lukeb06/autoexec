@@ -3587,7 +3587,8 @@ if game.GameId == 372226183 then
 	local locker_esp_toggled = true
 	local function updateLockerESP()
 		for _, v in pairs(getCurrentMapChildren()) do
-			local locker_names = { "HiddenCloset", "HidingCloset" }
+			local locker_names =
+				{ "HiddenCloset", "HidingCloset", "Locker", "Locker2", "Locker 2", "Locker V2", "Locker v2" }
 			local function hasLockerName()
 				for _, name in pairs(locker_names) do
 					if v.Name == name then
