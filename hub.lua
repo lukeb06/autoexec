@@ -3584,16 +3584,51 @@ if game.GameId == 372226183 then
 		end,
 	})
 
+	local locker_esp_toggled = true
+	local function updateLockerESP()
+		for _, v in pairs(getCurrentMapChildren()) do
+			local locker_names = { "HiddenCloset", "HidingCloset" }
+			local function hasLockerName()
+				for _, name in pairs(locker_names) do
+					if v.Name == name then
+						return true
+					end
+				end
+
+				return false
+			end
+			local function hasDoor()
+				local door = v:FindFirstChild("Door")
+				return door and door:IsA("BasePart") and door.CanCollide == false
+			end
+			if hasLockerName() or hasDoor() then
+				updateESP(v, Color3.fromRGB(255, 255, 0), locker_esp_toggled)
+			end
+		end
+	end
+
+	local FTFLockerEspToggle = FTFEspTab:CreateToggle({
+		Name = "Locker ESP",
+		CurrentValue = true,
+		Flag = nil,
+		Callback = function(value)
+			locker_esp_toggled = value
+			updateLockerESP()
+		end,
+	})
+
 	task.spawn(function()
 		while task.wait(1) do
 			UpdateBeastESP()
 			UpdatePlrESP()
 			updatePCESP()
+			updateLockerESP()
 		end
 
 		UpdateBeastESP()
 		UpdatePlrESP()
 		updatePCESP()
+		updateLockerESP()
 	end)
 
 	-- task.spawn(function()
@@ -4344,7 +4379,7 @@ if game.GameId == 372226183 then
 			end
 
 			enableNoclip()
-			tweenGotoPart(best_pod)
+			root.CFrame = best_pod.CFrame
 			task.delay(1, disableNoclip)
 		end,
 	})
