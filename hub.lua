@@ -517,7 +517,7 @@ local function InitUI()
 				Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
 			inner_label.TextColor3 = Color3.fromRGB(255, 255, 255)
 			inner_label.BackgroundTransparency = 1
-			inner_label.Text = settings.ShowText
+			inner_label.Text = "Show " .. settings.ShowText
 			inner_label.AutomaticSize = Enum.AutomaticSize.XY
 
 			show_inner.InputBegan:Connect(function(input)
@@ -1359,6 +1359,11 @@ local function isDev()
 	return false
 end
 
+local function isKBM()
+	local UIS = game:GetService("UserInputService")
+	return UIS.KeyboardEnabled and UIS.MouseEnabled
+end
+
 local Noclipping = nil
 local Clip = true
 
@@ -1915,13 +1920,13 @@ end
 local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 
 local Window = nil
-local UseNewUI = isDev()
+local UseNewUI = isKBM()
 local SETTINGS = {
 	Name = "Luke's Script Hub",
 	Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
 	LoadingTitle = "Luke's Script Hub",
 	LoadingSubtitle = "by @actuallyluke",
-	ShowText = "Show Menu", -- for mobile users to unhide Rayfield, change if you'd like
+	ShowText = "Menu", -- for mobile users to unhide Rayfield, change if you'd like
 	Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
 	ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
