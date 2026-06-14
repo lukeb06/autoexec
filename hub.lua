@@ -3591,10 +3591,27 @@ if game.GameId == 372226183 then
 
 	local locker_esp_toggled = true
 	local function updateLockerESP()
+		local children = {}
 		for _, v in pairs(getCurrentMapChildren()) do
-			local locker_names =
-				{ "HiddenCloset", "HidingCloset", "Locker", "Locker2", "Locker 2", "Locker V2", "Locker v2", "Cabinet" }
+			table.insert(children, v)
+			if v.Name == "Lockers" then
+				for _, v2 in pairs(v:GetChildren()) do
+					table.insert(children, v2)
+				end
+			end
+		end
+		for _, v in pairs(getCurrentMapChildren()) do
 			local function hasLockerName()
+				local locker_names = {
+					"HiddenCloset",
+					"HidingCloset",
+					"Locker",
+					"Locker2",
+					"Locker 2",
+					"Locker V2",
+					"Locker v2",
+					"Cabinet",
+				}
 				for _, name in pairs(locker_names) do
 					if v.Name == name then
 						return true
