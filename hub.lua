@@ -2605,7 +2605,7 @@ if game.PlaceId == 139233844569220 then
 	})
 	task.spawn(function()
 		while task.wait() do
-			if isKeeper() then
+			if isKeeper() and auto_kill_toggled then
 				local plr = game:GetService("Players").LocalPlayer
 				local char = plr and plr.Character
 				local root = char and char:FindFirstChild("HumanoidRootPart")
@@ -3771,6 +3771,16 @@ if game.GameId == 372226183 then
 		end,
 	})
 
+	local auto_beast_toggled = isDev()
+	local FTFAutoBeast = FTFUtilsTab:CreateToggle({
+		Name = "Auto Beast",
+		CurrentValue = auto_beast_toggled,
+		Flag = nil,
+		Callback = function(value)
+			auto_beast_toggled = value
+		end,
+	})
+
 	local function GetCurrentBeastPEvent()
 		local beast = findBeast()
 		local beastChar = beast and beast.Character
@@ -3875,6 +3885,19 @@ if game.GameId == 372226183 then
 							end
 						end
 					end
+				end
+			end
+		end
+	end)
+
+	task.spawn(function()
+		while task.wait() do
+			if auto_beast_toggled and isBeast() then
+				local plr = game:GetService("Players").LocalPlayer
+				local char = plr and plr.Character
+				local root = char and char:FindFirstChild("HumanoidRootPart")
+
+				if root then
 				end
 			end
 		end
