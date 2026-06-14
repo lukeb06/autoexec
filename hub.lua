@@ -3600,7 +3600,7 @@ if game.GameId == 372226183 then
 				end
 			end
 		end
-		for _, v in pairs(getCurrentMapChildren()) do
+		for _, v in pairs(children) do
 			local function hasLockerName()
 				local locker_names = {
 					"HiddenCloset",
@@ -3611,6 +3611,7 @@ if game.GameId == 372226183 then
 					"Locker V2",
 					"Locker v2",
 					"Cabinet",
+					"Closet",
 				}
 				for _, name in pairs(locker_names) do
 					if v.Name == name then
