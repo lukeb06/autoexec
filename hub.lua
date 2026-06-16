@@ -3269,6 +3269,17 @@ if game.GameId == 372226183 then
 		return trigger
 	end
 
+	task.spawn(function()
+		while task.wait(1) do
+			for i, v in pairs(getExits()) do
+				local trigger = getExitTrigger(v)
+				if trigger then
+					trigger.Size = Vector3.new(20, 20, 20)
+				end
+			end
+		end
+	end)
+
 	local function exitNeedsToOpen(exit)
 		local trigger = getExitTrigger(exit)
 		local value = trigger and trigger:FindFirstChild("ActionSign")
@@ -3632,6 +3643,61 @@ if game.GameId == 372226183 then
 		return isCloseToModelName("ExitDoor", 20)
 	end
 
+    local function getLockers()
+        local lockers = {}
+        for i, v in pairs(getCurrentMapChildren()) do
+            if v:HasTag("LOCKER") then
+                table.insert(lockers, v)
+            end
+        end
+        return lockers
+    end
+
+	-- local function getLockers()
+	-- 	local lockers = {}
+	--
+	-- 	local children = {}
+	-- 	for _, v in pairs(getCurrentMapChildren()) do
+	-- 		table.insert(children, v)
+	-- 		if v.Name == "Lockers" then
+	-- 			for _, v2 in pairs(v:GetChildren()) do
+	-- 				table.insert(children, v2)
+	-- 			end
+	-- 		end
+	-- 	end
+	-- 	for _, v in pairs(children) do
+	-- 		local function hasLockerName()
+	-- 			local locker_names = {
+	-- 				"HiddenCloset",
+	-- 				"HidingCloset",
+	-- 				"Locker",
+	-- 				"Locker2",
+	-- 				"Locker 2",
+	-- 				"Locker V2",
+	-- 				"Locker v2",
+	-- 				"Cabinet",
+	-- 				"Closet",
+	-- 			}
+	-- 			for _, name in pairs(locker_names) do
+	-- 				if v.Name == name then
+	-- 					return true
+	-- 				end
+	-- 			end
+	--
+	-- 			return false
+	-- 		end
+	-- 		local function hasDoor()
+	-- 			local door = v:FindFirstChild("Door")
+	-- 			return door and door:IsA("BasePart") and door.CanCollide == false
+	-- 		end
+	-- 		if hasLockerName() or hasDoor() then
+	-- 			table.insert(lockers, v)
+	-- 		end
+	-- 	end
+	--
+	-- 	return lockers
+	-- end
+
 	local computer_esp_toggled = true
 	local function updatePCESP()
 		for _, v in pairs(getCurrentMapChildren()) do
@@ -3653,43 +3719,9 @@ if game.GameId == 372226183 then
 
 	local locker_esp_toggled = true
 	local function updateLockerESP()
-		local children = {}
-		for _, v in pairs(getCurrentMapChildren()) do
-			table.insert(children, v)
-			if v.Name == "Lockers" then
-				for _, v2 in pairs(v:GetChildren()) do
-					table.insert(children, v2)
-				end
-			end
-		end
-		for _, v in pairs(children) do
-			local function hasLockerName()
-				local locker_names = {
-					"HiddenCloset",
-					"HidingCloset",
-					"Locker",
-					"Locker2",
-					"Locker 2",
-					"Locker V2",
-					"Locker v2",
-					"Cabinet",
-					"Closet",
-				}
-				for _, name in pairs(locker_names) do
-					if v.Name == name then
-						return true
-					end
-				end
-
-				return false
-			end
-			local function hasDoor()
-				local door = v:FindFirstChild("Door")
-				return door and door:IsA("BasePart") and door.CanCollide == false
-			end
-			if hasLockerName() or hasDoor() then
-				updateESP(v, Color3.fromRGB(255, 255, 0), locker_esp_toggled)
-			end
+		local lockers = getLockers()
+		for i, v in pairs(lockers) do
+			updateESP(v, Color3.fromRGB(255, 255, 0), locker_esp_toggled)
 		end
 	end
 
