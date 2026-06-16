@@ -1690,6 +1690,11 @@ local function flingPlayer(plr)
 	flingCharacter(char)
 end
 
+local function isFriendsWith(plr)
+	local player = game:GetService("Players").LocalPlayer
+	return player:IsFriendsWith(plr.UserId)
+end
+
 WaitForGameAndPlayer()
 
 local looped_functions = {}
@@ -3409,11 +3414,7 @@ if game.GameId == 372226183 then
 	end)
 
 	local function updateChaseVolume(value)
-		local music = getChaseMusic()
-
-		if music then
-			chaseMusicVolume = value
-		end
+		chaseMusicVolume = value
 	end
 
 	local function isGameActive()
@@ -3460,11 +3461,12 @@ if game.GameId == 372226183 then
 
 		if bars then
 			for i, v in pairs(bars) do
-				if v:IsA("TextLabel") then
+				if v:IsA("TextLabel") and v.TextColor3 == Color3.fromRGB(255, 255, 255) then
 					local name = v.ContentText
 					local player = game:GetService("Players"):FindFirstChild(name)
 
 					if player then
+						print(name)
 						table.insert(players, player)
 					end
 				end
@@ -3472,6 +3474,67 @@ if game.GameId == 372226183 then
 		end
 
 		return players
+	end
+
+	local function getStats(plr)
+		local stats = plr and plr:FindFirstChild("TempPlayerStatsModule")
+		return stats
+	end
+
+	local function isPlayerCaptured(plr)
+		local stats = getStats(plr)
+		local cap = stats and stats:FindFirstChild("Captured")
+		if cap then
+			return cap.Value
+		end
+
+		return false
+	end
+
+	local function getCapturablePlayers()
+		local players = {}
+
+		local plr = game:GetService("Players").LocalPlayer
+
+		for i, v in pairs(getActivePlayers()) do
+			if v ~= plr then
+				if not isPlayerCaptured(v) then
+					table.insert(players, v)
+				end
+			end
+		end
+
+		return players
+	end
+
+	local function teleportToNearestFreezePod()
+		local best_pod
+		local best_pod_dist = 99999999
+
+		local char = game:GetService("Players").LocalPlayer.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+		local plrPos = root and root.Position
+
+		for i, v in pairs(game.Workspace:GetDescendants()) do
+			if v.Name == "FreezePod" then
+				local pod = v:FindFirstChild("PodTrigger")
+				if pod then
+					local capturedTorsoValue = pod:FindFirstChild("CapturedTorso")
+
+					if capturedTorsoValue.Value == nil then
+						local dist = dist3d(plrPos, pod.Position)
+						if dist < best_pod_dist and dist > 20 then
+							best_pod = pod
+							best_pod_dist = dist
+						end
+					end
+				end
+			end
+		end
+
+		enableNoclip()
+		root.CFrame = best_pod.CFrame
+		task.delay(1, disableNoclip)
 	end
 
 	local function isInGame()
@@ -3557,17 +3620,6 @@ if game.GameId == 372226183 then
 
 	local function isCloseToExit()
 		return isCloseToModelName("ExitDoor", 20)
-	end
-
-	local function isEscaped()
-		local plr = game:GetService("Players").LocalPlayer
-		local stats = plr and plr:FindFirstChild("TempPlayerStatsModule")
-		local escaped = stats and stats:FindFirstChild("Escaped")
-		if escaped then
-			return escaped.Value
-		else
-			return false
-		end
 	end
 
 	local computer_esp_toggled = true
@@ -3828,7 +3880,7 @@ if game.GameId == 372226183 then
 				local p_root = p_char and p_char:FindFirstChild("HumanoidRootPart")
 
 				for _, p in pairs(game:GetService("Players"):GetPlayers()) do
-					if p ~= plr then
+					if p ~= plr and not isFriendsWith(p) then
 						local Stats = p:FindFirstChild("TempPlayerStatsModule")
 						if not Stats then
 							continue
@@ -3864,7 +3916,7 @@ if game.GameId == 372226183 then
 				local lroot = char and char:FindFirstChild("HumanoidRootPart")
 				local event = char and char:FindFirstChild("HammerEvent", true)
 				for _, p in pairs(game:GetService("Players"):GetPlayers()) do
-					if p ~= plr then
+					if p ~= plr and not isFriendsWith(p) then
 						local Stats = p:FindFirstChild("TempPlayerStatsModule")
 						if not Stats then
 							continue
@@ -3898,6 +3950,17 @@ if game.GameId == 372226183 then
 				local root = char and char:FindFirstChild("HumanoidRootPart")
 
 				if root then
+					local players = getCapturablePlayers()
+					for i, v in pairs(players) do
+						local pChar = v and v.Character
+						local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
+						if pRoot and root and not isFriendsWith(v) then
+							root.CFrame = pRoot.CFrame
+							task.wait(0.5)
+							teleportToNearestFreezePod()
+							task.wait(0.5)
+						end
+					end
 				end
 			end
 		end
@@ -3961,8 +4024,7 @@ if game.GameId == 372226183 then
 				task.wait(10)
 				teleported = false
 			end
-			print("isEscaped", isEscaped())
-			if auto_exit_toggled and isInGame() and not isBeast() and not teleported and not isEscaped() then
+			if auto_exit_toggled and isInGame() and not isBeast() and not teleported then
 				local exit = findOpenExit()
 
 				if exit then
@@ -3998,7 +4060,7 @@ if game.GameId == 372226183 then
 				task.wait(10)
 				teleported = false
 			end
-			if auto_open_exit_toggled and isInGame() and not isBeast() and not teleported and not isEscaped() then
+			if auto_open_exit_toggled and isInGame() and not isBeast() and not teleported then
 				local openExit = findOpenExit()
 				if openExit then
 					return
@@ -4400,35 +4462,7 @@ if game.GameId == 372226183 then
 		CurrentKeybind = "F",
 		HoldToInteract = false,
 		Flag = "FTFFreezePodKeybind", -- A flag is the identifier for the configuration file. Make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-		Callback = function()
-			local best_pod
-			local best_pod_dist = 99999999
-
-			local char = game:GetService("Players").LocalPlayer.Character
-			local root = char and char:FindFirstChild("HumanoidRootPart")
-			local plrPos = root and root.Position
-
-			for i, v in pairs(game.Workspace:GetDescendants()) do
-				if v.Name == "FreezePod" then
-					local pod = v:FindFirstChild("PodTrigger")
-					if pod then
-						local capturedTorsoValue = pod:FindFirstChild("CapturedTorso")
-
-						if capturedTorsoValue.Value == nil then
-							local dist = dist3d(plrPos, pod.Position)
-							if dist < best_pod_dist and dist > 20 then
-								best_pod = pod
-								best_pod_dist = dist
-							end
-						end
-					end
-				end
-			end
-
-			enableNoclip()
-			root.CFrame = best_pod.CFrame
-			task.delay(1, disableNoclip)
-		end,
+		Callback = teleportToNearestFreezePod,
 	})
 
 	task.spawn(function()
