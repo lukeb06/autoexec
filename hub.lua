@@ -2171,6 +2171,170 @@ local LoopSpeedToggle = UniversalTab:CreateToggle({
 	end,
 })
 
+-- Granny Shooters
+if game.GameId == 10141757860 then
+	local GSTab = Window:CreateTab("Granny Shooters", "gamepad-2")
+
+	local function getCurrentGun()
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local gun = char and char:FindFirstChildOfClass("Tool")
+
+		return gun
+	end
+
+	local function getGunFireEvent()
+		local gun = getCurrentGun()
+		local events = gun and gun:FindFirstChild("Events")
+		local event = events and events:FindFirstChild("Fire")
+
+		return event
+	end
+
+	local function getGunReloadEvent()
+		local gun = getCurrentGun()
+		local events = gun and gun:FindFirstChild("Events")
+		local event = events and events:FindFirstChild("Reload")
+
+		return event
+	end
+
+	local function getGunAmmo()
+		local gun = getCurrentGun()
+		local gunServer = gun and gun:FindFirstChild("GunServer")
+		local ammoV = gunServer and gunServer:FindFirstChild("Ammo")
+		local ammo = (ammoV and ammoV.Value) or 0
+
+		return ammo
+	end
+
+	local function reloadGun()
+		local event = getGunReloadEvent()
+
+		if event then
+			event:FireServer()
+		end
+	end
+
+	local function shootChar(pChar)
+		local event = getGunFireEvent()
+
+		local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
+		local hum = pChar and pChar:FindFirstChildWhichIsA("Humanoid")
+
+		if pRoot and hum and event then
+			local latency = game:GetService("Players").LocalPlayer:GetNetworkPing() / 2
+			local tVel = pRoot.AssemblyLinearVelocity
+			local tMov = hum and (hum.MoveDirection * hum.WalkSpeed)
+			tVel = tVel:Lerp(tMov, 0.6)
+			local tPos = pRoot.Position + (tVel * latency)
+
+			local rng = Random.new()
+
+			event:FireServer({
+				Origin = pRoot.Position,
+				Timestamp = game.Workspace:GetServerTimeNow(),
+				Direction = dir3d(pRoot.Position, tPos),
+				Seed = rng:NextInteger(0, 100),
+			})
+		end
+	end
+
+	local function findClosestChar()
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		if root then
+			local best = nil
+			local best_dist = 99999999
+			for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+				if v ~= plr then
+					local pChar = v and v.Character
+					local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
+					local ff = pChar and pChar:FindFirstChildOfClass("ForceField")
+					local hum = pChar and pChar:FindFirstChildOfClass("Humanoid")
+
+					if pRoot and not ff and (hum and hum.Health > 0) then
+						local dist = dist3d(root.Position, pRoot.Position)
+						-- local dist = hum.Health
+						if dist < best_dist then
+							best = pChar
+							best_dist = dist
+						end
+					end
+				end
+			end
+			return best
+		end
+
+		return nil
+	end
+
+	local auto_kill_toggled = true
+	local GSAutoKillToggle = GSTab:CreateToggle({
+		Name = "Auto Kill",
+		CurrentValue = auto_kill_toggled,
+		Flag = nil,
+		Callback = function(value)
+			auto_kill_toggled = value
+		end,
+	})
+
+	task.spawn(function()
+		while task.wait() do
+			if auto_kill_toggled then
+				local char = findClosestChar()
+				shootChar(char)
+			end
+		end
+	end)
+
+	-- task.spawn(function()
+	-- 	while task.wait() do
+	-- 		if auto_kill_toggled then
+	-- 			for i, v in pairs(game.Players:GetPlayers()) do
+	-- 				local char = v and v.Character
+	-- 				local root = char and char:FindFirstChild("HumanoidRootPart")
+	--
+	-- 				if root then
+	-- 					local mPlr = game:GetService("Players").LocalPlayer
+	-- 					local mChar = mPlr and mPlr.Character
+	-- 					local mRoot = mChar and mChar:FindFirstChild("HumanoidRootPart")
+	--
+	-- 					if mRoot then
+	-- 						mRoot.CFrame = root.CFrame * CFrame.new(0, 0, 0)
+	-- 					end
+	-- 				end
+	--
+	-- 				task.wait(0.25)
+	-- 			end
+	-- 		end
+	-- 	end
+	-- end)
+
+	local auto_reload_toggled = true
+	local GSAutoReloadToggle = GSTab:CreateToggle({
+		Name = "Auto Reload",
+		CurrentValue = auto_reload_toggled,
+		Flag = nil,
+		Callback = function(value)
+			auto_reload_toggled = value
+		end,
+	})
+
+	task.spawn(function()
+		while task.wait() do
+			if auto_reload_toggled then
+				if getGunAmmo() == 0 then
+					reloadGun()
+					task.wait(5)
+				end
+			end
+		end
+	end)
+end
+
 -- Reminiscence Zombies
 -- if game.PlaceId == 2778230703 then
 if game.GameId == 1003981402 then
@@ -3487,7 +3651,6 @@ if game.GameId == 372226183 then
 					local player = game:GetService("Players"):FindFirstChild(name)
 
 					if player then
-						print(name)
 						table.insert(players, player)
 					end
 				end
@@ -3643,60 +3806,63 @@ if game.GameId == 372226183 then
 		return isCloseToModelName("ExitDoor", 20)
 	end
 
-    local function getLockers()
-        local lockers = {}
-        for i, v in pairs(getCurrentMapChildren()) do
-            if v:HasTag("LOCKER") then
-                table.insert(lockers, v)
-            end
-        end
-        return lockers
-    end
+	local function getLockers()
+		local lockers = {}
+		for i, v in pairs(getCurrentMapChildren()) do
+			if v:HasTag("LOCKER") then
+				table.insert(lockers, v)
+			end
+		end
+		return lockers
+	end
 
-	-- local function getLockers()
-	-- 	local lockers = {}
-	--
-	-- 	local children = {}
-	-- 	for _, v in pairs(getCurrentMapChildren()) do
-	-- 		table.insert(children, v)
-	-- 		if v.Name == "Lockers" then
-	-- 			for _, v2 in pairs(v:GetChildren()) do
-	-- 				table.insert(children, v2)
-	-- 			end
-	-- 		end
-	-- 	end
-	-- 	for _, v in pairs(children) do
-	-- 		local function hasLockerName()
-	-- 			local locker_names = {
-	-- 				"HiddenCloset",
-	-- 				"HidingCloset",
-	-- 				"Locker",
-	-- 				"Locker2",
-	-- 				"Locker 2",
-	-- 				"Locker V2",
-	-- 				"Locker v2",
-	-- 				"Cabinet",
-	-- 				"Closet",
-	-- 			}
-	-- 			for _, name in pairs(locker_names) do
-	-- 				if v.Name == name then
-	-- 					return true
-	-- 				end
-	-- 			end
-	--
-	-- 			return false
-	-- 		end
-	-- 		local function hasDoor()
-	-- 			local door = v:FindFirstChild("Door")
-	-- 			return door and door:IsA("BasePart") and door.CanCollide == false
-	-- 		end
-	-- 		if hasLockerName() or hasDoor() then
-	-- 			table.insert(lockers, v)
-	-- 		end
-	-- 	end
-	--
-	-- 	return lockers
-	-- end
+	local function findNearestLocker()
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		if root then
+			local best = nil
+			local best_dist = 999999999
+
+			for i, v in pairs(getLockers()) do
+				local part = v:FindFirstChildOfClass("Part")
+				if part then
+					local dist = dist3d(root.Position, part.Position)
+
+					if dist < best_dist then
+						best_dist = dist
+						best = v
+					end
+				end
+			end
+
+			return best
+		end
+
+		return nil
+	end
+
+	local function getCurrentPower()
+		local v = game:GetService("ReplicatedStorage"):FindFirstChild("CurrentPower")
+		if v then
+			return v.Value
+		end
+		return ""
+	end
+
+	local function isPowerActive()
+		local v = game:GetService("ReplicatedStorage"):FindFirstChild("PowerActive")
+		if v then
+			return v.Value
+		end
+		return false
+	end
+
+	local function isSeerActive()
+		local isSeer = getCurrentPower() == "Seer"
+		return isSeer and isPowerActive()
+	end
 
 	local computer_esp_toggled = true
 	local function updatePCESP()
@@ -3801,6 +3967,41 @@ if game.GameId == 372226183 then
 			untie_toggled = value
 		end,
 	})
+
+	local auto_hide_toggled = isDev()
+	local FTFAutoHideToggle = FTFUtilsTab:CreateToggle({
+		Name = "Auto Hide (Seer)",
+		CurrentValue = auto_hide_toggled,
+		Flag = nil,
+		Callback = function(value)
+			auto_hide_toggled = value
+		end,
+	})
+
+	task.spawn(function()
+		local hiding = false
+		while task.wait() do
+			if hiding then
+				task.wait(2)
+				hiding = false
+				task.wait(5)
+			end
+			if auto_hide_toggled and isSeerActive() then
+				local locker = findNearestLocker()
+				local center = locker and locker:GetBoundingBox()
+				if center then
+					task.wait(2.5)
+					local plr = game:GetService("Players").LocalPlayer
+					local char = plr and plr.Character
+					local root = char and char:FindFirstChild("HumanoidRootPart")
+					if root then
+						root.CFrame = center
+						hiding = true
+					end
+				end
+			end
+		end
+	end)
 
 	local ftf_auto_save_toggled = false
 	local FTFAutoSaveToggle = FTFUtilsTab:CreateToggle({
@@ -4038,13 +4239,13 @@ if game.GameId == 372226183 then
 		end,
 	})
 
-	local auto_hide_toggled = false
-	local FTFAutoHideToggle = FTFUtilsTab:CreateToggle({
+	local avoid_beast_toggled = false
+	local FTFAvoidBeastToggle = FTFUtilsTab:CreateToggle({
 		Name = "Avoid Beast",
-		CurrentValue = auto_hide_toggled,
+		CurrentValue = avoid_beast_toggled,
 		Flag = nil,
 		Callback = function(value)
-			auto_hide_toggled = value
+			avoid_beast_toggled = value
 		end,
 	})
 
@@ -4132,7 +4333,6 @@ if game.GameId == 372226183 then
 		local hammerEvent = getHammerEvent()
 
 		if hammerEvent then
-			print("hammer click")
 			hammerEvent:FireServer("HammerClick", true)
 		end
 	end
@@ -4140,9 +4340,6 @@ if game.GameId == 372226183 then
 	local function hitCharacter(char)
 		local hammerEvent = getHammerEvent()
 		local torso = char and char:FindFirstChild("HumanoidRootPart")
-
-		print("torso", torso)
-		print("hammerEvent", hammerEvent)
 
 		if torso and hammerEvent then
 			hammerEvent:FireServer("HammerHit", torso)
@@ -4208,7 +4405,6 @@ if game.GameId == 372226183 then
 			task.spawn(function()
 				local success = tpToPlayerIfSafe(plr)
 				if success then
-					print("tphitandtie success", success)
 					hitAndTiePlayer(plr)
 				end
 			end)
@@ -4540,7 +4736,7 @@ if game.GameId == 372226183 then
 				end
 			end
 
-			if auto_hide_toggled and not ftf_auto_saving then
+			if avoid_beast_toggled and not ftf_auto_saving then
 				local beast = findBeast()
 				local beastChar = beast and beast.Character
 				local beastRoot = beastChar and beastChar:FindFirstChild("HumanoidRootPart")
