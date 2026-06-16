@@ -1379,10 +1379,13 @@ local function enableNoclip()
 		if Clip == false and speaker.Character ~= nil then
 			for _, child in pairs(speaker.Character:GetDescendants()) do
 				if child:IsA("BasePart") and child.CanCollide == true then
-					local couldCollide = Instance.new("BoolValue")
-					couldCollide.Name = "CouldCollide"
-					couldCollide.Value = child.CanCollide
-					couldCollide.Parent = child
+					local hasCouldCollide = child:FindFirstChild("CouldCollide")
+					if not hasCouldCollide then
+						local couldCollide = Instance.new("BoolValue")
+						couldCollide.Name = "CouldCollide"
+						couldCollide.Value = child.CanCollide
+						couldCollide.Parent = child
+					end
 					child.CanCollide = false
 				end
 				if child:IsA("BasePart") and child.Transparency ~= 1 and child.Transparency ~= 0.5 then
@@ -2120,6 +2123,13 @@ UniversalTab:CreateButton({
 	Name = "Set to 18",
 	Callback = function()
 		UniversalSpeedSlider:Set(18)
+	end,
+})
+
+UniversalTab:CreateButton({
+	Name = "Set to 20",
+	Callback = function()
+		UniversalSpeedSlider:Set(20)
 	end,
 })
 
