@@ -3986,7 +3986,7 @@ if game.GameId == 372226183 then
 				hiding = false
 				task.wait(5)
 			end
-			if auto_hide_toggled and isSeerActive() then
+			if auto_hide_toggled and isSeerActive() and isInGame() then
 				local locker = findNearestLocker()
 				local center = locker and locker:GetBoundingBox()
 				if center then
