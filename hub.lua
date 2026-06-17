@@ -2215,6 +2215,37 @@ if game.GameId == 93740418 then
 			end
 		end
 	end)
+
+	HSTab:CreateSection("Utils")
+
+	local HSKillAllButton = HSTab:CreateButton({
+		Name = "Kill All",
+		Callback = function()
+			local plr = game:GetService("Players").LocalPlayer
+			local char = plr and plr.Character
+			local root = char and char:FindFirstChild("HumanoidRootPart")
+
+			if root then
+				for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+					if v ~= plr then
+						local pChar = v and v.Character
+						local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
+
+						if pRoot then
+							local c = 0
+
+							while c < 10 do
+								pRoot.CFrame = root.CFrame
+
+								c = c + 1
+								task.wait()
+							end
+						end
+					end
+				end
+			end
+		end,
+	})
 end
 
 -- Granny Shooters
