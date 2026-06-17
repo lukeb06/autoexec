@@ -2171,6 +2171,52 @@ local LoopSpeedToggle = UniversalTab:CreateToggle({
 	end,
 })
 
+-- Hide and Seek
+if game.GameId == 93740418 then
+	local HSTab = Window:CreateTab("Hide and Seek", "gamepad-2")
+	HSTab:CreateSection("ESP")
+
+	local function isSeeker(plr)
+		local char = plr and plr.Character
+		local itscript = char and char:FindFirstChild("ItScript")
+		return itscript ~= nil
+	end
+
+	local player_esp_toggled = true
+	local function updatePlayerESP()
+		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+			if v ~= game:GetService("Players").LocalPlayer then
+				local char = v and v.Character
+				local color = (isSeeker(v) and Color3.fromRGB(255, 0, 0))
+					or (isFriendsWith(v) and Color3.fromRGB(0, 0, 255))
+					or Color3.fromRGB(0, 255, 0)
+
+				if char then
+					updateESP(char, color, player_esp_toggled)
+				end
+			end
+		end
+	end
+
+	local HSPlayerESPToggle = HSTab:CreateToggle({
+		Name = "Player ESP",
+		CurrentValue = player_esp_toggled,
+		Flag = nil,
+		Callback = function(value)
+			player_esp_toggled = value
+			updatePlayerESP()
+		end,
+	})
+
+	task.spawn(function()
+		while task.wait(1) do
+			if player_esp_toggled then
+				updatePlayerESP()
+			end
+		end
+	end)
+end
+
 -- Granny Shooters
 if game.GameId == 10141757860 then
 	local GSTab = Window:CreateTab("Granny Shooters", "gamepad-2")
@@ -3807,13 +3853,7 @@ if game.GameId == 372226183 then
 	end
 
 	local function getLockers()
-		local lockers = {}
-		for i, v in pairs(getCurrentMapChildren()) do
-			if v:HasTag("LOCKER") then
-				table.insert(lockers, v)
-			end
-		end
-		return lockers
+		return game:GetService("CollectionService"):GetTagged("LOCKER")
 	end
 
 	local function findNearestLocker()
