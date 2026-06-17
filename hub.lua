@@ -1042,7 +1042,7 @@ local function InitUI()
 					Slider.CurrentValue = settings.CurrentValue
 					Slider.Set = function(self, value)
 						local cvalue = math.clamp(value, min, max)
-						self.Value = cvalue
+						self.CurrentValue = cvalue
 						label.Text = settings.Name .. ": " .. cvalue .. (settings.Suffix or "")
 
 						local TS = game:GetService("TweenService")
