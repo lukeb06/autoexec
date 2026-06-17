@@ -4055,7 +4055,7 @@ if game.GameId == 372226183 then
 			if hiding then
 				task.wait(2)
 				hiding = false
-				task.wait(5)
+				task.wait(10)
 			end
 			if auto_hide_toggled and isSeerActive() and isInGame() then
 				local locker = findNearestLocker()
