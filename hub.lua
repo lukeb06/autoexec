@@ -4039,40 +4039,6 @@ if game.GameId == 372226183 then
 		end,
 	})
 
-	local auto_hide_toggled = isDev()
-	local FTFAutoHideToggle = FTFUtilsTab:CreateToggle({
-		Name = "Auto Hide (Seer)",
-		CurrentValue = auto_hide_toggled,
-		Flag = nil,
-		Callback = function(value)
-			auto_hide_toggled = value
-		end,
-	})
-
-	task.spawn(function()
-		local hiding = false
-		while task.wait() do
-			if hiding then
-				task.wait(2)
-				hiding = false
-				task.wait(10)
-			end
-			if auto_hide_toggled and isSeerActive() and isInGame() then
-				local locker = findNearestLocker()
-				local center = locker and locker:GetBoundingBox()
-				if center then
-					task.wait(2.5)
-					local plr = game:GetService("Players").LocalPlayer
-					local char = plr and plr.Character
-					local root = char and char:FindFirstChild("HumanoidRootPart")
-					if root then
-						root.CFrame = center
-						hiding = true
-					end
-				end
-			end
-		end
-	end)
 
 	local ftf_auto_save_toggled = false
 	local FTFAutoSaveToggle = FTFUtilsTab:CreateToggle({
@@ -4106,7 +4072,6 @@ if game.GameId == 372226183 then
 										RemoteEvent:FireServer("Input", "Action", true)
 										task.wait(1)
 										RemoteEvent:FireServer("Input", "Trigger", false, event)
-										RemoteEvent:FireServer("Input", "Action", false)
 									end)
 								end
 							end
@@ -4116,6 +4081,41 @@ if game.GameId == 372226183 then
 			end
 		end
 	end)
+
+	-- local auto_hide_toggled = isDev()
+	-- local FTFAutoHideToggle = FTFUtilsTab:CreateToggle({
+	-- 	Name = "Auto Hide (Seer)",
+	-- 	CurrentValue = auto_hide_toggled,
+	-- 	Flag = nil,
+	-- 	Callback = function(value)
+	-- 		auto_hide_toggled = value
+	-- 	end,
+	-- })
+
+	-- task.spawn(function()
+	-- 	local hiding = false
+	-- 	while task.wait() do
+	-- 		if hiding then
+	-- 			task.wait(2)
+	-- 			hiding = false
+	-- 			task.wait(10)
+	-- 		end
+	-- 		if auto_hide_toggled and isSeerActive() and isInGame() then
+	-- 			local locker = findNearestLocker()
+	-- 			local center = locker and locker:GetBoundingBox()
+	-- 			if center then
+	-- 				task.wait(2.5)
+	-- 				local plr = game:GetService("Players").LocalPlayer
+	-- 				local char = plr and plr.Character
+	-- 				local root = char and char:FindFirstChild("HumanoidRootPart")
+	-- 				if root then
+	-- 					root.CFrame = center
+	-- 					hiding = true
+	-- 				end
+	-- 			end
+	-- 		end
+	-- 	end
+	-- end)
 
 	local auto_tie_toggled = true
 	local FTFAutoTie = FTFUtilsTab:CreateToggle({
