@@ -1700,54 +1700,6 @@ end
 
 WaitForGameAndPlayer()
 
-local looped_functions = {}
-
-local path_toggled = false
-table.insert(looped_functions, function()
-	if path_toggled == true then
-		local paths = game.Workspace:FindFirstChild("PATHS")
-		if not paths then
-			Instance.new("Folder", game.Workspace).Name = "PATHS"
-		end
-
-		for i, v in pairs(paths:GetChildren()) do
-			v.Age.Value = v.Age.Value + 1
-			if v.Age.Value > 0 then
-				v:Destroy()
-			end
-		end
-
-		local p = Instance.new("Part", paths)
-		Instance.new("NumberValue", p).Name = "Age"
-		p.Size = Vector3.new(3, 1, 3)
-		p.Anchored = true
-		local plr = game:GetService("Players").LocalPlayer
-		local char = plr and plr.Character
-		local root = char and char:FindFirstChild("HumanoidRootPart")
-		local hum = char and char:FindFirstChildWhichIsA("Humanoid")
-		local rig = hum and hum.RigType
-
-		if root and hum then
-			if rig == Enum.HumanoidRigType.R15 then
-				local i = root.Position
-				local s = root.Size.Y
-				local h = hum.HipHeight
-
-				p.Position = Vector3.new(i.x, (i.y - s / 2) - h - 0.5, i.z)
-			else
-				local leg = char and char:FindFirstChild("Left Leg")
-				if leg then
-					local i = root.Position
-					local s = root.Size.Y
-					local h = leg.Size.Y
-
-					p.Position = Vector3.new(i.x, (i.y - s / 2) - h - 0.5, i.z)
-				end
-			end
-		end
-	end
-end)
-
 local ctrl_click_delete_toggled = true
 local function initCtrlClickDelete()
 	local Plr = game:GetService("Players").LocalPlayer
@@ -2017,6 +1969,7 @@ local NoClipKeybind = UniversalTab:CreateKeybind({
 
 local PathSection = UniversalTab:CreateSection("Path")
 
+local path_toggled = false
 local PathKeybind = UniversalTab:CreateKeybind({
 	Name = "Toggle Paths",
 	CurrentKeybind = "N",
@@ -2026,6 +1979,54 @@ local PathKeybind = UniversalTab:CreateKeybind({
 		path_toggled = not path_toggled
 	end,
 })
+
+task.spawn(function()
+	local path = nil
+
+	local function getPath()
+		if not path then
+			path = Instance.new("Part", game.Workspace)
+			path.Size = Vector3.new(3, 1, 3)
+			path.Anchored = true
+		end
+
+		return path
+	end
+
+	while task.wait() do
+		if path_toggled == true then
+			local path = getPath()
+
+			local plr = game:GetService("Players").LocalPlayer
+			local char = plr and plr.Character
+			local root = char and char:FindFirstChild("HumanoidRootPart")
+			local hum = char and char:FindFirstChildWhichIsA("Humanoid")
+			local rig = hum and hum.RigType
+
+			if root and hum and rig then
+				if rig == Enum.HumanoidRigType.R15 then
+					local s = root.Size.Y
+					local h = hum.HipHeight
+
+					path.CFrame = root.CFrame * CFrame.new(0, -(s / 2) - h - 0.5, 0)
+				else
+					local leg = char and char:FindFirstChild("Left Leg")
+					if leg then
+						local s = root.Size.Y
+						local h = leg.Size.Y
+
+						path.CFrame = root.CFrame * CFrame.new(0, -(s / 2) - h - 0.5, 0)
+					end
+				end
+			end
+		else
+			if path then
+				path:Destroy()
+				path = nil
+			end
+		end
+	end
+end)
 
 local DelSection = UniversalTab:CreateSection("Ctrl+Click Delete")
 
@@ -3655,6 +3656,71 @@ if game.GameId == 372226183 then
 		return nil
 	end
 
+	local function getPowerEvent()
+		local beast = findBeastIncludingLocal()
+		local beastChar = beast and beast.Character
+		local powers = beastChar and beastChar:FindFirstChild("BeastPowers")
+		local event = powers and powers:FindFirstChild("PowersEvent")
+		return event
+	end
+
+	local function clickHammer()
+		local event = getHammerEvent()
+
+		if event then
+			event:FireServer("HammerClick", true)
+		end
+	end
+
+	local function isRagdoll(plr)
+		local stats = getStats(plr)
+		local ragdoll = stats and stats:FindFirstChild("Ragdoll")
+		local isRagdoll = ragdoll and ragdoll.Value
+
+		if isRagdoll == nil then
+			return false
+		end
+
+		return isRagdoll
+	end
+
+	local function isCaptured(plr)
+		local stats = getStats(plr)
+		local captured = stats and stats:FindFirstChild("Captured")
+		local isCaptured = captured and captured.Value
+
+		if isCaptured == nil then
+			return false
+		end
+
+		return isCaptured
+	end
+
+	local function hitPlayer(plr)
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		if root then
+			local event = getHammerEvent()
+			if event then
+				clickHammer()
+				event:FireServer("HammerHit", root)
+			end
+		end
+	end
+
+	local function tiePlayer(plr)
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		if root then
+			local event = getHammerEvent()
+			if event then
+				event:FireServer("HammerTieUp", root, root.Position)
+			end
+		end
+	end
+
 	local function getChaseMusic()
 		local handle = getHammerHandle()
 		local music = handle and handle:FindFirstChild("SoundChaseMusic")
@@ -3768,13 +3834,51 @@ if game.GameId == 372226183 then
 		return players
 	end
 
-	local function teleportToNearestFreezePod()
-		local best_pod
-		local best_pod_dist = 99999999
+	local function triggerEvent(event, value)
+		local RemoteEvent = game:GetService("ReplicatedStorage").RemoteEvent
+		RemoteEvent:FireServer("Input", "Trigger", value, event)
+	end
 
-		local char = game:GetService("Players").LocalPlayer.Character
+	local function triggerInput(value)
+		local RemoteEvent = game:GetService("ReplicatedStorage").RemoteEvent
+		RemoteEvent:FireServer("Input", "Action", value)
+	end
+
+	local function triggerCrawl(value)
+		local RemoteEvent = game:GetService("ReplicatedStorage").RemoteEvent
+		RemoteEvent:FireServer("Input", "Crawl", value)
+	end
+
+	local function triggerPod(pod)
+		local event = pod:FindFirstChild("Event")
+
+		if event then
+			local stats = getStats(game:GetService("Players").LocalPlayer)
+			local actionEvent = stats and stats:FindFirstChild("ActionEvent")
+			local prevEvent = actionEvent and actionEvent.Value
+
+			task.spawn(function()
+				triggerEvent(event, true)
+				triggerInput(true)
+				task.wait(1)
+				triggerEvent(event, false)
+				triggerInput(false)
+				task.wait(1)
+				if prevEvent then
+					triggerEvent(prevEvent, true)
+					triggerInput(true)
+				end
+			end)
+		end
+	end
+
+	local function findNearestFreezePod()
+		local best
+		local best_dist = 99999999
+
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
 		local root = char and char:FindFirstChild("HumanoidRootPart")
-		local plrPos = root and root.Position
 
 		for i, v in pairs(game.Workspace:GetDescendants()) do
 			if v.Name == "FreezePod" then
@@ -3783,19 +3887,38 @@ if game.GameId == 372226183 then
 					local capturedTorsoValue = pod:FindFirstChild("CapturedTorso")
 
 					if capturedTorsoValue.Value == nil then
-						local dist = dist3d(plrPos, pod.Position)
-						if dist < best_pod_dist and dist > 20 then
-							best_pod = pod
-							best_pod_dist = dist
+						local dist = dist3d(root.Position, pod.Position)
+						if dist < best_dist then
+							best = pod
+							best_dist = dist
 						end
 					end
 				end
 			end
 		end
 
-		enableNoclip()
-		root.CFrame = best_pod.CFrame
-		task.delay(1, disableNoclip)
+		return best
+	end
+
+	local function triggerNearestFreezePod()
+		local pod = findNearestFreezePod()
+		if pod then
+			triggerPod(pod)
+		end
+	end
+
+	local function teleportToNearestFreezePod()
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		if root then
+			local pod = findNearestFreezePod()
+
+			enableNoclip()
+			root.CFrame = pod.CFrame
+			task.delay(1, disableNoclip)
+		end
 	end
 
 	local function isInGame()
@@ -3954,7 +4077,7 @@ if game.GameId == 372226183 then
 		end,
 	})
 
-	local locker_esp_toggled = true
+	local locker_esp_toggled = not isDev()
 	local function updateLockerESP()
 		local lockers = getLockers()
 		for i, v in pairs(lockers) do
@@ -3964,7 +4087,7 @@ if game.GameId == 372226183 then
 
 	local FTFLockerEspToggle = FTFEspTab:CreateToggle({
 		Name = "Locker ESP",
-		CurrentValue = true,
+		CurrentValue = locker_esp_toggled,
 		Flag = nil,
 		Callback = function(value)
 			locker_esp_toggled = value
@@ -4029,6 +4152,17 @@ if game.GameId == 372226183 then
 		end,
 	})
 
+	task.spawn(function()
+		while task.wait() do
+			if slow_beast_toggled and not isBeast() then
+				local event = getPowerEvent()
+				if event then
+					event:FireServer("Jumped")
+				end
+			end
+		end
+	end)
+
 	local untie_toggled = false
 	local FTFUntie = FTFUtilsTab:CreateToggle({
 		Name = "Make Beast Untie",
@@ -4039,6 +4173,13 @@ if game.GameId == 372226183 then
 		end,
 	})
 
+	task.spawn(function()
+		while task.wait() do
+			if untie_toggled then
+				clickHammer()
+			end
+		end
+	end)
 
 	local ftf_auto_save_toggled = false
 	local FTFAutoSaveToggle = FTFUtilsTab:CreateToggle({
@@ -4063,17 +4204,7 @@ if game.GameId == 372226183 then
 						if pod then
 							local capturedTorsoValue = pod:FindFirstChild("CapturedTorso")
 							if capturedTorsoValue.Value ~= nil then
-								local event = pod:FindFirstChild("Event")
-
-								if event then
-									task.spawn(function()
-										local RemoteEvent = game:GetService("ReplicatedStorage").RemoteEvent
-										RemoteEvent:FireServer("Input", "Trigger", true, event)
-										RemoteEvent:FireServer("Input", "Action", true)
-										task.wait(1)
-										RemoteEvent:FireServer("Input", "Trigger", false, event)
-									end)
-								end
+								triggerPod(pod)
 							end
 						end
 					end
@@ -4127,6 +4258,29 @@ if game.GameId == 372226183 then
 		end,
 	})
 
+	task.spawn(function()
+		while task.wait() do
+			if auto_tie_toggled and isBeast() then
+				local plr = game:GetService("Players").LocalPlayer
+				local char = plr and plr.Character
+				local root = char and char:FindFirstChild("HumanoidRootPart")
+
+				if root then
+					for _, p in pairs(game:GetService("Players"):GetPlayers()) do
+						if p ~= plr and not isFriendsWith(p) and isRagdoll(p) and not isCaptured(p) then
+							local pRoot = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+							if pRoot then
+								if dist3d(root.Position, pRoot.Position) <= 15 then
+									tiePlayer(p)
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end)
+
 	local auto_hit_toggled = isDev()
 	local FTFAutoHit = FTFUtilsTab:CreateToggle({
 		Name = "Auto Hit",
@@ -4137,6 +4291,29 @@ if game.GameId == 372226183 then
 		end,
 	})
 
+	task.spawn(function()
+		while task.wait() do
+			if auto_hit_toggled then
+				local plr = game:GetService("Players").LocalPlayer
+				local char = plr and plr.Character
+				local root = char and char:FindFirstChild("HumanoidRootPart")
+
+				if root then
+					for _, p in pairs(game:GetService("Players"):GetPlayers()) do
+						if p ~= plr and not isFriendsWith(p) and not isRagdoll(p) and not isCaptured(p) then
+							local pRoot = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+							if pRoot then
+								if dist3d(root.Position, pRoot.Position) <= 15 then
+									hitPlayer(p)
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end)
+
 	local auto_beast_toggled = isDev()
 	local FTFAutoBeast = FTFUtilsTab:CreateToggle({
 		Name = "Auto Beast",
@@ -4146,115 +4323,6 @@ if game.GameId == 372226183 then
 			auto_beast_toggled = value
 		end,
 	})
-
-	local function GetCurrentBeastPEvent()
-		local beast = findBeast()
-		local beastChar = beast and beast.Character
-		local powers = beastChar and beastChar:FindFirstChild("BeastPowers")
-		local event = powers and powers:FindFirstChild("PowersEvent")
-		return event
-	end
-
-	local function GetCurrentBeastHEvent()
-		local beast = findBeast()
-		local beastChar = beast and beast.Character
-		local hammer = beastChar and beastChar:FindFirstChild("Hammer")
-		local event = hammer and hammer:FindFirstChild("HammerEvent")
-		return event
-	end
-
-	task.spawn(function()
-		while task.wait() do
-			if slow_beast_toggled then
-				local event = GetCurrentBeastPEvent()
-				if event then
-					event:FireServer("Jumped")
-				end
-			end
-		end
-	end)
-
-	task.spawn(function()
-		while task.wait() do
-			if untie_toggled then
-				local event = GetCurrentBeastHEvent()
-				if event then
-					event:FireServer("HammerClick", true)
-				end
-			end
-		end
-	end)
-
-	task.spawn(function()
-		while task.wait() do
-			if auto_tie_toggled then
-				local hammerEvent = getHammerEvent()
-				local plr = game:GetService("Players").LocalPlayer
-				local p_char = plr and plr.Character
-				local p_root = p_char and p_char:FindFirstChild("HumanoidRootPart")
-
-				for _, p in pairs(game:GetService("Players"):GetPlayers()) do
-					if p ~= plr and not isFriendsWith(p) then
-						local Stats = p:FindFirstChild("TempPlayerStatsModule")
-						if not Stats then
-							continue
-						end
-
-						local PisRagdoll, PisCaptured =
-							Stats:FindFirstChild("Ragdoll"), Stats:FindFirstChild("Captured")
-
-						if not (PisRagdoll and PisCaptured) then
-							continue
-						end
-
-						if PisRagdoll.Value and not PisCaptured.Value then
-							local root = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
-							if root and p_char and p_root and hammerEvent then
-								if (root.Position - p_root.Position).Magnitude <= 15 then
-									local pos = root.Position
-									hammerEvent:FireServer("HammerTieUp", root, pos)
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end)
-
-	task.spawn(function()
-		while task.wait() do
-			if auto_hit_toggled then
-				local plr = game:GetService("Players").LocalPlayer
-				local char = plr and plr.Character
-				local lroot = char and char:FindFirstChild("HumanoidRootPart")
-				local event = char and char:FindFirstChild("HammerEvent", true)
-				for _, p in pairs(game:GetService("Players"):GetPlayers()) do
-					if p ~= plr and not isFriendsWith(p) then
-						local Stats = p:FindFirstChild("TempPlayerStatsModule")
-						if not Stats then
-							continue
-						end
-
-						local PisRagdoll, PisCaptured =
-							Stats:FindFirstChild("Ragdoll"), Stats:FindFirstChild("Captured")
-						if not (PisRagdoll and PisCaptured) then
-							continue
-						end
-
-						if not (PisRagdoll.Value or PisCaptured.Value) then
-							local root = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
-							if root and char and lroot and event then
-								if (root.Position - lroot.Position).Magnitude <= 15 then
-									event:FireServer("HammerHit", root)
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end)
 
 	task.spawn(function()
 		while task.wait() do
@@ -4270,9 +4338,12 @@ if game.GameId == 372226183 then
 						local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
 						if pRoot and root and not isFriendsWith(v) then
 							root.CFrame = pRoot.CFrame
-							task.wait(0.5)
-							teleportToNearestFreezePod()
-							task.wait(0.5)
+							task.wait(0.1)
+							hitPlayer(v)
+							task.wait(0.1)
+							tiePlayer(v)
+							task.wait(0.1)
+							triggerNearestFreezePod()
 						end
 					end
 				end
@@ -4399,88 +4470,6 @@ if game.GameId == 372226183 then
 			end
 		end
 	end)
-
-	local function clickHammer()
-		local hammerEvent = getHammerEvent()
-
-		if hammerEvent then
-			hammerEvent:FireServer("HammerClick", true)
-		end
-	end
-
-	local function hitCharacter(char)
-		local hammerEvent = getHammerEvent()
-		local torso = char and char:FindFirstChild("HumanoidRootPart")
-
-		if torso and hammerEvent then
-			hammerEvent:FireServer("HammerHit", torso)
-		end
-	end
-
-	local function hitPlayer(plr)
-		local char = plr and plr.Character
-		hitCharacter(char)
-	end
-
-	local function tieCharacter(char)
-		local hammerEvent = getHammerEvent()
-		local torso = char and char:FindFirstChild("Torso")
-
-		if torso and hammerEvent then
-			clickHammer()
-			task.wait()
-			hammerEvent:FireServer("HammerTieUp", torso, torso.Position)
-		end
-	end
-
-	local function tiePlayer(plr)
-		local char = plr and plr.Character
-		tieCharacter(char)
-	end
-
-	local function hitAndTiePlayer(plr)
-		hitPlayer(plr)
-		task.wait(0.5)
-		tiePlayer(plr)
-	end
-
-	local function tpToPlayerIfSafe(plr)
-		local char = plr and plr.Character
-		local root = char and char:FindFirstChild("HumanoidRootPart")
-
-		local myPlr = game:GetService("Players").LocalPlayer
-		local myChar = myPlr and myPlr.Character
-		local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
-
-		if root and myRoot then
-			if not partCloseToComputer(root) then
-				myRoot.CFrame = root.CFrame
-				task.wait(0.2)
-				return true
-			else
-				safeTweenToPart(root)
-				while safeTweening do
-					task.wait()
-				end
-				return true
-			end
-		end
-
-		return false
-	end
-
-	local function tpHitAndTie(plr)
-		local hammer = getHammer()
-
-		if hammer then
-			task.spawn(function()
-				local success = tpToPlayerIfSafe(plr)
-				if success then
-					hitAndTiePlayer(plr)
-				end
-			end)
-		end
-	end
 
 	local computerUnhacked = Color3.fromRGB(13, 105, 172)
 	local computerErrored = Color3.fromRGB(196, 40, 28)
@@ -4782,7 +4771,12 @@ if game.GameId == 372226183 then
 
 		while task.wait() do
 			if no_errors_toggled then
-				game.ReplicatedStorage.RemoteEvent:FireServer("SetPlayerMinigameResult", true)
+				local stats = getStats(game:GetService("Players").LocalPlayer)
+				local actionEvent = stats and stats:FindFirstChild("ActionEvent")
+
+				if actionEvent.Value then
+					game.ReplicatedStorage.RemoteEvent:FireServer("SetPlayerMinigameResult", true)
+				end
 			end
 
 			if no_fog_toggled then
@@ -4884,43 +4878,6 @@ if game.GameId == 372226183 then
 			updateChaseVolume((value / 100) * defaultChaseMusicVolume)
 		end,
 	})
-
-	local hitOptions = {}
-
-	local FTFHitDropdown
-
-	local function refreshHitOptions()
-		hitOptions = {}
-		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-			table.insert(hitOptions, v.Name)
-		end
-
-		if FTFHitDropdown then
-			FTFHitDropdown:Refresh(hitOptions)
-		end
-	end
-
-	refreshHitOptions()
-
-	FTFHitDropdown = FTFUtilsTab:CreateDropdown({
-		Name = "Hit Player",
-		Options = hitOptions,
-		CurrentOption = {},
-		MultipleOptions = false,
-		Flag = nil,
-		Callback = function(options)
-			local plr = game:GetService("Players"):FindFirstChild(options[1])
-			if plr then
-				tpHitAndTie(plr)
-			end
-		end,
-	})
-
-	game:GetService("Players").PlayerAdded:Connect(refreshHitOptions)
-	game:GetService("Players").PlayerRemoving:Connect(function()
-		task.wait(1)
-		refreshHitOptions()
-	end)
 end
 
 -- Externals
@@ -4969,22 +4926,22 @@ local IYToggle = ExternalsTab:CreateToggle({
 	Callback = function(value) end,
 })
 
-ExternalsTab:CreateSection("Remote Spy")
+ExternalsTab:CreateSection("Cobalt Spy")
 
 local rs_injected = false
 local RSButton = ExternalsTab:CreateButton({
-	Name = "Inject Remote Spy",
+	Name = "Inject Cobalt Spy",
 	Callback = function()
 		if rs_injected then
 			return
 		end
 		rs_injected = true
-		loadstring(game:HttpGet("https://paste.ee/r/hK1Q4D65"))()
+		loadstring(game:HttpGet("https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau"))()
 	end,
 })
 
 local RSToggle = ExternalsTab:CreateToggle({
-	Name = "Load RS on Startup",
+	Name = "Load Cobalt on Startup",
 	CurrentValue = false,
 	Flag = "LoadRSOnStartup", -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value) end,
@@ -5006,11 +4963,3 @@ if RSToggle.CurrentValue then
 	rs_injected = true
 	loadstring(game:HttpGet("https://paste.ee/r/hK1Q4D65"))()
 end
-
-task.spawn(function()
-	while task.wait() do
-		for i, v in pairs(looped_functions) do
-			task.spawn(v)
-		end
-	end
-end)
