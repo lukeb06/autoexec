@@ -511,6 +511,10 @@ Library = {
 			end
 
 			tab.CreateToggle = function(self, settings)
+				if settings.Flag and cw_self.Flags[settings.Flag] then
+					settings.CurrentValue = cw_self.Flags[settings.Flag]
+				end
+
 				local toggle = Instance.new("Frame")
 				toggle.BorderSizePixel = 0
 				toggle.BackgroundColor3 = theme.ElementBackground
@@ -643,10 +647,6 @@ Library = {
 					Toggle:Set(settings.CurrentValue)
 				end
 
-				if settings.Flag and cw_self.Flags[settings.Flag] then
-					Toggle:Set(cw_self.Flags[settings.Flag])
-				end
-
 				toggle.InputBegan:Connect(function(input)
 					if
 						input.UserInputType == Enum.UserInputType.MouseButton1
@@ -684,6 +684,10 @@ Library = {
 			end
 
 			tab.CreateSlider = function(self, settings)
+				if settings.Flag and cw_self.Flags[settings.Flag] then
+					settings.CurrentValue = cw_self.Flags[settings.Flag]
+				end
+
 				local slider = Instance.new("Frame")
 				slider.BorderSizePixel = 0
 				slider.BackgroundColor3 = theme.ElementBackground
@@ -778,10 +782,6 @@ Library = {
 					Slider:Set(settings.CurrentValue)
 				end
 
-				if settings.Flag and cw_self.Flags[settings.Flag] then
-					Slider:Set(cw_self.Flags[settings.Flag])
-				end
-
 				slider.MouseEnter:Connect(function()
 					local TS = game:GetService("TweenService")
 					TS:Create(
@@ -845,7 +845,6 @@ Library = {
 			tab.CreateKeybind = function(self, settings)
 				if settings.Flag and cw_self.Flags[settings.Flag] then
 					settings.CurrentKeybind = cw_self.Flags[settings.Flag]
-					SaveConfig()
 				end
 
 				local toggle = Instance.new("Frame")
