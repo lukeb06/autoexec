@@ -735,7 +735,7 @@ function M.isInDanger()
 	return M.getDistToBeast() <= beast_max_dist and M.LOSToBeast()
 end
 
-local function M.shouldEasyHack()
+function M.shouldEasyHack()
 	return M.getDistToBeast() > 30 or not M.LOSToBeast()
 end
 

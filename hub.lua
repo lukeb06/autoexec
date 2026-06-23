@@ -518,10 +518,10 @@ function ab.LOSToBeast()local ah=game:GetService('Players').LocalPlayer local ai
 FindFirstChild('HumanoidRootPart')local ak=ai and ai:FindFirstChild('Head')local al=ai and ai:FindFirstChild('Left Leg')
 local am=ai and ai:FindFirstChild('Right Leg')local an={aj,ak,al,am}for ao,ap in pairs(an)do if ap then if ab.
 doBeastRaycast(ap)then return true end end end return false end function ab.isInDanger()return ab.getDistToBeast()<=ag
-and ab.LOSToBeast()end local function shouldEasyHack()return ab.getDistToBeast()>30 or not ab.LOSToBeast()end return ab
-end function a.i():typeof(__modImpl())local aa=a.cache.i if not aa then aa={c=__modImpl()}a.cache.i=aa end return aa.c
-end end do local function __modImpl()local aa=a.e()local ab=a.b()local ac=a.i()if game.GameId==372226183 then local ad=
-aa.Window:CreateTab('ESP')local ae=true function UpdateBeastESP()for af,ag in pairs(game.Players:GetPlayers())do if ag.
+and ab.LOSToBeast()end function ab.shouldEasyHack()return ab.getDistToBeast()>30 or not ab.LOSToBeast()end return ab end
+function a.i():typeof(__modImpl())local aa=a.cache.i if not aa then aa={c=__modImpl()}a.cache.i=aa end return aa.c end
+end do local function __modImpl()local aa=a.e()local ab=a.b()local ac=a.i()if game.GameId==372226183 then local ad=aa.
+Window:CreateTab('ESP')local ae=true function UpdateBeastESP()for af,ag in pairs(game.Players:GetPlayers())do if ag.
 Character and ag.Character:FindFirstChild('BeastPowers')and ag~=game.Players.LocalPlayer then ab.updateESP(ag.Character,
 Color3.fromRGB(255,0,0),ae)end end end local af=ad:CreateToggle({Name='Beast ESP',CurrentValue=true,Flag=nil,Callback=
 function(af)ae=af UpdateBeastESP()end})local ag=true function UpdatePlrESP()for ah,ai in pairs(game.Players:GetPlayers()
