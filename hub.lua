@@ -251,37 +251,38 @@ MouseEnter:Connect(function()local ac=game:GetService('TweenService')ac:Create(X
 Exponential),{BackgroundColor3=l.ElementBackgroundHover}):Play()end)X.MouseLeave:Connect(function()local ac=game:
 GetService('TweenService')ac:Create(X,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{BackgroundColor3=l.
 ElementBackground}):Play()end)table.insert(V.Content,X)if V.Active then X.Parent=G end end T.CreateToggle=function(aa,ab
-)local ac=Instance.new('Frame')ac.BorderSizePixel=0 ac.BackgroundColor3=l.ElementBackground ac.AutomaticSize=Enum.
-AutomaticSize.X ac.Size=UDim2.new(0,0,0,40)Instance.new('UICorner',ac)local V=Instance.new('UIStroke',ac)V.Color=l.
-ElementStroke Instance.new('UIFlexItem',ac)local W=Instance.new('UIListLayout',ac)W.HorizontalFlex=Enum.UIFlexAlignment.
-SpaceBetween W.Padding=UDim.new(0,15)W.VerticalAlignment=Enum.VerticalAlignment.Center W.SortOrder=Enum.SortOrder.
-LayoutOrder W.FillDirection=Enum.FillDirection.Horizontal local X=Instance.new('UIPadding',ac)X.PaddingRight=UDim.new(0,
-10)X.PaddingLeft=UDim.new(0,10)local Y=Instance.new('UIFlexItem')Y.FlexMode=Enum.UIFlexMode.Grow local Z=Instance.new(
-'TextLabel',ac)Z.BorderSizePixel=0 Z.TextSize=18 Z.FontFace=Font.new('rbxasset://fonts/families/SourceSansPro.json',Enum
-.FontWeight.Regular,Enum.FontStyle.Normal)Z.TextColor3=l.TextColor Z.BackgroundTransparency=1 Z.Size=UDim2.new(0,0,0,30)
-Z.Text=ab.Name Z.AutomaticSize=Enum.AutomaticSize.X local _=Instance.new('Frame',ac)_.BorderSizePixel=0 _.
-BackgroundColor3=l.ToggleBackground _.Size=UDim2.new(0,60,0,30)local ad=Instance.new('UIStroke',_)ad.Color=l.
-ToggleDisabledOuterStroke local ae=Instance.new('UICorner',_)ae.CornerRadius=UDim.new(0,999)local af=Instance.new(
-'Frame',_)af.BorderSizePixel=0 af.BackgroundColor3=l.ToggleDisabled af.Size=UDim2.new(0,20,0,20)af.Position=UDim2.new(0,
-5,0,5)local ag=Instance.new('UICorner',af)ag.CornerRadius=UDim.new(0,999)local ah=Instance.new('UIStroke',af)ah.Color=l.
-ToggleDisabledStroke local ai={}ai.CurrentValue=ab.CurrentValue ai.Set=function(aj,ak)aj.CurrentValue=ak if ab.Flag then
-K.Flags[ab.Flag]=ak SaveConfig()end task.spawn(function()ab.Callback(ak)end)if ak then local al=game:GetService(
-'TweenService')al:Create(ad,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{Color=l.ToggleEnabledOuterStroke}):Play()al
-:Create(af,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{BackgroundColor3=l.ToggleEnabled}):Play()al:Create(af,
-TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{Position=UDim2.new(0,35,0,5)}):Play()al:Create(ah,TweenInfo.new(0.6,
-Enum.EasingStyle.Exponential),{Color=l.ToggleEnabledStroke}):Play()else local al=game:GetService('TweenService')al:
-Create(ad,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{Color=l.ToggleDisabledOuterStroke}):Play()al:Create(af,
-TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{BackgroundColor3=l.ToggleDisabled}):Play()al:Create(af,TweenInfo.new(
-0.6,Enum.EasingStyle.Exponential),{Position=UDim2.new(0,5,0,5)}):Play()al:Create(ah,TweenInfo.new(0.6,Enum.EasingStyle.
-Exponential),{Color=l.ToggleDisabledStroke}):Play()end end ai.Toggle=function(aj)aj:Set(not aj.CurrentValue)end if ab.
-CurrentValue then ai:Set(ab.CurrentValue)end if ab.Flag and K.Flags[ab.Flag]then ai:Set(K.Flags[ab.Flag])end ac.
-InputBegan:Connect(function(aj)if aj.UserInputType==Enum.UserInputType.MouseButton1 or aj.UserInputType==Enum.
-UserInputType.Touch then ai:Toggle()end end)ac.MouseEnter:Connect(function()local aj=game:GetService('TweenService')aj:
-Create(ac,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{BackgroundColor3=l.ElementBackgroundHover}):Play()end)ac.
-MouseLeave:Connect(function()local aj=game:GetService('TweenService')aj:Create(ac,TweenInfo.new(0.6,Enum.EasingStyle.
-Exponential),{BackgroundColor3=l.ElementBackground}):Play()end)table.insert(aa.Content,ac)if aa.Active then ac.Parent=G
-end return ai end T.CreateSlider=function(aa,ab)local ac=Instance.new('Frame')ac.BorderSizePixel=0 ac.BackgroundColor3=l
-.ElementBackground ac.AutomaticSize=Enum.AutomaticSize.X ac.Size=UDim2.new(0,0,0,40)Instance.new('UICorner',ac)local ad=
+)if ab.Flag and K.Flags[ab.Flag]then ab.CurrentValue=K.Flags[ab.Flag]end local ac=Instance.new('Frame')ac.
+BorderSizePixel=0 ac.BackgroundColor3=l.ElementBackground ac.AutomaticSize=Enum.AutomaticSize.X ac.Size=UDim2.new(0,0,0,
+40)Instance.new('UICorner',ac)local V=Instance.new('UIStroke',ac)V.Color=l.ElementStroke Instance.new('UIFlexItem',ac)
+local W=Instance.new('UIListLayout',ac)W.HorizontalFlex=Enum.UIFlexAlignment.SpaceBetween W.Padding=UDim.new(0,15)W.
+VerticalAlignment=Enum.VerticalAlignment.Center W.SortOrder=Enum.SortOrder.LayoutOrder W.FillDirection=Enum.
+FillDirection.Horizontal local X=Instance.new('UIPadding',ac)X.PaddingRight=UDim.new(0,10)X.PaddingLeft=UDim.new(0,10)
+local Y=Instance.new('UIFlexItem')Y.FlexMode=Enum.UIFlexMode.Grow local Z=Instance.new('TextLabel',ac)Z.BorderSizePixel=
+0 Z.TextSize=18 Z.FontFace=Font.new('rbxasset://fonts/families/SourceSansPro.json',Enum.FontWeight.Regular,Enum.
+FontStyle.Normal)Z.TextColor3=l.TextColor Z.BackgroundTransparency=1 Z.Size=UDim2.new(0,0,0,30)Z.Text=ab.Name Z.
+AutomaticSize=Enum.AutomaticSize.X local _=Instance.new('Frame',ac)_.BorderSizePixel=0 _.BackgroundColor3=l.
+ToggleBackground _.Size=UDim2.new(0,60,0,30)local ad=Instance.new('UIStroke',_)ad.Color=l.ToggleDisabledOuterStroke
+local ae=Instance.new('UICorner',_)ae.CornerRadius=UDim.new(0,999)local af=Instance.new('Frame',_)af.BorderSizePixel=0
+af.BackgroundColor3=l.ToggleDisabled af.Size=UDim2.new(0,20,0,20)af.Position=UDim2.new(0,5,0,5)local ag=Instance.new(
+'UICorner',af)ag.CornerRadius=UDim.new(0,999)local ah=Instance.new('UIStroke',af)ah.Color=l.ToggleDisabledStroke local
+ai={}ai.CurrentValue=ab.CurrentValue ai.Set=function(aj,ak)aj.CurrentValue=ak if ab.Flag then K.Flags[ab.Flag]=ak
+SaveConfig()end task.spawn(function()ab.Callback(ak)end)if ak then local al=game:GetService('TweenService')al:Create(ad,
+TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{Color=l.ToggleEnabledOuterStroke}):Play()al:Create(af,TweenInfo.new(0.6
+,Enum.EasingStyle.Exponential),{BackgroundColor3=l.ToggleEnabled}):Play()al:Create(af,TweenInfo.new(0.6,Enum.EasingStyle
+.Exponential),{Position=UDim2.new(0,35,0,5)}):Play()al:Create(ah,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{Color=
+l.ToggleEnabledStroke}):Play()else local al=game:GetService('TweenService')al:Create(ad,TweenInfo.new(0.6,Enum.
+EasingStyle.Exponential),{Color=l.ToggleDisabledOuterStroke}):Play()al:Create(af,TweenInfo.new(0.6,Enum.EasingStyle.
+Exponential),{BackgroundColor3=l.ToggleDisabled}):Play()al:Create(af,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{
+Position=UDim2.new(0,5,0,5)}):Play()al:Create(ah,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{Color=l.
+ToggleDisabledStroke}):Play()end end ai.Toggle=function(aj)aj:Set(not aj.CurrentValue)end if ab.CurrentValue then ai:
+Set(ab.CurrentValue)end ac.InputBegan:Connect(function(aj)if aj.UserInputType==Enum.UserInputType.MouseButton1 or aj.
+UserInputType==Enum.UserInputType.Touch then ai:Toggle()end end)ac.MouseEnter:Connect(function()local aj=game:
+GetService('TweenService')aj:Create(ac,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{BackgroundColor3=l.
+ElementBackgroundHover}):Play()end)ac.MouseLeave:Connect(function()local aj=game:GetService('TweenService')aj:Create(ac,
+TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{BackgroundColor3=l.ElementBackground}):Play()end)table.insert(aa.
+Content,ac)if aa.Active then ac.Parent=G end return ai end T.CreateSlider=function(aa,ab)if ab.Flag and K.Flags[ab.Flag]
+then ab.CurrentValue=K.Flags[ab.Flag]end local ac=Instance.new('Frame')ac.BorderSizePixel=0 ac.BackgroundColor3=l.
+ElementBackground ac.AutomaticSize=Enum.AutomaticSize.X ac.Size=UDim2.new(0,0,0,40)Instance.new('UICorner',ac)local ad=
 Instance.new('UIStroke',ac)ad.Color=l.ElementStroke Instance.new('UIFlexItem',ac)local ae=Instance.new('UIListLayout',ac
 )ae.HorizontalFlex=Enum.UIFlexAlignment.SpaceBetween ae.Padding=UDim.new(0,15)ae.VerticalAlignment=Enum.
 VerticalAlignment.Center ae.SortOrder=Enum.SortOrder.LayoutOrder ae.FillDirection=Enum.FillDirection.Horizontal local af
@@ -297,83 +298,83 @@ new(0,999)local W={}local X=ab.Range and ab.Range[1]or 0 local Y=ab.Range and ab
 0.1 W.CurrentValue=ab.CurrentValue W.Set=function(_,am)local an=math.clamp(am,X,Y)_.CurrentValue=an if ab.Flag then K.
 Flags[ab.Flag]=an SaveConfig()end ah.Text=ab.Name..': '..an..(ab.Suffix or'')local ao=game:GetService('TweenService')
 local ap=(an-X)/(Y-X)ao:Create(al,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{Size=UDim2.new(ap,0,1,0)}):Play()task
-.spawn(function()ab.Callback(an)end)end if ab.CurrentValue then W:Set(ab.CurrentValue)end if ab.Flag and K.Flags[ab.Flag
-]then W:Set(K.Flags[ab.Flag])end ac.MouseEnter:Connect(function()local am=game:GetService('TweenService')am:Create(ac,
-TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{BackgroundColor3=l.ElementBackgroundHover}):Play()end)ac.MouseLeave:
-Connect(function()local am=game:GetService('TweenService')am:Create(ac,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{
-BackgroundColor3=l.ElementBackground}):Play()end)local am=nil ai.InputBegan:Connect(function(an)if an.UserInputType==
-Enum.UserInputType.MouseButton1 or an.UserInputType==Enum.UserInputType.Touch then local ao=game:GetService(
-'UserInputService')local ap=ai.AbsoluteSize.X am=game:GetService('RunService').Stepped:Connect(function()local _=ao:
-GetMouseLocation().X-ai.AbsolutePosition.X local aq=_/ap local ar=X+(aq*(Y-X))ar=math.floor(ar/Z)*Z local as=1/Z ar=math
-.round(ar*as)/as W:Set(ar)end)end end)ai.InputEnded:Connect(function(an)if an.UserInputType==Enum.UserInputType.
-MouseButton1 or an.UserInputType==Enum.UserInputType.Touch then am:Disconnect()am=nil end end)table.insert(aa.Content,ac
-)if aa.Active then ac.Parent=G end return W end T.CreateKeybind=function(aa,ab)if ab.Flag and K.Flags[ab.Flag]then ab.
-CurrentKeybind=K.Flags[ab.Flag]SaveConfig()end local ac=Instance.new('Frame')ac.BorderSizePixel=0 ac.BackgroundColor3=l.
-ElementBackground ac.AutomaticSize=Enum.AutomaticSize.X ac.Size=UDim2.new(0,0,0,40)Instance.new('UICorner',ac)local ad=
-Instance.new('UIStroke',ac)ad.Color=l.ElementStroke Instance.new('UIFlexItem',ac)local ae=Instance.new('UIListLayout',ac
-)ae.HorizontalFlex=Enum.UIFlexAlignment.SpaceBetween ae.Padding=UDim.new(0,15)ae.VerticalAlignment=Enum.
-VerticalAlignment.Center ae.SortOrder=Enum.SortOrder.LayoutOrder ae.FillDirection=Enum.FillDirection.Horizontal local af
-=Instance.new('UIPadding',ac)af.PaddingRight=UDim.new(0,10)af.PaddingLeft=UDim.new(0,10)local ag=Instance.new(
-'UIFlexItem')ag.FlexMode=Enum.UIFlexMode.Grow local ah=Instance.new('TextLabel',ac)ah.BorderSizePixel=0 ah.TextSize=18
-ah.FontFace=Font.new('rbxasset://fonts/families/SourceSansPro.json',Enum.FontWeight.Regular,Enum.FontStyle.Normal)ah.
-TextColor3=l.TextColor ah.BackgroundTransparency=1 ah.Size=UDim2.new(0,0,0,30)ah.Text=ab.Name ah.AutomaticSize=Enum.
-AutomaticSize.X local ai=Instance.new('Frame',ac)ai.BorderSizePixel=0 ai.BackgroundColor3=l.InputBackground ai.Size=
-UDim2.new(0,30,0,30)local aj=Instance.new('UIStroke',ai)aj.Color=l.InputStroke local ak=Instance.new('UICorner',ai)ak.
-CornerRadius=UDim.new(0,3)local al=Instance.new('TextBox',ai)al.BorderSizePixel=0 al.TextSize=16 al.TextColor3=l.
-TextColor al.FontFace=Font.new('rbxasset://fonts/families/SourceSansPro.json',Enum.FontWeight.Regular,Enum.FontStyle.
-Normal)al.Size=UDim2.new(1,0,1,0)al.Text=ab.CurrentKeybind or''al.BackgroundTransparency=1 ac.InputBegan:Connect(
-function(am)if am.UserInputType==Enum.UserInputType.MouseButton1 or am.UserInputType==Enum.UserInputType.Touch then end
-end)ac.MouseEnter:Connect(function()local am=game:GetService('TweenService')am:Create(ac,TweenInfo.new(0.6,Enum.
-EasingStyle.Exponential),{BackgroundColor3=l.ElementBackgroundHover}):Play()end)ac.MouseLeave:Connect(function()local am
-=game:GetService('TweenService')am:Create(ac,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{BackgroundColor3=l.
-ElementBackground}):Play()end)local am=false al.Focused:Connect(function()am=true al.Text=''end)al.FocusLost:Connect(
-function()am=false if al.Text==nil or al.Text==''then al.Text=ab.CurrentKeybind end end)local an=al game:GetService(
-'UserInputService').InputBegan:Connect(function(ao,ap)if am then if ao.KeyCode~=Enum.KeyCode.Unknown then local aq=
-string.split(tostring(ao.KeyCode),'.')local ar=aq[3]an.Text=tostring(ar)ab.CurrentKeybind=tostring(ar)if ab.Flag then K.
-Flags[ab.Flag]=tostring(ar)SaveConfig()end an:ReleaseFocus()end elseif ab.CurrentKeybind~=nil and(ao.KeyCode==Enum.
-KeyCode[ab.CurrentKeybind]and not ap)then ab.Callback()end end)table.insert(aa.Content,ac)if aa.Active then ac.Parent=G
-end end T.CreateSection=function(aa,ab)local ac=Instance.new('TextLabel')ac.BorderSizePixel=0 ac.TextSize=20 ac.FontFace
-=Font.new('rbxasset://fonts/families/SourceSansPro.json',Enum.FontWeight.Regular,Enum.FontStyle.Normal)ac.TextColor3=l.
-TextColor ac.BackgroundTransparency=1 ac.Size=UDim2.new(0,0,0,30)ac.Text=ab ac.AutomaticSize=Enum.AutomaticSize.X table.
-insert(aa.Content,ac)if aa.Active then ac.Parent=G end end T.CreateDropdown=function(aa,ab)end T.CreateLabel=function(aa
-,ab)local ac=Instance.new('TextLabel')ac.BorderSizePixel=0 ac.TextSize=18 ac.FontFace=Font.new(
-'rbxasset://fonts/families/SourceSansPro.json',Enum.FontWeight.Regular,Enum.FontStyle.Normal)ac.TextColor3=l.TextColor
-ac.BackgroundTransparency=1 ac.Size=UDim2.new(0,0,0,30)ac.Text=ab ac.AutomaticSize=Enum.AutomaticSize.X table.insert(aa.
-Content,ac)if aa.Active then ac.Parent=G end end table.insert(K.Tabs,T)if K.Tabs[1].Name==M then selectTab()end return T
-end k.Frame=m h.Window=k return k end}return c end function a.d():typeof(__modImpl())local aa=a.cache.d if not aa then
-aa={c=__modImpl()}a.cache.d=aa end return aa.c end end do local function __modImpl()local aa=a.b()local ab={Name=
-"Luke's Script Hub",Icon=0,LoadingTitle="Luke's Script Hub",LoadingSubtitle='by @actuallyluke',ShowText='Menu',Theme=
-'Default',ToggleUIKeybind='K',DisableRayfieldPrompts=true,DisableBuildWarnings=false,ConfigurationSaving={Enabled=true,
-FolderName=nil,FileName='Lukes Script Hub'},KeySystem=false}local ac={}if aa.isKBM()then ac.Library=a.d()else ac.Library
-=loadstring(game:HttpGet('https://sirius.menu/rayfield'))()end ac.Window=ac.Library:CreateWindow(ab)return ac end
-function a.e():typeof(__modImpl())local aa=a.cache.e if not aa then aa={c=__modImpl()}a.cache.e=aa end return aa.c end
-end do local function __modImpl()local aa=a.e()local ab=a.b()local ac=aa.Window:CreateTab('Universal','globe')local ad=
-ac:CreateSection('Noclip')local ae=ac:CreateToggle({Name='Toggle Noclip',CurrentValue=false,Flag=nil,Callback=function(
-ae)ab.Noclip.set_manual(ae)if ae then ab.Noclip.enable()else ab.Noclip.disable()end end})local af=ac:CreateKeybind({Name
-='Toggle Noclip',CurrentKeybind='V',HoldToInteract=false,Flag='NoClipKeybind',Callback=function()if ae.CurrentValue then
-aa.Library:Notify({Title='Noclip Disabled',Content='Noclip is now disabled.',Duration=3,Image='ban'})else aa.Library:
-Notify({Title='Noclip Enabled',Content='Noclip is now enabled.',Duration=3,Image='check'})end ae:Set(not ae.CurrentValue
-)end})local ag=ac:CreateSection('Path')local ah=false local ai=ac:CreateKeybind({Name='Toggle Paths',CurrentKeybind='N',
-HoldToInteract=false,Flag='PathKeybind',Callback=function()ah=not ah end})task.spawn(function()local aj=nil local 
-function getPath()if not aj then aj=Instance.new('Part',game.Workspace)aj.Size=Vector3.new(3,1,3)aj.Anchored=true end
-return aj end while task.wait()do if ah==true then local ak=getPath()local al=game:GetService('Players').LocalPlayer
-local am=al and al.Character local an=am and am:FindFirstChild('HumanoidRootPart')local ao=am and am:
-FindFirstChildWhichIsA('Humanoid')local ap=ao and ao.RigType if an and ao and ap then if ap==Enum.HumanoidRigType.R15
-then local aq=an.Size.Y local ar=ao.HipHeight ak.CFrame=an.CFrame*CFrame.new(0,-(aq/2)-ar-0.5,0)else local aq=am and am:
-FindFirstChild('Left Leg')if aq then local ar=an.Size.Y local as=aq.Size.Y ak.CFrame=an.CFrame*CFrame.new(0,-(ar/2)-as-
-0.5,0)end end end else if aj then aj:Destroy()aj=nil end end end end)local aj=ac:CreateSection('Ctrl+Click Delete')local
-ak=ac:CreateLabel([[Ctrl+Left-Click a part to delete. Ctrl+Right-Click to restore]])local al=true local am=ac:
-CreateToggle({Name='Ctrl+Click Delete',CurrentValue=true,Flag=nil,Callback=function(am)al=am end})task.spawn(function()
-local an=game:GetService('Players').LocalPlayer local ao=an:GetMouse()local ap=Instance.new('Folder',game.Workspace)ap.
-Name='DELETED_PARTS'local aq=1 local function isControlDown()local ar=game:GetService('UserInputService')return ar:
-IsKeyDown(Enum.KeyCode.LeftControl)or ar:IsKeyDown(Enum.KeyCode.LeftMeta)end ao.Button1Down:Connect(function()if not al
-then return end if not isControlDown()then return end if not ao.Target then return end local ar=Instance.new(
-'ObjectValue',ap)ar.Value=ao.Target ar.Name=''..aq local as=Instance.new('Vector3Value',ar)as.Value=ao.Target.Position
-as.Name='pos'ao.Target.Position=Vector3.new(100000000,100000000,100000000)aq=aq+1 end)ao.Button2Down:Connect(function()
-if not al then return end if not isControlDown()then return end ap:GetChildren()[#ap:GetChildren()].Value.Position=ap:
-GetChildren()[#ap:GetChildren()].pos.Value ap:GetChildren()[#ap:GetChildren()]:Destroy()end)local ar=Instance.new('Part'
-,game.Workspace)local as=Instance.new('ObjectValue',ap)as.Value=ar as.Name='0'local b=Instance.new('Vector3Value',as)b.
-Name='pos'b.Value=Vector3.new(100000000,100000000,100000000)end)local an=ac:CreateSection('Universal ESP')local function 
+.spawn(function()ab.Callback(an)end)end if ab.CurrentValue then W:Set(ab.CurrentValue)end ac.MouseEnter:Connect(function
+()local am=game:GetService('TweenService')am:Create(ac,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{BackgroundColor3
+=l.ElementBackgroundHover}):Play()end)ac.MouseLeave:Connect(function()local am=game:GetService('TweenService')am:Create(
+ac,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{BackgroundColor3=l.ElementBackground}):Play()end)local am=nil ai.
+InputBegan:Connect(function(an)if an.UserInputType==Enum.UserInputType.MouseButton1 or an.UserInputType==Enum.
+UserInputType.Touch then local ao=game:GetService('UserInputService')local ap=ai.AbsoluteSize.X am=game:GetService(
+'RunService').Stepped:Connect(function()local _=ao:GetMouseLocation().X-ai.AbsolutePosition.X local aq=_/ap local ar=X+(
+aq*(Y-X))ar=math.floor(ar/Z)*Z local as=1/Z ar=math.round(ar*as)/as W:Set(ar)end)end end)ai.InputEnded:Connect(function(
+an)if an.UserInputType==Enum.UserInputType.MouseButton1 or an.UserInputType==Enum.UserInputType.Touch then am:
+Disconnect()am=nil end end)table.insert(aa.Content,ac)if aa.Active then ac.Parent=G end return W end T.CreateKeybind=
+function(aa,ab)if ab.Flag and K.Flags[ab.Flag]then ab.CurrentKeybind=K.Flags[ab.Flag]end local ac=Instance.new('Frame')
+ac.BorderSizePixel=0 ac.BackgroundColor3=l.ElementBackground ac.AutomaticSize=Enum.AutomaticSize.X ac.Size=UDim2.new(0,0
+,0,40)Instance.new('UICorner',ac)local ad=Instance.new('UIStroke',ac)ad.Color=l.ElementStroke Instance.new('UIFlexItem',
+ac)local ae=Instance.new('UIListLayout',ac)ae.HorizontalFlex=Enum.UIFlexAlignment.SpaceBetween ae.Padding=UDim.new(0,15)
+ae.VerticalAlignment=Enum.VerticalAlignment.Center ae.SortOrder=Enum.SortOrder.LayoutOrder ae.FillDirection=Enum.
+FillDirection.Horizontal local af=Instance.new('UIPadding',ac)af.PaddingRight=UDim.new(0,10)af.PaddingLeft=UDim.new(0,10
+)local ag=Instance.new('UIFlexItem')ag.FlexMode=Enum.UIFlexMode.Grow local ah=Instance.new('TextLabel',ac)ah.
+BorderSizePixel=0 ah.TextSize=18 ah.FontFace=Font.new('rbxasset://fonts/families/SourceSansPro.json',Enum.FontWeight.
+Regular,Enum.FontStyle.Normal)ah.TextColor3=l.TextColor ah.BackgroundTransparency=1 ah.Size=UDim2.new(0,0,0,30)ah.Text=
+ab.Name ah.AutomaticSize=Enum.AutomaticSize.X local ai=Instance.new('Frame',ac)ai.BorderSizePixel=0 ai.BackgroundColor3=
+l.InputBackground ai.Size=UDim2.new(0,30,0,30)local aj=Instance.new('UIStroke',ai)aj.Color=l.InputStroke local ak=
+Instance.new('UICorner',ai)ak.CornerRadius=UDim.new(0,3)local al=Instance.new('TextBox',ai)al.BorderSizePixel=0 al.
+TextSize=16 al.TextColor3=l.TextColor al.FontFace=Font.new('rbxasset://fonts/families/SourceSansPro.json',Enum.
+FontWeight.Regular,Enum.FontStyle.Normal)al.Size=UDim2.new(1,0,1,0)al.Text=ab.CurrentKeybind or''al.
+BackgroundTransparency=1 ac.InputBegan:Connect(function(am)if am.UserInputType==Enum.UserInputType.MouseButton1 or am.
+UserInputType==Enum.UserInputType.Touch then end end)ac.MouseEnter:Connect(function()local am=game:GetService(
+'TweenService')am:Create(ac,TweenInfo.new(0.6,Enum.EasingStyle.Exponential),{BackgroundColor3=l.ElementBackgroundHover})
+:Play()end)ac.MouseLeave:Connect(function()local am=game:GetService('TweenService')am:Create(ac,TweenInfo.new(0.6,Enum.
+EasingStyle.Exponential),{BackgroundColor3=l.ElementBackground}):Play()end)local am=false al.Focused:Connect(function()
+am=true al.Text=''end)al.FocusLost:Connect(function()am=false if al.Text==nil or al.Text==''then al.Text=ab.
+CurrentKeybind end end)local an=al game:GetService('UserInputService').InputBegan:Connect(function(ao,ap)if am then if
+ao.KeyCode~=Enum.KeyCode.Unknown then local aq=string.split(tostring(ao.KeyCode),'.')local ar=aq[3]an.Text=tostring(ar)
+ab.CurrentKeybind=tostring(ar)if ab.Flag then K.Flags[ab.Flag]=tostring(ar)SaveConfig()end an:ReleaseFocus()end elseif
+ab.CurrentKeybind~=nil and(ao.KeyCode==Enum.KeyCode[ab.CurrentKeybind]and not ap)then ab.Callback()end end)table.insert(
+aa.Content,ac)if aa.Active then ac.Parent=G end end T.CreateSection=function(aa,ab)local ac=Instance.new('TextLabel')ac.
+BorderSizePixel=0 ac.TextSize=20 ac.FontFace=Font.new('rbxasset://fonts/families/SourceSansPro.json',Enum.FontWeight.
+Regular,Enum.FontStyle.Normal)ac.TextColor3=l.TextColor ac.BackgroundTransparency=1 ac.Size=UDim2.new(0,0,0,30)ac.Text=
+ab ac.AutomaticSize=Enum.AutomaticSize.X table.insert(aa.Content,ac)if aa.Active then ac.Parent=G end end T.
+CreateDropdown=function(aa,ab)end T.CreateLabel=function(aa,ab)local ac=Instance.new('TextLabel')ac.BorderSizePixel=0 ac
+.TextSize=18 ac.FontFace=Font.new('rbxasset://fonts/families/SourceSansPro.json',Enum.FontWeight.Regular,Enum.FontStyle.
+Normal)ac.TextColor3=l.TextColor ac.BackgroundTransparency=1 ac.Size=UDim2.new(0,0,0,30)ac.Text=ab ac.AutomaticSize=Enum
+.AutomaticSize.X table.insert(aa.Content,ac)if aa.Active then ac.Parent=G end end table.insert(K.Tabs,T)if K.Tabs[1].
+Name==M then selectTab()end return T end k.Frame=m h.Window=k return k end}return c end function a.d():typeof(__modImpl(
+))local aa=a.cache.d if not aa then aa={c=__modImpl()}a.cache.d=aa end return aa.c end end do local function __modImpl()
+local aa=a.b()local ab={Name="Luke's Script Hub",Icon=0,LoadingTitle="Luke's Script Hub",LoadingSubtitle=
+'by @actuallyluke',ShowText='Menu',Theme='Default',ToggleUIKeybind='K',DisableRayfieldPrompts=true,DisableBuildWarnings=
+false,ConfigurationSaving={Enabled=true,FolderName=nil,FileName='Lukes Script Hub'},KeySystem=false}local ac={}if aa.
+isKBM()then ac.Library=a.d()else ac.Library=loadstring(game:HttpGet('https://sirius.menu/rayfield'))()end ac.Window=ac.
+Library:CreateWindow(ab)return ac end function a.e():typeof(__modImpl())local aa=a.cache.e if not aa then aa={c=
+__modImpl()}a.cache.e=aa end return aa.c end end do local function __modImpl()local aa=a.e()local ab=a.b()local ac=aa.
+Window:CreateTab('Universal','globe')local ad=ac:CreateSection('Noclip')local ae=ac:CreateToggle({Name='Toggle Noclip',
+CurrentValue=false,Flag=nil,Callback=function(ae)ab.Noclip.set_manual(ae)if ae then ab.Noclip.enable()else ab.Noclip.
+disable()end end})local af=ac:CreateKeybind({Name='Toggle Noclip',CurrentKeybind='V',HoldToInteract=false,Flag=
+'NoClipKeybind',Callback=function()if ae.CurrentValue then aa.Library:Notify({Title='Noclip Disabled',Content=
+'Noclip is now disabled.',Duration=3,Image='ban'})else aa.Library:Notify({Title='Noclip Enabled',Content=
+'Noclip is now enabled.',Duration=3,Image='check'})end ae:Set(not ae.CurrentValue)end})local ag=ac:CreateSection('Path')
+local ah=false local ai=ac:CreateKeybind({Name='Toggle Paths',CurrentKeybind='N',HoldToInteract=false,Flag='PathKeybind'
+,Callback=function()ah=not ah end})task.spawn(function()local aj=nil local function getPath()if not aj then aj=Instance.
+new('Part',game.Workspace)aj.Size=Vector3.new(3,1,3)aj.Anchored=true end return aj end while task.wait()do if ah==true
+then local ak=getPath()local al=game:GetService('Players').LocalPlayer local am=al and al.Character local an=am and am:
+FindFirstChild('HumanoidRootPart')local ao=am and am:FindFirstChildWhichIsA('Humanoid')local ap=ao and ao.RigType if an
+and ao and ap then if ap==Enum.HumanoidRigType.R15 then local aq=an.Size.Y local ar=ao.HipHeight ak.CFrame=an.CFrame*
+CFrame.new(0,-(aq/2)-ar-0.5,0)else local aq=am and am:FindFirstChild('Left Leg')if aq then local ar=an.Size.Y local as=
+aq.Size.Y ak.CFrame=an.CFrame*CFrame.new(0,-(ar/2)-as-0.5,0)end end end else if aj then aj:Destroy()aj=nil end end end
+end)local aj=ac:CreateSection('Ctrl+Click Delete')local ak=ac:CreateLabel(
+[[Ctrl+Left-Click a part to delete. Ctrl+Right-Click to restore]])local al=true local am=ac:CreateToggle({Name=
+'Ctrl+Click Delete',CurrentValue=true,Flag=nil,Callback=function(am)al=am end})task.spawn(function()local an=game:
+GetService('Players').LocalPlayer local ao=an:GetMouse()local ap=Instance.new('Folder',game.Workspace)ap.Name=
+'DELETED_PARTS'local aq=1 local function isControlDown()local ar=game:GetService('UserInputService')return ar:IsKeyDown(
+Enum.KeyCode.LeftControl)or ar:IsKeyDown(Enum.KeyCode.LeftMeta)end ao.Button1Down:Connect(function()if not al then
+return end if not isControlDown()then return end if not ao.Target then return end local ar=Instance.new('ObjectValue',ap
+)ar.Value=ao.Target ar.Name=''..aq local as=Instance.new('Vector3Value',ar)as.Value=ao.Target.Position as.Name='pos'ao.
+Target.Position=Vector3.new(100000000,100000000,100000000)aq=aq+1 end)ao.Button2Down:Connect(function()if not al then
+return end if not isControlDown()then return end ap:GetChildren()[#ap:GetChildren()].Value.Position=ap:GetChildren()[#ap
+:GetChildren()].pos.Value ap:GetChildren()[#ap:GetChildren()]:Destroy()end)local ar=Instance.new('Part',game.Workspace)
+local as=Instance.new('ObjectValue',ap)as.Value=ar as.Name='0'local b=Instance.new('Vector3Value',as)b.Name='pos'b.Value
+=Vector3.new(100000000,100000000,100000000)end)local an=ac:CreateSection('Universal ESP')local function 
 updateUniversalESP(ao)for ap,aq in pairs(game:GetService('Players'):GetPlayers())do if aq.Character and aq~=game:
 GetService('Players').LocalPlayer then ab.updateESP(aq.Character,Color3.fromRGB(255,0,0),ao)end end end local ao=false
 local ap=ac:CreateToggle({Name='Universal ESP',CurrentValue=false,Flag=nil,Callback=function(ap)ao=ap
