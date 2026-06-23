@@ -42,51 +42,27 @@ if game.PlaceId == 142823291 then
 
 	local MMKillAllButton = MMTab:CreateButton({
 		Name = "Kill All (Murderer)",
-		Callback = function()
-			local plr = game:GetService("Players").LocalPlayer
-			local char = plr and plr.Character
-			local hum = char and char:FindFirstChild("Humanoid")
-			local root = char and char:FindFirstChild("HumanoidRootPart")
+		Callback = GameUtils.killAll,
+	})
 
-			if hum then
-				local backpack = plr:FindFirstChild("Backpack")
-				local knifeBackpack = backpack and backpack:FindFirstChild("Knife")
-
-				if knifeBackpack then
-					hum:EquipTool(knifeBackpack)
-					task.wait()
-				end
-
-				local knifePlayer = plr.Character:FindFirstChild("Knife")
-
-				if knifePlayer then
-					task.spawn(function()
-						local running = true
-						task.spawn(function()
-							task.wait(1)
-							running = false
-						end)
-						while running do
-							for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-								local pChar = v.Character
-								local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
-
-								if pChar and v ~= game:GetService("Players").LocalPlayer then
-									pRoot.CFrame = root.CFrame * CFrame.new(0, 0, -3)
-								end
-							end
-
-							task.wait()
-						end
-					end)
-
-					task.wait()
-
-					knifePlayer:Activate()
-				end
-			end
+	local auto_kill_all_toggled = false
+	local MMAutoKillAllToggle = MMTab:CreateToggle({
+		Name = "Auto Kill All",
+		CurrentValue = false,
+		Flag = nil,
+		Callback = function(value)
+			auto_kill_all_toggled = value
 		end,
 	})
+
+	task.spawn(function()
+		while task.wait() do
+			if auto_kill_all_toggled then
+				GameUtils.killAll()
+				task.wait(4)
+			end
+		end
+	end)
 
 	local MMShootMurdererKeybind = MMTab:CreateKeybind({
 		Name = "Shoot Murderer",

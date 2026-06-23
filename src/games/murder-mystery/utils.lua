@@ -189,4 +189,49 @@ function M.flingMurderer()
 	end
 end
 
+function M.killAll()
+	local plr = game:GetService("Players").LocalPlayer
+	local char = plr and plr.Character
+	local hum = char and char:FindFirstChild("Humanoid")
+	local root = char and char:FindFirstChild("HumanoidRootPart")
+
+	if hum then
+		local backpack = plr:FindFirstChild("Backpack")
+		local knifeBackpack = backpack and backpack:FindFirstChild("Knife")
+
+		if knifeBackpack then
+			hum:EquipTool(knifeBackpack)
+			task.wait()
+		end
+
+		local knifePlayer = plr.Character:FindFirstChild("Knife")
+
+		if knifePlayer then
+			task.spawn(function()
+				local running = true
+				task.spawn(function()
+					task.wait(1)
+					running = false
+				end)
+				while running do
+					for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+						local pChar = v.Character
+						local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
+
+						if pChar and v ~= game:GetService("Players").LocalPlayer then
+							pRoot.CFrame = root.CFrame * CFrame.new(0, 0, -3)
+						end
+					end
+
+					task.wait()
+				end
+			end)
+
+			task.wait()
+
+			knifePlayer:Activate()
+		end
+	end
+end
+
 return M

@@ -676,124 +676,126 @@ GetPlayers())do local aj=ai.Character if aj and ai~=game:GetService('Players').L
 else aa.updateESP(aj,Color3.fromRGB(0,255,0),ae)end end end end function ab.updateCoinESP(ae)local af=game.Workspace:
 FindFirstChild('CoinContainer',true)if af then for ag,ah in pairs(af:GetChildren())do if ah.Name=='CollectedCoin'then ah
 :Destroy()end end aa.updateESP(af,Color3.fromRGB(255,200,0),ae)end end function ab.flingMurderer()local ae=ab.
-getMurderer()if ae and ae~=game:GetService('Players').LocalPlayer then aa.flingPlayer(ae)end end return ab end function
-a.o():typeof(__modImpl())local aa=a.cache.o if not aa then aa={c=__modImpl()}a.cache.o=aa end return aa.c end end do
-local function __modImpl()local aa=a.e()local ab=a.b()local ac=a.o()if game.PlaceId==142823291 then local ad=aa.Window:
-CreateTab('Murder Mystery 2','gamepad-2')local ae=ad:CreateSection('ESP')local af=true local ag=ad:CreateToggle({Name=
-'Player ESP',CurrentValue=true,Flag=nil,Callback=function(ag)af=ag ac.updatePlayerESP(ag)end})game:GetService(
-'RunService').RenderStepped:Connect(function()if af then ac.updatePlayerESP(af)end end)local ah=true local ai=ad:
-CreateToggle({Name='Coin ESP',CurrentValue=true,Flag=nil,Callback=function(ai)ah=ai ac.updateCoinESP(ai)end})game:
-GetService('RunService').RenderStepped:Connect(function()if ah then ac.updateCoinESP(ah)end end)local aj=ad:
-CreateSection('Utils')local ak=ad:CreateButton({Name='Kill All (Murderer)',Callback=function()local ak=game:GetService(
-'Players').LocalPlayer local al=ak and ak.Character local am=al and al:FindFirstChild('Humanoid')local an=al and al:
-FindFirstChild('HumanoidRootPart')if am then local ao=ak:FindFirstChild('Backpack')local ap=ao and ao:FindFirstChild(
-'Knife')if ap then am:EquipTool(ap)task.wait()end local aq=ak.Character:FindFirstChild('Knife')if aq then task.spawn(
-function()local ar=true task.spawn(function()task.wait(1)ar=false end)while ar do for as,b in pairs(game:GetService(
-'Players'):GetPlayers())do local c=b.Character local d=c and c:FindFirstChild('HumanoidRootPart')if c and b~=game:
-GetService('Players').LocalPlayer then d.CFrame=an.CFrame*CFrame.new(0,0,-3)end end task.wait()end end)task.wait()aq:
-Activate()end end end})local al=ad:CreateKeybind({Name='Shoot Murderer',CurrentKeybind='G',HoldToInteract=false,Flag=
-'MMShootMurdererKeybind',Callback=function()local al=ac.getMurderer()if al then ac.tpShoot(al)end end})local am=true
-local an=ad:CreateToggle({Name='Auto Grab Gun',CurrentValue=true,Flag=nil,Callback=function(an)am=an end})task.spawn(
-function()local ao=true while task.wait()do if am then local ap=game.Workspace:FindFirstChild('GunDrop',true)if not ap
-and not ao then ao=true end if ap and ao then local aq=game:GetService('Players').LocalPlayer local ar=aq and aq.
-Character local as=ar and ar:FindFirstChild('HumanoidRootPart')local b=as and as.CFrame if as then task.wait(0.5)if not
-ab.isDev()then task.wait(0.1)end as.CFrame=ap.CFrame task.wait(0.1)as.CFrame=b end ao=false end end end end)local ao=ad:
-CreateButton({Name='Fling Murderer',Callback=function()ac.flingMurderer()end})local ap=false local aq=ad:CreateToggle({
-Name='Auto Fling Murderer',CurrentValue=false,Flag=nil,Callback=function(aq)ap=aq end})task.spawn(function()while task.
-wait()do if ap then local ar=ac.getMurderer()if ar then ac.flingMurderer()task.wait(4)end end end end)local ar=false
-local as=ad:CreateToggle({Name='Collect Coins',CurrentValue=false,Flag=nil,Callback=function(as)ar=as end})task.spawn(
-function()while task.wait()do if ar and not ab.get_safeTweening()then local b=game:GetService('Players').LocalPlayer
-local c=b and b.Character local d=c and c:FindFirstChild('HumanoidRootPart')if d then local e=game.Workspace:
-FindFirstChild('CoinContainer',true)if e then local f=nil local g=99999999 for h,i in pairs(e:GetChildren())do if i.Name
-=='Coin_Server'then local j=ab.dist3d(d.Position,i.Position)if j<g then g=j f=i end end end if f then ab.
-safeTweenToPart(f)end end end end end end)end return true end function a.p():typeof(__modImpl())local aa=a.cache.p if
-not aa then aa={c=__modImpl()}a.cache.p=aa end return aa.c end end do local function __modImpl()local aa=a.b()local ab={
-}function ab.getZombies()local ac=game.Workspace:FindFirstChild('Zombies')return(ac and ac:GetChildren())or{}end
-function ab.getBox()local ac=game.Workspace:FindFirstChild('Interactions')return ac and ac:FindFirstChild('Mystery')end
-function ab.getPack()local ac=game.Workspace:FindFirstChild('Interactions')return ac and ac:FindFirstChild(
-'Pack-a-Punch')end function ab.getPowerups()local ac=game.Workspace:FindFirstChild('Power-ups')return(ac and ac:
-GetChildren())or{}end function ab.updateZombieESP(ac)local ad=ab.getZombies()for ae,af in pairs(ad)do aa.updateESP(af,
-Color3.fromRGB(255,0,255),ac)end end function ab.updateBoxESP(ac)local ad=ab.getBox()if ad then aa.updateESP(ad,Color3.
-fromRGB(255,255,0),ac)end end function ab.updatePowerupESP(ac)local ad=ab.getPowerups()for ae,af in pairs(ad)do aa.
-updateESP(af,Color3.fromRGB(107,176,255),ac)end end return ab end function a.q():typeof(__modImpl())local aa=a.cache.q
-if not aa then aa={c=__modImpl()}a.cache.q=aa end return aa.c end end do local function __modImpl()local aa=a.e()local
-ab=a.q()if game.GameId==1003981402 then local ac=aa.Window:CreateTab('Reminiscence Zombies','gamepad-2')local ad=ac:
-CreateSection('ESP')local ae=true local af=ac:CreateToggle({Name='Zombie ESP',CurrentValue=true,Flag=nil,Callback=
-function(af)ae=af ab.updateZombieESP(af)end})local ag=true local ah=ac:CreateToggle({Name='Box ESP',CurrentValue=true,
-Flag=nil,Callback=function(ah)ag=ah ab.updateBoxESP(ah)end})local ai=true local aj=ac:CreateToggle({Name='Powerup ESP',
-CurrentValue=true,Flag=nil,Callback=function(aj)ai=aj ab.updatePowerupESP(aj)end})game:GetService('RunService').
-RenderStepped:Connect(function()if ae then ab.updateZombieESP(ae)end if ag then ab.updateBoxESP(ag)end if ai then ab.
-updatePowerupESP(ai)end end)local ak=ac:CreateSection('Utils')local al=ac:CreateKeybind({Name='TP to Box',CurrentKeybind
-='X',HoldToInteract=false,Flag='RZGotoBoxKeybind',Callback=function()local al=ab.getBox()if al then local am=al.
-PrimaryPart or al:FindFirstChildWhichIsA('BasePart')if am then local an=game:GetService('Players').LocalPlayer local ao=
-an and an.Character local ap=ao and ao:FindFirstChild('HumanoidRootPart')if ap then ap.CFrame=am.CFrame end end end end}
-)local am=ac:CreateKeybind({Name='TP to Pack',CurrentKeybind='Z',HoldToInteract=false,Flag='RZGotoPackKeybind',Callback=
-function()local am=ab.getPack()if am then local an=am.PrimaryPart or am:FindFirstChildWhichIsA('BasePart')if an then
-local ao=game:GetService('Players').LocalPlayer local ap=ao and ao.Character local aq=ap and ap:FindFirstChild(
-'HumanoidRootPart')if aq then aq.CFrame=an.CFrame end end end end})local an=true local ao=ac:CreateToggle({Name=
-'Bring Zombies (Right Click)',CurrentValue=true,Flag=nil,Callback=function(ao)an=ao end})task.spawn(function()local ap=
-game:GetService('Players').LocalPlayer local aq=ap and ap:GetMouse()local ar=false if aq then aq.Button2Down:Connect(
-function()ar=true end)aq.Button2Up:Connect(function()ar=false end)end game:GetService('RunService').RenderStepped:
-Connect(function()if an and ar then local as=ab.getZombies()for b,c in pairs(as)do local d=c:FindFirstChild(
-'HumanoidRootPart')or c.PrimaryPart if d then local e=game:GetService('Players').LocalPlayer local f=e and e.Character
-local g=f and f:FindFirstChild('HumanoidRootPart')if g then d.CFrame=g.CFrame*CFrame.new(0,0,-5)end end end end end)end)
-local ap=true local aq=ac:CreateToggle({Name='Auto Grab Powerups',CurrentValue=true,Flag=nil,Callback=function(aq)ap=aq
-end})game:GetService('RunService').RenderStepped:Connect(function()if ap then local ar=ab.getPowerups()for as,b in
-pairs(ar)do local c=game:GetService('Players').LocalPlayer local d=c and c.Character local e=d and d:FindFirstChild(
-'HumanoidRootPart')local f=b.PrimaryPart or b:FindFirstChildWhichIsA('BasePart')if f and e then f.CFrame=e.CFrame end
-end end end)end return true end function a.r():typeof(__modImpl())local aa=a.cache.r if not aa then aa={c=__modImpl()}a.
-cache.r=aa end return aa.c end end do local function __modImpl()local aa=a.b()local ab={}function ab.updateAnimalESP(ac)
-local ad=game.Workspace:FindFirstChild('Gameplay')local ae=ad and ad:FindFirstChild('Dynamic')local af=ae and ae:
-FindFirstChild('Animals')local ag=af and af:GetChildren()for ah,ai in pairs(ag)do aa.updateESP(ai,Color3.fromRGB(0,128,
-255),ac)end end function ab.getTeam()local ac=game:GetService('Players').LocalPlayer return(ac and ac.Team)or{Name=
-'Not in game'}end function ab.isAnimal()return ab.getTeam().Name=='Animal'end function ab.isKeeper()return ab.getTeam().
-Name=='Keeper'end function ab.isInGame()return ab.getTeam().Name~='Not in game'end function ab.getKeeper()for ac,ad in
-pairs(game:GetService('Players'):GetPlayers())do if ad.Team.Name=='Keeper'then return ad end end return nil end function
-ab.getClosestAnimal()local ac=game:GetService('Players').LocalPlayer local ad=ac and ac.Character local ae=ad and ad:
-FindFirstChild('HumanoidRootPart')local af=game:GetService('Players'):GetPlayers()local ag=nil local ah=99999999 for ai,
-aj in pairs(af)do local ak=aj.Character local al=ak and ak:FindFirstChild('HumanoidRootPart')if al and ae then local am=
-aa.dist3d(ae.Position,al.Position)if am<ah and aj~=ac and aj.Team.Name=='Animal'then ah=am ag=aj end end end return ag
-end function ab.getPlayersAnimal(ac)local ad=ac and ac.Character local ae=ad and ad:FindFirstChild('HumanoidRootPart')if
-ae then local af=game.Workspace:FindFirstChild('Gameplay')local ag=af and af:FindFirstChild('Dynamic')local ah=ag and ag
-:FindFirstChild('Animals')local ai=ah and ah:GetChildren()if ai then local aj=nil local ak=99999999 for al,am in pairs(
-ai)do local an=am.PrimaryPart if an then local ao=aa.dist3d(ae.Position,an.Position)if ao<ak then ak=ao aj=am end end
-end return aj end end return nil end return ab end function a.s():typeof(__modImpl())local aa=a.cache.s if not aa then
-aa={c=__modImpl()}a.cache.s=aa end return aa.c end end do local function __modImpl()local aa=a.e()local ab=a.b()local ac
-=a.s()if game.PlaceId==139233844569220 then local ad=aa.Window:CreateTab('ZOO or OOF','gamepad-2')local ae=ad:
-CreateSection('ESP')local af=true local ag=ad:CreateToggle({Name='Animal ESP',CurrentValue=true,Flag=nil,Callback=
-function(ag)af=ag ac.updateAnimalESP(ag)end})game:GetService('RunService').RenderStepped:Connect(function()if af then ac
-.updateAnimalESP(af)end end)local ah=ad:CreateSection('Farm')local ai=true local aj=ad:CreateToggle({Name='Auto Farm',
-CurrentValue=true,Flag=nil,Callback=function(aj)ai=aj end})task.spawn(function()local ak=false while task.wait()do if ai
-then if ak and not ac.isInGame()then ak=false end if ac.isAnimal()and not ak then local al=game:GetService('Players').
-LocalPlayer local am=al and al.Character local an=am and am:FindFirstChild('HumanoidRootPart')if an then task.wait((ab.
-isDev()and 1)or 2)an.CFrame=CFrame.new(1,51,224)task.wait(1)ak=true end end if ak then local al=ac.getKeeper()if al then
-local am=game:GetService('Players').LocalPlayer local an=am and am.Character local ao=an and an:FindFirstChild(
-'HumanoidRootPart')local ap=al.Character local aq=ap and ap:FindFirstChild('HumanoidRootPart')if ao and aq then ao.
-CFrame=aq.CFrame local ar={[1]='Taunt.play'}game:GetService('ReplicatedStorage').Net:FireServer(unpack(ar))end end end
-else ak=false end end end)local ak=true local al=ad:CreateToggle({Name='Auto Kill',CurrentValue=true,Flag=nil,Callback=
-function(al)ak=al end})task.spawn(function()while task.wait()do if ac.isKeeper()and ak then local am=game:GetService(
-'Players').LocalPlayer local an=am and am.Character local ao=an and an:FindFirstChild('HumanoidRootPart')local ap=ac.
-getClosestAnimal()if ap and ao then local aq=ac.getPlayersAnimal(ap)local ar=aq and aq.PrimaryPart if ar then local as={
-[1]='Shooting.shotPlayer',[2]=ao.CFrame,[3]=ar.CFrame,[4]=ap,[5]=ar,[6]=CFrame.new(0.8038291931152344,
-0.09816551208496094,-8.88824462890625E-4)*CFrame.Angles(3.1407759189605713,1.3910810947418213,3.129187822341919)}game:
-GetService('ReplicatedStorage').Net:FireServer(unpack(as))end end end end end)end return true end function a.t():typeof(
-__modImpl())local aa=a.cache.t if not aa then aa={c=__modImpl()}a.cache.t=aa end return aa.c end end do local function 
-__modImpl()a.h()a.j()a.l()a.n()a.p()a.r()a.t()return true end function a.u():typeof(__modImpl())local aa=a.cache.u if
-not aa then aa={c=__modImpl()}a.cache.u=aa end return aa.c end end do local function __modImpl()local aa=a.e()local ab={
-}local ac=aa.Window:CreateTab('Externals','telescope')ac:CreateSection('Dex')ab.dex_injected=false ab.iy_injected=false
-ab.rs_injected=false local ad=ac:CreateButton({Name='Inject Dex',Callback=function()if ab.dex_injected then return end
-ab.dex_injected=true loadstring(game:HttpGet([[https://raw.githubusercontent.com/infyiff/backup/main/dex.lua]]))()end})
-ab.DexToggle=ac:CreateToggle({Name='Load Dex on Startup',CurrentValue=false,Flag='LoadDexOnStartup',Callback=function(ae
-)end})ac:CreateSection('Infinite Yield')local ae=ac:CreateButton({Name='Inject IY',Callback=function()if ab.iy_injected
-then return end ab.iy_injected=true loadstring(game:HttpGet(
-[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]]))()end})ab.IYToggle=ac:CreateToggle({Name=
-'Load IY on Startup',CurrentValue=false,Flag='LoadIYOnStartup',Callback=function(af)end})ac:CreateSection('Cobalt Spy')
-local af=ac:CreateButton({Name='Inject Cobalt Spy',Callback=function()if ab.rs_injected then return end ab.rs_injected=
-true loadstring(game:HttpGet([[https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau]]))()end})ab.
-RSToggle=ac:CreateToggle({Name='Load Cobalt on Startup',CurrentValue=false,Flag='LoadRSOnStartup',Callback=function(ag)
-end})return ab end function a.v():typeof(__modImpl())local aa=a.cache.v if not aa then aa={c=__modImpl()}a.cache.v=aa
-end return aa.c end end end local aa=a.b()aa.WaitForGameAndPlayer()local ab=a.e()a.f()a.u()local ac=a.v()ab.Library:
-LoadConfiguration()if ac.DexToggle.CurrentValue then ac.dex_injected=true loadstring(game:HttpGet(
+getMurderer()if ae and ae~=game:GetService('Players').LocalPlayer then aa.flingPlayer(ae)end end function ab.killAll()
+local ae=game:GetService('Players').LocalPlayer local af=ae and ae.Character local ag=af and af:FindFirstChild(
+'Humanoid')local ah=af and af:FindFirstChild('HumanoidRootPart')if ag then local ai=ae:FindFirstChild('Backpack')local
+aj=ai and ai:FindFirstChild('Knife')if aj then ag:EquipTool(aj)task.wait()end local ak=ae.Character:FindFirstChild(
+'Knife')if ak then task.spawn(function()local al=true task.spawn(function()task.wait(1)al=false end)while al do for am,
+an in pairs(game:GetService('Players'):GetPlayers())do local ao=an.Character local ap=ao and ao:FindFirstChild(
+'HumanoidRootPart')if ao and an~=game:GetService('Players').LocalPlayer then ap.CFrame=ah.CFrame*CFrame.new(0,0,-3)end
+end task.wait()end end)task.wait()ak:Activate()end end end return ab end function a.o():typeof(__modImpl())local aa=a.
+cache.o if not aa then aa={c=__modImpl()}a.cache.o=aa end return aa.c end end do local function __modImpl()local aa=a.e(
+)local ab=a.b()local ac=a.o()if game.PlaceId==142823291 then local ad=aa.Window:CreateTab('Murder Mystery 2','gamepad-2'
+)local ae=ad:CreateSection('ESP')local af=true local ag=ad:CreateToggle({Name='Player ESP',CurrentValue=true,Flag=nil,
+Callback=function(ag)af=ag ac.updatePlayerESP(ag)end})game:GetService('RunService').RenderStepped:Connect(function()if
+af then ac.updatePlayerESP(af)end end)local ah=true local ai=ad:CreateToggle({Name='Coin ESP',CurrentValue=true,Flag=nil
+,Callback=function(ai)ah=ai ac.updateCoinESP(ai)end})game:GetService('RunService').RenderStepped:Connect(function()if ah
+then ac.updateCoinESP(ah)end end)local aj=ad:CreateSection('Utils')local ak=ad:CreateButton({Name='Kill All (Murderer)',
+Callback=ac.killAll})local al=false local am=ad:CreateToggle({Name='Auto Kill All',CurrentValue=false,Flag=nil,Callback=
+function(am)al=am end})task.spawn(function()while task.wait()do if al then ac.killAll()task.wait(4)end end end)local an=
+ad:CreateKeybind({Name='Shoot Murderer',CurrentKeybind='G',HoldToInteract=false,Flag='MMShootMurdererKeybind',Callback=
+function()local an=ac.getMurderer()if an then ac.tpShoot(an)end end})local ao=true local ap=ad:CreateToggle({Name=
+'Auto Grab Gun',CurrentValue=true,Flag=nil,Callback=function(ap)ao=ap end})task.spawn(function()local aq=true while task
+.wait()do if ao then local ar=game.Workspace:FindFirstChild('GunDrop',true)if not ar and not aq then aq=true end if ar
+and aq then local as=game:GetService('Players').LocalPlayer local b=as and as.Character local c=b and b:FindFirstChild(
+'HumanoidRootPart')local d=c and c.CFrame if c then task.wait(0.5)if not ab.isDev()then task.wait(0.1)end c.CFrame=ar.
+CFrame task.wait(0.1)c.CFrame=d end aq=false end end end end)local aq=ad:CreateButton({Name='Fling Murderer',Callback=
+function()ac.flingMurderer()end})local ar=false local as=ad:CreateToggle({Name='Auto Fling Murderer',CurrentValue=false,
+Flag=nil,Callback=function(as)ar=as end})task.spawn(function()while task.wait()do if ar then local b=ac.getMurderer()if
+b then ac.flingMurderer()task.wait(4)end end end end)local b=false local c=ad:CreateToggle({Name='Collect Coins',
+CurrentValue=false,Flag=nil,Callback=function(c)b=c end})task.spawn(function()while task.wait()do if b and not ab.
+get_safeTweening()then local d=game:GetService('Players').LocalPlayer local e=d and d.Character local f=e and e:
+FindFirstChild('HumanoidRootPart')if f then local g=game.Workspace:FindFirstChild('CoinContainer',true)if g then local h
+=nil local i=99999999 for j,k in pairs(g:GetChildren())do if k.Name=='Coin_Server'then local l=ab.dist3d(f.Position,k.
+Position)if l<i then i=l h=k end end end if h then ab.safeTweenToPart(h)end end end end end end)end return true end
+function a.p():typeof(__modImpl())local aa=a.cache.p if not aa then aa={c=__modImpl()}a.cache.p=aa end return aa.c end
+end do local function __modImpl()local aa=a.b()local ab={}function ab.getZombies()local ac=game.Workspace:
+FindFirstChild('Zombies')return(ac and ac:GetChildren())or{}end function ab.getBox()local ac=game.Workspace:
+FindFirstChild('Interactions')return ac and ac:FindFirstChild('Mystery')end function ab.getPack()local ac=game.Workspace
+:FindFirstChild('Interactions')return ac and ac:FindFirstChild('Pack-a-Punch')end function ab.getPowerups()local ac=game
+.Workspace:FindFirstChild('Power-ups')return(ac and ac:GetChildren())or{}end function ab.updateZombieESP(ac)local ad=ab.
+getZombies()for ae,af in pairs(ad)do aa.updateESP(af,Color3.fromRGB(255,0,255),ac)end end function ab.updateBoxESP(ac)
+local ad=ab.getBox()if ad then aa.updateESP(ad,Color3.fromRGB(255,255,0),ac)end end function ab.updatePowerupESP(ac)
+local ad=ab.getPowerups()for ae,af in pairs(ad)do aa.updateESP(af,Color3.fromRGB(107,176,255),ac)end end return ab end
+function a.q():typeof(__modImpl())local aa=a.cache.q if not aa then aa={c=__modImpl()}a.cache.q=aa end return aa.c end
+end do local function __modImpl()local aa=a.e()local ab=a.q()if game.GameId==1003981402 then local ac=aa.Window:
+CreateTab('Reminiscence Zombies','gamepad-2')local ad=ac:CreateSection('ESP')local ae=true local af=ac:CreateToggle({
+Name='Zombie ESP',CurrentValue=true,Flag=nil,Callback=function(af)ae=af ab.updateZombieESP(af)end})local ag=true local
+ah=ac:CreateToggle({Name='Box ESP',CurrentValue=true,Flag=nil,Callback=function(ah)ag=ah ab.updateBoxESP(ah)end})local
+ai=true local aj=ac:CreateToggle({Name='Powerup ESP',CurrentValue=true,Flag=nil,Callback=function(aj)ai=aj ab.
+updatePowerupESP(aj)end})game:GetService('RunService').RenderStepped:Connect(function()if ae then ab.updateZombieESP(ae)
+end if ag then ab.updateBoxESP(ag)end if ai then ab.updatePowerupESP(ai)end end)local ak=ac:CreateSection('Utils')local
+al=ac:CreateKeybind({Name='TP to Box',CurrentKeybind='X',HoldToInteract=false,Flag='RZGotoBoxKeybind',Callback=function(
+)local al=ab.getBox()if al then local am=al.PrimaryPart or al:FindFirstChildWhichIsA('BasePart')if am then local an=game
+:GetService('Players').LocalPlayer local ao=an and an.Character local ap=ao and ao:FindFirstChild('HumanoidRootPart')if
+ap then ap.CFrame=am.CFrame end end end end})local am=ac:CreateKeybind({Name='TP to Pack',CurrentKeybind='Z',
+HoldToInteract=false,Flag='RZGotoPackKeybind',Callback=function()local am=ab.getPack()if am then local an=am.PrimaryPart
+or am:FindFirstChildWhichIsA('BasePart')if an then local ao=game:GetService('Players').LocalPlayer local ap=ao and ao.
+Character local aq=ap and ap:FindFirstChild('HumanoidRootPart')if aq then aq.CFrame=an.CFrame end end end end})local an=
+true local ao=ac:CreateToggle({Name='Bring Zombies (Right Click)',CurrentValue=true,Flag=nil,Callback=function(ao)an=ao
+end})task.spawn(function()local ap=game:GetService('Players').LocalPlayer local aq=ap and ap:GetMouse()local ar=false if
+aq then aq.Button2Down:Connect(function()ar=true end)aq.Button2Up:Connect(function()ar=false end)end game:GetService(
+'RunService').RenderStepped:Connect(function()if an and ar then local as=ab.getZombies()for b,c in pairs(as)do local d=c
+:FindFirstChild('HumanoidRootPart')or c.PrimaryPart if d then local e=game:GetService('Players').LocalPlayer local f=e
+and e.Character local g=f and f:FindFirstChild('HumanoidRootPart')if g then d.CFrame=g.CFrame*CFrame.new(0,0,-5)end end
+end end end)end)local ap=true local aq=ac:CreateToggle({Name='Auto Grab Powerups',CurrentValue=true,Flag=nil,Callback=
+function(aq)ap=aq end})game:GetService('RunService').RenderStepped:Connect(function()if ap then local ar=ab.getPowerups(
+)for as,b in pairs(ar)do local c=game:GetService('Players').LocalPlayer local d=c and c.Character local e=d and d:
+FindFirstChild('HumanoidRootPart')local f=b.PrimaryPart or b:FindFirstChildWhichIsA('BasePart')if f and e then f.CFrame=
+e.CFrame end end end end)end return true end function a.r():typeof(__modImpl())local aa=a.cache.r if not aa then aa={c=
+__modImpl()}a.cache.r=aa end return aa.c end end do local function __modImpl()local aa=a.b()local ab={}function ab.
+updateAnimalESP(ac)local ad=game.Workspace:FindFirstChild('Gameplay')local ae=ad and ad:FindFirstChild('Dynamic')local
+af=ae and ae:FindFirstChild('Animals')local ag=af and af:GetChildren()for ah,ai in pairs(ag)do aa.updateESP(ai,Color3.
+fromRGB(0,128,255),ac)end end function ab.getTeam()local ac=game:GetService('Players').LocalPlayer return(ac and ac.Team
+)or{Name='Not in game'}end function ab.isAnimal()return ab.getTeam().Name=='Animal'end function ab.isKeeper()return ab.
+getTeam().Name=='Keeper'end function ab.isInGame()return ab.getTeam().Name~='Not in game'end function ab.getKeeper()for
+ac,ad in pairs(game:GetService('Players'):GetPlayers())do if ad.Team.Name=='Keeper'then return ad end end return nil end
+function ab.getClosestAnimal()local ac=game:GetService('Players').LocalPlayer local ad=ac and ac.Character local ae=ad
+and ad:FindFirstChild('HumanoidRootPart')local af=game:GetService('Players'):GetPlayers()local ag=nil local ah=99999999
+for ai,aj in pairs(af)do local ak=aj.Character local al=ak and ak:FindFirstChild('HumanoidRootPart')if al and ae then
+local am=aa.dist3d(ae.Position,al.Position)if am<ah and aj~=ac and aj.Team.Name=='Animal'then ah=am ag=aj end end end
+return ag end function ab.getPlayersAnimal(ac)local ad=ac and ac.Character local ae=ad and ad:FindFirstChild(
+'HumanoidRootPart')if ae then local af=game.Workspace:FindFirstChild('Gameplay')local ag=af and af:FindFirstChild(
+'Dynamic')local ah=ag and ag:FindFirstChild('Animals')local ai=ah and ah:GetChildren()if ai then local aj=nil local ak=
+99999999 for al,am in pairs(ai)do local an=am.PrimaryPart if an then local ao=aa.dist3d(ae.Position,an.Position)if ao<ak
+then ak=ao aj=am end end end return aj end end return nil end return ab end function a.s():typeof(__modImpl())local aa=a
+.cache.s if not aa then aa={c=__modImpl()}a.cache.s=aa end return aa.c end end do local function __modImpl()local aa=a.
+e()local ab=a.b()local ac=a.s()if game.PlaceId==139233844569220 then local ad=aa.Window:CreateTab('ZOO or OOF',
+'gamepad-2')local ae=ad:CreateSection('ESP')local af=true local ag=ad:CreateToggle({Name='Animal ESP',CurrentValue=true,
+Flag=nil,Callback=function(ag)af=ag ac.updateAnimalESP(ag)end})game:GetService('RunService').RenderStepped:Connect(
+function()if af then ac.updateAnimalESP(af)end end)local ah=ad:CreateSection('Farm')local ai=true local aj=ad:
+CreateToggle({Name='Auto Farm',CurrentValue=true,Flag=nil,Callback=function(aj)ai=aj end})task.spawn(function()local ak=
+false while task.wait()do if ai then if ak and not ac.isInGame()then ak=false end if ac.isAnimal()and not ak then local
+al=game:GetService('Players').LocalPlayer local am=al and al.Character local an=am and am:FindFirstChild(
+'HumanoidRootPart')if an then task.wait((ab.isDev()and 1)or 2)an.CFrame=CFrame.new(1,51,224)task.wait(1)ak=true end end
+if ak then local al=ac.getKeeper()if al then local am=game:GetService('Players').LocalPlayer local an=am and am.
+Character local ao=an and an:FindFirstChild('HumanoidRootPart')local ap=al.Character local aq=ap and ap:FindFirstChild(
+'HumanoidRootPart')if ao and aq then ao.CFrame=aq.CFrame local ar={[1]='Taunt.play'}game:GetService('ReplicatedStorage')
+.Net:FireServer(unpack(ar))end end end else ak=false end end end)local ak=true local al=ad:CreateToggle({Name=
+'Auto Kill',CurrentValue=true,Flag=nil,Callback=function(al)ak=al end})task.spawn(function()while task.wait()do if ac.
+isKeeper()and ak then local am=game:GetService('Players').LocalPlayer local an=am and am.Character local ao=an and an:
+FindFirstChild('HumanoidRootPart')local ap=ac.getClosestAnimal()if ap and ao then local aq=ac.getPlayersAnimal(ap)local
+ar=aq and aq.PrimaryPart if ar then local as={[1]='Shooting.shotPlayer',[2]=ao.CFrame,[3]=ar.CFrame,[4]=ap,[5]=ar,[6]=
+CFrame.new(0.8038291931152344,0.09816551208496094,-8.88824462890625E-4)*CFrame.Angles(3.1407759189605713,
+1.3910810947418213,3.129187822341919)}game:GetService('ReplicatedStorage').Net:FireServer(unpack(as))end end end end end
+)end return true end function a.t():typeof(__modImpl())local aa=a.cache.t if not aa then aa={c=__modImpl()}a.cache.t=aa
+end return aa.c end end do local function __modImpl()a.h()a.j()a.l()a.n()a.p()a.r()a.t()return true end function a.u():
+typeof(__modImpl())local aa=a.cache.u if not aa then aa={c=__modImpl()}a.cache.u=aa end return aa.c end end do local 
+function __modImpl()local aa=a.e()local ab={}local ac=aa.Window:CreateTab('Externals','telescope')ac:CreateSection('Dex'
+)ab.dex_injected=false ab.iy_injected=false ab.rs_injected=false local ad=ac:CreateButton({Name='Inject Dex',Callback=
+function()if ab.dex_injected then return end ab.dex_injected=true loadstring(game:HttpGet(
+[[https://raw.githubusercontent.com/infyiff/backup/main/dex.lua]]))()end})ab.DexToggle=ac:CreateToggle({Name=
+'Load Dex on Startup',CurrentValue=false,Flag='LoadDexOnStartup',Callback=function(ae)end})ac:CreateSection(
+'Infinite Yield')local ae=ac:CreateButton({Name='Inject IY',Callback=function()if ab.iy_injected then return end ab.
+iy_injected=true loadstring(game:HttpGet([[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]]))()end
+})ab.IYToggle=ac:CreateToggle({Name='Load IY on Startup',CurrentValue=false,Flag='LoadIYOnStartup',Callback=function(af)
+end})ac:CreateSection('Cobalt Spy')local af=ac:CreateButton({Name='Inject Cobalt Spy',Callback=function()if ab.
+rs_injected then return end ab.rs_injected=true loadstring(game:HttpGet(
+[[https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau]]))()end})ab.RSToggle=ac:CreateToggle({Name=
+'Load Cobalt on Startup',CurrentValue=false,Flag='LoadRSOnStartup',Callback=function(ag)end})return ab end function a.v(
+):typeof(__modImpl())local aa=a.cache.v if not aa then aa={c=__modImpl()}a.cache.v=aa end return aa.c end end end local
+aa=a.b()aa.WaitForGameAndPlayer()local ab=a.e()a.f()a.u()local ac=a.v()ab.Library:LoadConfiguration()if ac.DexToggle.
+CurrentValue then ac.dex_injected=true loadstring(game:HttpGet(
 [[https://rawscripts.net/raw/Universal-Script-DEX-Explorer-29920]]))()end if ac.IYToggle.CurrentValue then ac.
 iy_injected=true loadstring(game:HttpGet([[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]]))()end
 if ac.RSToggle.CurrentValue then ac.rs_injected=true loadstring(game:HttpGet(
