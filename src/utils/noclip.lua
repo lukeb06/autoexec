@@ -73,9 +73,9 @@ end
 
 function M.toggleNoclip()
 	if Clip then
-		M.enableNoclip()
+		M.enable()
 	else
-		M.disableNoclip()
+		M.disable()
 	end
 end
 

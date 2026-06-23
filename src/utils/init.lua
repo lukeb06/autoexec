@@ -123,13 +123,13 @@ function M.safeTweenToPart(part)
 		task.wait(0.1)
 		local conn = nil
 		safeTweening = true
-		M.enableNoclip()
+		M.Noclip.enable()
 		game.Workspace.Gravity = 0
 		conn = game:GetService("RunService").Heartbeat:Connect(function(dt)
 			if not root or not part or not part.Parent then
 				conn:Disconnect()
 				safeTweening = false
-				M.disableNoclip()
+				M.Noclip.disable()
 				game.Workspace.Gravity = 196.21
 				if hum then
 					hum:ChangeState(Enum.HumanoidStateType.GettingUp)
@@ -147,7 +147,7 @@ function M.safeTweenToPart(part)
 				root.CFrame = part.CFrame
 				conn:Disconnect()
 				safeTweening = false
-				M.disableNoclip()
+				M.Noclip.disable()
 				if hum then
 					hum:ChangeState(Enum.HumanoidStateType.GettingUp)
 				end
@@ -175,7 +175,7 @@ function M.flingCharacter(pChar)
 	local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
 
 	if root and pRoot then
-		M.enableNoclip()
+		M.Noclip.Noclip.enable()
 
 		task.wait(0.2)
 
@@ -258,7 +258,7 @@ function M.flingCharacter(pChar)
 				end
 			end
 
-			M.disableNoclip()
+			M.Noclip.disable()
 			flingloop:Disconnect()
 			M.breakVelocity(0.2)
 			task.wait(0.1)
