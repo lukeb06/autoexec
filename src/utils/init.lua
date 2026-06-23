@@ -112,7 +112,7 @@ function M.safeTweenToPart(part)
 		local root = char and char:FindFirstChild("HumanoidRootPart")
 		local hum = char and char:FindFirstChildWhichIsA("Humanoid")
 
-		local dist = dist3d(root.Position, part.Position)
+		local dist = M.dist3d(root.Position, part.Position)
 		local t = dist / safeTweenSpeed
 
 		safeTweening = true
@@ -153,7 +153,7 @@ function M.safeTweenToPart(part)
 				end
 				game.Workspace.Gravity = 196.21
 			else
-				local direction = dir3d(currentPos, targetPos)
+				local direction = M.dir3d(currentPos, targetPos)
 				local newPosition = currentPos + (direction * moveStep)
 
 				if hum then

@@ -580,7 +580,7 @@ if game.GameId == 372226183 then
 			if GameUtils.isInGame() and auto_hack_toggled and not GameUtils.isInDanger() and not hidingFromBeast then
 				local cComp = GameUtils.getClosestComputer(false)
 
-				if not safeTweening and cComp and cComp ~= computer then
+				if not Utils.get_safeTweening() and cComp and cComp ~= computer then
 					local spot = GameUtils.getValidSpot(cComp)
 
 					if spot then
