@@ -4993,7 +4993,7 @@ if game.GameId == 372226183 then
 		Increment = 1,
 		Suffix = "%",
 		CurrentValue = 100,
-		Flag = nil,
+		Flag = "FTFChaseMusicVolume",
 		Callback = function(value)
 			updateChaseVolume((value / 100) * defaultChaseMusicVolume)
 		end,
