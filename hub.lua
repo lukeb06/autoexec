@@ -1,7 +1,78 @@
 -- Start Custom UI Library
 
 local function InitUI()
-	local Library = {
+	local Library = {}
+
+	local CFileName = nil
+	local EZUIFOLDER = "EZUI"
+	local ConfigurationFolder = EZUIFOLDER .. "/Configurations"
+	local ConfigurationExtension = ".ez"
+
+	local function callSafely(func, ...)
+		if func then
+			local success, result = pcall(func, ...)
+			if not success then
+				warn("Function failed with error: ", result)
+				return false
+			else
+				return result
+			end
+		end
+	end
+
+	local function ensureFolder(folderPath)
+		if isfolder and not callSafely(isfolder, folderPath) then
+			callSafely(makefolder, folderPath)
+		end
+	end
+
+	local function SaveConfig()
+		print("Saving Config")
+		local data = {}
+		for i, v in pairs(Library.Flags) do
+			print(v)
+			if typeof(v) == "boolean" then
+				if v == false then
+					data[i] = false
+				else
+					data[i] = v
+				end
+			else
+				data[i] = v
+			end
+		end
+
+		callSafely(
+			writefile,
+			ConfigurationFolder .. "/" .. CFileName .. ConfigurationExtension,
+			tostring(game:GetService("HttpService"):JSONEncode(data))
+		)
+	end
+
+	local function LoadConfig()
+		callSafely(function()
+			if isfile then
+				if callSafely(isfile, ConfigurationFolder .. "/" .. CFileName .. ConfigurationExtension) then
+					local config =
+						callSafely(readfile, ConfigurationFolder .. "/" .. CFileName .. ConfigurationExtension)
+
+					if config then
+						local success, data = pcall(function()
+							return game:GetService("HttpService"):JSONDecode(config)
+						end)
+
+						if success then
+							for FlagName, Flag in pairs(data) do
+								Library.Flags[FlagName] = Flag
+							end
+						end
+					end
+				end
+			end
+		end)
+	end
+
+	Library = {
 		Flags = {},
 		Theme = {
 			Default = {
@@ -413,6 +484,25 @@ local function InitUI()
 			if settings.Theme then
 				self.CurrentTheme = settings.Theme
 			end
+
+			callSafely(function()
+				if not settings.ConfigurationSaving.FileName then
+					settings.ConfigurationSaving.FileName = tostring(game.PlaceId)
+				end
+
+				if settings.ConfigurationSaving.Enabled == nil then
+					settings.ConfigurationSaving.Enabled = false
+				end
+
+				CFileName = settings.ConfigurationSaving.FileName
+				ConfigurationFolder = settings.ConfigurationSaving.FolderName or ConfigurationFolder
+
+				if settings.ConfigurationSaving.Enabled then
+					ensureFolder(ConfigurationFolder)
+				end
+			end)
+
+			LoadConfig()
 
 			local theme = self:GetTheme()
 			local frame = Instance.new("Frame", ui)
@@ -877,6 +967,12 @@ local function InitUI()
 					Toggle.CurrentValue = settings.CurrentValue
 					Toggle.Set = function(self, value)
 						self.CurrentValue = value
+
+						if settings.Flag then
+							cw_self.Flags[settings.Flag] = value
+							SaveConfig()
+						end
+
 						task.spawn(function()
 							settings.Callback(value)
 						end)
@@ -933,6 +1029,10 @@ local function InitUI()
 
 					if settings.CurrentValue then
 						Toggle:Set(settings.CurrentValue)
+					end
+
+					if settings.Flag and cw_self.Flags[settings.Flag] then
+						Toggle:Set(cw_self.Flags[settings.Flag])
 					end
 
 					toggle.InputBegan:Connect(function(input)
@@ -1043,6 +1143,10 @@ local function InitUI()
 					Slider.Set = function(self, value)
 						local cvalue = math.clamp(value, min, max)
 						self.CurrentValue = cvalue
+						if settings.Flag then
+							cw_self.Flags[settings.Flag] = cvalue
+							SaveConfig()
+						end
 						label.Text = settings.Name .. ": " .. cvalue .. (settings.Suffix or "")
 
 						local TS = game:GetService("TweenService")
@@ -1060,6 +1164,10 @@ local function InitUI()
 
 					if settings.CurrentValue then
 						Slider:Set(settings.CurrentValue)
+					end
+
+					if settings.Flag and cw_self.Flags[settings.Flag] then
+						Slider:Set(cw_self.Flags[settings.Flag])
 					end
 
 					slider.MouseEnter:Connect(function()
@@ -1123,6 +1231,11 @@ local function InitUI()
 				end
 
 				tab.CreateKeybind = function(self, settings)
+					if settings.Flag and cw_self.Flags[settings.Flag] then
+						settings.CurrentKeybind = cw_self.Flags[settings.Flag]
+						SaveConfig()
+					end
+
 					local toggle = Instance.new("Frame")
 					toggle.BorderSizePixel = 0
 					toggle.BackgroundColor3 = theme.ElementBackground
@@ -1235,6 +1348,10 @@ local function InitUI()
 								local NewKeyNoEnum = SplitMessage[3]
 								_input.Text = tostring(NewKeyNoEnum)
 								settings.CurrentKeybind = tostring(NewKeyNoEnum)
+								if settings.Flag then
+									cw_self.Flags[settings.Flag] = tostring(NewKeyNoEnum)
+									SaveConfig()
+								end
 								_input:ReleaseFocus()
 							end
 						elseif
@@ -3207,9 +3324,12 @@ if game.PlaceId == 142823291 then
 					local pos = root and root.CFrame
 
 					if root then
-						task.wait(1)
+						task.wait(0.5)
+						if not isDev() then
+							task.wait(0.1)
+						end
 						root.CFrame = gun.CFrame
-						task.wait(0.2)
+						task.wait(0.1)
 						root.CFrame = pos
 					end
 
@@ -3672,6 +3792,11 @@ if game.GameId == 372226183 then
 		end
 	end
 
+	local function getStats(plr)
+		local stats = plr and plr:FindFirstChild("TempPlayerStatsModule")
+		return stats
+	end
+
 	local function isRagdoll(plr)
 		local stats = getStats(plr)
 		local ragdoll = stats and stats:FindFirstChild("Ragdoll")
@@ -3801,11 +3926,6 @@ if game.GameId == 372226183 then
 		end
 
 		return players
-	end
-
-	local function getStats(plr)
-		local stats = plr and plr:FindFirstChild("TempPlayerStatsModule")
-		return stats
 	end
 
 	local function isPlayerCaptured(plr)
