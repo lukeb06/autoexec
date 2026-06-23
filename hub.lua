@@ -1,150 +1,150 @@
-local __DARKLUA_BUNDLE_MODULES={cache={}::any}do do local function __modImpl()local Noclipping=nil
-local Clip=true
+local a={cache={}::any}do do local function __modImpl()local b=nil
+local c=true
 
-local manual_noclip=false
+local d=false
 
-local M={}
+local e={}
 
-function M.set_manual(value)
-manual_noclip=value
+function e.set_manual(f)
+d=f
 end
 
-function M.get_manual()
-return manual_noclip
+function e.get_manual()
+return d
 end
 
-function M.enable()
-local speaker=game:GetService("Players").LocalPlayer
-local RunService=game:GetService("RunService")
+function e.enable()
+local f=game:GetService("Players").LocalPlayer
+local g=game:GetService("RunService")
 
-Clip=false
+c=false
 task.wait(0.1)
 local function NoclipLoop()
-if Clip==false and speaker.Character~=nil then
-for _,child in pairs(speaker.Character:GetDescendants())do
-if child:IsA("BasePart")and child.CanCollide==true then
-local hasCouldCollide=child:FindFirstChild("CouldCollide")
-if not hasCouldCollide then
-local couldCollide=Instance.new("BoolValue")
-couldCollide.Name="CouldCollide"
-couldCollide.Value=child.CanCollide
-couldCollide.Parent=child
+if c==false and f.Character~=nil then
+for h,i in pairs(f.Character:GetDescendants())do
+if i:IsA("BasePart")and i.CanCollide==true then
+local j=i:FindFirstChild("CouldCollide")
+if not j then
+local k=Instance.new("BoolValue")
+k.Name="CouldCollide"
+k.Value=i.CanCollide
+k.Parent=i
 end
-child.CanCollide=false
+i.CanCollide=false
 end
-if child:IsA("BasePart")and child.Transparency~=1 and child.Transparency~=0.5 then
-local trans=Instance.new("NumberValue")
-trans.Name="Transparency"
-trans.Value=child.Transparency
-trans.Parent=child
-child.Transparency=0.5
-end
-end
+if i:IsA("BasePart")and i.Transparency~=1 and i.Transparency~=0.5 then
+local j=Instance.new("NumberValue")
+j.Name="Transparency"
+j.Value=i.Transparency
+j.Parent=i
+i.Transparency=0.5
 end
 end
-Noclipping=RunService.Stepped:Connect(NoclipLoop)
+end
+end
+b=g.Stepped:Connect(NoclipLoop)
 end
 
-function M.disable()
-if manual_noclip then
+function e.disable()
+if d then
 return
 end
-if Noclipping then
-Noclipping:Disconnect()
-local speaker=game:GetService("Players").LocalPlayer
-for _,child in pairs(speaker.Character:GetDescendants())do
-if child:IsA("BasePart")then
-local couldCollideValue=child:FindFirstChild("CouldCollide")
-if couldCollideValue then
-child.CanCollide=couldCollideValue.Value
-couldCollideValue:Destroy()
+if b then
+b:Disconnect()
+local f=game:GetService("Players").LocalPlayer
+for g,h in pairs(f.Character:GetDescendants())do
+if h:IsA("BasePart")then
+local i=h:FindFirstChild("CouldCollide")
+if i then
+h.CanCollide=i.Value
+i:Destroy()
 end
 
-local trans=child:FindFirstChild("Transparency")
-if trans then
-child.Transparency=trans.Value
-trans:Destroy()
+local j=h:FindFirstChild("Transparency")
+if j then
+h.Transparency=j.Value
+j:Destroy()
 end
 end
 end
 end
-Clip=true
+c=true
 end
 
-function M.toggleNoclip()
-if Clip then
-M.enableNoclip()
+function e.toggleNoclip()
+if c then
+e.enableNoclip()
 else
-M.disableNoclip()
+e.disableNoclip()
 end
 end
 
-return M end function __DARKLUA_BUNDLE_MODULES.a():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.a if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.a=v end return v.c end end do local function __modImpl()
+return e end function a.a():typeof(__modImpl())local b=a.cache.a if not b then b={c=__modImpl()}a.cache.a=b end return b.c end end do local function __modImpl()
 
-local Noclip=__DARKLUA_BUNDLE_MODULES.a()
+local b=a.a()
 
-local M={}
+local c={}
 
-function M.WaitForGameAndPlayer()
-local gameLoaded=false
-local playerLoaded=false
+function c.WaitForGameAndPlayer()
+local d=false
+local e=false
 
-while not(gameLoaded and playerLoaded)do
+while not(d and e)do
 if game:IsLoaded()then
-gameLoaded=true
+d=true
 end
 
 if game:GetService("Players").LocalPlayer then
-playerLoaded=true
+e=true
 end
 
 task.wait()
 end
 end
 
-function M.diff3d(origin,target)
-return target-origin
+function c.diff3d(d,e)
+return e-d
 end
 
-function M.dist3d(pos1,pos2)
-return M.diff3d(pos1,pos2).Magnitude
+function c.dist3d(d,e)
+return c.diff3d(d,e).Magnitude
 end
 
-function M.dir3d(origin,target)
-return M.diff3d(origin,target).Unit
+function c.dir3d(d,e)
+return c.diff3d(d,e).Unit
 end
 
-function M.isDev()
-local prefix="pathwise"
+function c.isDev()
+local d="pathwise"
 
-local plr=game:GetService("Players").LocalPlayer
+local e=game:GetService("Players").LocalPlayer
 
-if string.sub(plr.Name,1,#prefix)==prefix then
+if string.sub(e.Name,1,#d)==d then
 return true
 end
 
 return false
 end
 
-function M.isKBM()
-local UIS=game:GetService("UserInputService")
-return UIS.KeyboardEnabled and UIS.MouseEnabled
+function c.isKBM()
+local d=game:GetService("UserInputService")
+return d.KeyboardEnabled and d.MouseEnabled
 end
 
-M.Noclip=Noclip
+c.Noclip=b
 
-function M.breakVelocity(t)
+function c.breakVelocity(d)
 task.spawn(function()
-local speaker=game:GetService("Players").LocalPlayer
-local BeenASecond,V3=false,Vector3.new(0,0,0)
+local e=game:GetService("Players").LocalPlayer
+local f,g=false,Vector3.new(0,0,0)
 task.spawn(function()
-task.wait(t)
-BeenASecond=true
+task.wait(d)
+f=true
 end)
-while not BeenASecond do
-for _,v in ipairs(speaker.Character:GetDescendants())do
-if v:IsA("BasePart")then
-v.Velocity,v.RotVelocity=V3,V3
+while not f do
+for h,i in ipairs(e.Character:GetDescendants())do
+if i:IsA("BasePart")then
+i.Velocity,i.RotVelocity=g,g
 end
 end
 task.wait()
@@ -152,168 +152,168 @@ end
 end)
 end
 
-local safeTweenSpeed=20
-local safeTweening=false
+local d=20
+local e=false
 
-function M.get_safeTweening()
-return safeTweening
+function c.get_safeTweening()
+return e
 end
 
-function M.set_safeTweening(value)
-safeTweening=value
+function c.set_safeTweening(f)
+e=f
 end
 
-function M.safeTweenToPos(cframe)
-local TweenService=game:GetService("TweenService")
+function c.safeTweenToPos(f)
+local g=game:GetService("TweenService")
 
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
-local hum=char and char:FindFirstChildOfClass("Humanoid")
+local h=game:GetService("Players").LocalPlayer
+local i=h and h.Character
+local j=i and i:FindFirstChild("HumanoidRootPart")
+local k=i and i:FindFirstChildOfClass("Humanoid")
 
-local dist=M.dist3d(root.Position,cframe.Position)
-local t=dist/safeTweenSpeed
+local l=c.dist3d(j.Position,f.Position)
+local m=l/d
 
-safeTweening=true
-if hum and hum.SeatPart then
-hum.Sit=false
+e=true
+if k and k.SeatPart then
+k.Sit=false
 task.wait(0.1)
 end
 task.wait(0.1)
-TweenService:Create(root,TweenInfo.new(t,Enum.EasingStyle.Linear),{CFrame=cframe}):Play()
+g:Create(j,TweenInfo.new(m,Enum.EasingStyle.Linear),{CFrame=f}):Play()
 
-task.delay(t,function()
-safeTweening=false
+task.delay(m,function()
+e=false
 end)
-M.breakVelocity(t)
+c.breakVelocity(m)
 end
 
-function M.safeTweenToPart(part)
-if part:IsA("BasePart")then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
-local hum=char and char:FindFirstChildWhichIsA("Humanoid")
+function c.safeTweenToPart(f)
+if f:IsA("BasePart")then
+local g=game:GetService("Players").LocalPlayer
+local h=g and g.Character
+local i=h and h:FindFirstChild("HumanoidRootPart")
+local j=h and h:FindFirstChildWhichIsA("Humanoid")
 
-local dist=dist3d(root.Position,part.Position)
-local t=dist/safeTweenSpeed
+local k=dist3d(i.Position,f.Position)
+local l=k/d
 
-safeTweening=true
-if hum and hum.SeatPart then
-hum.Sit=false
+e=true
+if j and j.SeatPart then
+j.Sit=false
 task.wait(0.1)
 end
 task.wait(0.1)
-local conn=nil
-safeTweening=true
-M.enableNoclip()
+local m=nil
+e=true
+c.enableNoclip()
 game.Workspace.Gravity=0
-conn=game:GetService("RunService").Heartbeat:Connect(function(dt)
-if not root or not part or not part.Parent then
-conn:Disconnect()
-safeTweening=false
-M.disableNoclip()
+m=game:GetService("RunService").Heartbeat:Connect(function(n)
+if not i or not f or not f.Parent then
+m:Disconnect()
+e=false
+c.disableNoclip()
 game.Workspace.Gravity=196.21
-if hum then
-hum:ChangeState(Enum.HumanoidStateType.GettingUp)
+if j then
+j:ChangeState(Enum.HumanoidStateType.GettingUp)
 end
 return
 end
 
-local currentPos=root.Position
-local targetPos=part.Position
-local distance=M.dist3d(currentPos,targetPos)
+local o=i.Position
+local p=f.Position
+local q=c.dist3d(o,p)
 
-local moveStep=safeTweenSpeed*dt
+local r=d*n
 
-if distance<=moveStep then
-root.CFrame=part.CFrame
-conn:Disconnect()
-safeTweening=false
-M.disableNoclip()
-if hum then
-hum:ChangeState(Enum.HumanoidStateType.GettingUp)
+if q<=r then
+i.CFrame=f.CFrame
+m:Disconnect()
+e=false
+c.disableNoclip()
+if j then
+j:ChangeState(Enum.HumanoidStateType.GettingUp)
 end
 game.Workspace.Gravity=196.21
 else
-local direction=dir3d(currentPos,targetPos)
-local newPosition=currentPos+(direction*moveStep)
+local s=dir3d(o,p)
+local t=o+(s*r)
 
-if hum then
-hum:ChangeState(Enum.HumanoidStateType.Physics)
+if j then
+j:ChangeState(Enum.HumanoidStateType.Physics)
 end
 
-root.CFrame=CFrame.new(newPosition)*(part.CFrame-part.CFrame.Position)
+i.CFrame=CFrame.new(t)*(f.CFrame-f.CFrame.Position)
 end
 end)
-M.breakVelocity(t)
+c.breakVelocity(l)
 end
 end
 
-function M.flingCharacter(pChar)
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+function c.flingCharacter(f)
+local g=game:GetService("Players").LocalPlayer
+local h=g and g.Character
+local i=h and h:FindFirstChild("HumanoidRootPart")
 
-local pRoot=pChar and pChar:FindFirstChild("HumanoidRootPart")
+local j=f and f:FindFirstChild("HumanoidRootPart")
 
-if root and pRoot then
-M.enableNoclip()
+if i and j then
+c.enableNoclip()
 
 task.wait(0.2)
 
-local pos=root.CFrame
+local k=i.CFrame
 
 task.wait(0.1)
 
-for _,child in pairs(char:GetDescendants())do
-if child:IsA("BasePart")then
-child.CustomPhysicalProperties=PhysicalProperties.new(100,0.3,0.5)
+for l,m in pairs(h:GetDescendants())do
+if m:IsA("BasePart")then
+m.CustomPhysicalProperties=PhysicalProperties.new(100,0.3,0.5)
 end
 end
 
-for i,v in char:GetChildren()do
-if v:IsA("BasePart")then
-v.CanCollide=false
-v.Massless=true
-v.Velocity=Vector3.new(0,0,0)
+for l,m in h:GetChildren()do
+if m:IsA("BasePart")then
+m.CanCollide=false
+m.Massless=true
+m.Velocity=Vector3.new(0,0,0)
 end
 end
 
-local power=99999
-local spin=power
+local l=99999
+local m=l
 
-local flingloop
-flingloop=game:GetService("RunService").Heartbeat:Connect(function(dt)
-if not pRoot or not pRoot.Parent then
+local n
+n=game:GetService("RunService").Heartbeat:Connect(function(o)
+if not j or not j.Parent then
 return
 end
 
-local jitter=math.random(-100,100)
+local p=math.random(-100,100)
 
-local tVel=pRoot.AssemblyLinearVelocity
+local q=j.AssemblyLinearVelocity
 
-if tVel.Magnitude>500 then
-flingloop:Disconnect()
+if q.Magnitude>500 then
+n:Disconnect()
 end
 
-local tPos=pRoot.Position+(tVel*0.08)
+local r=j.Position+(q*0.08)
 
-if tPos.Y<=game.Workspace.FallenPartsDestroyHeight+50 then
+if r.Y<=game.Workspace.FallenPartsDestroyHeight+50 then
 return
 end
 
-root.CFrame=(CFrame.new(tPos+Vector3.new(0.1,0,0.1)))*(root.CFrame-root.CFrame.Position)
+i.CFrame=(CFrame.new(r+Vector3.new(0.1,0,0.1)))*(i.CFrame-i.CFrame.Position)
 
-root.AssemblyLinearVelocity=Vector3.new(power+jitter,-100,power+jitter)
-root.AssemblyAngularVelocity=Vector3.new(0,spin,0)
+i.AssemblyLinearVelocity=Vector3.new(l+p,-100,l+p)
+i.AssemblyAngularVelocity=Vector3.new(0,m,0)
 end)
 
 task.spawn(function()
-while flingloop.Connected do
-spin=power
+while n.Connected do
+m=l
 task.wait(0.2)
-spin=0
+m=0
 task.wait(0.1)
 end
 end)
@@ -335,53 +335,53 @@ task.delay(3,function()
 
 
 
-for _,child in pairs(char:GetDescendants())do
-if child.ClassName=="Part"or child.ClassName=="MeshPart"then
-child.CustomPhysicalProperties=PhysicalProperties.new(0.7,0.3,0.5)
+for o,p in pairs(h:GetDescendants())do
+if p.ClassName=="Part"or p.ClassName=="MeshPart"then
+p.CustomPhysicalProperties=PhysicalProperties.new(0.7,0.3,0.5)
 end
 end
 
-M.disableNoclip()
-flingloop:Disconnect()
-M.breakVelocity(0.2)
+c.disableNoclip()
+n:Disconnect()
+c.breakVelocity(0.2)
 task.wait(0.1)
-root.CFrame=pos
+i.CFrame=k
 end)
 end
 end
 
-function M.flingPlayer(plr)
-local char=plr and plr.Character
-M.flingCharacter(char)
+function c.flingPlayer(f)
+local g=f and f.Character
+c.flingCharacter(g)
 end
 
-function M.isFriendsWith(plr)
-local player=game:GetService("Players").LocalPlayer
-return player:IsFriendsWith(plr.UserId)
+function c.isFriendsWith(f)
+local g=game:GetService("Players").LocalPlayer
+return g:IsFriendsWith(f.UserId)
 end
 
-function M.updateESP(obj,color,enabled)
-local oldHl=obj:FindFirstChild("ESPHL")
-if oldHl then
-if not enabled then
-oldHl:Destroy()
-elseif color~=oldHl.FillColor then
-oldHl.FillColor=color
-oldHl.OutlineColor=color
+function c.updateESP(f,g,h)
+local i=f:FindFirstChild("ESPHL")
+if i then
+if not h then
+i:Destroy()
+elseif g~=i.FillColor then
+i.FillColor=g
+i.OutlineColor=g
 end
-elseif enabled then
-local hl=Instance.new("Highlight")
-hl.Name="ESPHL"
-hl.Adornee=obj
-hl.FillColor=color
-hl.OutlineColor=color
-hl.Parent=obj
+elseif h then
+local j=Instance.new("Highlight")
+j.Name="ESPHL"
+j.Adornee=f
+j.FillColor=g
+j.OutlineColor=g
+j.Parent=f
 end
 end
 
-return M end function __DARKLUA_BUNDLE_MODULES.b():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.b if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.b=v end return v.c end end do local function __modImpl()
+return c end function a.b():typeof(__modImpl())local b=a.cache.b if not b then b={c=__modImpl()}a.cache.b=b end return b.c end end do local function __modImpl()
 
-local Theme={
+local b={
 Default={
 TextColor=Color3.fromRGB(240,240,240),
 
@@ -760,72 +760,72 @@ PlaceholderColor=Color3.fromRGB(150,150,150),
 },
 }
 
-return Theme end function __DARKLUA_BUNDLE_MODULES.c():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.c if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.c=v end return v.c end end do local function __modImpl()
+return b end function a.c():typeof(__modImpl())local b=a.cache.c if not b then b={c=__modImpl()}a.cache.c=b end return b.c end end do local function __modImpl()
 
-local Theme=__DARKLUA_BUNDLE_MODULES.c()
+local b=a.c()
 
-local Library={}
+local c={}
 
-local CFileName=nil
-local EZUIFOLDER="EZUI"
-local ConfigurationFolder=EZUIFOLDER.."/Configurations"
-local ConfigurationExtension=".ez"
+local d=nil
+local e="EZUI"
+local f=e.."/Configurations"
+local g=".ez"
 
-local function callSafely(func,...)
-if func then
-local success,result=pcall(func,...)
-if not success then
-warn("Function failed with error: ",result)
+local function callSafely(h,...)
+if h then
+local i,j=pcall(h,...)
+if not i then
+warn("Function failed with error: ",j)
 return false
 else
-return result
+return j
 end
 end
 end
 
-local function ensureFolder(folderPath)
-if isfolder and not callSafely(isfolder,folderPath)then
-callSafely(makefolder,folderPath)
+local function ensureFolder(h)
+if isfolder and not callSafely(isfolder,h)then
+callSafely(makefolder,h)
 end
 end
 
 local function SaveConfig()
 print("Saving Config")
-local data={}
-for i,v in pairs(Library.Flags)do
-print(v)
-if typeof(v)=="boolean"then
-if v==false then
-data[i]=false
+local h={}
+for i,j in pairs(c.Flags)do
+print(j)
+if typeof(j)=="boolean"then
+if j==false then
+h[i]=false
 else
-data[i]=v
+h[i]=j
 end
 else
-data[i]=v
+h[i]=j
 end
 end
 
 callSafely(
 writefile,
-ConfigurationFolder.."/"..CFileName..ConfigurationExtension,
-tostring(game:GetService("HttpService"):JSONEncode(data))
+f.."/"..d..g,
+tostring(game:GetService("HttpService"):JSONEncode(h))
 )
 end
 
 local function LoadConfig()
 callSafely(function()
 if isfile then
-if callSafely(isfile,ConfigurationFolder.."/"..CFileName..ConfigurationExtension)then
-local config=callSafely(readfile,ConfigurationFolder.."/"..CFileName..ConfigurationExtension)
+if callSafely(isfile,f.."/"..d..g)then
+local h=callSafely(readfile,f.."/"..d..g)
 
-if config then
-local success,data=pcall(function()
-return game:GetService("HttpService"):JSONDecode(config)
+if h then
+local i,j=pcall(function()
+return game:GetService("HttpService"):JSONDecode(h)
 end)
 
-if success then
-for FlagName,Flag in pairs(data)do
-Library.Flags[FlagName]=Flag
+if i then
+for k,l in pairs(j)do
+c.Flags[k]=l
 end
 end
 end
@@ -834,983 +834,983 @@ end
 end)
 end
 
-Library={
+c={
 Flags={},
-Theme=Theme,
+Theme=b,
 UI=nil,
 Window=nil,
 CurrentTheme="Default",
-GetTheme=function(self)
-return self.Theme[self.CurrentTheme]
+GetTheme=function(h)
+return h.Theme[h.CurrentTheme]
 end,
 Tabs={},
-Notify=function(self,settings)end,
-LoadConfiguration=function(self)end,
-CreateUI=function(self)
-if self.UI then
-return self.UI
+Notify=function(h,i)end,
+LoadConfiguration=function(h)end,
+CreateUI=function(h)
+if h.UI then
+return h.UI
 end
 
-local ui=Instance.new("ScreenGui",game.CoreGui)
-ui.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
+local i=Instance.new("ScreenGui",game.CoreGui)
+i.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
 
-self.UI=ui
-return ui
+h.UI=i
+return i
 end,
-CreateWindow=function(self,settings)
-local ui=self:CreateUI()
+CreateWindow=function(h,i)
+local j=h:CreateUI()
 
-if self.Window then
-return self.Window
+if h.Window then
+return h.Window
 end
 
-local window={}
-window.UI=ui
-window.Settings=settings
-if settings.Theme then
-self.CurrentTheme=settings.Theme
+local k={}
+k.UI=j
+k.Settings=i
+if i.Theme then
+h.CurrentTheme=i.Theme
 end
 
 callSafely(function()
-if not settings.ConfigurationSaving.FileName then
-settings.ConfigurationSaving.FileName=tostring(game.PlaceId)
+if not i.ConfigurationSaving.FileName then
+i.ConfigurationSaving.FileName=tostring(game.PlaceId)
 end
 
-if settings.ConfigurationSaving.Enabled==nil then
-settings.ConfigurationSaving.Enabled=false
+if i.ConfigurationSaving.Enabled==nil then
+i.ConfigurationSaving.Enabled=false
 end
 
-CFileName=settings.ConfigurationSaving.FileName
-ConfigurationFolder=settings.ConfigurationSaving.FolderName or ConfigurationFolder
+d=i.ConfigurationSaving.FileName
+f=i.ConfigurationSaving.FolderName or f
 
-if settings.ConfigurationSaving.Enabled then
-ensureFolder(ConfigurationFolder)
+if i.ConfigurationSaving.Enabled then
+ensureFolder(f)
 end
 end)
 
 LoadConfig()
 
-local theme=self:GetTheme()
-local frame=Instance.new("Frame",ui)
-frame.BorderSizePixel=0
-frame.BackgroundColor3=theme.Background
-frame.ClipsDescendants=true
-frame.Size=UDim2.new(0,682,0,433)
-frame.Position=UDim2.new(0.5,-341,0.5,-216.5)
+local l=h:GetTheme()
+local m=Instance.new("Frame",j)
+m.BorderSizePixel=0
+m.BackgroundColor3=l.Background
+m.ClipsDescendants=true
+m.Size=UDim2.new(0,682,0,433)
+m.Position=UDim2.new(0.5,-341,0.5,-216.5)
 
-game:GetService("UserInputService").InputBegan:Connect(function(input,proc)
-if input.KeyCode==Enum.KeyCode[settings.ToggleUIKeybind]and not proc then
-if frame.Parent==nil then
-frame.Parent=ui
+game:GetService("UserInputService").InputBegan:Connect(function(n,o)
+if n.KeyCode==Enum.KeyCode[i.ToggleUIKeybind]and not o then
+if m.Parent==nil then
+m.Parent=j
 else
-frame.Parent=nil
+m.Parent=nil
 end
 end
 end)
 
-local corner=Instance.new("UICorner",frame)
-corner.CornerRadius=UDim.new(0,16)
+local n=Instance.new("UICorner",m)
+n.CornerRadius=UDim.new(0,16)
 
-local tbc=Instance.new("Frame",frame)
-tbc.BorderSizePixel=0
-tbc.ClipsDescendants=true
-tbc.Size=UDim2.new(0,682,0,35)
-tbc.BackgroundTransparency=1
+local o=Instance.new("Frame",m)
+o.BorderSizePixel=0
+o.ClipsDescendants=true
+o.Size=UDim2.new(0,682,0,35)
+o.BackgroundTransparency=1
 
-local tb=Instance.new("Frame",tbc)
-tb.BorderSizePixel=0
-tb.BackgroundColor3=theme.Topbar
-tb.Size=UDim2.new(0,682,0,50)
+local p=Instance.new("Frame",o)
+p.BorderSizePixel=0
+p.BackgroundColor3=l.Topbar
+p.Size=UDim2.new(0,682,0,50)
 
-local corner2=Instance.new("UICorner",tb)
-corner2.CornerRadius=UDim.new(0,16)
+local q=Instance.new("UICorner",p)
+q.CornerRadius=UDim.new(0,16)
 
-local tbi=Instance.new("Frame",tb)
-tbi.BorderSizePixel=0
-tbi.Size=UDim2.new(0,682,0,35)
-tbi.BackgroundTransparency=1
+local r=Instance.new("Frame",p)
+r.BorderSizePixel=0
+r.Size=UDim2.new(0,682,0,35)
+r.BackgroundTransparency=1
 
-if settings.Name then
-local title=Instance.new("TextLabel",tbi)
-title.BorderSizePixel=0
-title.TextSize=20
-title.TextXAlignment=Enum.TextXAlignment.Left
-title.FontFace=
+if i.Name then
+local s=Instance.new("TextLabel",r)
+s.BorderSizePixel=0
+s.TextSize=20
+s.TextXAlignment=Enum.TextXAlignment.Left
+s.FontFace=
 Font.new("rbxasset://fonts/families/SourceSansPro.json",Enum.FontWeight.Regular,Enum.FontStyle.Normal)
-title.TextColor3=theme.TextColor
-title.BackgroundTransparency=1
-title.Size=UDim2.new(0,634,0,35)
-title.Text=settings.Name
-title.Position=UDim2.new(0.01884,0,0,0)
+s.TextColor3=l.TextColor
+s.BackgroundTransparency=1
+s.Size=UDim2.new(0,634,0,35)
+s.Text=i.Name
+s.Position=UDim2.new(0.01884,0,0,0)
 end
 
-local close=Instance.new("TextButton",tbi)
-close.BorderSizePixel=0
-close.TextSize=14
-close.TextScaled=true
-close.TextColor3=theme.TextColor
-close.FontFace=
+local s=Instance.new("TextButton",r)
+s.BorderSizePixel=0
+s.TextSize=14
+s.TextScaled=true
+s.TextColor3=l.TextColor
+s.FontFace=
 Font.new("rbxasset://fonts/families/SourceSansPro.json",Enum.FontWeight.Regular,Enum.FontStyle.Normal)
-close.BackgroundTransparency=1
-close.Size=UDim2.new(0,35,0,35)
-close.Text="×"
-close.Position=UDim2.new(0.94868,0,0,0)
+s.BackgroundTransparency=1
+s.Size=UDim2.new(0,35,0,35)
+s.Text="×"
+s.Position=UDim2.new(0.94868,0,0,0)
 
-local show=Instance.new("Frame")
-show.BorderSizePixel=0
-show.Size=UDim2.new(1,0,0,0)
-show.Position=UDim2.new(0,0,0,30)
-show.BackgroundTransparency=1
+local t=Instance.new("Frame")
+t.BorderSizePixel=0
+t.Size=UDim2.new(1,0,0,0)
+t.Position=UDim2.new(0,0,0,30)
+t.BackgroundTransparency=1
 
-local show_list=Instance.new("UIListLayout",show)
-show_list.HorizontalAlignment=Enum.HorizontalAlignment.Center
-show_list.FillDirection=Enum.FillDirection.Horizontal
+local u=Instance.new("UIListLayout",t)
+u.HorizontalAlignment=Enum.HorizontalAlignment.Center
+u.FillDirection=Enum.FillDirection.Horizontal
 
-local show_inner=Instance.new("Frame",show)
-show_inner.BorderSizePixel=0
-show_inner.BackgroundColor3=Color3.fromRGB(0,0,0)
-show_inner.AutomaticSize=Enum.AutomaticSize.XY
-show_inner.BackgroundTransparency=0.5
+local v=Instance.new("Frame",t)
+v.BorderSizePixel=0
+v.BackgroundColor3=Color3.fromRGB(0,0,0)
+v.AutomaticSize=Enum.AutomaticSize.XY
+v.BackgroundTransparency=0.5
 
-local inner_pad=Instance.new("UIPadding",show_inner)
-inner_pad.PaddingTop=UDim.new(0,10)
-inner_pad.PaddingBottom=UDim.new(0,10)
-inner_pad.PaddingLeft=UDim.new(0,15)
-inner_pad.PaddingRight=UDim.new(0,15)
+local w=Instance.new("UIPadding",v)
+w.PaddingTop=UDim.new(0,10)
+w.PaddingBottom=UDim.new(0,10)
+w.PaddingLeft=UDim.new(0,15)
+w.PaddingRight=UDim.new(0,15)
 
-local inner_corner=Instance.new("UICorner",show_inner)
-inner_corner.CornerRadius=UDim.new(0,16)
+local x=Instance.new("UICorner",v)
+x.CornerRadius=UDim.new(0,16)
 
-Instance.new("UIFlexItem",show_inner)
+Instance.new("UIFlexItem",v)
 
-local inner_label=Instance.new("TextLabel",show_inner)
-inner_label.BorderSizePixel=0
-inner_label.TextSize=20
-inner_label.FontFace=
+local y=Instance.new("TextLabel",v)
+y.BorderSizePixel=0
+y.TextSize=20
+y.FontFace=
 Font.new("rbxasset://fonts/families/SourceSansPro.json",Enum.FontWeight.Regular,Enum.FontStyle.Normal)
-inner_label.TextColor3=Color3.fromRGB(255,255,255)
-inner_label.BackgroundTransparency=1
-inner_label.Text="Show "..settings.ShowText
-inner_label.AutomaticSize=Enum.AutomaticSize.XY
+y.TextColor3=Color3.fromRGB(255,255,255)
+y.BackgroundTransparency=1
+y.Text="Show "..i.ShowText
+y.AutomaticSize=Enum.AutomaticSize.XY
 
-show_inner.InputBegan:Connect(function(input)
+v.InputBegan:Connect(function(z)
 if
-input.UserInputType==Enum.UserInputType.MouseButton1
-or input.UserInputType==Enum.UserInputType.Touch
+z.UserInputType==Enum.UserInputType.MouseButton1
+or z.UserInputType==Enum.UserInputType.Touch
 then
-frame.Parent=ui
-show.Parent=nil
+m.Parent=j
+t.Parent=nil
 end
 end)
 
-close.MouseButton1Click:Connect(function()
-frame.Parent=nil
-show.Parent=ui
+s.MouseButton1Click:Connect(function()
+m.Parent=nil
+t.Parent=j
 end)
 
-local main=Instance.new("Frame",frame)
-main.BorderSizePixel=0
-main.Size=UDim2.new(0,682,0,398)
-main.Position=UDim2.new(0,0,0.08083,0)
-main.BackgroundTransparency=1
+local z=Instance.new("Frame",m)
+z.BorderSizePixel=0
+z.Size=UDim2.new(0,682,0,398)
+z.Position=UDim2.new(0,0,0.08083,0)
+z.BackgroundTransparency=1
 
-local main_list=Instance.new("UIListLayout",main)
-main_list.Padding=UDim.new(0,5)
-main_list.VerticalAlignment=Enum.VerticalAlignment.Bottom
-main_list.SortOrder=Enum.SortOrder.LayoutOrder
-main_list.FillDirection=Enum.FillDirection.Horizontal
+local A=Instance.new("UIListLayout",z)
+A.Padding=UDim.new(0,5)
+A.VerticalAlignment=Enum.VerticalAlignment.Bottom
+A.SortOrder=Enum.SortOrder.LayoutOrder
+A.FillDirection=Enum.FillDirection.Horizontal
 
-local tabsf=Instance.new("ScrollingFrame",main)
-tabsf.Active=true
-tabsf.ScrollingDirection=Enum.ScrollingDirection.Y
-tabsf.BorderSizePixel=0
-tabsf.CanvasSize=UDim2.new(0,0,0,0)
-tabsf.AutomaticCanvasSize=Enum.AutomaticSize.Y
-tabsf.Size=UDim2.new(0,72,0,398)
-tabsf.ScrollBarThickness=0
-tabsf.BackgroundTransparency=1
+local B=Instance.new("ScrollingFrame",z)
+B.Active=true
+B.ScrollingDirection=Enum.ScrollingDirection.Y
+B.BorderSizePixel=0
+B.CanvasSize=UDim2.new(0,0,0,0)
+B.AutomaticCanvasSize=Enum.AutomaticSize.Y
+B.Size=UDim2.new(0,72,0,398)
+B.ScrollBarThickness=0
+B.BackgroundTransparency=1
 
-local tabsf_flex=Instance.new("UIFlexItem",tabsf)
+local C=Instance.new("UIFlexItem",B)
 
-local twrapper=Instance.new("Frame",tabsf)
-twrapper.BorderSizePixel=0
-twrapper.AutomaticSize=Enum.AutomaticSize.XY
-twrapper.BackgroundTransparency=1
+local D=Instance.new("Frame",B)
+D.BorderSizePixel=0
+D.AutomaticSize=Enum.AutomaticSize.XY
+D.BackgroundTransparency=1
 
 task.spawn(function()
-local tabs=twrapper.Parent
-local main=tabs.Parent
+local E=D.Parent
+local F=E.Parent
 
 local function updateWidth()
-local w=twrapper.AbsoluteSize.X
+local G=D.AbsoluteSize.X
 
-tabs.Size=UDim2.new(0,w,1,0)
+E.Size=UDim2.new(0,G,1,0)
 
-if main then
-local size=main.Size
-main.Size=size+UDim2.new(0,1,0,0)
-main.Size=size
+if F then
+local H=F.Size
+F.Size=H+UDim2.new(0,1,0,0)
+F.Size=H
 end
 end
 
-twrapper:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateWidth)
+D:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateWidth)
 end)
 
-local twrapper_list=Instance.new("UIListLayout",twrapper)
-twrapper_list.HorizontalAlignment=Enum.HorizontalAlignment.Center
-twrapper_list.Padding=UDim.new(0,10)
-twrapper_list.SortOrder=Enum.SortOrder.LayoutOrder
+local E=Instance.new("UIListLayout",D)
+E.HorizontalAlignment=Enum.HorizontalAlignment.Center
+E.Padding=UDim.new(0,10)
+E.SortOrder=Enum.SortOrder.LayoutOrder
 
-local twrapper_pad=Instance.new("UIPadding",twrapper)
-twrapper_pad.PaddingTop=UDim.new(0,10)
-twrapper_pad.PaddingLeft=UDim.new(0,10)
-twrapper_pad.PaddingRight=UDim.new(0,10)
-twrapper_pad.PaddingBottom=UDim.new(0,10)
+local F=Instance.new("UIPadding",D)
+F.PaddingTop=UDim.new(0,10)
+F.PaddingLeft=UDim.new(0,10)
+F.PaddingRight=UDim.new(0,10)
+F.PaddingBottom=UDim.new(0,10)
 
-local tabContent=Instance.new("ScrollingFrame",main)
-tabContent.Active=true
-tabContent.ScrollingDirection=Enum.ScrollingDirection.Y
-tabContent.BorderSizePixel=0
-tabContent.CanvasSize=UDim2.new(0,0,1,0)
-tabContent.AutomaticCanvasSize=Enum.AutomaticSize.Y
-tabContent.Size=UDim2.new(0,0,0,398)
-tabContent.ScrollBarThickness=0
-tabContent.BackgroundTransparency=1
+local G=Instance.new("ScrollingFrame",z)
+G.Active=true
+G.ScrollingDirection=Enum.ScrollingDirection.Y
+G.BorderSizePixel=0
+G.CanvasSize=UDim2.new(0,0,1,0)
+G.AutomaticCanvasSize=Enum.AutomaticSize.Y
+G.Size=UDim2.new(0,0,0,398)
+G.ScrollBarThickness=0
+G.BackgroundTransparency=1
 
-local tc_pad=Instance.new("UIPadding",tabContent)
-tc_pad.PaddingTop=UDim.new(0,10)
-tc_pad.PaddingRight=UDim.new(0,10)
-tc_pad.PaddingLeft=UDim.new(0,5)
-tc_pad.PaddingBottom=UDim.new(0,10)
+local H=Instance.new("UIPadding",G)
+H.PaddingTop=UDim.new(0,10)
+H.PaddingRight=UDim.new(0,10)
+H.PaddingLeft=UDim.new(0,5)
+H.PaddingBottom=UDim.new(0,10)
 
-local tc_list=Instance.new("UIListLayout",tabContent)
-tc_list.HorizontalFlex=Enum.UIFlexAlignment.Fill
-tc_list.Padding=UDim.new(0,10)
-tc_list.SortOrder=Enum.SortOrder.LayoutOrder
+local I=Instance.new("UIListLayout",G)
+I.HorizontalFlex=Enum.UIFlexAlignment.Fill
+I.Padding=UDim.new(0,10)
+I.SortOrder=Enum.SortOrder.LayoutOrder
 
-local tc_flex=Instance.new("UIFlexItem",tabContent)
-tc_flex.FlexMode=Enum.UIFlexMode.Grow
+local J=Instance.new("UIFlexItem",G)
+J.FlexMode=Enum.UIFlexMode.Grow
 
-local cw_self=self
-window.CreateTab=function(self,name)
-local frame=Instance.new("Frame",twrapper)
-frame.BorderSizePixel=0
-frame.BackgroundColor3=theme.TabBackground
-frame.AutomaticSize=Enum.AutomaticSize.X
-frame.Size=UDim2.new(0,0,0,30)
-frame.Position=UDim2.new(0,0,0,0)
-frame.BackgroundTransparency=0.7
+local K=h
+k.CreateTab=function(L,M)
+local N=Instance.new("Frame",D)
+N.BorderSizePixel=0
+N.BackgroundColor3=l.TabBackground
+N.AutomaticSize=Enum.AutomaticSize.X
+N.Size=UDim2.new(0,0,0,30)
+N.Position=UDim2.new(0,0,0,0)
+N.BackgroundTransparency=0.7
 
-local corner=Instance.new("UICorner",frame)
-local stroke=Instance.new("UIStroke",frame)
-stroke.Transparency=0.5
-stroke.Color=theme.TabStroke
+local O=Instance.new("UICorner",N)
+local P=Instance.new("UIStroke",N)
+P.Transparency=0.5
+P.Color=l.TabStroke
 
-local flex=Instance.new("UIFlexItem",frame)
-flex.ItemLineAlignment=Enum.ItemLineAlignment.Stretch
+local Q=Instance.new("UIFlexItem",N)
+Q.ItemLineAlignment=Enum.ItemLineAlignment.Stretch
 
-local label=Instance.new("TextLabel",frame)
-label.BorderSizePixel=0
-label.TextSize=16
-label.TextTransparency=0.2
-label.FontFace=
+local R=Instance.new("TextLabel",N)
+R.BorderSizePixel=0
+R.TextSize=16
+R.TextTransparency=0.2
+R.FontFace=
 Font.new("rbxasset://fonts/families/SourceSansPro.json",Enum.FontWeight.Regular,Enum.FontStyle.Normal)
-label.TextColor3=theme.TabTextColor
-label.BackgroundTransparency=1
-label.Size=UDim2.new(0,0,0,30)
-label.AutomaticSize=Enum.AutomaticSize.X
-label.Text=name
+R.TextColor3=l.TabTextColor
+R.BackgroundTransparency=1
+R.Size=UDim2.new(0,0,0,30)
+R.AutomaticSize=Enum.AutomaticSize.X
+R.Text=M
 
-local padding=Instance.new("UIPadding",frame)
-padding.PaddingRight=UDim.new(0,10)
-padding.PaddingLeft=UDim.new(0,10)
+local S=Instance.new("UIPadding",N)
+S.PaddingRight=UDim.new(0,10)
+S.PaddingLeft=UDim.new(0,10)
 
 local function selectTab()
-local theme=cw_self:GetTheme()
-local TS=game:GetService("TweenService")
-TS:Create(
-frame,
+local T=K:GetTheme()
+local U=game:GetService("TweenService")
+U:Create(
+N,
 TweenInfo.new(0.7,Enum.EasingStyle.Exponential),
-{BackgroundColor3=theme.TabBackgroundSelected}
+{BackgroundColor3=T.TabBackgroundSelected}
 ):Play()
-TS:Create(frame,TweenInfo.new(0.7,Enum.EasingStyle.Exponential),{BackgroundTransparency=0})
+U:Create(N,TweenInfo.new(0.7,Enum.EasingStyle.Exponential),{BackgroundTransparency=0})
 :Play()
-TS:Create(stroke,TweenInfo.new(0.7,Enum.EasingStyle.Exponential),{Transparency=0}):Play()
-TS:Create(label,TweenInfo.new(0.7,Enum.EasingStyle.Exponential),{TextTransparency=0}):Play()
-TS:Create(
-label,
+U:Create(P,TweenInfo.new(0.7,Enum.EasingStyle.Exponential),{Transparency=0}):Play()
+U:Create(R,TweenInfo.new(0.7,Enum.EasingStyle.Exponential),{TextTransparency=0}):Play()
+U:Create(
+R,
 TweenInfo.new(0.7,Enum.EasingStyle.Exponential),
-{TextColor3=theme.SelectedTabTextColor}
+{TextColor3=T.SelectedTabTextColor}
 ):Play()
 
-local tabs=cw_self.Tabs
+local V=K.Tabs
 
-for i,v in pairs(tabs)do
-if v.Name~=name then
-v:Deselect()
+for W,X in pairs(V)do
+if X.Name~=M then
+X:Deselect()
 else
-v.Active=true
+X.Active=true
 
-for i,v in pairs(v.Content)do
-v.Parent=tabContent
+for Y,Z in pairs(X.Content)do
+Z.Parent=G
 end
 end
 end
 end
 
-frame.InputBegan:Connect(function(input)
+N.InputBegan:Connect(function(T)
 if
-input.UserInputType==Enum.UserInputType.MouseButton1
-or input.UserInputType==Enum.UserInputType.Touch
+T.UserInputType==Enum.UserInputType.MouseButton1
+or T.UserInputType==Enum.UserInputType.Touch
 then
 selectTab()
 end
 end)
 
-local tab={}
+local T={}
 
-tab.Name=name
-tab.Content={}
-tab.Active=false
+T.Name=M
+T.Content={}
+T.Active=false
 
-tab.Deselect=function(self)
-local theme=cw_self:GetTheme()
-local TS=game:GetService("TweenService")
-TS:Create(
-frame,
+T.Deselect=function(U)
+local V=K:GetTheme()
+local W=game:GetService("TweenService")
+W:Create(
+N,
 TweenInfo.new(0.7,Enum.EasingStyle.Exponential),
-{BackgroundColor3=theme.TabBackground}
+{BackgroundColor3=V.TabBackground}
 ):Play()
-TS:Create(frame,TweenInfo.new(0.7,Enum.EasingStyle.Exponential),{BackgroundTransparency=0.7})
+W:Create(N,TweenInfo.new(0.7,Enum.EasingStyle.Exponential),{BackgroundTransparency=0.7})
 :Play()
-TS:Create(stroke,TweenInfo.new(0.7,Enum.EasingStyle.Exponential),{Transparency=0.5}):Play()
-TS:Create(label,TweenInfo.new(0.7,Enum.EasingStyle.Exponential),{TextTransparency=0.2}):Play()
-TS:Create(label,TweenInfo.new(0.7,Enum.EasingStyle.Exponential),{TextColor3=theme.TabTextColor})
+W:Create(P,TweenInfo.new(0.7,Enum.EasingStyle.Exponential),{Transparency=0.5}):Play()
+W:Create(R,TweenInfo.new(0.7,Enum.EasingStyle.Exponential),{TextTransparency=0.2}):Play()
+W:Create(R,TweenInfo.new(0.7,Enum.EasingStyle.Exponential),{TextColor3=V.TabTextColor})
 :Play()
 
-self.Active=false
+U.Active=false
 
-for i,v in pairs(self.Content)do
-v.Parent=nil
+for X,Y in pairs(U.Content)do
+Y.Parent=nil
 end
 end
 
-local cb_self=self
-tab.CreateButton=function(self,settings)
-local button=Instance.new("Frame")
-button.BorderSizePixel=0
-button.BackgroundColor3=theme.ElementBackground
-button.AutomaticSize=Enum.AutomaticSize.X
-button.Size=UDim2.new(0,0,0,40)
+local U=L
+T.CreateButton=function(V,W)
+local X=Instance.new("Frame")
+X.BorderSizePixel=0
+X.BackgroundColor3=l.ElementBackground
+X.AutomaticSize=Enum.AutomaticSize.X
+X.Size=UDim2.new(0,0,0,40)
 
-Instance.new("UICorner",button)
+Instance.new("UICorner",X)
 
-local btn_stroke=Instance.new("UIStroke",button)
-btn_stroke.Color=theme.ElementStroke
+local Y=Instance.new("UIStroke",X)
+Y.Color=l.ElementStroke
 
-Instance.new("UIFlexItem",button)
+Instance.new("UIFlexItem",X)
 
-local btn_list=Instance.new("UIListLayout",button)
-btn_list.HorizontalFlex=Enum.UIFlexAlignment.SpaceBetween
-btn_list.Padding=UDim.new(0,15)
-btn_list.VerticalAlignment=Enum.VerticalAlignment.Center
-btn_list.SortOrder=Enum.SortOrder.LayoutOrder
-btn_list.FillDirection=Enum.FillDirection.Horizontal
+local Z=Instance.new("UIListLayout",X)
+Z.HorizontalFlex=Enum.UIFlexAlignment.SpaceBetween
+Z.Padding=UDim.new(0,15)
+Z.VerticalAlignment=Enum.VerticalAlignment.Center
+Z.SortOrder=Enum.SortOrder.LayoutOrder
+Z.FillDirection=Enum.FillDirection.Horizontal
 
-local btn_pad=Instance.new("UIPadding",button)
-btn_pad.PaddingRight=UDim.new(0,10)
-btn_pad.PaddingLeft=UDim.new(0,10)
+local _=Instance.new("UIPadding",X)
+_.PaddingRight=UDim.new(0,10)
+_.PaddingLeft=UDim.new(0,10)
 
-local btn_flex=Instance.new("UIFlexItem")
-btn_flex.FlexMode=Enum.UIFlexMode.Grow
+local aa=Instance.new("UIFlexItem")
+aa.FlexMode=Enum.UIFlexMode.Grow
 
-local label=Instance.new("TextLabel",button)
-label.BorderSizePixel=0
-label.TextSize=18
-label.FontFace=Font.new(
+local ab=Instance.new("TextLabel",X)
+ab.BorderSizePixel=0
+ab.TextSize=18
+ab.FontFace=Font.new(
 "rbxasset://fonts/families/SourceSansPro.json",
 Enum.FontWeight.Regular,
 Enum.FontStyle.Normal
 )
-label.TextColor3=theme.TextColor
-label.BackgroundTransparency=1
-label.Size=UDim2.new(0,0,0,30)
-label.Text=settings.Name
-label.AutomaticSize=Enum.AutomaticSize.X
+ab.TextColor3=l.TextColor
+ab.BackgroundTransparency=1
+ab.Size=UDim2.new(0,0,0,30)
+ab.Text=W.Name
+ab.AutomaticSize=Enum.AutomaticSize.X
 
-button.InputBegan:Connect(function(input)
+X.InputBegan:Connect(function(ac)
 if
-input.UserInputType==Enum.UserInputType.MouseButton1
-or input.UserInputType==Enum.UserInputType.Touch
+ac.UserInputType==Enum.UserInputType.MouseButton1
+or ac.UserInputType==Enum.UserInputType.Touch
 then
 task.spawn(function()
-settings:Callback()
+W:Callback()
 end)
 end
 end)
 
-button.MouseEnter:Connect(function()
-local TS=game:GetService("TweenService")
-TS:Create(
-button,
+X.MouseEnter:Connect(function()
+local ac=game:GetService("TweenService")
+ac:Create(
+X,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{BackgroundColor3=theme.ElementBackgroundHover}
+{BackgroundColor3=l.ElementBackgroundHover}
 ):Play()
 end)
 
-button.MouseLeave:Connect(function()
-local TS=game:GetService("TweenService")
-TS:Create(
-button,
+X.MouseLeave:Connect(function()
+local ac=game:GetService("TweenService")
+ac:Create(
+X,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{BackgroundColor3=theme.ElementBackground}
+{BackgroundColor3=l.ElementBackground}
 ):Play()
 end)
 
-table.insert(self.Content,button)
+table.insert(V.Content,X)
 
-if self.Active then
-button.Parent=tabContent
+if V.Active then
+X.Parent=G
 end
 end
 
-tab.CreateToggle=function(self,settings)
-local toggle=Instance.new("Frame")
-toggle.BorderSizePixel=0
-toggle.BackgroundColor3=theme.ElementBackground
-toggle.AutomaticSize=Enum.AutomaticSize.X
-toggle.Size=UDim2.new(0,0,0,40)
+T.CreateToggle=function(aa,ab)
+local ac=Instance.new("Frame")
+ac.BorderSizePixel=0
+ac.BackgroundColor3=l.ElementBackground
+ac.AutomaticSize=Enum.AutomaticSize.X
+ac.Size=UDim2.new(0,0,0,40)
 
-Instance.new("UICorner",toggle)
+Instance.new("UICorner",ac)
 
-local btn_stroke=Instance.new("UIStroke",toggle)
-btn_stroke.Color=theme.ElementStroke
+local V=Instance.new("UIStroke",ac)
+V.Color=l.ElementStroke
 
-Instance.new("UIFlexItem",toggle)
+Instance.new("UIFlexItem",ac)
 
-local btn_list=Instance.new("UIListLayout",toggle)
-btn_list.HorizontalFlex=Enum.UIFlexAlignment.SpaceBetween
-btn_list.Padding=UDim.new(0,15)
-btn_list.VerticalAlignment=Enum.VerticalAlignment.Center
-btn_list.SortOrder=Enum.SortOrder.LayoutOrder
-btn_list.FillDirection=Enum.FillDirection.Horizontal
+local W=Instance.new("UIListLayout",ac)
+W.HorizontalFlex=Enum.UIFlexAlignment.SpaceBetween
+W.Padding=UDim.new(0,15)
+W.VerticalAlignment=Enum.VerticalAlignment.Center
+W.SortOrder=Enum.SortOrder.LayoutOrder
+W.FillDirection=Enum.FillDirection.Horizontal
 
-local btn_pad=Instance.new("UIPadding",toggle)
-btn_pad.PaddingRight=UDim.new(0,10)
-btn_pad.PaddingLeft=UDim.new(0,10)
+local X=Instance.new("UIPadding",ac)
+X.PaddingRight=UDim.new(0,10)
+X.PaddingLeft=UDim.new(0,10)
 
-local btn_flex=Instance.new("UIFlexItem")
-btn_flex.FlexMode=Enum.UIFlexMode.Grow
+local Y=Instance.new("UIFlexItem")
+Y.FlexMode=Enum.UIFlexMode.Grow
 
-local label=Instance.new("TextLabel",toggle)
-label.BorderSizePixel=0
-label.TextSize=18
-label.FontFace=Font.new(
+local Z=Instance.new("TextLabel",ac)
+Z.BorderSizePixel=0
+Z.TextSize=18
+Z.FontFace=Font.new(
 "rbxasset://fonts/families/SourceSansPro.json",
 Enum.FontWeight.Regular,
 Enum.FontStyle.Normal
 )
-label.TextColor3=theme.TextColor
-label.BackgroundTransparency=1
-label.Size=UDim2.new(0,0,0,30)
-label.Text=settings.Name
-label.AutomaticSize=Enum.AutomaticSize.X
+Z.TextColor3=l.TextColor
+Z.BackgroundTransparency=1
+Z.Size=UDim2.new(0,0,0,30)
+Z.Text=ab.Name
+Z.AutomaticSize=Enum.AutomaticSize.X
 
-local switch=Instance.new("Frame",toggle)
-switch.BorderSizePixel=0
-switch.BackgroundColor3=theme.ToggleBackground
-switch.Size=UDim2.new(0,60,0,30)
+local _=Instance.new("Frame",ac)
+_.BorderSizePixel=0
+_.BackgroundColor3=l.ToggleBackground
+_.Size=UDim2.new(0,60,0,30)
 
-local switch_stroke=Instance.new("UIStroke",switch)
-switch_stroke.Color=theme.ToggleDisabledOuterStroke
+local ad=Instance.new("UIStroke",_)
+ad.Color=l.ToggleDisabledOuterStroke
 
-local switch_corner=Instance.new("UICorner",switch)
-switch_corner.CornerRadius=UDim.new(0,999)
+local ae=Instance.new("UICorner",_)
+ae.CornerRadius=UDim.new(0,999)
 
-local indicator=Instance.new("Frame",switch)
-indicator.BorderSizePixel=0
-indicator.BackgroundColor3=theme.ToggleDisabled
-indicator.Size=UDim2.new(0,20,0,20)
-indicator.Position=UDim2.new(0,5,0,5)
+local af=Instance.new("Frame",_)
+af.BorderSizePixel=0
+af.BackgroundColor3=l.ToggleDisabled
+af.Size=UDim2.new(0,20,0,20)
+af.Position=UDim2.new(0,5,0,5)
 
-local indicator_corner=Instance.new("UICorner",indicator)
-indicator_corner.CornerRadius=UDim.new(0,999)
+local ag=Instance.new("UICorner",af)
+ag.CornerRadius=UDim.new(0,999)
 
-local indicator_stroke=Instance.new("UIStroke",indicator)
-indicator_stroke.Color=theme.ToggleDisabledStroke
+local ah=Instance.new("UIStroke",af)
+ah.Color=l.ToggleDisabledStroke
 
-local Toggle={}
-Toggle.CurrentValue=settings.CurrentValue
-Toggle.Set=function(self,value)
-self.CurrentValue=value
+local ai={}
+ai.CurrentValue=ab.CurrentValue
+ai.Set=function(aj,ak)
+aj.CurrentValue=ak
 
-if settings.Flag then
-cw_self.Flags[settings.Flag]=value
+if ab.Flag then
+K.Flags[ab.Flag]=ak
 SaveConfig()
 end
 
 task.spawn(function()
-settings.Callback(value)
+ab.Callback(ak)
 end)
 
-if value then
-local TS=game:GetService("TweenService")
-TS:Create(
-switch_stroke,
+if ak then
+local al=game:GetService("TweenService")
+al:Create(
+ad,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{Color=theme.ToggleEnabledOuterStroke}
+{Color=l.ToggleEnabledOuterStroke}
 ):Play()
-TS:Create(
-indicator,
+al:Create(
+af,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{BackgroundColor3=theme.ToggleEnabled}
+{BackgroundColor3=l.ToggleEnabled}
 ):Play()
-TS:Create(
-indicator,
+al:Create(
+af,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
 {Position=UDim2.new(0,35,0,5)}
 ):Play()
-TS:Create(
-indicator_stroke,
+al:Create(
+ah,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{Color=theme.ToggleEnabledStroke}
+{Color=l.ToggleEnabledStroke}
 ):Play()
 else
-local TS=game:GetService("TweenService")
-TS:Create(
-switch_stroke,
+local al=game:GetService("TweenService")
+al:Create(
+ad,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{Color=theme.ToggleDisabledOuterStroke}
+{Color=l.ToggleDisabledOuterStroke}
 ):Play()
-TS:Create(
-indicator,
+al:Create(
+af,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{BackgroundColor3=theme.ToggleDisabled}
+{BackgroundColor3=l.ToggleDisabled}
 ):Play()
-TS:Create(
-indicator,
+al:Create(
+af,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
 {Position=UDim2.new(0,5,0,5)}
 ):Play()
-TS:Create(
-indicator_stroke,
+al:Create(
+ah,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{Color=theme.ToggleDisabledStroke}
+{Color=l.ToggleDisabledStroke}
 ):Play()
 end
 end
-Toggle.Toggle=function(self)
-self:Set(not self.CurrentValue)
+ai.Toggle=function(aj)
+aj:Set(not aj.CurrentValue)
 end
 
-if settings.CurrentValue then
-Toggle:Set(settings.CurrentValue)
+if ab.CurrentValue then
+ai:Set(ab.CurrentValue)
 end
 
-if settings.Flag and cw_self.Flags[settings.Flag]then
-Toggle:Set(cw_self.Flags[settings.Flag])
+if ab.Flag and K.Flags[ab.Flag]then
+ai:Set(K.Flags[ab.Flag])
 end
 
-toggle.InputBegan:Connect(function(input)
+ac.InputBegan:Connect(function(aj)
 if
-input.UserInputType==Enum.UserInputType.MouseButton1
-or input.UserInputType==Enum.UserInputType.Touch
+aj.UserInputType==Enum.UserInputType.MouseButton1
+or aj.UserInputType==Enum.UserInputType.Touch
 then
-Toggle:Toggle()
+ai:Toggle()
 end
 end)
 
-toggle.MouseEnter:Connect(function()
-local TS=game:GetService("TweenService")
-TS:Create(
-toggle,
+ac.MouseEnter:Connect(function()
+local aj=game:GetService("TweenService")
+aj:Create(
+ac,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{BackgroundColor3=theme.ElementBackgroundHover}
+{BackgroundColor3=l.ElementBackgroundHover}
 ):Play()
 end)
 
-toggle.MouseLeave:Connect(function()
-local TS=game:GetService("TweenService")
-TS:Create(
-toggle,
+ac.MouseLeave:Connect(function()
+local aj=game:GetService("TweenService")
+aj:Create(
+ac,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{BackgroundColor3=theme.ElementBackground}
+{BackgroundColor3=l.ElementBackground}
 ):Play()
 end)
 
-table.insert(self.Content,toggle)
+table.insert(aa.Content,ac)
 
-if self.Active then
-toggle.Parent=tabContent
+if aa.Active then
+ac.Parent=G
 end
 
-return Toggle
+return ai
 end
 
-tab.CreateSlider=function(self,settings)
-local slider=Instance.new("Frame")
-slider.BorderSizePixel=0
-slider.BackgroundColor3=theme.ElementBackground
-slider.AutomaticSize=Enum.AutomaticSize.X
-slider.Size=UDim2.new(0,0,0,40)
+T.CreateSlider=function(aa,ab)
+local ac=Instance.new("Frame")
+ac.BorderSizePixel=0
+ac.BackgroundColor3=l.ElementBackground
+ac.AutomaticSize=Enum.AutomaticSize.X
+ac.Size=UDim2.new(0,0,0,40)
 
-Instance.new("UICorner",slider)
+Instance.new("UICorner",ac)
 
-local btn_stroke=Instance.new("UIStroke",slider)
-btn_stroke.Color=theme.ElementStroke
+local ad=Instance.new("UIStroke",ac)
+ad.Color=l.ElementStroke
 
-Instance.new("UIFlexItem",slider)
+Instance.new("UIFlexItem",ac)
 
-local btn_list=Instance.new("UIListLayout",slider)
-btn_list.HorizontalFlex=Enum.UIFlexAlignment.SpaceBetween
-btn_list.Padding=UDim.new(0,15)
-btn_list.VerticalAlignment=Enum.VerticalAlignment.Center
-btn_list.SortOrder=Enum.SortOrder.LayoutOrder
-btn_list.FillDirection=Enum.FillDirection.Horizontal
+local ae=Instance.new("UIListLayout",ac)
+ae.HorizontalFlex=Enum.UIFlexAlignment.SpaceBetween
+ae.Padding=UDim.new(0,15)
+ae.VerticalAlignment=Enum.VerticalAlignment.Center
+ae.SortOrder=Enum.SortOrder.LayoutOrder
+ae.FillDirection=Enum.FillDirection.Horizontal
 
-local btn_pad=Instance.new("UIPadding",slider)
-btn_pad.PaddingRight=UDim.new(0,10)
-btn_pad.PaddingLeft=UDim.new(0,10)
+local af=Instance.new("UIPadding",ac)
+af.PaddingRight=UDim.new(0,10)
+af.PaddingLeft=UDim.new(0,10)
 
-local btn_flex=Instance.new("UIFlexItem")
-btn_flex.FlexMode=Enum.UIFlexMode.Grow
+local ag=Instance.new("UIFlexItem")
+ag.FlexMode=Enum.UIFlexMode.Grow
 
-local label=Instance.new("TextLabel",slider)
-label.BorderSizePixel=0
-label.TextSize=18
-label.FontFace=Font.new(
+local ah=Instance.new("TextLabel",ac)
+ah.BorderSizePixel=0
+ah.TextSize=18
+ah.FontFace=Font.new(
 "rbxasset://fonts/families/SourceSansPro.json",
 Enum.FontWeight.Regular,
 Enum.FontStyle.Normal
 )
-label.TextColor3=theme.TextColor
-label.BackgroundTransparency=1
-label.Size=UDim2.new(0,0,0,30)
-label.Text=settings.Name
-label.AutomaticSize=Enum.AutomaticSize.X
+ah.TextColor3=l.TextColor
+ah.BackgroundTransparency=1
+ah.Size=UDim2.new(0,0,0,30)
+ah.Text=ab.Name
+ah.AutomaticSize=Enum.AutomaticSize.X
 
-local slide=Instance.new("Frame",slider)
-slide.BorderSizePixel=0
-slide.BackgroundColor3=theme.SliderBackground
-slide.BackgroundTransparency=0.75
-slide.Size=UDim2.new(0,270,0,30)
+local ai=Instance.new("Frame",ac)
+ai.BorderSizePixel=0
+ai.BackgroundColor3=l.SliderBackground
+ai.BackgroundTransparency=0.75
+ai.Size=UDim2.new(0,270,0,30)
 
-local switch_stroke=Instance.new("UIStroke",slide)
-switch_stroke.Color=theme.SliderStroke
+local aj=Instance.new("UIStroke",ai)
+aj.Color=l.SliderStroke
 
-local switch_corner=Instance.new("UICorner",slide)
-switch_corner.CornerRadius=UDim.new(0,999)
+local ak=Instance.new("UICorner",ai)
+ak.CornerRadius=UDim.new(0,999)
 
-local progress=Instance.new("Frame",slide)
-progress.BorderSizePixel=0
-progress.BackgroundColor3=theme.SliderProgress
-progress.Size=UDim2.new(0.5,0,1,0)
+local al=Instance.new("Frame",ai)
+al.BorderSizePixel=0
+al.BackgroundColor3=l.SliderProgress
+al.Size=UDim2.new(0.5,0,1,0)
 
-local indicator_corner=Instance.new("UICorner",progress)
-indicator_corner.CornerRadius=UDim.new(0,999)
+local V=Instance.new("UICorner",al)
+V.CornerRadius=UDim.new(0,999)
 
-local Slider={}
+local W={}
 
-local min=settings.Range and settings.Range[1]or 0
-local max=settings.Range and settings.Range[2]or 1
-local step=settings.Increment or 0.1
+local X=ab.Range and ab.Range[1]or 0
+local Y=ab.Range and ab.Range[2]or 1
+local Z=ab.Increment or 0.1
 
-Slider.CurrentValue=settings.CurrentValue
-Slider.Set=function(self,value)
-local cvalue=math.clamp(value,min,max)
-self.CurrentValue=cvalue
-if settings.Flag then
-cw_self.Flags[settings.Flag]=cvalue
+W.CurrentValue=ab.CurrentValue
+W.Set=function(_,am)
+local an=math.clamp(am,X,Y)
+_.CurrentValue=an
+if ab.Flag then
+K.Flags[ab.Flag]=an
 SaveConfig()
 end
-label.Text=settings.Name..": "..cvalue..(settings.Suffix or"")
+ah.Text=ab.Name..": "..an..(ab.Suffix or"")
 
-local TS=game:GetService("TweenService")
-local percent=(cvalue-min)/(max-min)
-TS:Create(
-progress,
+local ao=game:GetService("TweenService")
+local ap=(an-X)/(Y-X)
+ao:Create(
+al,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{Size=UDim2.new(percent,0,1,0)}
+{Size=UDim2.new(ap,0,1,0)}
 ):Play()
 
 task.spawn(function()
-settings.Callback(cvalue)
+ab.Callback(an)
 end)
 end
 
-if settings.CurrentValue then
-Slider:Set(settings.CurrentValue)
+if ab.CurrentValue then
+W:Set(ab.CurrentValue)
 end
 
-if settings.Flag and cw_self.Flags[settings.Flag]then
-Slider:Set(cw_self.Flags[settings.Flag])
+if ab.Flag and K.Flags[ab.Flag]then
+W:Set(K.Flags[ab.Flag])
 end
 
-slider.MouseEnter:Connect(function()
-local TS=game:GetService("TweenService")
-TS:Create(
-slider,
+ac.MouseEnter:Connect(function()
+local am=game:GetService("TweenService")
+am:Create(
+ac,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{BackgroundColor3=theme.ElementBackgroundHover}
+{BackgroundColor3=l.ElementBackgroundHover}
 ):Play()
 end)
 
-slider.MouseLeave:Connect(function()
-local TS=game:GetService("TweenService")
-TS:Create(
-slider,
+ac.MouseLeave:Connect(function()
+local am=game:GetService("TweenService")
+am:Create(
+ac,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{BackgroundColor3=theme.ElementBackground}
+{BackgroundColor3=l.ElementBackground}
 ):Play()
 end)
 
-local DragLoop=nil
-slide.InputBegan:Connect(function(Input)
+local am=nil
+ai.InputBegan:Connect(function(an)
 if
-Input.UserInputType==Enum.UserInputType.MouseButton1
-or Input.UserInputType==Enum.UserInputType.Touch
+an.UserInputType==Enum.UserInputType.MouseButton1
+or an.UserInputType==Enum.UserInputType.Touch
 then
-local UIS=game:GetService("UserInputService")
-local width=slide.AbsoluteSize.X
-DragLoop=game:GetService("RunService").Stepped:Connect(function()
-local x=UIS:GetMouseLocation().X-slide.AbsolutePosition.X
-local percent=x/width
+local ao=game:GetService("UserInputService")
+local ap=ai.AbsoluteSize.X
+am=game:GetService("RunService").Stepped:Connect(function()
+local _=ao:GetMouseLocation().X-ai.AbsolutePosition.X
+local aq=_/ap
 
-local val=min+(percent*(max-min))
-val=math.floor(val/step)*step
+local ar=X+(aq*(Y-X))
+ar=math.floor(ar/Z)*Z
 
-local mult=1/step
-val=math.round(val*mult)/mult
+local as=1/Z
+ar=math.round(ar*as)/as
 
-Slider:Set(val)
+W:Set(ar)
 end)
 end
 end)
 
-slide.InputEnded:Connect(function(Input)
+ai.InputEnded:Connect(function(an)
 if
-Input.UserInputType==Enum.UserInputType.MouseButton1
-or Input.UserInputType==Enum.UserInputType.Touch
+an.UserInputType==Enum.UserInputType.MouseButton1
+or an.UserInputType==Enum.UserInputType.Touch
 then
-DragLoop:Disconnect()
-DragLoop=nil
+am:Disconnect()
+am=nil
 end
 end)
 
-table.insert(self.Content,slider)
+table.insert(aa.Content,ac)
 
-if self.Active then
-slider.Parent=tabContent
+if aa.Active then
+ac.Parent=G
 end
 
-return Slider
+return W
 end
 
-tab.CreateKeybind=function(self,settings)
-if settings.Flag and cw_self.Flags[settings.Flag]then
-settings.CurrentKeybind=cw_self.Flags[settings.Flag]
+T.CreateKeybind=function(aa,ab)
+if ab.Flag and K.Flags[ab.Flag]then
+ab.CurrentKeybind=K.Flags[ab.Flag]
 SaveConfig()
 end
 
-local toggle=Instance.new("Frame")
-toggle.BorderSizePixel=0
-toggle.BackgroundColor3=theme.ElementBackground
-toggle.AutomaticSize=Enum.AutomaticSize.X
-toggle.Size=UDim2.new(0,0,0,40)
+local ac=Instance.new("Frame")
+ac.BorderSizePixel=0
+ac.BackgroundColor3=l.ElementBackground
+ac.AutomaticSize=Enum.AutomaticSize.X
+ac.Size=UDim2.new(0,0,0,40)
 
-Instance.new("UICorner",toggle)
+Instance.new("UICorner",ac)
 
-local btn_stroke=Instance.new("UIStroke",toggle)
-btn_stroke.Color=theme.ElementStroke
+local ad=Instance.new("UIStroke",ac)
+ad.Color=l.ElementStroke
 
-Instance.new("UIFlexItem",toggle)
+Instance.new("UIFlexItem",ac)
 
-local btn_list=Instance.new("UIListLayout",toggle)
-btn_list.HorizontalFlex=Enum.UIFlexAlignment.SpaceBetween
-btn_list.Padding=UDim.new(0,15)
-btn_list.VerticalAlignment=Enum.VerticalAlignment.Center
-btn_list.SortOrder=Enum.SortOrder.LayoutOrder
-btn_list.FillDirection=Enum.FillDirection.Horizontal
+local ae=Instance.new("UIListLayout",ac)
+ae.HorizontalFlex=Enum.UIFlexAlignment.SpaceBetween
+ae.Padding=UDim.new(0,15)
+ae.VerticalAlignment=Enum.VerticalAlignment.Center
+ae.SortOrder=Enum.SortOrder.LayoutOrder
+ae.FillDirection=Enum.FillDirection.Horizontal
 
-local btn_pad=Instance.new("UIPadding",toggle)
-btn_pad.PaddingRight=UDim.new(0,10)
-btn_pad.PaddingLeft=UDim.new(0,10)
+local af=Instance.new("UIPadding",ac)
+af.PaddingRight=UDim.new(0,10)
+af.PaddingLeft=UDim.new(0,10)
 
-local btn_flex=Instance.new("UIFlexItem")
-btn_flex.FlexMode=Enum.UIFlexMode.Grow
+local ag=Instance.new("UIFlexItem")
+ag.FlexMode=Enum.UIFlexMode.Grow
 
-local label=Instance.new("TextLabel",toggle)
-label.BorderSizePixel=0
-label.TextSize=18
-label.FontFace=Font.new(
+local ah=Instance.new("TextLabel",ac)
+ah.BorderSizePixel=0
+ah.TextSize=18
+ah.FontFace=Font.new(
 "rbxasset://fonts/families/SourceSansPro.json",
 Enum.FontWeight.Regular,
 Enum.FontStyle.Normal
 )
-label.TextColor3=theme.TextColor
-label.BackgroundTransparency=1
-label.Size=UDim2.new(0,0,0,30)
-label.Text=settings.Name
-label.AutomaticSize=Enum.AutomaticSize.X
+ah.TextColor3=l.TextColor
+ah.BackgroundTransparency=1
+ah.Size=UDim2.new(0,0,0,30)
+ah.Text=ab.Name
+ah.AutomaticSize=Enum.AutomaticSize.X
 
-local switch=Instance.new("Frame",toggle)
-switch.BorderSizePixel=0
-switch.BackgroundColor3=theme.InputBackground
-switch.Size=UDim2.new(0,30,0,30)
+local ai=Instance.new("Frame",ac)
+ai.BorderSizePixel=0
+ai.BackgroundColor3=l.InputBackground
+ai.Size=UDim2.new(0,30,0,30)
 
-local switch_stroke=Instance.new("UIStroke",switch)
-switch_stroke.Color=theme.InputStroke
+local aj=Instance.new("UIStroke",ai)
+aj.Color=l.InputStroke
 
-local switch_corner=Instance.new("UICorner",switch)
-switch_corner.CornerRadius=UDim.new(0,3)
+local ak=Instance.new("UICorner",ai)
+ak.CornerRadius=UDim.new(0,3)
 
-local input=Instance.new("TextBox",switch)
-input.BorderSizePixel=0
-input.TextSize=16
-input.TextColor3=theme.TextColor
-input.FontFace=Font.new(
+local al=Instance.new("TextBox",ai)
+al.BorderSizePixel=0
+al.TextSize=16
+al.TextColor3=l.TextColor
+al.FontFace=Font.new(
 "rbxasset://fonts/families/SourceSansPro.json",
 Enum.FontWeight.Regular,
 Enum.FontStyle.Normal
 )
-input.Size=UDim2.new(1,0,1,0)
-input.Text=settings.CurrentKeybind or""
-input.BackgroundTransparency=1
+al.Size=UDim2.new(1,0,1,0)
+al.Text=ab.CurrentKeybind or""
+al.BackgroundTransparency=1
 
-toggle.InputBegan:Connect(function(input)
+ac.InputBegan:Connect(function(am)
 if
-input.UserInputType==Enum.UserInputType.MouseButton1
-or input.UserInputType==Enum.UserInputType.Touch
+am.UserInputType==Enum.UserInputType.MouseButton1
+or am.UserInputType==Enum.UserInputType.Touch
 then
 end
 end)
 
-toggle.MouseEnter:Connect(function()
-local TS=game:GetService("TweenService")
-TS:Create(
-toggle,
+ac.MouseEnter:Connect(function()
+local am=game:GetService("TweenService")
+am:Create(
+ac,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{BackgroundColor3=theme.ElementBackgroundHover}
+{BackgroundColor3=l.ElementBackgroundHover}
 ):Play()
 end)
 
-toggle.MouseLeave:Connect(function()
-local TS=game:GetService("TweenService")
-TS:Create(
-toggle,
+ac.MouseLeave:Connect(function()
+local am=game:GetService("TweenService")
+am:Create(
+ac,
 TweenInfo.new(0.6,Enum.EasingStyle.Exponential),
-{BackgroundColor3=theme.ElementBackground}
+{BackgroundColor3=l.ElementBackground}
 ):Play()
 end)
 
-local checking=false
-input.Focused:Connect(function()
-checking=true
-input.Text=""
+local am=false
+al.Focused:Connect(function()
+am=true
+al.Text=""
 end)
 
-input.FocusLost:Connect(function()
-checking=false
-if input.Text==nil or input.Text==""then
-input.Text=settings.CurrentKeybind
+al.FocusLost:Connect(function()
+am=false
+if al.Text==nil or al.Text==""then
+al.Text=ab.CurrentKeybind
 end
 end)
 
-local _input=input
-game:GetService("UserInputService").InputBegan:Connect(function(input,proc)
-if checking then
-if input.KeyCode~=Enum.KeyCode.Unknown then
-local SplitMessage=string.split(tostring(input.KeyCode),".")
-local NewKeyNoEnum=SplitMessage[3]
-_input.Text=tostring(NewKeyNoEnum)
-settings.CurrentKeybind=tostring(NewKeyNoEnum)
-if settings.Flag then
-cw_self.Flags[settings.Flag]=tostring(NewKeyNoEnum)
+local an=al
+game:GetService("UserInputService").InputBegan:Connect(function(ao,ap)
+if am then
+if ao.KeyCode~=Enum.KeyCode.Unknown then
+local aq=string.split(tostring(ao.KeyCode),".")
+local ar=aq[3]
+an.Text=tostring(ar)
+ab.CurrentKeybind=tostring(ar)
+if ab.Flag then
+K.Flags[ab.Flag]=tostring(ar)
 SaveConfig()
 end
-_input:ReleaseFocus()
+an:ReleaseFocus()
 end
 elseif
-settings.CurrentKeybind~=nil
-and(input.KeyCode==Enum.KeyCode[settings.CurrentKeybind]and not proc)
+ab.CurrentKeybind~=nil
+and(ao.KeyCode==Enum.KeyCode[ab.CurrentKeybind]and not ap)
 then
-settings.Callback()
+ab.Callback()
 end
 end)
 
-table.insert(self.Content,toggle)
+table.insert(aa.Content,ac)
 
-if self.Active then
-toggle.Parent=tabContent
+if aa.Active then
+ac.Parent=G
 end
 end
 
-tab.CreateSection=function(self,name)
-local label=Instance.new("TextLabel")
-label.BorderSizePixel=0
-label.TextSize=20
-label.FontFace=Font.new(
+T.CreateSection=function(aa,ab)
+local ac=Instance.new("TextLabel")
+ac.BorderSizePixel=0
+ac.TextSize=20
+ac.FontFace=Font.new(
 "rbxasset://fonts/families/SourceSansPro.json",
 Enum.FontWeight.Regular,
 Enum.FontStyle.Normal
 )
-label.TextColor3=theme.TextColor
-label.BackgroundTransparency=1
-label.Size=UDim2.new(0,0,0,30)
-label.Text=name
-label.AutomaticSize=Enum.AutomaticSize.X
+ac.TextColor3=l.TextColor
+ac.BackgroundTransparency=1
+ac.Size=UDim2.new(0,0,0,30)
+ac.Text=ab
+ac.AutomaticSize=Enum.AutomaticSize.X
 
-table.insert(self.Content,label)
+table.insert(aa.Content,ac)
 
-if self.Active then
-label.Parent=tabContent
+if aa.Active then
+ac.Parent=G
 end
 end
 
-tab.CreateDropdown=function(self,settings)end
+T.CreateDropdown=function(aa,ab)end
 
-tab.CreateLabel=function(self,name)
-local label=Instance.new("TextLabel")
-label.BorderSizePixel=0
-label.TextSize=18
-label.FontFace=Font.new(
+T.CreateLabel=function(aa,ab)
+local ac=Instance.new("TextLabel")
+ac.BorderSizePixel=0
+ac.TextSize=18
+ac.FontFace=Font.new(
 "rbxasset://fonts/families/SourceSansPro.json",
 Enum.FontWeight.Regular,
 Enum.FontStyle.Normal
 )
-label.TextColor3=theme.TextColor
-label.BackgroundTransparency=1
-label.Size=UDim2.new(0,0,0,30)
-label.Text=name
-label.AutomaticSize=Enum.AutomaticSize.X
+ac.TextColor3=l.TextColor
+ac.BackgroundTransparency=1
+ac.Size=UDim2.new(0,0,0,30)
+ac.Text=ab
+ac.AutomaticSize=Enum.AutomaticSize.X
 
-table.insert(self.Content,label)
+table.insert(aa.Content,ac)
 
-if self.Active then
-label.Parent=tabContent
+if aa.Active then
+ac.Parent=G
 end
 end
 
-table.insert(cw_self.Tabs,tab)
-if cw_self.Tabs[1].Name==name then
+table.insert(K.Tabs,T)
+if K.Tabs[1].Name==M then
 selectTab()
 end
 
-return tab
+return T
 end
 
-window.Frame=frame
+k.Frame=m
 
-self.Window=window
-return window
+h.Window=k
+return k
 end,
 }
 
-return Library end function __DARKLUA_BUNDLE_MODULES.d():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.d if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.d=v end return v.c end end do local function __modImpl()
+return c end function a.d():typeof(__modImpl())local aa=a.cache.d if not aa then aa={c=__modImpl()}a.cache.d=aa end return aa.c end end do local function __modImpl()
 
-local Utils=__DARKLUA_BUNDLE_MODULES.b()
+local aa=a.b()
 
-local SETTINGS={
+local ab={
 Name="Luke's Script Hub",
 Icon=0,
 LoadingTitle="Luke's Script Hub",
@@ -1832,392 +1832,392 @@ FileName="Lukes Script Hub",
 KeySystem=false,
 }
 
-local M={}
+local ac={}
 
-if Utils.isKBM()then
-M.Library=__DARKLUA_BUNDLE_MODULES.d()
+if aa.isKBM()then
+ac.Library=a.d()
 else
-M.Library=loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+ac.Library=loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 end
 
-M.Window=M.Library:CreateWindow(SETTINGS)
+ac.Window=ac.Library:CreateWindow(ab)
 
-return M end function __DARKLUA_BUNDLE_MODULES.e():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.e if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.e=v end return v.c end end do local function __modImpl()
+return ac end function a.e():typeof(__modImpl())local aa=a.cache.e if not aa then aa={c=__modImpl()}a.cache.e=aa end return aa.c end end do local function __modImpl()
 
-local UI=__DARKLUA_BUNDLE_MODULES.e()
-local Utils=__DARKLUA_BUNDLE_MODULES.b()
+local aa=a.e()
+local ab=a.b()
 
-local UniversalTab=UI.Window:CreateTab("Universal","globe")
+local ac=aa.Window:CreateTab("Universal","globe")
 
-local NoclipSection=UniversalTab:CreateSection("Noclip")
+local ad=ac:CreateSection("Noclip")
 
-local NoClipToggle=UniversalTab:CreateToggle({
+local ae=ac:CreateToggle({
 Name="Toggle Noclip",
 CurrentValue=false,
 Flag=nil,
-Callback=function(value)
-Utils.Noclip.set_manual(value)
-if value then
-Utils.Noclip.enable()
+Callback=function(ae)
+ab.Noclip.set_manual(ae)
+if ae then
+ab.Noclip.enable()
 else
-Utils.Noclip.disable()
+ab.Noclip.disable()
 end
 end,
 })
 
-local NoClipKeybind=UniversalTab:CreateKeybind({
+local af=ac:CreateKeybind({
 Name="Toggle Noclip",
 CurrentKeybind="V",
 HoldToInteract=false,
 Flag="NoClipKeybind",
 Callback=function()
-if NoClipToggle.CurrentValue then
-UI.Library:Notify({
+if ae.CurrentValue then
+aa.Library:Notify({
 Title="Noclip Disabled",
 Content="Noclip is now disabled.",
 Duration=3,
 Image="ban",
 })
 else
-UI.Library:Notify({
+aa.Library:Notify({
 Title="Noclip Enabled",
 Content="Noclip is now enabled.",
 Duration=3,
 Image="check",
 })
 end
-NoClipToggle:Set(not NoClipToggle.CurrentValue)
+ae:Set(not ae.CurrentValue)
 end,
 })
 
-local PathSection=UniversalTab:CreateSection("Path")
+local ag=ac:CreateSection("Path")
 
-local path_toggled=false
-local PathKeybind=UniversalTab:CreateKeybind({
+local ah=false
+local ai=ac:CreateKeybind({
 Name="Toggle Paths",
 CurrentKeybind="N",
 HoldToInteract=false,
 Flag="PathKeybind",
 Callback=function()
-path_toggled=not path_toggled
+ah=not ah
 end,
 })
 
 task.spawn(function()
-local path=nil
+local aj=nil
 
 local function getPath()
-if not path then
-path=Instance.new("Part",game.Workspace)
-path.Size=Vector3.new(3,1,3)
-path.Anchored=true
+if not aj then
+aj=Instance.new("Part",game.Workspace)
+aj.Size=Vector3.new(3,1,3)
+aj.Anchored=true
 end
 
-return path
+return aj
 end
 
 while task.wait()do
-if path_toggled==true then
-local p=getPath()
+if ah==true then
+local ak=getPath()
 
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
-local hum=char and char:FindFirstChildWhichIsA("Humanoid")
-local rig=hum and hum.RigType
+local al=game:GetService("Players").LocalPlayer
+local am=al and al.Character
+local an=am and am:FindFirstChild("HumanoidRootPart")
+local ao=am and am:FindFirstChildWhichIsA("Humanoid")
+local ap=ao and ao.RigType
 
-if root and hum and rig then
-if rig==Enum.HumanoidRigType.R15 then
-local s=root.Size.Y
-local h=hum.HipHeight
+if an and ao and ap then
+if ap==Enum.HumanoidRigType.R15 then
+local aq=an.Size.Y
+local ar=ao.HipHeight
 
-p.CFrame=root.CFrame*CFrame.new(0,-(s/2)-h-0.5,0)
+ak.CFrame=an.CFrame*CFrame.new(0,-(aq/2)-ar-0.5,0)
 else
-local leg=char and char:FindFirstChild("Left Leg")
-if leg then
-local s=root.Size.Y
-local h=leg.Size.Y
+local aq=am and am:FindFirstChild("Left Leg")
+if aq then
+local ar=an.Size.Y
+local as=aq.Size.Y
 
-p.CFrame=root.CFrame*CFrame.new(0,-(s/2)-h-0.5,0)
+ak.CFrame=an.CFrame*CFrame.new(0,-(ar/2)-as-0.5,0)
 end
 end
 end
 else
-if path then
-path:Destroy()
-path=nil
+if aj then
+aj:Destroy()
+aj=nil
 end
 end
 end
 end)
 
-local DelSection=UniversalTab:CreateSection("Ctrl+Click Delete")
+local aj=ac:CreateSection("Ctrl+Click Delete")
 
-local CtrlClickInstructions=UniversalTab:CreateLabel("Ctrl+Left-Click a part to delete. Ctrl+Right-Click to restore")
+local ak=ac:CreateLabel("Ctrl+Left-Click a part to delete. Ctrl+Right-Click to restore")
 
-local ctrl_click_delete_toggled=true
-local CtrlClickDelToggle=UniversalTab:CreateToggle({
+local al=true
+local am=ac:CreateToggle({
 Name="Ctrl+Click Delete",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-ctrl_click_delete_toggled=value
+Callback=function(am)
+al=am
 end,
 })
 
 task.spawn(function()
-local Plr=game:GetService("Players").LocalPlayer
-local Mouse=Plr:GetMouse()
+local an=game:GetService("Players").LocalPlayer
+local ao=an:GetMouse()
 
-local deletedParts=Instance.new("Folder",game.Workspace)
-deletedParts.Name="DELETED_PARTS"
+local ap=Instance.new("Folder",game.Workspace)
+ap.Name="DELETED_PARTS"
 
-local index=1
+local aq=1
 
 local function isControlDown()
-local UIS=game:GetService("UserInputService")
+local ar=game:GetService("UserInputService")
 
-return UIS:IsKeyDown(Enum.KeyCode.LeftControl)or UIS:IsKeyDown(Enum.KeyCode.LeftMeta)
+return ar:IsKeyDown(Enum.KeyCode.LeftControl)or ar:IsKeyDown(Enum.KeyCode.LeftMeta)
 end
 
-Mouse.Button1Down:Connect(function()
-if not ctrl_click_delete_toggled then
+ao.Button1Down:Connect(function()
+if not al then
 return
 end
 if not isControlDown()then
 return
 end
-if not Mouse.Target then
+if not ao.Target then
 return
 end
-local objHolder=Instance.new("ObjectValue",deletedParts)
-objHolder.Value=Mouse.Target
-objHolder.Name=""..index
-local objPos=Instance.new("Vector3Value",objHolder)
-objPos.Value=Mouse.Target.Position
-objPos.Name="pos"
-Mouse.Target.Position=Vector3.new(100000000,100000000,100000000)
+local ar=Instance.new("ObjectValue",ap)
+ar.Value=ao.Target
+ar.Name=""..aq
+local as=Instance.new("Vector3Value",ar)
+as.Value=ao.Target.Position
+as.Name="pos"
+ao.Target.Position=Vector3.new(100000000,100000000,100000000)
 
-index=index+1
+aq=aq+1
 end)
 
-Mouse.Button2Down:Connect(function()
-if not ctrl_click_delete_toggled then
+ao.Button2Down:Connect(function()
+if not al then
 return
 end
 if not isControlDown()then
 return
 end
-deletedParts:GetChildren()[#deletedParts:GetChildren()].Value.Position=
-deletedParts:GetChildren()[#deletedParts:GetChildren()].pos.Value
-deletedParts:GetChildren()[#deletedParts:GetChildren()]:Destroy()
+ap:GetChildren()[#ap:GetChildren()].Value.Position=
+ap:GetChildren()[#ap:GetChildren()].pos.Value
+ap:GetChildren()[#ap:GetChildren()]:Destroy()
 end)
 
-local h=Instance.new("Part",game.Workspace)
-local j=Instance.new("ObjectValue",deletedParts)
-j.Value=h
-j.Name="0"
-local k=Instance.new("Vector3Value",j)
-k.Name="pos"
-k.Value=Vector3.new(100000000,100000000,100000000)
+local ar=Instance.new("Part",game.Workspace)
+local as=Instance.new("ObjectValue",ap)
+as.Value=ar
+as.Name="0"
+local b=Instance.new("Vector3Value",as)
+b.Name="pos"
+b.Value=Vector3.new(100000000,100000000,100000000)
 end)
 
-local UniversalESPSection=UniversalTab:CreateSection("Universal ESP")
+local an=ac:CreateSection("Universal ESP")
 
-local function updateUniversalESP(enabled)
-for i,v in pairs(game:GetService("Players"):GetPlayers())do
-if v.Character and v~=game:GetService("Players").LocalPlayer then
-Utils.updateESP(v.Character,Color3.fromRGB(255,0,0),enabled)
+local function updateUniversalESP(ao)
+for ap,aq in pairs(game:GetService("Players"):GetPlayers())do
+if aq.Character and aq~=game:GetService("Players").LocalPlayer then
+ab.updateESP(aq.Character,Color3.fromRGB(255,0,0),ao)
 end
 end
 end
 
-local universal_esp_toggled=false
-local UniversalESPToggle=UniversalTab:CreateToggle({
+local ao=false
+local ap=ac:CreateToggle({
 Name="Universal ESP",
 CurrentValue=false,
 Flag=nil,
-Callback=function(value)
-universal_esp_toggled=value
-updateUniversalESP(universal_esp_toggled)
+Callback=function(ap)
+ao=ap
+updateUniversalESP(ao)
 end,
 })
 game:GetService("RunService").RenderStepped:Connect(function()
-if universal_esp_toggled then
-updateUniversalESP(universal_esp_toggled)
+if ao then
+updateUniversalESP(ao)
 end
 end)
 
-local ussPlr=game:GetService("Players").LocalPlayer
-local TweenService=game:GetService("TweenService")
-local ussChar=ussPlr and ussPlr.Character
-local ussHum=ussChar and ussChar:FindFirstChild("Humanoid")
+local aq=game:GetService("Players").LocalPlayer
+local ar=game:GetService("TweenService")
+local as=aq and aq.Character
+local b=as and as:FindFirstChild("Humanoid")
 
-local ussSpeed=(ussHum and ussHum.WalkSpeed)or 16
+local c=(b and b.WalkSpeed)or 16
 
-local UniversalSpeedSection=UniversalTab:CreateSection("Speed")
+local d=ac:CreateSection("Speed")
 
-local UniversalSpeedSlider=UniversalTab:CreateSlider({
+local e=ac:CreateSlider({
 Name="Speed",
 Range={0,100},
 Increment=1,
 Suffix="",
-CurrentValue=ussSpeed,
+CurrentValue=c,
 Flag=nil,
-Callback=function(value)
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local hum=char and char:FindFirstChildWhichIsA("Humanoid")
+Callback=function(e)
+local f=game:GetService("Players").LocalPlayer
+local g=f and f.Character
+local h=g and g:FindFirstChildWhichIsA("Humanoid")
 
-if hum then
-hum.WalkSpeed=value
+if h then
+h.WalkSpeed=e
 end
 end,
 })
 
-UniversalTab:CreateButton({
+ac:CreateButton({
 Name="Set to 16",
 Callback=function()
-UniversalSpeedSlider:Set(16)
+e:Set(16)
 end,
 })
 
-UniversalTab:CreateButton({
+ac:CreateButton({
 Name="Set to 18",
 Callback=function()
-UniversalSpeedSlider:Set(18)
+e:Set(18)
 end,
 })
 
-UniversalTab:CreateButton({
+ac:CreateButton({
 Name="Set to 20",
 Callback=function()
-UniversalSpeedSlider:Set(20)
+e:Set(20)
 end,
 })
 
-local SpeedMod=nil
-local SpeedCA=nil
-local LoopSpeedToggle=UniversalTab:CreateToggle({
+local f=nil
+local g=nil
+local h=ac:CreateToggle({
 Name="Loop Speed",
 CurrentValue=false,
 Flag=nil,
-Callback=function(value)
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local hum=char and char:FindFirstChildWhichIsA("Humanoid")
+Callback=function(h)
+local i=game:GetService("Players").LocalPlayer
+local j=i and i.Character
+local k=j and j:FindFirstChildWhichIsA("Humanoid")
 
-if value and hum then
+if h and k then
 local function SetWalkspeed()
-local _plr=game:GetService("Players").LocalPlayer
-local _char=_plr and _plr.Character
-local _hum=_char and _char:FindFirstChildWhichIsA("Humanoid")
+local l=game:GetService("Players").LocalPlayer
+local m=l and l.Character
+local n=m and m:FindFirstChildWhichIsA("Humanoid")
 
-if _hum then
-_hum.WalkSpeed=UniversalSpeedSlider.CurrentValue
+if n then
+n.WalkSpeed=e.CurrentValue
 end
 end
 SetWalkspeed()
-SpeedMod=(SpeedMod and SpeedMod:Disconnect()and false)
-or hum:GetPropertyChangedSignal("WalkSpeed"):Connect(SetWalkspeed)
-SpeedCA=(SpeedCA and SpeedCA:Disconnect()and false)
-or plr.CharacterAdded:Connect(function(nChar)
-hum=nChar:WaitForChild("Humanoid")
+f=(f and f:Disconnect()and false)
+or k:GetPropertyChangedSignal("WalkSpeed"):Connect(SetWalkspeed)
+g=(g and g:Disconnect()and false)
+or i.CharacterAdded:Connect(function(l)
+k=l:WaitForChild("Humanoid")
 SetWalkspeed()
-SpeedMod=(SpeedMod and SpeedMod:Disconnect()and false)
-or hum:GetPropertyChangedSignal("WalkSpeed"):Connect(SetWalkspeed)
+f=(f and f:Disconnect()and false)
+or k:GetPropertyChangedSignal("WalkSpeed"):Connect(SetWalkspeed)
 end)
 else
-SpeedMod=(SpeedMod and SpeedMod:Disconnect()and false)or nil
-SpeedCA=(SpeedCA and SpeedCA:Disconnect()and false)or nil
+f=(f and f:Disconnect()and false)or nil
+g=(g and g:Disconnect()and false)or nil
 end
 end,
 })
 
-return true end function __DARKLUA_BUNDLE_MODULES.f():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.f if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.f=v end return v.c end end do local function __modImpl()
+return true end function a.f():typeof(__modImpl())local aa=a.cache.f if not aa then aa={c=__modImpl()}a.cache.f=aa end return aa.c end end do local function __modImpl()
 
-local Utils=__DARKLUA_BUNDLE_MODULES.b()
+local aa=a.b()
 
-local M={}
+local ab={}
 
-function M.getMap()
-local map=game.Workspace:FindFirstChild("Map")
-return map
+function ab.getMap()
+local ac=game.Workspace:FindFirstChild("Map")
+return ac
 end
 
-function M.getFunctionals()
-local map=M.getMap()
-local funcs=map and map:FindFirstChild("Functionals")
-return funcs
+function ab.getFunctionals()
+local ac=ab.getMap()
+local ad=ac and ac:FindFirstChild("Functionals")
+return ad
 end
 
-function M.getComputers()
-local funcs=M.getFunctionals()
-local comps=funcs and funcs:FindFirstChild("Computers")
-if comps then
-return comps:GetChildren()
+function ab.getComputers()
+local ac=ab.getFunctionals()
+local ad=ac and ac:FindFirstChild("Computers")
+if ad then
+return ad:GetChildren()
 else
 return{}
 end
 end
 
-function M.getComputerModel(pc)
-local model=pc and pc:FindFirstChild("ComputerModel")
-return model
+function ab.getComputerModel(ac)
+local ad=ac and ac:FindFirstChild("ComputerModel")
+return ad
 end
 
-function M.getComputerScreen(pc)
-local screen=pc and pc:FindFirstChild("Screen")
-return screen
+function ab.getComputerScreen(ac)
+local ad=ac and ac:FindFirstChild("Screen")
+return ad
 end
 
-function M.getComputerColor(pc)
-local screen=M.getComputerScreen(pc)
-local color=(screen and screen.Color)or Color3.fromRGB(0,0,255)
-return color
+function ab.getComputerColor(ac)
+local ad=ab.getComputerScreen(ac)
+local ae=(ad and ad.Color)or Color3.fromRGB(0,0,255)
+return ae
 end
 
-function M.getBeasts()
-local beasts=game.Workspace:FindFirstChild("Beasts")
-if beasts then
-return beasts:GetChildren()
+function ab.getBeasts()
+local ac=game.Workspace:FindFirstChild("Beasts")
+if ac then
+return ac:GetChildren()
 else
 return{}
 end
 end
 
-function M.getSurvivors()
-local survs=game.Workspace:FindFirstChild("Survivors")
-if survs then
-return survs:GetChildren()
+function ab.getSurvivors()
+local ac=game.Workspace:FindFirstChild("Survivors")
+if ac then
+return ac:GetChildren()
 else
 return{}
 end
 end
 
-return M end function __DARKLUA_BUNDLE_MODULES.g():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.g if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.g=v end return v.c end end do local function __modImpl()
+return ab end function a.g():typeof(__modImpl())local aa=a.cache.g if not aa then aa={c=__modImpl()}a.cache.g=aa end return aa.c end end do local function __modImpl()
 
-local UI=__DARKLUA_BUNDLE_MODULES.e()
-local Utils=__DARKLUA_BUNDLE_MODULES.b()
-local GameUtils=__DARKLUA_BUNDLE_MODULES.g()
+local aa=a.e()
+local ab=a.b()
+local ac=a.g()
 
 if game.GameId==7585283196 then
-local AGTab=UI.Window:CreateTab("Agoraphobia","gamepad-2")
-local AGESPSection=AGTab:CreateSection("ESP")
+local ad=aa.Window:CreateTab("Agoraphobia","gamepad-2")
+local ae=ad:CreateSection("ESP")
 
-local player_esp_toggled=true
+local af=true
 
 local function updateSurvivorESP()
-local survs=GameUtils.getSurvivors()
-for i,v in pairs(survs)do
-Utils.updateESP(v,Color3.fromRGB(0,255,0),player_esp_toggled)
+local ag=ac.getSurvivors()
+for ah,ai in pairs(ag)do
+ab.updateESP(ai,Color3.fromRGB(0,255,0),af)
 end
 end
 
 local function updateBeastESP()
-local beasts=GameUtils.getBeasts()
-for i,v in pairs(beasts)do
-Utils.updateESP(v,Color3.fromRGB(255,0,0),player_esp_toggled)
+local ag=ac.getBeasts()
+for ah,ai in pairs(ag)do
+ab.updateESP(ai,Color3.fromRGB(255,0,0),af)
 end
 end
 
@@ -2226,36 +2226,36 @@ updateSurvivorESP()
 updateBeastESP()
 end
 
-local computer_esp_toggled=true
+local ag=true
 
 local function updateComputerESP()
-local comps=GameUtils.getComputers()
+local ah=ac.getComputers()
 
-for i,v in pairs(comps)do
-local model=GameUtils.getComputerModel(v)
-local color=GameUtils.getComputerColor(v)
-if model then
-Utils.updateESP(model,color,computer_esp_toggled)
+for ai,aj in pairs(ah)do
+local ak=ac.getComputerModel(aj)
+local al=ac.getComputerColor(aj)
+if ak then
+ab.updateESP(ak,al,ag)
 end
 end
 end
 
-local AGESPToggle=AGTab:CreateToggle({
+local ah=ad:CreateToggle({
 Name="Player ESP",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-player_esp_toggled=value
+Callback=function(ah)
+af=ah
 updatePlayerESP()
 end,
 })
 
-local AGPCESPToggle=AGTab:CreateToggle({
+local ai=ad:CreateToggle({
 Name="Computer ESP",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-computer_esp_toggled=value
+Callback=function(ai)
+ag=ai
 updateComputerESP()
 end,
 })
@@ -2271,460 +2271,460 @@ updateComputerESP()
 end)
 end
 
-return true end function __DARKLUA_BUNDLE_MODULES.h():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.h if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.h=v end return v.c end end do local function __modImpl()
+return true end function a.h():typeof(__modImpl())local aa=a.cache.h if not aa then aa={c=__modImpl()}a.cache.h=aa end return aa.c end end do local function __modImpl()
 
-local Utils=__DARKLUA_BUNDLE_MODULES.b()
+local aa=a.b()
 
-local M={}
+local ab={}
 
-function M.getCurrentMap()
-for i,v in pairs(game.Workspace:GetChildren())do
-if v:FindFirstChild("ComputerTable")then
-return v
+function ab.getCurrentMap()
+for ac,ad in pairs(game.Workspace:GetChildren())do
+if ad:FindFirstChild("ComputerTable")then
+return ad
 end
 end
 
 return nil
 end
 
-function M.getCurrentMapChildren()
-local map=M.getCurrentMap()
-if not map then
+function ab.getCurrentMapChildren()
+local ac=ab.getCurrentMap()
+if not ac then
 return{}
 end
 
-return map:GetChildren()
+return ac:GetChildren()
 end
 
-function M.getExits()
-local exits={}
-local map=M.getCurrentMapChildren()
+function ab.getExits()
+local ac={}
+local ad=ab.getCurrentMapChildren()
 
-for i,v in pairs(map)do
-if v.Name=="ExitDoor"then
-table.insert(exits,v)
+for ae,af in pairs(ad)do
+if af.Name=="ExitDoor"then
+table.insert(ac,af)
 end
 end
 
-return exits
+return ac
 end
 
-function M.getExitArea(exit)
-local area=exit:FindFirstChild("ExitArea")
-return area
+function ab.getExitArea(ac)
+local ad=ac:FindFirstChild("ExitArea")
+return ad
 end
 
-function M.getExitTrigger(exit)
-local trigger=exit:FindFirstChild("ExitDoorTrigger")
-return trigger
+function ab.getExitTrigger(ac)
+local ad=ac:FindFirstChild("ExitDoorTrigger")
+return ad
 end
 
-function M.exitNeedsToOpen(exit)
-local trigger=M.getExitTrigger(exit)
-local value=trigger and trigger:FindFirstChild("ActionSign")
+function ab.exitNeedsToOpen(ac)
+local ad=ab.getExitTrigger(ac)
+local ae=ad and ad:FindFirstChild("ActionSign")
 
-if value then
-return value.Value~=0
+if ae then
+return ae.Value~=0
 end
 
 return false
 end
 
-function M.exitIsOpen(exit)
-local trigger=M.getExitTrigger(exit)
+function ab.exitIsOpen(ac)
+local ad=ab.getExitTrigger(ac)
 
-if not trigger then
+if not ad then
 return true
 end
 
 return false
 end
 
-function M.getClosestClosedExit()
-local exits=M.getExits()
-local closed_exits={}
+function ab.getClosestClosedExit()
+local ac=ab.getExits()
+local ad={}
 
-for i,v in pairs(exits)do
-if not M.exitIsOpen(v)and M.exitNeedsToOpen(v)then
-table.insert(closed_exits,v)
+for ae,af in pairs(ac)do
+if not ab.exitIsOpen(af)and ab.exitNeedsToOpen(af)then
+table.insert(ad,af)
 end
 end
 
-local best=nil
-local best_dist=99999999
+local ae=nil
+local af=99999999
 
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+local ag=game:GetService("Players").LocalPlayer
+local ah=ag and ag.Character
+local ai=ah and ah:FindFirstChild("HumanoidRootPart")
 
-if root then
-for i,v in pairs(closed_exits)do
-local trigger=M.getExitTrigger(v)
-local dist=Utils.dist3d(trigger.Position,root.Position)
-if dist<best_dist then
-best_dist=dist
-best=v
-end
-end
-end
-
-return best
-end
-
-function M.findOpenExit()
-local open_exits={}
-
-for i,v in pairs(M.getExits())do
-if M.exitIsOpen(v)then
-table.insert(open_exits,v)
-end
-end
-
-local best=nil
-local best_dist=99999999
-
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
-
-if root then
-for i,v in pairs(open_exits)do
-local area=M.getExitArea(v)
-local dist=Utils.dist3d(area.Position,root.Position)
-
-if dist<best_dist then
-best_dist=dist
-best=v
+if ai then
+for aj,ak in pairs(ad)do
+local al=ab.getExitTrigger(ak)
+local am=aa.dist3d(al.Position,ai.Position)
+if am<af then
+af=am
+ae=ak
 end
 end
 end
 
-return best
+return ae
 end
 
-function M.findBeast()
-for i,v in pairs(game:GetService("Players"):GetPlayers())do
+function ab.findOpenExit()
+local ac={}
+
+for ad,ae in pairs(ab.getExits())do
+if ab.exitIsOpen(ae)then
+table.insert(ac,ae)
+end
+end
+
+local ad=nil
+local ae=99999999
+
+local af=game:GetService("Players").LocalPlayer
+local ag=af and af.Character
+local ah=ag and ag:FindFirstChild("HumanoidRootPart")
+
+if ah then
+for ai,aj in pairs(ac)do
+local ak=ab.getExitArea(aj)
+local al=aa.dist3d(ak.Position,ah.Position)
+
+if al<ae then
+ae=al
+ad=aj
+end
+end
+end
+
+return ad
+end
+
+function ab.findBeast()
+for ac,ad in pairs(game:GetService("Players"):GetPlayers())do
 if
-v.Character
-and v.Character:FindFirstChild("BeastPowers")
-and v~=game:GetService("Players").LocalPlayer
+ad.Character
+and ad.Character:FindFirstChild("BeastPowers")
+and ad~=game:GetService("Players").LocalPlayer
 then
-return v
+return ad
 end
 end
 
 return nil
 end
 
-function M.findBeastIncludingLocal()
-for i,v in pairs(game:GetService("Players"):GetPlayers())do
-if v.Character and v.Character:FindFirstChild("BeastPowers")then
-return v
+function ab.findBeastIncludingLocal()
+for ac,ad in pairs(game:GetService("Players"):GetPlayers())do
+if ad.Character and ad.Character:FindFirstChild("BeastPowers")then
+return ad
 end
 end
 
 return nil
 end
 
-function M.getHammer()
-local beast=M.findBeastIncludingLocal()
-local char=beast and beast.Character
-local hammer=char and char:FindFirstChild("Hammer")
+function ab.getHammer()
+local ac=ab.findBeastIncludingLocal()
+local ad=ac and ac.Character
+local ae=ad and ad:FindFirstChild("Hammer")
 
-return hammer
+return ae
 end
 
-function M.getHammerHandle()
-local beast=M.findBeast()
-local char=beast and beast.Character
-local hammer=char and char:FindFirstChild("Hammer")
-local handle=hammer and hammer:FindFirstChild("Handle")
+function ab.getHammerHandle()
+local ac=ab.findBeast()
+local ad=ac and ac.Character
+local ae=ad and ad:FindFirstChild("Hammer")
+local af=ae and ae:FindFirstChild("Handle")
 
-return handle
+return af
 end
 
-function M.getHammerEvent()
-local hammer=M.getHammer()
+function ab.getHammerEvent()
+local ac=ab.getHammer()
 
-if hammer then
-return hammer:FindFirstChild("HammerEvent")
+if ac then
+return ac:FindFirstChild("HammerEvent")
 end
 
 return nil
 end
 
-function M.getPowerEvent()
-local beast=M.findBeastIncludingLocal()
-local beastChar=beast and beast.Character
-local powers=beastChar and beastChar:FindFirstChild("BeastPowers")
-local event=powers and powers:FindFirstChild("PowersEvent")
-return event
+function ab.getPowerEvent()
+local ac=ab.findBeastIncludingLocal()
+local ad=ac and ac.Character
+local ae=ad and ad:FindFirstChild("BeastPowers")
+local af=ae and ae:FindFirstChild("PowersEvent")
+return af
 end
 
-function M.clickHammer()
-local event=M.getHammerEvent()
+function ab.clickHammer()
+local ac=ab.getHammerEvent()
 
-if event then
-event:FireServer("HammerClick",true)
+if ac then
+ac:FireServer("HammerClick",true)
 end
 end
 
-function M.getStats(plr)
-local stats=plr and plr:FindFirstChild("TempPlayerStatsModule")
-return stats
+function ab.getStats(ac)
+local ad=ac and ac:FindFirstChild("TempPlayerStatsModule")
+return ad
 end
 
-function M.isRagdoll(plr)
-local stats=M.getStats(plr)
-local ragdoll=stats and stats:FindFirstChild("Ragdoll")
-local isRagdoll=ragdoll and ragdoll.Value
+function ab.isRagdoll(ac)
+local ad=ab.getStats(ac)
+local ae=ad and ad:FindFirstChild("Ragdoll")
+local af=ae and ae.Value
 
-if isRagdoll==nil then
+if af==nil then
 return false
 end
 
-return isRagdoll
+return af
 end
 
-function M.isCaptured(plr)
-local stats=M.getStats(plr)
-local captured=stats and stats:FindFirstChild("Captured")
-local isCaptured=captured and captured.Value
+function ab.isCaptured(ac)
+local ad=ab.getStats(ac)
+local ae=ad and ad:FindFirstChild("Captured")
+local af=ae and ae.Value
 
-if isCaptured==nil then
+if af==nil then
 return false
 end
 
-return isCaptured
+return af
 end
 
-function M.hitPlayer(plr)
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+function ab.hitPlayer(ac)
+local ad=ac and ac.Character
+local ae=ad and ad:FindFirstChild("HumanoidRootPart")
 
-if root then
-local event=M.getHammerEvent()
-if event then
-M.clickHammer()
-event:FireServer("HammerHit",root)
-end
-end
-end
-
-function M.tiePlayer(plr)
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
-
-if root then
-local event=M.getHammerEvent()
-if event then
-event:FireServer("HammerTieUp",root,root.Position)
+if ae then
+local af=ab.getHammerEvent()
+if af then
+ab.clickHammer()
+af:FireServer("HammerHit",ae)
 end
 end
 end
 
-function M.getChaseMusic()
-local handle=M.getHammerHandle()
-local music=handle and handle:FindFirstChild("SoundChaseMusic")
+function ab.tiePlayer(ac)
+local ad=ac and ac.Character
+local ae=ad and ad:FindFirstChild("HumanoidRootPart")
 
-return music
+if ae then
+local af=ab.getHammerEvent()
+if af then
+af:FireServer("HammerTieUp",ae,ae.Position)
+end
+end
 end
 
-local defaultChaseMusicVolume=0.4
-local chaseMusicVolume=0.4
+function ab.getChaseMusic()
+local ac=ab.getHammerHandle()
+local ad=ac and ac:FindFirstChild("SoundChaseMusic")
+
+return ad
+end
+
+local ac=0.4
+local ad=0.4
 
 task.spawn(function()
 while task.wait()do
-local music=M.getChaseMusic()
+local ae=ab.getChaseMusic()
 
-if music then
-music.Volume=chaseMusicVolume
+if ae then
+ae.Volume=ad
 end
 end
 end)
 
-function M.updateChaseVolume(value)
-chaseMusicVolume=((value/100)*defaultChaseMusicVolume)
+function ab.updateChaseVolume(ae)
+ad=((ae/100)*ac)
 end
 
-function M.isGameActive()
+function ab.isGameActive()
 return game.ReplicatedStorage.IsGameActive.Value and game.ReplicatedStorage.GameTimer.Value~=0
 end
 
-function M.isBeast()
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
+function ab.isBeast()
+local ae=game:GetService("Players").LocalPlayer
+local af=ae and ae.Character
 
-if M.isGameActive()and char then
+if ab.isGameActive()and af then
 task.wait()
-return char:FindFirstChild("BeastPowers")
+return af:FindFirstChild("BeastPowers")
 end
 
 return false
 end
 
-function M.getDistToBeast()
-local beast=M.findBeast()
-local beastChar=beast and beast.Character
-local beastRoot=beastChar and beastChar:FindFirstChild("HumanoidRootPart")
+function ab.getDistToBeast()
+local ae=ab.findBeast()
+local af=ae and ae.Character
+local ag=af and af:FindFirstChild("HumanoidRootPart")
 
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+local ah=game:GetService("Players").LocalPlayer
+local ai=ah and ah.Character
+local aj=ai and ai:FindFirstChild("HumanoidRootPart")
 
-if beastRoot and root then
-return Utils.dist3d(root.Position,beastRoot.Position)
+if ag and aj then
+return aa.dist3d(aj.Position,ag.Position)
 end
 
 return 99999999
 end
 
-function M.getActivePlayers()
-local players={}
+function ab.getActivePlayers()
+local ae={}
 
-local plr=game:GetService("Players").LocalPlayer
-local pgui=plr and plr:FindFirstChild("PlayerGui")
-local sgui=pgui and pgui:FindFirstChild("ScreenGui")
-local sbars=sgui and sgui:FindFirstChild("StatusBars")
+local af=game:GetService("Players").LocalPlayer
+local ag=af and af:FindFirstChild("PlayerGui")
+local ah=ag and ag:FindFirstChild("ScreenGui")
+local ai=ah and ah:FindFirstChild("StatusBars")
 
-local bars=sbars and sbars:GetChildren()
+local aj=ai and ai:GetChildren()
 
-if bars then
-for i,v in pairs(bars)do
-if v:IsA("TextLabel")and v.TextColor3==Color3.fromRGB(255,255,255)then
-local name=v.ContentText
-local player=game:GetService("Players"):FindFirstChild(name)
+if aj then
+for ak,al in pairs(aj)do
+if al:IsA("TextLabel")and al.TextColor3==Color3.fromRGB(255,255,255)then
+local am=al.ContentText
+local an=game:GetService("Players"):FindFirstChild(am)
 
-if player then
-table.insert(players,player)
+if an then
+table.insert(ae,an)
 end
 end
 end
 end
 
-return players
+return ae
 end
 
-function M.isPlayerCaptured(plr)
-local stats=M.getStats(plr)
-local cap=stats and stats:FindFirstChild("Captured")
-if cap then
-return cap.Value
+function ab.isPlayerCaptured(ae)
+local af=ab.getStats(ae)
+local ag=af and af:FindFirstChild("Captured")
+if ag then
+return ag.Value
 end
 
 return false
 end
 
-function M.getCapturablePlayers()
-local players={}
+function ab.getCapturablePlayers()
+local ae={}
 
-local plr=game:GetService("Players").LocalPlayer
+local af=game:GetService("Players").LocalPlayer
 
-for i,v in pairs(M.getActivePlayers())do
-if v~=plr then
-if not M.isPlayerCaptured(v)then
-table.insert(players,v)
+for ag,ah in pairs(ab.getActivePlayers())do
+if ah~=af then
+if not ab.isPlayerCaptured(ah)then
+table.insert(ae,ah)
 end
 end
 end
 
-return players
+return ae
 end
 
-function M.triggerEvent(event,value)
-local RemoteEvent=game:GetService("ReplicatedStorage").RemoteEvent
-RemoteEvent:FireServer("Input","Trigger",value,event)
+function ab.triggerEvent(ae,af)
+local ag=game:GetService("ReplicatedStorage").RemoteEvent
+ag:FireServer("Input","Trigger",af,ae)
 end
 
-function M.triggerInput(value)
-local RemoteEvent=game:GetService("ReplicatedStorage").RemoteEvent
-RemoteEvent:FireServer("Input","Action",value)
+function ab.triggerInput(ae)
+local af=game:GetService("ReplicatedStorage").RemoteEvent
+af:FireServer("Input","Action",ae)
 end
 
-function M.triggerCrawl(value)
-local RemoteEvent=game:GetService("ReplicatedStorage").RemoteEvent
-RemoteEvent:FireServer("Input","Crawl",value)
+function ab.triggerCrawl(ae)
+local af=game:GetService("ReplicatedStorage").RemoteEvent
+af:FireServer("Input","Crawl",ae)
 end
 
-function M.triggerPod(pod)
-local event=pod:FindFirstChild("Event")
+function ab.triggerPod(ae)
+local af=ae:FindFirstChild("Event")
 
-if event then
-local stats=M.getStats(game:GetService("Players").LocalPlayer)
-local actionEvent=stats and stats:FindFirstChild("ActionEvent")
-local prevEvent=actionEvent and actionEvent.Value
+if af then
+local ag=ab.getStats(game:GetService("Players").LocalPlayer)
+local ah=ag and ag:FindFirstChild("ActionEvent")
+local ai=ah and ah.Value
 
 task.spawn(function()
-M.triggerEvent(event,true)
-M.triggerInput(true)
+ab.triggerEvent(af,true)
+ab.triggerInput(true)
 task.wait(1)
-M.triggerEvent(event,false)
-M.triggerInput(false)
+ab.triggerEvent(af,false)
+ab.triggerInput(false)
 task.wait(1)
-if prevEvent then
-M.triggerEvent(prevEvent,true)
-M.triggerInput(true)
+if ai then
+ab.triggerEvent(ai,true)
+ab.triggerInput(true)
 end
 end)
 end
 end
 
-function M.findNearestFreezePod()
-local best
-local best_dist=99999999
+function ab.findNearestFreezePod()
+local ae
+local af=99999999
 
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+local ag=game:GetService("Players").LocalPlayer
+local ah=ag and ag.Character
+local ai=ah and ah:FindFirstChild("HumanoidRootPart")
 
-for i,v in pairs(game.Workspace:GetDescendants())do
-if v.Name=="FreezePod"then
-local pod=v:FindFirstChild("PodTrigger")
-if pod then
-local capturedTorsoValue=pod:FindFirstChild("CapturedTorso")
+for aj,ak in pairs(game.Workspace:GetDescendants())do
+if ak.Name=="FreezePod"then
+local al=ak:FindFirstChild("PodTrigger")
+if al then
+local am=al:FindFirstChild("CapturedTorso")
 
-if capturedTorsoValue.Value==nil then
-local dist=Utils.dist3d(root.Position,pod.Position)
-if dist<best_dist then
-best=pod
-best_dist=dist
+if am.Value==nil then
+local an=aa.dist3d(ai.Position,al.Position)
+if an<af then
+ae=al
+af=an
 end
 end
 end
 end
 end
 
-return best
+return ae
 end
 
-function M.triggerNearestFreezePod()
-local pod=M.findNearestFreezePod()
-if pod then
-M.triggerPod(pod)
-end
-end
-
-function M.teleportToNearestFreezePod()
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
-
-if root then
-local pod=M.findNearestFreezePod()
-
-Utils.Noclip.enable()
-root.CFrame=pod.CFrame
-task.delay(1,Utils.Noclip.disable)
+function ab.triggerNearestFreezePod()
+local ae=ab.findNearestFreezePod()
+if ae then
+ab.triggerPod(ae)
 end
 end
 
-function M.isInGame()
-local plr=game:GetService("Players").LocalPlayer
-local players=M.getActivePlayers()
+function ab.teleportToNearestFreezePod()
+local ae=game:GetService("Players").LocalPlayer
+local af=ae and ae.Character
+local ag=af and af:FindFirstChild("HumanoidRootPart")
 
-if plr and players then
-for i,v in pairs(players)do
-if v==plr then
+if ag then
+local ah=ab.findNearestFreezePod()
+
+aa.Noclip.enable()
+ag.CFrame=ah.CFrame
+task.delay(1,aa.Noclip.disable)
+end
+end
+
+function ab.isInGame()
+local ae=game:GetService("Players").LocalPlayer
+local af=ab.getActivePlayers()
+
+if ae and af then
+for ag,ah in pairs(af)do
+if ah==ae then
 return true
 end
 end
@@ -2733,53 +2733,41 @@ end
 return false
 end
 
-function M.partCloseToModel(part,model,ddist)
-local base=nil
-if model.PrimaryPart then
-base=model.PrimaryPart
+function ab.partCloseToModel(ae,af,ag)
+local ah=nil
+if af.PrimaryPart then
+ah=af.PrimaryPart
 else
-local d=model:GetDescendants()
-for i,v in pairs(d)do
-if v:IsA("BasePart")then
-base=v
+local ai=af:GetDescendants()
+for aj,ak in pairs(ai)do
+if ak:IsA("BasePart")then
+ah=ak
 break
 end
 end
 end
 
-if part and base then
-local dist=Utils.dist3d(part.Position,base.Position)
-return dist<=ddist
+if ae and ah then
+local ai=aa.dist3d(ae.Position,ah.Position)
+return ai<=ag
 end
 
 return false
 end
 
-function M.isCloseToModel(model,ddist)
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+function ab.isCloseToModel(ae,af)
+local ag=game:GetService("Players").LocalPlayer
+local ah=ag and ag.Character
+local ai=ah and ah:FindFirstChild("HumanoidRootPart")
 
-return M.partCloseToModel(root,model,ddist)
-end
-
-function M.partCloseToModelName(part,name,ddist)
-for i,v in pairs(M.getCurrentMapChildren())do
-if v.Name==name then
-if M.partCloseToModel(part,v,ddist)then
-return true,v
-end
-end
+return ab.partCloseToModel(ai,ae,af)
 end
 
-return false,nil
-end
-
-function M.isCloseToModelName(name,ddist)
-for i,v in pairs(M.getCurrentMapChildren())do
-if v.Name==name then
-if M.isCloseToModel(v,ddist)then
-return true,v
+function ab.partCloseToModelName(ae,af,ag)
+for ah,ai in pairs(ab.getCurrentMapChildren())do
+if ai.Name==af then
+if ab.partCloseToModel(ae,ai,ag)then
+return true,ai
 end
 end
 end
@@ -2787,103 +2775,115 @@ end
 return false,nil
 end
 
-function M.partCloseToComputer(part)
-return M.partCloseToModelName(part,"ComputerTable",20)
+function ab.isCloseToModelName(ae,af)
+for ag,ah in pairs(ab.getCurrentMapChildren())do
+if ah.Name==ae then
+if ab.isCloseToModel(ah,af)then
+return true,ah
+end
+end
 end
 
-function M.isCloseToComputer()
-return M.isCloseToModelName("ComputerTable",8.5)
+return false,nil
 end
 
-function M.isCloseToFreezePod()
-return M.isCloseToModelName("FreezePod",10)
+function ab.partCloseToComputer(ae)
+return ab.partCloseToModelName(ae,"ComputerTable",20)
 end
 
-function M.isCloseToExit()
-return M.isCloseToModelName("ExitDoor",20)
+function ab.isCloseToComputer()
+return ab.isCloseToModelName("ComputerTable",8.5)
 end
 
-function M.getLockers()
+function ab.isCloseToFreezePod()
+return ab.isCloseToModelName("FreezePod",10)
+end
+
+function ab.isCloseToExit()
+return ab.isCloseToModelName("ExitDoor",20)
+end
+
+function ab.getLockers()
 return game:GetService("CollectionService"):GetTagged("LOCKER")
 end
 
-function M.findNearestLocker()
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+function ab.findNearestLocker()
+local ae=game:GetService("Players").LocalPlayer
+local af=ae and ae.Character
+local ag=af and af:FindFirstChild("HumanoidRootPart")
 
-if root then
-local best=nil
-local best_dist=999999999
+if ag then
+local ah=nil
+local ai=999999999
 
-for i,v in pairs(M.getLockers())do
-local part=v:FindFirstChildOfClass("Part")
-if part then
-local dist=Utils.dist3d(root.Position,part.Position)
+for aj,ak in pairs(ab.getLockers())do
+local al=ak:FindFirstChildOfClass("Part")
+if al then
+local am=aa.dist3d(ag.Position,al.Position)
 
-if dist<best_dist then
-best_dist=dist
-best=v
+if am<ai then
+ai=am
+ah=ak
 end
 end
 end
 
-return best
+return ah
 end
 
 return nil
 end
 
-function M.getCurrentPower()
-local v=game:GetService("ReplicatedStorage"):FindFirstChild("CurrentPower")
-if v then
-return v.Value
+function ab.getCurrentPower()
+local ae=game:GetService("ReplicatedStorage"):FindFirstChild("CurrentPower")
+if ae then
+return ae.Value
 end
 return""
 end
 
-function M.isPowerActive()
-local v=game:GetService("ReplicatedStorage"):FindFirstChild("PowerActive")
-if v then
-return v.Value
+function ab.isPowerActive()
+local ae=game:GetService("ReplicatedStorage"):FindFirstChild("PowerActive")
+if ae then
+return ae.Value
 end
 return false
 end
 
-function M.isSeerActive()
-local isSeer=M.getCurrentPower()=="Seer"
-return isSeer and M.isPowerActive()
+function ab.isSeerActive()
+local ae=ab.getCurrentPower()=="Seer"
+return ae and ab.isPowerActive()
 end
 
-local computerUnhacked=Color3.fromRGB(13,105,172)
-local computerErrored=Color3.fromRGB(196,40,28)
-function M.getClosestComputer(includeHacked)
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+local ae=Color3.fromRGB(13,105,172)
+local af=Color3.fromRGB(196,40,28)
+function ab.getClosestComputer(ag)
+local ah=game:GetService("Players").LocalPlayer
+local ai=ah and ah.Character
+local aj=ai and ai:FindFirstChild("HumanoidRootPart")
 
-local best=nil
-local best_dist=99999999
+local ak=nil
+local al=99999999
 
-if root then
-for i,v in pairs(M.getCurrentMapChildren())do
-if v.Name=="ComputerTable"then
-local base=v.PrimaryPart
+if aj then
+for am,an in pairs(ab.getCurrentMapChildren())do
+if an.Name=="ComputerTable"then
+local ao=an.PrimaryPart
 
-if base then
-local dist=Utils.dist3d(root.Position,base.Position)
+if ao then
+local ap=aa.dist3d(aj.Position,ao.Position)
 
-if includeHacked then
-if dist<best_dist then
-best_dist=dist
-best=v
+if ag then
+if ap<al then
+al=ap
+ak=an
 end
 else
-local screen=v:FindFirstChild("Screen")
-if screen and(screen.Color==computerUnhacked or screen.Color==computerErrored)then
-if dist<best_dist then
-best_dist=dist
-best=v
+local aq=an:FindFirstChild("Screen")
+if aq and(aq.Color==ae or aq.Color==af)then
+if ap<al then
+al=ap
+ak=an
 end
 end
 end
@@ -2892,89 +2892,89 @@ end
 end
 end
 
-return best
+return ak
 end
 
-function M.getValidSpot(computer)
-local screen=computer:FindFirstChild("Screen")
-if screen and(screen.Color==computerUnhacked or screen.Color==computerErrored)then
-local trigger1=computer:FindFirstChild("ComputerTrigger1")
-local trigger2=computer:FindFirstChild("ComputerTrigger2")
-local trigger3=computer:FindFirstChild("ComputerTrigger3")
+function ab.getValidSpot(ag)
+local ah=ag:FindFirstChild("Screen")
+if ah and(ah.Color==ae or ah.Color==af)then
+local ai=ag:FindFirstChild("ComputerTrigger1")
+local aj=ag:FindFirstChild("ComputerTrigger2")
+local ak=ag:FindFirstChild("ComputerTrigger3")
 
-local triggers={trigger1,trigger2,trigger3}
+local al={ai,aj,ak}
 
-local valid_triggers={}
+local am={}
 
-for _,t in pairs(triggers)do
-local v=t:FindFirstChild("ActionSign")
+for an,ao in pairs(al)do
+local ap=ao:FindFirstChild("ActionSign")
 
-if v then
-if v.Value~=0 then
-table.insert(valid_triggers,t)
-end
-end
-end
-
-local best_dist=99999999
-local best=nil
-
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
-
-if root then
-for i,t in pairs(valid_triggers)do
-local dist=Utils.dist3d(root.Position,t.Position)
-if dist<best_dist then
-best_dist=dist
-best=t
+if ap then
+if ap.Value~=0 then
+table.insert(am,ao)
 end
 end
 end
 
-return best
+local an=99999999
+local ao=nil
+
+local ap=game:GetService("Players").LocalPlayer
+local aq=ap and ap.Character
+local ar=aq and aq:FindFirstChild("HumanoidRootPart")
+
+if ar then
+for as,b in pairs(am)do
+local c=aa.dist3d(ar.Position,b.Position)
+if c<an then
+an=c
+ao=b
+end
+end
+end
+
+return ao
 end
 
 return nil
 end
 
-local beast_max_dist=20
-M.beast_max_dist=beast_max_dist
+local ag=20
+ab.beast_max_dist=ag
 
-function M.doBeastRaycast(part)
-local beast=M.findBeast()
-local beastChar=beast and beast.Character
-local beastHead=beastChar and beastChar:FindFirstChild("Head")
+function ab.doBeastRaycast(ah)
+local ai=ab.findBeast()
+local aj=ai and ai.Character
+local ak=aj and aj:FindFirstChild("Head")
 
-if beastHead and part then
-local origin=part.Position
-local target=beastHead.Position
+if ak and ah then
+local al=ah.Position
+local am=ak.Position
 
-local dir=(target-origin)*1.5
+local an=(am-al)*1.5
 
-local plrs=game:GetService("Players"):GetPlayers()
-local exclusions={part,part.Parent}
+local ao=game:GetService("Players"):GetPlayers()
+local ap={ah,ah.Parent}
 
-for i,v in pairs(plrs)do
-local char=v.Character
-if char and v~=beast then
-table.insert(exclusions,char)
+for aq,ar in pairs(ao)do
+local as=ar.Character
+if as and ar~=ai then
+table.insert(ap,as)
 end
 end
 
-local params=RaycastParams.new()
-params.FilterType=Enum.RaycastFilterType.Exclude
-params.FilterDescendantsInstances=exclusions
-params.IgnoreWater=true
+local aq=RaycastParams.new()
+aq.FilterType=Enum.RaycastFilterType.Exclude
+aq.FilterDescendantsInstances=ap
+aq.IgnoreWater=true
 
-local result=game.Workspace:Raycast(origin,dir,params)
+local ar=game.Workspace:Raycast(al,an,aq)
 
-if result then
-local instance=result.Instance
+if ar then
+local as=ar.Instance
 
-if instance then
-if instance:IsDescendantOf(beastChar)then
+if as then
+if as:IsDescendantOf(aj)then
 return true
 end
 end
@@ -2984,20 +2984,20 @@ end
 return false
 end
 
-function M.LOSToBeast()
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
+function ab.LOSToBeast()
+local ah=game:GetService("Players").LocalPlayer
+local ai=ah and ah.Character
 
-local root=char and char:FindFirstChild("HumanoidRootPart")
-local head=char and char:FindFirstChild("Head")
-local lleg=char and char:FindFirstChild("Left Leg")
-local rleg=char and char:FindFirstChild("Right Leg")
+local aj=ai and ai:FindFirstChild("HumanoidRootPart")
+local ak=ai and ai:FindFirstChild("Head")
+local al=ai and ai:FindFirstChild("Left Leg")
+local am=ai and ai:FindFirstChild("Right Leg")
 
-local parts={root,head,lleg,rleg}
+local an={aj,ak,al,am}
 
-for i,v in pairs(parts)do
-if v then
-if M.doBeastRaycast(v)then
+for ao,ap in pairs(an)do
+if ap then
+if ab.doBeastRaycast(ap)then
 return true
 end
 end
@@ -3006,105 +3006,105 @@ end
 return false
 end
 
-function M.isInDanger()
-return M.getDistToBeast()<=beast_max_dist and M.LOSToBeast()
+function ab.isInDanger()
+return ab.getDistToBeast()<=ag and ab.LOSToBeast()
 end
 
 local function shouldEasyHack()
-return M.getDistToBeast()>30 or not M.LOSToBeast()
+return ab.getDistToBeast()>30 or not ab.LOSToBeast()
 end
 
-return M end function __DARKLUA_BUNDLE_MODULES.i():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.i if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.i=v end return v.c end end do local function __modImpl()
+return ab end function a.i():typeof(__modImpl())local aa=a.cache.i if not aa then aa={c=__modImpl()}a.cache.i=aa end return aa.c end end do local function __modImpl()
 
-local UI=__DARKLUA_BUNDLE_MODULES.e()
-local Utils=__DARKLUA_BUNDLE_MODULES.b()
-local GameUtils=__DARKLUA_BUNDLE_MODULES.i()
+local aa=a.e()
+local ab=a.b()
+local ac=a.i()
 
 if game.GameId==372226183 then
-local FTFEspTab=UI.Window:CreateTab("ESP")
+local ad=aa.Window:CreateTab("ESP")
 
-local beast_esp_toggled=true
+local ae=true
 function UpdateBeastESP()
-for i,v in pairs(game.Players:GetPlayers())do
-if v.Character and v.Character:FindFirstChild("BeastPowers")and v~=game.Players.LocalPlayer then
-Utils.updateESP(v.Character,Color3.fromRGB(255,0,0),beast_esp_toggled)
+for af,ag in pairs(game.Players:GetPlayers())do
+if ag.Character and ag.Character:FindFirstChild("BeastPowers")and ag~=game.Players.LocalPlayer then
+ab.updateESP(ag.Character,Color3.fromRGB(255,0,0),ae)
 end
 end
 end
 
-local FTFBeastEspToggle=FTFEspTab:CreateToggle({
+local af=ad:CreateToggle({
 Name="Beast ESP",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-beast_esp_toggled=value
+Callback=function(af)
+ae=af
 UpdateBeastESP()
 end,
 })
 
-local player_esp_toggled=true
+local ag=true
 function UpdatePlrESP()
-for i,v in pairs(game.Players:GetPlayers())do
-if v.Character and not v.Character:FindFirstChild("BeastPowers")and v~=game.Players.LocalPlayer then
-Utils.updateESP(v.Character,Color3.fromRGB(0,255,0),player_esp_toggled)
+for ah,ai in pairs(game.Players:GetPlayers())do
+if ai.Character and not ai.Character:FindFirstChild("BeastPowers")and ai~=game.Players.LocalPlayer then
+ab.updateESP(ai.Character,Color3.fromRGB(0,255,0),ag)
 end
 end
 end
 
-local FTFPlayerEspToggle=FTFEspTab:CreateToggle({
+local ah=ad:CreateToggle({
 Name="Player ESP",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-player_esp_toggled=value
+Callback=function(ah)
+ag=ah
 UpdatePlrESP()
 end,
 })
 
 task.spawn(function()
 while task.wait(1)do
-for i,v in pairs(GameUtils.getExits())do
-local trigger=GameUtils.getExitTrigger(v)
-if trigger then
-trigger.Size=Vector3.new(20,20,20)
+for ai,aj in pairs(ac.getExits())do
+local ak=ac.getExitTrigger(aj)
+if ak then
+ak.Size=Vector3.new(20,20,20)
 end
 end
 end
 end)
 
-local computer_esp_toggled=true
+local ai=true
 local function updatePCESP()
-for _,v in pairs(GameUtils.getCurrentMapChildren())do
-if v.Name=="ComputerTable"and v:FindFirstChild("Screen")then
-Utils.updateESP(v,v.Screen.Color,computer_esp_toggled)
+for aj,ak in pairs(ac.getCurrentMapChildren())do
+if ak.Name=="ComputerTable"and ak:FindFirstChild("Screen")then
+ab.updateESP(ak,ak.Screen.Color,ai)
 end
 end
 end
 
-local FTFPCEspToggle=FTFEspTab:CreateToggle({
+local aj=ad:CreateToggle({
 Name="Computer ESP",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-computer_esp_toggled=value
+Callback=function(aj)
+ai=aj
 updatePCESP()
 end,
 })
 
-local locker_esp_toggled=not Utils.isDev()
+local ak=not ab.isDev()
 local function updateLockerESP()
-local lockers=GameUtils.getLockers()
-for i,v in pairs(lockers)do
-Utils.updateESP(v,Color3.fromRGB(255,255,0),locker_esp_toggled)
+local al=ac.getLockers()
+for am,an in pairs(al)do
+ab.updateESP(an,Color3.fromRGB(255,255,0),ak)
 end
 end
 
-local FTFLockerEspToggle=FTFEspTab:CreateToggle({
+local al=ad:CreateToggle({
 Name="Locker ESP",
-CurrentValue=locker_esp_toggled,
+CurrentValue=ak,
 Flag=nil,
-Callback=function(value)
-locker_esp_toggled=value
+Callback=function(al)
+ak=al
 updateLockerESP()
 end,
 })
@@ -3144,81 +3144,81 @@ end)
 
 
 
-local FTFUtilsTab=UI.Window:CreateTab("Utils")
+local am=aa.Window:CreateTab("Utils")
 
-local FTFFlingBeast=FTFUtilsTab:CreateButton({
+local an=am:CreateButton({
 Name="Fling Beast",
 Callback=function()
-local beast=GameUtils.findBeast()
-if beast then
-Utils.flingPlayer(beast)
+local an=ac.findBeast()
+if an then
+ab.flingPlayer(an)
 end
 end,
 })
 
-local slow_beast_toggled=false
-local FTFSlowBeast=FTFUtilsTab:CreateToggle({
+local ao=false
+local ap=am:CreateToggle({
 Name="Slow Beast",
 CurrentValue=false,
 Flag=nil,
-Callback=function(value)
-slow_beast_toggled=value
+Callback=function(ap)
+ao=ap
 end,
 })
 
 task.spawn(function()
 while task.wait()do
-if slow_beast_toggled and not GameUtils.isBeast()then
-local event=GameUtils.getPowerEvent()
-if event then
-event:FireServer("Jumped")
+if ao and not ac.isBeast()then
+local aq=ac.getPowerEvent()
+if aq then
+aq:FireServer("Jumped")
 end
 end
 end
 end)
 
-local untie_toggled=false
-local FTFUntie=FTFUtilsTab:CreateToggle({
+local aq=false
+local ar=am:CreateToggle({
 Name="Make Beast Untie",
 CurrentValue=false,
 Flag=nil,
-Callback=function(value)
-untie_toggled=value
+Callback=function(ar)
+aq=ar
 end,
 })
 
 task.spawn(function()
 while task.wait()do
-if untie_toggled then
-GameUtils.clickHammer()
+if aq then
+ac.clickHammer()
 end
 end
 end)
 
-local ftf_auto_save_toggled=false
-local FTFAutoSaveToggle=FTFUtilsTab:CreateToggle({
+local as=false
+local b=am:CreateToggle({
 Name="Auto Save",
 CurrentValue=false,
 Flag=nil,
-Callback=function(value)
-ftf_auto_save_toggled=value
+Callback=function(b)
+as=b
 end,
 })
 
-local ftf_auto_saving=false
+local c=false
 task.spawn(function()
 while task.wait()do
-if ftf_auto_save_toggled and GameUtils.isInGame()and not GameUtils.isBeast()then
-local children=GameUtils.getCurrentMapChildren()
+if as and ac.isInGame()and not ac.isBeast()then
+local d=ac.getCurrentMapChildren()
 
-for i,v in pairs(children)do
-if v.Name=="FreezePod"then
-local pod=v:FindFirstChild("PodTrigger")
+for e,f in pairs(d)do
+if f.Name=="FreezePod"then
+local g=f:FindFirstChild("PodTrigger")
 
-if pod then
-local capturedTorsoValue=pod:FindFirstChild("CapturedTorso")
-if capturedTorsoValue.Value~=nil then
-GameUtils.triggerPod(pod)
+if g then
+local h=g:FindFirstChild("CapturedTorso")
+if h.Value~=nil then
+ac.triggerPod(g)
 end
 end
 end
@@ -3262,35 +3262,35 @@ end)
 
 
 
-local auto_tie_toggled=true
-local FTFAutoTie=FTFUtilsTab:CreateToggle({
+local d=true
+local e=am:CreateToggle({
 Name="Auto Tie",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-auto_tie_toggled=value
+Callback=function(e)
+d=e
 end,
 })
 
 task.spawn(function()
 while task.wait()do
-if auto_tie_toggled and GameUtils.isBeast()then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+if d and ac.isBeast()then
+local f=game:GetService("Players").LocalPlayer
+local g=f and f.Character
+local h=g and g:FindFirstChild("HumanoidRootPart")
 
-if root then
-for _,p in pairs(game:GetService("Players"):GetPlayers())do
+if h then
+for i,j in pairs(game:GetService("Players"):GetPlayers())do
 if
-p~=plr
-and not Utils.isFriendsWith(p)
-and GameUtils.isRagdoll(p)
-and not GameUtils.isCaptured(p)
+j~=f
+and not ab.isFriendsWith(j)
+and ac.isRagdoll(j)
+and not ac.isCaptured(j)
 then
-local pRoot=p.Character and p.Character:FindFirstChild("HumanoidRootPart")
-if pRoot then
-if Utils.dist3d(root.Position,pRoot.Position)<=15 then
-GameUtils.tiePlayer(p)
+local k=j.Character and j.Character:FindFirstChild("HumanoidRootPart")
+if k then
+if ab.dist3d(h.Position,k.Position)<=15 then
+ac.tiePlayer(j)
 end
 end
 end
@@ -3300,35 +3300,35 @@ end
 end
 end)
 
-local auto_hit_toggled=Utils.isDev()
-local FTFAutoHit=FTFUtilsTab:CreateToggle({
+local f=ab.isDev()
+local g=am:CreateToggle({
 Name="Auto Hit",
-CurrentValue=auto_hit_toggled,
+CurrentValue=f,
 Flag=nil,
-Callback=function(value)
-auto_hit_toggled=value
+Callback=function(g)
+f=g
 end,
 })
 
 task.spawn(function()
 while task.wait()do
-if auto_hit_toggled then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+if f then
+local h=game:GetService("Players").LocalPlayer
+local i=h and h.Character
+local j=i and i:FindFirstChild("HumanoidRootPart")
 
-if root then
-for _,p in pairs(game:GetService("Players"):GetPlayers())do
+if j then
+for k,l in pairs(game:GetService("Players"):GetPlayers())do
 if
-p~=plr
-and not Utils.isFriendsWith(p)
-and not GameUtils.isRagdoll(p)
-and not GameUtils.isCaptured(p)
+l~=h
+and not ab.isFriendsWith(l)
+and not ac.isRagdoll(l)
+and not ac.isCaptured(l)
 then
-local pRoot=p.Character and p.Character:FindFirstChild("HumanoidRootPart")
-if pRoot then
-if Utils.dist3d(root.Position,pRoot.Position)<=15 then
-GameUtils.hitPlayer(p)
+local m=l.Character and l.Character:FindFirstChild("HumanoidRootPart")
+if m then
+if ab.dist3d(j.Position,m.Position)<=15 then
+ac.hitPlayer(l)
 end
 end
 end
@@ -3338,36 +3338,36 @@ end
 end
 end)
 
-local auto_beast_toggled=Utils.isDev()
-local FTFAutoBeast=FTFUtilsTab:CreateToggle({
+local h=ab.isDev()
+local i=am:CreateToggle({
 Name="Auto Beast",
-CurrentValue=auto_beast_toggled,
+CurrentValue=h,
 Flag=nil,
-Callback=function(value)
-auto_beast_toggled=value
+Callback=function(i)
+h=i
 end,
 })
 
 task.spawn(function()
 while task.wait()do
-if auto_beast_toggled and GameUtils.isBeast()then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+if h and ac.isBeast()then
+local j=game:GetService("Players").LocalPlayer
+local k=j and j.Character
+local l=k and k:FindFirstChild("HumanoidRootPart")
 
-if root then
-local players=GameUtils.getCapturablePlayers()
-for i,v in pairs(players)do
-local pChar=v and v.Character
-local pRoot=pChar and pChar:FindFirstChild("HumanoidRootPart")
-if pRoot and root and not Utils.isFriendsWith(v)then
-root.CFrame=pRoot.CFrame
+if l then
+local m=ac.getCapturablePlayers()
+for n,o in pairs(m)do
+local p=o and o.Character
+local q=p and p:FindFirstChild("HumanoidRootPart")
+if q and l and not ab.isFriendsWith(o)then
+l.CFrame=q.CFrame
 task.wait(0.1)
-GameUtils.hitPlayer(v)
+ac.hitPlayer(o)
 task.wait(0.1)
-GameUtils.tiePlayer(v)
+ac.tiePlayer(o)
 task.wait(0.1)
-GameUtils.triggerNearestFreezePod()
+ac.triggerNearestFreezePod()
 end
 end
 end
@@ -3375,119 +3375,119 @@ end
 end
 end)
 
-local no_errors_toggled=true
-local FTFNoErrorToggle=FTFUtilsTab:CreateToggle({
+local j=true
+local k=am:CreateToggle({
 Name="No Errors",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-no_errors_toggled=value
+Callback=function(k)
+j=k
 end,
 })
 
-local no_fog_toggled=true
-local FTFNoFogToggle=FTFUtilsTab:CreateToggle({
+local l=true
+local m=am:CreateToggle({
 Name="No Fog",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-no_fog_toggled=value
+Callback=function(m)
+l=m
 end,
 })
 
-local better_cam_toggled=true
-local FTFBetterCamToggle=FTFUtilsTab:CreateToggle({
+local n=true
+local o=am:CreateToggle({
 Name="Better Camera",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-better_cam_toggled=value
+Callback=function(o)
+n=o
 end,
 })
 
-local avoid_beast_toggled=false
-local FTFAvoidBeastToggle=FTFUtilsTab:CreateToggle({
+local p=false
+local q=am:CreateToggle({
 Name="Avoid Beast",
-CurrentValue=avoid_beast_toggled,
+CurrentValue=p,
 Flag=nil,
-Callback=function(value)
-avoid_beast_toggled=value
+Callback=function(q)
+p=q
 end,
 })
 
-local auto_exit_toggled=false
-local FTFAutoExitToggle=FTFUtilsTab:CreateToggle({
+local r=false
+local s=am:CreateToggle({
 Name="Auto Exit",
-CurrentValue=auto_exit_toggled,
+CurrentValue=r,
 Flag=nil,
-Callback=function(value)
-auto_exit_toggled=value
+Callback=function(s)
+r=s
 end,
 })
 
 task.spawn(function()
-local teleported=false
+local t=false
 
 while task.wait(1)do
-if teleported and not GameUtils.isCloseToExit()then
+if t and not ac.isCloseToExit()then
 task.wait(10)
-teleported=false
+t=false
 end
-if auto_exit_toggled and GameUtils.isInGame()and not GameUtils.isBeast()and not teleported then
-local exit=GameUtils.findOpenExit()
+if r and ac.isInGame()and not ac.isBeast()and not t then
+local u=ac.findOpenExit()
 
-if exit then
-local area=GameUtils.getExitArea(exit)
+if u then
+local v=ac.getExitArea(u)
 
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+local w=game:GetService("Players").LocalPlayer
+local x=w and w.Character
+local y=x and x:FindFirstChild("HumanoidRootPart")
 
-if root then
-root.CFrame=area.CFrame
-teleported=true
+if y then
+y.CFrame=v.CFrame
+t=true
 end
 end
 end
 end
 end)
 
-local auto_open_exit_toggled=false
-local FTFAutoOpenExitToggle=FTFUtilsTab:CreateToggle({
+local t=false
+local u=am:CreateToggle({
 Name="Auto Open Exit",
-CurrentValue=auto_open_exit_toggled,
+CurrentValue=t,
 Flag=nil,
-Callback=function(value)
-auto_open_exit_toggled=value
+Callback=function(u)
+t=u
 end,
 })
 
 task.spawn(function()
-local teleported=false
+local v=false
 while task.wait()do
-if teleported and not GameUtils.isCloseToExit()then
+if v and not ac.isCloseToExit()then
 task.wait(10)
-teleported=false
+v=false
 end
-if auto_open_exit_toggled and GameUtils.isInGame()and not GameUtils.isBeast()and not teleported then
-local openExit=GameUtils.findOpenExit()
-if openExit then
+if t and ac.isInGame()and not ac.isBeast()and not v then
+local w=ac.findOpenExit()
+if w then
 return
 end
 
-local exit=GameUtils.getClosestClosedExit()
+local x=ac.getClosestClosedExit()
 
-if exit then
-local trigger=GameUtils.getExitTrigger(exit)
+if x then
+local y=ac.getExitTrigger(x)
 
-if trigger then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+if y then
+local z=game:GetService("Players").LocalPlayer
+local A=z and z.Character
+local B=A and A:FindFirstChild("HumanoidRootPart")
 
-if root then
-root.CFrame=trigger.CFrame
-teleported=true
+if B then
+B.CFrame=y.CFrame
+v=true
 end
 end
 end
@@ -3495,66 +3495,66 @@ end
 end
 end)
 
-local auto_e_toggled=true
-local quick_hack_toggled=true
-local auto_hack_toggled=false
+local v=true
+local w=true
+local x=false
 
-local FTFAutoEToggle
-FTFAutoEToggle=FTFUtilsTab:CreateToggle({
+local y
+y=am:CreateToggle({
 Name="Auto E",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-auto_e_toggled=value
+Callback=function(z)
+v=z
 
-if quick_hack_toggled and not value then
-FTFAutoEToggle:Set(true)
+if w and not z then
+y:Set(true)
 end
 end,
 })
 
-local FTFQuickHackToggle
-FTFQuickHackToggle=FTFUtilsTab:CreateToggle({
+local z
+z=am:CreateToggle({
 Name="Easy Hack (Requires Auto E)",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-quick_hack_toggled=value
-if value then
-FTFAutoEToggle:Set(true)
+Callback=function(A)
+w=A
+if A then
+y:Set(true)
 end
 
-if auto_hack_toggled and not value then
-FTFQuickHackToggle:Set(true)
+if x and not A then
+z:Set(true)
 end
 end,
 })
 
-local FTFAutoHackToggle=FTFUtilsTab:CreateToggle({
+local A=am:CreateToggle({
 Name="Auto Hack (Requires Easy Hack)",
 CurrentValue=false,
 Flag=nil,
-Callback=function(value)
-auto_hack_toggled=value
-if value then
-FTFQuickHackToggle:Set(true)
+Callback=function(A)
+x=A
+if A then
+z:Set(true)
 end
 end,
 })
 
-local hidingFromBeast=false
+local B=false
 
 task.spawn(function()
-local last_computer=nil
+local C=nil
 
 while task.wait(0.1)do
-local ictc,computer=GameUtils.isCloseToComputer()
-local ictfp,freeze_pod=GameUtils.isCloseToFreezePod()
-local icte,exit=GameUtils.isCloseToExit()
+local D,E=ac.isCloseToComputer()
+local F,G=ac.isCloseToFreezePod()
+local H,I=ac.isCloseToExit()
 
 if
-(GameUtils.isInGame()and auto_e_toggled and(ictc or ictfp or icte))
-or(GameUtils.isBeast()and auto_e_toggled and ictfp)and GameUtils.shouldEasyHack()
+(ac.isInGame()and v and(D or F or H))
+or(ac.isBeast()and v and F)and ac.shouldEasyHack()
 then
 game.ReplicatedStorage.RemoteEvent:FireServer("Input","Action",true)
 task.wait(0.1)
@@ -3562,92 +3562,92 @@ game.ReplicatedStorage.RemoteEvent:FireServer("Input","Action",false)
 end
 
 if
-GameUtils.isInGame()
-and quick_hack_toggled
-and ictc
-and last_computer~=computer
-and not GameUtils.isInDanger()
-and not hidingFromBeast
+ac.isInGame()
+and w
+and D
+and C~=E
+and not ac.isInDanger()
+and not B
 then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+local J=game:GetService("Players").LocalPlayer
+local K=J and J.Character
+local L=K and K:FindFirstChild("HumanoidRootPart")
 
-if root then
-local spot=GameUtils.getValidSpot(computer)
-
-task.spawn(function()
-local running=true
+if L then
+local M=ac.getValidSpot(E)
 
 task.spawn(function()
-while running and not GameUtils.isInDanger()and not hidingFromBeast do
-if spot then
-root.CFrame=spot.CFrame*CFrame.new(0,0,0.1)
+local N=true
+
+task.spawn(function()
+while N and not ac.isInDanger()and not B do
+if M then
+L.CFrame=M.CFrame*CFrame.new(0,0,0.1)
 end
 task.wait()
 end
 end)
 
 task.delay(1,function()
-running=false
+N=false
 end)
 end)
 end
 end
 
-if GameUtils.isInGame()and auto_hack_toggled and not GameUtils.isInDanger()and not hidingFromBeast then
-local cComp=GameUtils.getClosestComputer(false)
+if ac.isInGame()and x and not ac.isInDanger()and not B then
+local J=ac.getClosestComputer(false)
 
-if not safeTweening and cComp and cComp~=computer then
-local spot=GameUtils.getValidSpot(cComp)
+if not safeTweening and J and J~=E then
+local K=ac.getValidSpot(J)
 
-if spot then
-Utils.set_safeTweening(true)
+if K then
+ab.set_safeTweening(true)
 
 task.delay(1,function()
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+local L=game:GetService("Players").LocalPlayer
+local M=L and L.Character
+local N=M and M:FindFirstChild("HumanoidRootPart")
 
 
 
 
 
-Utils.safeTweenToPart(spot)
+ab.safeTweenToPart(K)
 end)
 end
 end
 end
 
-last_computer=computer
+C=E
 end
 end)
 
-local FTFFreezePodKeybind=FTFUtilsTab:CreateKeybind({
+local C=am:CreateKeybind({
 Name="Teleport to Freeze Pod",
 CurrentKeybind="F",
 HoldToInteract=false,
 Flag="FTFFreezePodKeybind",
-Callback=GameUtils.teleportToNearestFreezePod,
+Callback=ac.teleportToNearestFreezePod,
 })
 
 task.spawn(function()
-local oldPos
-local oldPosV
+local D
+local E
 
-local V3=Vector3.new(0,0,0)
+local F=Vector3.new(0,0,0)
 
 while task.wait()do
-if no_errors_toggled then
-local stats=GameUtils.getStats(game:GetService("Players").LocalPlayer)
-local actionEvent=stats and stats:FindFirstChild("ActionEvent")
+if j then
+local G=ac.getStats(game:GetService("Players").LocalPlayer)
+local H=G and G:FindFirstChild("ActionEvent")
 
-if actionEvent.Value then
+if H.Value then
 game.ReplicatedStorage.RemoteEvent:FireServer("SetPlayerMinigameResult",true)
 end
 end
 
-if no_fog_toggled then
+if l then
 game:GetService("Lighting").Atmosphere.Density=0
 game:GetService("Lighting").Atmosphere.Offset=0
 game:GetService("Lighting").Atmosphere.Glare=0
@@ -3661,237 +3661,237 @@ game:GetService("Lighting").GlobalShadows=false
 game:GetService("Lighting").OutdoorAmbient=Color3.fromRGB(128,128,128)
 end
 
-if better_cam_toggled then
-local player=game:GetService("Players").LocalPlayer
-if player then
-player.CameraMode=Enum.CameraMode.Classic
-player.CameraMaxZoomDistance=30
+if n then
+local G=game:GetService("Players").LocalPlayer
+if G then
+G.CameraMode=Enum.CameraMode.Classic
+G.CameraMaxZoomDistance=30
 end
 end
 
-if avoid_beast_toggled and not ftf_auto_saving then
-local beast=GameUtils.findBeast()
-local beastChar=beast and beast.Character
-local beastRoot=beastChar and beastChar:FindFirstChild("HumanoidRootPart")
+if p and not c then
+local G=ac.findBeast()
+local H=G and G.Character
+local I=H and H:FindFirstChild("HumanoidRootPart")
 
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+local J=game:GetService("Players").LocalPlayer
+local K=J and J.Character
+local L=K and K:FindFirstChild("HumanoidRootPart")
 
-if beastChar then
-if char then
-if GameUtils.isInDanger()then
-if not hidingFromBeast then
-oldPos=root.CFrame
-oldPosV=root.Position
+if H then
+if K then
+if ac.isInDanger()then
+if not B then
+D=L.CFrame
+E=L.Position
 game.Workspace.Gravity=0
 
-Utils.Noclip.enable()
+ab.Noclip.enable()
 
 task.wait(0.1)
-hidingFromBeast=true
+B=true
 end
 end
 end
-elseif hidingFromBeast then
-root.CFrame=oldPos
+elseif B then
+L.CFrame=D
 game.Workspace.Gravity=196.2
-Utils.Noclip.disable()
-hidingFromBeast=false
+ab.Noclip.disable()
+B=false
 end
 
-if hidingFromBeast then
-local testDist=Utils.dist3d(oldPosV,beastRoot.Position)
+if B then
+local M=ab.dist3d(E,I.Position)
 
-if testDist>=GameUtils.beast_max_dist then
-root.CFrame=oldPos
+if M>=ac.beast_max_dist then
+L.CFrame=D
 game.Workspace.Gravity=196.21
-Utils.Noclip.disable()
-hidingFromBeast=false
+ab.Noclip.disable()
+B=false
 else
-local newPos=beastRoot.CFrame*CFrame.new(0,-10,0)
-root.CFrame=newPos
+local N=I.CFrame*CFrame.new(0,-10,0)
+L.CFrame=N
 
-for _,v in ipairs(char:GetDescendants())do
-if v:IsA("BasePart")then
-v.Velocity,v.RotVelocity=V3,V3
+for O,P in ipairs(K:GetDescendants())do
+if P:IsA("BasePart")then
+P.Velocity,P.RotVelocity=F,F
 end
 end
 end
 end
-elseif hidingFromBeast then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+elseif B then
+local G=game:GetService("Players").LocalPlayer
+local H=G and G.Character
+local I=H and H:FindFirstChild("HumanoidRootPart")
 
-if root then
-root.CFrame=oldPos
+if I then
+I.CFrame=D
 end
 
 game.Workspace.Gravity=196.21
-Utils.Noclip.disable()
-hidingFromBeast=false
+ab.Noclip.disable()
+B=false
 end
 end
 end)
 
-local FTFChaseMusicSlider=FTFUtilsTab:CreateSlider({
+local D=am:CreateSlider({
 Name="Chase Music Volume",
 Range={0,100},
 Increment=1,
 Suffix="%",
 CurrentValue=100,
 Flag="FTFChaseMusicVolume",
-Callback=function(value)
-GameUtils.updateChaseVolume(value)
+Callback=function(D)
+ac.updateChaseVolume(D)
 end,
 })
 end
 
-return true end function __DARKLUA_BUNDLE_MODULES.j():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.j if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.j=v end return v.c end end do local function __modImpl()
+return true end function a.j():typeof(__modImpl())local aa=a.cache.j if not aa then aa={c=__modImpl()}a.cache.j=aa end return aa.c end end do local function __modImpl()
 
-local Utils=__DARKLUA_BUNDLE_MODULES.b()
+local aa=a.b()
 
-local M={}
+local ab={}
 
-function M.getCurrentGun()
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local gun=char and char:FindFirstChildOfClass("Tool")
+function ab.getCurrentGun()
+local ac=game:GetService("Players").LocalPlayer
+local ad=ac and ac.Character
+local ae=ad and ad:FindFirstChildOfClass("Tool")
 
-return gun
+return ae
 end
 
-function M.getGunFireEvent()
-local gun=M.getCurrentGun()
-local events=gun and gun:FindFirstChild("Events")
-local event=events and events:FindFirstChild("Fire")
+function ab.getGunFireEvent()
+local ac=ab.getCurrentGun()
+local ad=ac and ac:FindFirstChild("Events")
+local ae=ad and ad:FindFirstChild("Fire")
 
-return event
+return ae
 end
 
-function M.getGunReloadEvent()
-local gun=M.getCurrentGun()
-local events=gun and gun:FindFirstChild("Events")
-local event=events and events:FindFirstChild("Reload")
+function ab.getGunReloadEvent()
+local ac=ab.getCurrentGun()
+local ad=ac and ac:FindFirstChild("Events")
+local ae=ad and ad:FindFirstChild("Reload")
 
-return event
+return ae
 end
 
-function M.getGunAmmo()
-local gun=M.getCurrentGun()
-local gunServer=gun and gun:FindFirstChild("GunServer")
-local ammoV=gunServer and gunServer:FindFirstChild("Ammo")
-local ammo=(ammoV and ammoV.Value)or 0
+function ab.getGunAmmo()
+local ac=ab.getCurrentGun()
+local ad=ac and ac:FindFirstChild("GunServer")
+local ae=ad and ad:FindFirstChild("Ammo")
+local af=(ae and ae.Value)or 0
 
-return ammo
+return af
 end
 
-function M.reloadGun()
-local event=M.getGunReloadEvent()
+function ab.reloadGun()
+local ac=ab.getGunReloadEvent()
 
-if event then
-event:FireServer()
+if ac then
+ac:FireServer()
 end
 end
 
-function M.shootChar(pChar)
-local event=M.getGunFireEvent()
+function ab.shootChar(ac)
+local ad=ab.getGunFireEvent()
 
-local pRoot=pChar and pChar:FindFirstChild("HumanoidRootPart")
-local hum=pChar and pChar:FindFirstChildWhichIsA("Humanoid")
+local ae=ac and ac:FindFirstChild("HumanoidRootPart")
+local af=ac and ac:FindFirstChildWhichIsA("Humanoid")
 
-if pRoot and hum and event then
-local latency=game:GetService("Players").LocalPlayer:GetNetworkPing()/2
-local tVel=pRoot.AssemblyLinearVelocity
-local tMov=hum and(hum.MoveDirection*hum.WalkSpeed)
-tVel=tVel:Lerp(tMov,0.6)
-local tPos=pRoot.Position+(tVel*latency)
+if ae and af and ad then
+local ag=game:GetService("Players").LocalPlayer:GetNetworkPing()/2
+local ah=ae.AssemblyLinearVelocity
+local ai=af and(af.MoveDirection*af.WalkSpeed)
+ah=ah:Lerp(ai,0.6)
+local aj=ae.Position+(ah*ag)
 
-local rng=Random.new()
+local ak=Random.new()
 
-event:FireServer({
-Origin=pRoot.Position,
+ad:FireServer({
+Origin=ae.Position,
 Timestamp=game.Workspace:GetServerTimeNow(),
-Direction=Utils.dir3d(pRoot.Position,tPos),
-Seed=rng:NextInteger(0,100),
+Direction=aa.dir3d(ae.Position,aj),
+Seed=ak:NextInteger(0,100),
 })
 end
 end
 
-function M.findClosestChar()
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+function ab.findClosestChar()
+local ac=game:GetService("Players").LocalPlayer
+local ad=ac and ac.Character
+local ae=ad and ad:FindFirstChild("HumanoidRootPart")
 
-if root then
-local best=nil
-local best_dist=99999999
-for i,v in pairs(game:GetService("Players"):GetPlayers())do
-if v~=plr then
-local pChar=v and v.Character
-local pRoot=pChar and pChar:FindFirstChild("HumanoidRootPart")
-local ff=pChar and pChar:FindFirstChildOfClass("ForceField")
-local hum=pChar and pChar:FindFirstChildOfClass("Humanoid")
+if ae then
+local af=nil
+local ag=99999999
+for ah,ai in pairs(game:GetService("Players"):GetPlayers())do
+if ai~=ac then
+local aj=ai and ai.Character
+local ak=aj and aj:FindFirstChild("HumanoidRootPart")
+local al=aj and aj:FindFirstChildOfClass("ForceField")
+local am=aj and aj:FindFirstChildOfClass("Humanoid")
 
-if pRoot and not ff and(hum and hum.Health>0)then
-local dist=Utils.dist3d(root.Position,pRoot.Position)
+if ak and not al and(am and am.Health>0)then
+local an=aa.dist3d(ae.Position,ak.Position)
 
-if dist<best_dist then
-best=pChar
-best_dist=dist
+if an<ag then
+af=aj
+ag=an
 end
 end
 end
 end
-return best
+return af
 end
 
 return nil
 end
 
-return M end function __DARKLUA_BUNDLE_MODULES.k():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.k if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.k=v end return v.c end end do local function __modImpl()
+return ab end function a.k():typeof(__modImpl())local aa=a.cache.k if not aa then aa={c=__modImpl()}a.cache.k=aa end return aa.c end end do local function __modImpl()
 
-local UI=__DARKLUA_BUNDLE_MODULES.e()
-local GameUtils=__DARKLUA_BUNDLE_MODULES.k()
+local aa=a.e()
+local ab=a.k()
 
 if game.GameId==10141757860 then
-local GSTab=UI.Window:CreateTab("Granny Shooters","gamepad-2")
+local ac=aa.Window:CreateTab("Granny Shooters","gamepad-2")
 
-local auto_kill_toggled=true
-local GSAutoKillToggle=GSTab:CreateToggle({
+local ad=true
+local ae=ac:CreateToggle({
 Name="Auto Kill",
-CurrentValue=auto_kill_toggled,
+CurrentValue=ad,
 Flag=nil,
-Callback=function(value)
-auto_kill_toggled=value
+Callback=function(ae)
+ad=ae
 end,
 })
 
 task.spawn(function()
 while task.wait()do
-if auto_kill_toggled then
-local char=GameUtils.findClosestChar()
-GameUtils.shootChar(char)
+if ad then
+local af=ab.findClosestChar()
+ab.shootChar(af)
 end
 end
 end)
 
-local auto_reload_toggled=true
-local GSAutoReloadToggle=GSTab:CreateToggle({
+local af=true
+local ag=ac:CreateToggle({
 Name="Auto Reload",
-CurrentValue=auto_reload_toggled,
+CurrentValue=af,
 Flag=nil,
-Callback=function(value)
-auto_reload_toggled=value
+Callback=function(ag)
+af=ag
 end,
 })
 
 task.spawn(function()
 while task.wait()do
-if auto_reload_toggled then
-if GameUtils.getGunAmmo()==0 then
-GameUtils.reloadGun()
+if af then
+if ab.getGunAmmo()==0 then
+ab.reloadGun()
 task.wait(5)
 end
 end
@@ -3899,143 +3899,143 @@ end
 end)
 end
 
-return true end function __DARKLUA_BUNDLE_MODULES.l():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.l if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.l=v end return v.c end end do local function __modImpl()
+return true end function a.l():typeof(__modImpl())local aa=a.cache.l if not aa then aa={c=__modImpl()}a.cache.l=aa end return aa.c end end do local function __modImpl()
 
-local M={}
+local aa={}
 
-function M.isSeeker(plr)
-local char=plr and plr.Character
-local itscript=char and char:FindFirstChild("ItScript")
-return itscript~=nil
+function aa.isSeeker(ab)
+local ac=ab and ab.Character
+local ad=ac and ac:FindFirstChild("ItScript")
+return ad~=nil
 end
 
-return M end function __DARKLUA_BUNDLE_MODULES.m():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.m if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.m=v end return v.c end end do local function __modImpl()
+return aa end function a.m():typeof(__modImpl())local aa=a.cache.m if not aa then aa={c=__modImpl()}a.cache.m=aa end return aa.c end end do local function __modImpl()
 
-local UI=__DARKLUA_BUNDLE_MODULES.e()
-local Utils=__DARKLUA_BUNDLE_MODULES.b()
-local GameUtils=__DARKLUA_BUNDLE_MODULES.m()
+local aa=a.e()
+local ab=a.b()
+local ac=a.m()
 
 if game.GameId==93740418 then
-local HSTab=UI.Window:CreateTab("Hide and Seek","gamepad-2")
-HSTab:CreateSection("ESP")
+local ad=aa.Window:CreateTab("Hide and Seek","gamepad-2")
+ad:CreateSection("ESP")
 
-local player_esp_toggled=true
+local ae=true
 local function updatePlayerESP()
-for i,v in pairs(game:GetService("Players"):GetPlayers())do
-if v~=game:GetService("Players").LocalPlayer then
-local char=v and v.Character
-local color=(GameUtils.isSeeker(v)and Color3.fromRGB(255,0,0))
-or(Utils.isFriendsWith(v)and Color3.fromRGB(0,0,255))
+for af,ag in pairs(game:GetService("Players"):GetPlayers())do
+if ag~=game:GetService("Players").LocalPlayer then
+local ah=ag and ag.Character
+local ai=(ac.isSeeker(ag)and Color3.fromRGB(255,0,0))
+or(ab.isFriendsWith(ag)and Color3.fromRGB(0,0,255))
 or Color3.fromRGB(0,255,0)
 
-if char then
-Utils.updateESP(char,color,player_esp_toggled)
+if ah then
+ab.updateESP(ah,ai,ae)
 end
 end
 end
 end
 
-local HSPlayerESPToggle=HSTab:CreateToggle({
+local af=ad:CreateToggle({
 Name="Player ESP",
-CurrentValue=player_esp_toggled,
+CurrentValue=ae,
 Flag=nil,
-Callback=function(value)
-player_esp_toggled=value
+Callback=function(af)
+ae=af
 updatePlayerESP()
 end,
 })
 
 task.spawn(function()
 while task.wait(1)do
-if player_esp_toggled then
+if ae then
 updatePlayerESP()
 end
 end
 end)
 
-HSTab:CreateSection("Utils")
+ad:CreateSection("Utils")
 
-local HSKillAllButton=HSTab:CreateButton({
+local ag=ad:CreateButton({
 Name="Kill All",
 Callback=function()
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+local ag=game:GetService("Players").LocalPlayer
+local ah=ag and ag.Character
+local ai=ah and ah:FindFirstChild("HumanoidRootPart")
 
-if root then
-local c=0
-Utils.Noclip.enable()
-while c<10 do
-for i,v in pairs(game:GetService("Players"):GetPlayers())do
-if v~=plr then
-local pChar=v and v.Character
-local pRoot=pChar and pChar:FindFirstChild("HumanoidRootPart")
+if ai then
+local aj=0
+ab.Noclip.enable()
+while aj<10 do
+for ak,al in pairs(game:GetService("Players"):GetPlayers())do
+if al~=ag then
+local am=al and al.Character
+local an=am and am:FindFirstChild("HumanoidRootPart")
 
-if pRoot then
-pRoot.CFrame=root.CFrame
+if an then
+an.CFrame=ai.CFrame
 end
 end
 end
-c=c+1
+aj=aj+1
 task.wait()
 end
-Utils.Noclip.disable()
+ab.Noclip.disable()
 end
 end,
 })
 end
 
-return true end function __DARKLUA_BUNDLE_MODULES.n():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.n if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.n=v end return v.c end end do local function __modImpl()
+return true end function a.n():typeof(__modImpl())local aa=a.cache.n if not aa then aa={c=__modImpl()}a.cache.n=aa end return aa.c end end do local function __modImpl()
 
-local Utils=__DARKLUA_BUNDLE_MODULES.b()
+local aa=a.b()
 
-local M={}
+local ab={}
 
-function M.plrHasItem(player,item)
-local pBackpack=player:FindFirstChild("Backpack")
-local pChar=player.Character
+function ab.plrHasItem(ac,ad)
+local ae=ac:FindFirstChild("Backpack")
+local af=ac.Character
 
-local itemBackpack=pBackpack and pBackpack:FindFirstChild(item)
-local itemPlayer=pChar and pChar:FindFirstChild(item)
+local ag=ae and ae:FindFirstChild(ad)
+local ah=af and af:FindFirstChild(ad)
 
-if itemBackpack or itemPlayer then
+if ag or ah then
 return true
 end
 
 return false
 end
 
-function M.plrHasKnife(player)
-return M.plrHasItem(player,"Knife")
+function ab.plrHasKnife(ac)
+return ab.plrHasItem(ac,"Knife")
 end
 
-function M.plrHasGun(player)
-return M.plrHasItem(player,"Gun")
+function ab.plrHasGun(ac)
+return ab.plrHasItem(ac,"Gun")
 end
 
-local murderer=nil
-local sheriff=nil
+local ac=nil
+local ad=nil
 
 task.spawn(function()
 game:GetService("ReplicatedStorage")
 :WaitForChild("Remotes")
 :WaitForChild("Gameplay")
 :WaitForChild("PlayerDataChanged").OnClientEvent
-:Connect(function(data)
-murderer=nil
-sheriff=nil
+:Connect(function(ae)
+ac=nil
+ad=nil
 
-for k,v in pairs(data)do
-local plr=game:GetService("Players"):FindFirstChild(k)
+for af,ag in pairs(ae)do
+local ah=game:GetService("Players"):FindFirstChild(af)
 
-for vk,vv in pairs(v)do
-if vk=="Role"then
-if vv=="Murderer"then
-murderer=plr
+for ai,aj in pairs(ag)do
+if ai=="Role"then
+if aj=="Murderer"then
+ac=ah
 end
 
-if vv=="Sheriff"then
-sheriff=plr
+if aj=="Sheriff"then
+ad=ah
 end
 end
 end
@@ -4046,215 +4046,215 @@ game:GetService("ReplicatedStorage")
 :WaitForChild("Remotes")
 :WaitForChild("Gameplay")
 :WaitForChild("RoundEndFade").OnClientEvent
-:Connect(function(data)
-murderer=nil
-sheriff=nil
+:Connect(function(ae)
+ac=nil
+ad=nil
 end)
 end)
 
-function M.getMurderer()
-if not murderer then
-for i,plr in pairs(game:GetService("Players"):GetPlayers())do
-if M.plrHasKnife(plr)then
-murderer=plr
+function ab.getMurderer()
+if not ac then
+for ae,af in pairs(game:GetService("Players"):GetPlayers())do
+if ab.plrHasKnife(af)then
+ac=af
 break
 end
 end
 end
 
-return murderer
+return ac
 end
 
-function M.getSheriff()
-if not sheriff then
-for i,plr in pairs(game:GetService("Players"):GetPlayers())do
-if M.plrHasGun(plr)then
-sheriff=plr
+function ab.getSheriff()
+if not ad then
+for ae,af in pairs(game:GetService("Players"):GetPlayers())do
+if ab.plrHasGun(af)then
+ad=af
 break
 end
 end
 end
 
-return sheriff
+return ad
 end
 
-function M.shootPos(pos)
-local plr=game:GetService("Players").LocalPlayer
+function ab.shootPos(ae)
+local af=game:GetService("Players").LocalPlayer
 
-if M.plrHasGun(plr)then
-local char=plr and plr.Character
-local gun=char and char:FindFirstChild("Gun")
-local shoot=gun and gun:FindFirstChild("Shoot")
-local handle=gun and gun:FindFirstChild("Handle")
+if ab.plrHasGun(af)then
+local ag=af and af.Character
+local ah=ag and ag:FindFirstChild("Gun")
+local ai=ah and ah:FindFirstChild("Shoot")
+local aj=ah and ah:FindFirstChild("Handle")
 
-if shoot and handle then
+if ai and aj then
 
-shoot:FireServer(handle.CFrame,CFrame.new(pos))
+ai:FireServer(aj.CFrame,CFrame.new(ae))
 end
-end
-end
-
-function M.shootPlayer(plr)
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
-local hum=char and char:FindFirstChildWhichIsA("Humanoid")
-
-if root then
-local latency=game:GetService("Players").LocalPlayer:GetNetworkPing()/2
-local tVel=root.AssemblyLinearVelocity
-local tMov=hum and(hum.MoveDirection*hum.WalkSpeed)
-tVel=tVel:Lerp(tMov,0.6)
-local tPos=root.Position+(tVel*latency)
-
-M.shootPos(tPos)
 end
 end
 
-function M.tpShoot(other)
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+function ab.shootPlayer(ae)
+local af=ae and ae.Character
+local ag=af and af:FindFirstChild("HumanoidRootPart")
+local ah=af and af:FindFirstChildWhichIsA("Humanoid")
 
-local otherChar=other and other.Character
-local otherRoot=otherChar and otherChar:FindFirstChild("HumanoidRootPart")
+if ag then
+local ai=game:GetService("Players").LocalPlayer:GetNetworkPing()/2
+local aj=ag.AssemblyLinearVelocity
+local ak=ah and(ah.MoveDirection*ah.WalkSpeed)
+aj=aj:Lerp(ak,0.6)
+local al=ag.Position+(aj*ai)
 
-local latency=plr:GetNetworkPing()
-if root and otherRoot then
-local pos=root.CFrame
+ab.shootPos(al)
+end
+end
+
+function ab.tpShoot(ae)
+local af=game:GetService("Players").LocalPlayer
+local ag=af and af.Character
+local ah=ag and ag:FindFirstChild("HumanoidRootPart")
+
+local ai=ae and ae.Character
+local aj=ai and ai:FindFirstChild("HumanoidRootPart")
+
+local ak=af:GetNetworkPing()
+if ah and aj then
+local al=ah.CFrame
 task.wait(0.1)
 
-root.CFrame=otherRoot.CFrame
+ah.CFrame=aj.CFrame
 
-task.wait(latency*2)
+task.wait(ak*2)
 
-M.shootPlayer(other)
+ab.shootPlayer(ae)
 
-task.wait(latency*2)
+task.wait(ak*2)
 
-root.CFrame=pos
+ah.CFrame=al
 end
 end
 
-function M.updatePlayerESP(enabled)
-local murderer=M.getMurderer()
-local sheriff=M.getSheriff()
+function ab.updatePlayerESP(ae)
+local af=ab.getMurderer()
+local ag=ab.getSheriff()
 
-for i,v in pairs(game:GetService("Players"):GetPlayers())do
-local char=v.Character
-if char and v~=game:GetService("Players").LocalPlayer then
-local isMurderer=v==murderer
-local isSheriff=v==sheriff
+for ah,ai in pairs(game:GetService("Players"):GetPlayers())do
+local aj=ai.Character
+if aj and ai~=game:GetService("Players").LocalPlayer then
+local ak=ai==af
+local al=ai==ag
 
-if isSheriff then
-Utils.updateESP(char,Color3.fromRGB(0,0,255),enabled)
-elseif isMurderer then
-Utils.updateESP(char,Color3.fromRGB(255,0,0),enabled)
+if al then
+aa.updateESP(aj,Color3.fromRGB(0,0,255),ae)
+elseif ak then
+aa.updateESP(aj,Color3.fromRGB(255,0,0),ae)
 else
-Utils.updateESP(char,Color3.fromRGB(0,255,0),enabled)
+aa.updateESP(aj,Color3.fromRGB(0,255,0),ae)
 end
 end
 end
 end
 
-function M.updateCoinESP(enabled)
-local coins=game.Workspace:FindFirstChild("CoinContainer",true)
+function ab.updateCoinESP(ae)
+local af=game.Workspace:FindFirstChild("CoinContainer",true)
 
-if coins then
-for i,v in pairs(coins:GetChildren())do
-if v.Name=="CollectedCoin"then
-v:Destroy()
+if af then
+for ag,ah in pairs(af:GetChildren())do
+if ah.Name=="CollectedCoin"then
+ah:Destroy()
 end
 end
 
-Utils.updateESP(coins,Color3.fromRGB(255,200,0),enabled)
+aa.updateESP(af,Color3.fromRGB(255,200,0),ae)
 end
 end
 
-function M.flingMurderer()
-local murderer=M.getMurderer()
+function ab.flingMurderer()
+local ae=ab.getMurderer()
 
-if murderer and murderer~=game:GetService("Players").LocalPlayer then
-Utils.flingPlayer(murderer)
+if ae and ae~=game:GetService("Players").LocalPlayer then
+aa.flingPlayer(ae)
 end
 end
 
-return M end function __DARKLUA_BUNDLE_MODULES.o():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.o if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.o=v end return v.c end end do local function __modImpl()
+return ab end function a.o():typeof(__modImpl())local aa=a.cache.o if not aa then aa={c=__modImpl()}a.cache.o=aa end return aa.c end end do local function __modImpl()
 
-local UI=__DARKLUA_BUNDLE_MODULES.e()
-local Utils=__DARKLUA_BUNDLE_MODULES.b()
-local GameUtils=__DARKLUA_BUNDLE_MODULES.o()
+local aa=a.e()
+local ab=a.b()
+local ac=a.o()
 
 if game.PlaceId==142823291 then
-local MMTab=UI.Window:CreateTab("Murder Mystery 2","gamepad-2")
-local MMESPSection=MMTab:CreateSection("ESP")
+local ad=aa.Window:CreateTab("Murder Mystery 2","gamepad-2")
+local ae=ad:CreateSection("ESP")
 
-local mm_player_esp_toggled=true
-local MMPlayerEspToggle=MMTab:CreateToggle({
+local af=true
+local ag=ad:CreateToggle({
 Name="Player ESP",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-mm_player_esp_toggled=value
-GameUtils.updatePlayerESP(value)
+Callback=function(ag)
+af=ag
+ac.updatePlayerESP(ag)
 end,
 })
 game:GetService("RunService").RenderStepped:Connect(function()
-if mm_player_esp_toggled then
-GameUtils.updatePlayerESP(mm_player_esp_toggled)
+if af then
+ac.updatePlayerESP(af)
 end
 end)
 
-local mm_coin_esp_toggled=true
-local MMCoinEspToggle=MMTab:CreateToggle({
+local ah=true
+local ai=ad:CreateToggle({
 Name="Coin ESP",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-mm_coin_esp_toggled=value
-GameUtils.updateCoinESP(value)
+Callback=function(ai)
+ah=ai
+ac.updateCoinESP(ai)
 end,
 })
 game:GetService("RunService").RenderStepped:Connect(function()
-if mm_coin_esp_toggled then
-GameUtils.updateCoinESP(mm_coin_esp_toggled)
+if ah then
+ac.updateCoinESP(ah)
 end
 end)
 
-local MMUtilsSection=MMTab:CreateSection("Utils")
+local aj=ad:CreateSection("Utils")
 
-local MMKillAllButton=MMTab:CreateButton({
+local ak=ad:CreateButton({
 Name="Kill All (Murderer)",
 Callback=function()
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local hum=char and char:FindFirstChild("Humanoid")
-local root=char and char:FindFirstChild("HumanoidRootPart")
+local ak=game:GetService("Players").LocalPlayer
+local al=ak and ak.Character
+local am=al and al:FindFirstChild("Humanoid")
+local an=al and al:FindFirstChild("HumanoidRootPart")
 
-if hum then
-local backpack=plr:FindFirstChild("Backpack")
-local knifeBackpack=backpack and backpack:FindFirstChild("Knife")
+if am then
+local ao=ak:FindFirstChild("Backpack")
+local ap=ao and ao:FindFirstChild("Knife")
 
-if knifeBackpack then
-hum:EquipTool(knifeBackpack)
+if ap then
+am:EquipTool(ap)
 task.wait()
 end
 
-local knifePlayer=plr.Character:FindFirstChild("Knife")
+local aq=ak.Character:FindFirstChild("Knife")
 
-if knifePlayer then
+if aq then
 task.spawn(function()
-local running=true
+local ar=true
 task.spawn(function()
 task.wait(1)
-running=false
+ar=false
 end)
-while running do
-for i,v in pairs(game:GetService("Players"):GetPlayers())do
-local pChar=v.Character
-local pRoot=pChar and pChar:FindFirstChild("HumanoidRootPart")
+while ar do
+for as,b in pairs(game:GetService("Players"):GetPlayers())do
+local c=b.Character
+local d=c and c:FindFirstChild("HumanoidRootPart")
 
-if pChar and v~=game:GetService("Players").LocalPlayer then
-pRoot.CFrame=root.CFrame*CFrame.new(0,0,-3)
+if c and b~=game:GetService("Players").LocalPlayer then
+d.CFrame=an.CFrame*CFrame.new(0,0,-3)
 end
 end
 
@@ -4264,131 +4264,131 @@ end)
 
 task.wait()
 
-knifePlayer:Activate()
+aq:Activate()
 end
 end
 end,
 })
 
-local MMShootMurdererKeybind=MMTab:CreateKeybind({
+local al=ad:CreateKeybind({
 Name="Shoot Murderer",
 CurrentKeybind="G",
 HoldToInteract=false,
 Flag="MMShootMurdererKeybind",
 Callback=function()
-local murderer=GameUtils.getMurderer()
-if murderer then
-GameUtils.tpShoot(murderer)
+local al=ac.getMurderer()
+if al then
+ac.tpShoot(al)
 end
 end,
 })
 
-local mm_grab_gun_toggled=true
-local MMGrabGunToggle=MMTab:CreateToggle({
+local am=true
+local an=ad:CreateToggle({
 Name="Auto Grab Gun",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-mm_grab_gun_toggled=value
+Callback=function(an)
+am=an
 end,
 })
 task.spawn(function()
-local pickupGun=true
+local ao=true
 
 while task.wait()do
-if mm_grab_gun_toggled then
-local gun=game.Workspace:FindFirstChild("GunDrop",true)
+if am then
+local ap=game.Workspace:FindFirstChild("GunDrop",true)
 
-if not gun and not pickupGun then
-pickupGun=true
+if not ap and not ao then
+ao=true
 end
 
-if gun and pickupGun then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
-local pos=root and root.CFrame
+if ap and ao then
+local aq=game:GetService("Players").LocalPlayer
+local ar=aq and aq.Character
+local as=ar and ar:FindFirstChild("HumanoidRootPart")
+local b=as and as.CFrame
 
-if root then
+if as then
 task.wait(0.5)
-if not Utils.isDev()then
+if not ab.isDev()then
 task.wait(0.1)
 end
-root.CFrame=gun.CFrame
+as.CFrame=ap.CFrame
 task.wait(0.1)
-root.CFrame=pos
+as.CFrame=b
 end
 
-pickupGun=false
+ao=false
 end
 end
 end
 end)
 
-local MMFlingMurdererButton=MMTab:CreateButton({
+local ao=ad:CreateButton({
 Name="Fling Murderer",
 Callback=function()
-GameUtils.flingMurderer()
+ac.flingMurderer()
 end,
 })
 
-local mm_auto_fling_murderer_toggled=false
-local MMAutoFlingMurdererToggle=MMTab:CreateToggle({
+local ap=false
+local aq=ad:CreateToggle({
 Name="Auto Fling Murderer",
 CurrentValue=false,
 Flag=nil,
-Callback=function(value)
-mm_auto_fling_murderer_toggled=value
+Callback=function(aq)
+ap=aq
 end,
 })
 task.spawn(function()
 while task.wait()do
-if mm_auto_fling_murderer_toggled then
-local murderer=GameUtils.getMurderer()
+if ap then
+local ar=ac.getMurderer()
 
-if murderer then
-GameUtils.flingMurderer()
+if ar then
+ac.flingMurderer()
 task.wait(4)
 end
 end
 end
 end)
 
-local mm_collect_coin_toggled=false
-local MMCollectCoinToggle=MMTab:CreateToggle({
+local ar=false
+local as=ad:CreateToggle({
 Name="Collect Coins",
 CurrentValue=false,
 Flag=nil,
-Callback=function(value)
-mm_collect_coin_toggled=value
+Callback=function(as)
+ar=as
 end,
 })
 task.spawn(function()
 while task.wait()do
-if mm_collect_coin_toggled and not Utils.get_safeTweening()then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+if ar and not ab.get_safeTweening()then
+local b=game:GetService("Players").LocalPlayer
+local c=b and b.Character
+local d=c and c:FindFirstChild("HumanoidRootPart")
 
-if root then
-local coins=game.Workspace:FindFirstChild("CoinContainer",true)
+if d then
+local e=game.Workspace:FindFirstChild("CoinContainer",true)
 
-if coins then
-local best=nil
-local best_dist=99999999
+if e then
+local f=nil
+local g=99999999
 
-for i,v in pairs(coins:GetChildren())do
-if v.Name=="Coin_Server"then
-local dist=Utils.dist3d(root.Position,v.Position)
-if dist<best_dist then
-best_dist=dist
-best=v
+for h,i in pairs(e:GetChildren())do
+if i.Name=="Coin_Server"then
+local j=ab.dist3d(d.Position,i.Position)
+if j<g then
+g=j
+f=i
 end
 end
 end
 
-if best then
-Utils.safeTweenToPart(best)
+if f then
+ab.safeTweenToPart(f)
 end
 end
 end
@@ -4397,201 +4397,201 @@ end
 end)
 end
 
-return true end function __DARKLUA_BUNDLE_MODULES.p():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.p if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.p=v end return v.c end end do local function __modImpl()
+return true end function a.p():typeof(__modImpl())local aa=a.cache.p if not aa then aa={c=__modImpl()}a.cache.p=aa end return aa.c end end do local function __modImpl()
 
-local Utils=__DARKLUA_BUNDLE_MODULES.b()
+local aa=a.b()
 
-local M={}
+local ab={}
 
-function M.getZombies()
-local zombies=game.Workspace:FindFirstChild("Zombies")
-return(zombies and zombies:GetChildren())or{}
+function ab.getZombies()
+local ac=game.Workspace:FindFirstChild("Zombies")
+return(ac and ac:GetChildren())or{}
 end
 
-function M.getBox()
-local interactions=game.Workspace:FindFirstChild("Interactions")
-return interactions and interactions:FindFirstChild("Mystery")
+function ab.getBox()
+local ac=game.Workspace:FindFirstChild("Interactions")
+return ac and ac:FindFirstChild("Mystery")
 end
 
-function M.getPack()
-local interactions=game.Workspace:FindFirstChild("Interactions")
-return interactions and interactions:FindFirstChild("Pack-a-Punch")
+function ab.getPack()
+local ac=game.Workspace:FindFirstChild("Interactions")
+return ac and ac:FindFirstChild("Pack-a-Punch")
 end
 
-function M.getPowerups()
-local powerups=game.Workspace:FindFirstChild("Power-ups")
-return(powerups and powerups:GetChildren())or{}
+function ab.getPowerups()
+local ac=game.Workspace:FindFirstChild("Power-ups")
+return(ac and ac:GetChildren())or{}
 end
 
-function M.updateZombieESP(enabled)
-local zombies=M.getZombies()
+function ab.updateZombieESP(ac)
+local ad=ab.getZombies()
 
-for i,v in pairs(zombies)do
-Utils.updateESP(v,Color3.fromRGB(255,0,255),enabled)
-end
-end
-
-function M.updateBoxESP(enabled)
-local box=M.getBox()
-
-if box then
-Utils.updateESP(box,Color3.fromRGB(255,255,0),enabled)
+for ae,af in pairs(ad)do
+aa.updateESP(af,Color3.fromRGB(255,0,255),ac)
 end
 end
 
-function M.updatePowerupESP(enabled)
-local powerups=M.getPowerups()
+function ab.updateBoxESP(ac)
+local ad=ab.getBox()
 
-for i,v in pairs(powerups)do
-Utils.updateESP(v,Color3.fromRGB(107,176,255),enabled)
+if ad then
+aa.updateESP(ad,Color3.fromRGB(255,255,0),ac)
 end
 end
 
-return M end function __DARKLUA_BUNDLE_MODULES.q():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.q if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.q=v end return v.c end end do local function __modImpl()
+function ab.updatePowerupESP(ac)
+local ad=ab.getPowerups()
 
-local UI=__DARKLUA_BUNDLE_MODULES.e()
-local GameUtils=__DARKLUA_BUNDLE_MODULES.q()
+for ae,af in pairs(ad)do
+aa.updateESP(af,Color3.fromRGB(107,176,255),ac)
+end
+end
+
+return ab end function a.q():typeof(__modImpl())local aa=a.cache.q if not aa then aa={c=__modImpl()}a.cache.q=aa end return aa.c end end do local function __modImpl()
+
+local aa=a.e()
+local ab=a.q()
 
 if game.GameId==1003981402 then
-local RZTab=UI.Window:CreateTab("Reminiscence Zombies","gamepad-2")
-local RZESPSection=RZTab:CreateSection("ESP")
+local ac=aa.Window:CreateTab("Reminiscence Zombies","gamepad-2")
+local ad=ac:CreateSection("ESP")
 
-local zombie_esp_toggled=true
-local RZZombieESPToggle=RZTab:CreateToggle({
+local ae=true
+local af=ac:CreateToggle({
 Name="Zombie ESP",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-zombie_esp_toggled=value
-GameUtils.updateZombieESP(value)
+Callback=function(af)
+ae=af
+ab.updateZombieESP(af)
 end,
 })
 
-local box_esp_toggled=true
-local RZBoxESPToggle=RZTab:CreateToggle({
+local ag=true
+local ah=ac:CreateToggle({
 Name="Box ESP",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-box_esp_toggled=value
-GameUtils.updateBoxESP(value)
+Callback=function(ah)
+ag=ah
+ab.updateBoxESP(ah)
 end,
 })
 
-local powerup_esp_toggled=true
-local RZPowerupESPToggle=RZTab:CreateToggle({
+local ai=true
+local aj=ac:CreateToggle({
 Name="Powerup ESP",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-powerup_esp_toggled=value
-GameUtils.updatePowerupESP(value)
+Callback=function(aj)
+ai=aj
+ab.updatePowerupESP(aj)
 end,
 })
 
 game:GetService("RunService").RenderStepped:Connect(function()
-if zombie_esp_toggled then
-GameUtils.updateZombieESP(zombie_esp_toggled)
+if ae then
+ab.updateZombieESP(ae)
 end
 
-if box_esp_toggled then
-GameUtils.updateBoxESP(box_esp_toggled)
+if ag then
+ab.updateBoxESP(ag)
 end
 
-if powerup_esp_toggled then
-GameUtils.updatePowerupESP(powerup_esp_toggled)
+if ai then
+ab.updatePowerupESP(ai)
 end
 end)
 
-local RZUtilSection=RZTab:CreateSection("Utils")
+local ak=ac:CreateSection("Utils")
 
-local RZGotoBoxKeybind=RZTab:CreateKeybind({
+local al=ac:CreateKeybind({
 Name="TP to Box",
 CurrentKeybind="X",
 HoldToInteract=false,
 Flag="RZGotoBoxKeybind",
 Callback=function()
-local box=GameUtils.getBox()
+local al=ab.getBox()
 
-if box then
-local primary=box.PrimaryPart or box:FindFirstChildWhichIsA("BasePart")
+if al then
+local am=al.PrimaryPart or al:FindFirstChildWhichIsA("BasePart")
 
-if primary then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+if am then
+local an=game:GetService("Players").LocalPlayer
+local ao=an and an.Character
+local ap=ao and ao:FindFirstChild("HumanoidRootPart")
 
-if root then
-root.CFrame=primary.CFrame
+if ap then
+ap.CFrame=am.CFrame
 end
 end
 end
 end,
 })
 
-local RZGotoPackKeybind=RZTab:CreateKeybind({
+local am=ac:CreateKeybind({
 Name="TP to Pack",
 CurrentKeybind="Z",
 HoldToInteract=false,
 Flag="RZGotoPackKeybind",
 Callback=function()
-local pack=GameUtils.getPack()
+local am=ab.getPack()
 
-if pack then
-local primary=pack.PrimaryPart or pack:FindFirstChildWhichIsA("BasePart")
+if am then
+local an=am.PrimaryPart or am:FindFirstChildWhichIsA("BasePart")
 
-if primary then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+if an then
+local ao=game:GetService("Players").LocalPlayer
+local ap=ao and ao.Character
+local aq=ap and ap:FindFirstChild("HumanoidRootPart")
 
-if root then
-root.CFrame=primary.CFrame
+if aq then
+aq.CFrame=an.CFrame
 end
 end
 end
 end,
 })
 
-local rz_bring_zombies_toggled=true
-local RZBringZombiesToggle=RZTab:CreateToggle({
+local an=true
+local ao=ac:CreateToggle({
 Name="Bring Zombies (Right Click)",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-rz_bring_zombies_toggled=value
+Callback=function(ao)
+an=ao
 end,
 })
 task.spawn(function()
-local plr=game:GetService("Players").LocalPlayer
-local mouse=plr and plr:GetMouse()
+local ap=game:GetService("Players").LocalPlayer
+local aq=ap and ap:GetMouse()
 
-local doBring=false
+local ar=false
 
-if mouse then
-mouse.Button2Down:Connect(function()
-doBring=true
+if aq then
+aq.Button2Down:Connect(function()
+ar=true
 end)
 
-mouse.Button2Up:Connect(function()
-doBring=false
+aq.Button2Up:Connect(function()
+ar=false
 end)
 end
 
 game:GetService("RunService").RenderStepped:Connect(function()
-if rz_bring_zombies_toggled and doBring then
-local zombies=GameUtils.getZombies()
+if an and ar then
+local as=ab.getZombies()
 
-for i,v in pairs(zombies)do
-local root=v:FindFirstChild("HumanoidRootPart")or v.PrimaryPart
+for b,c in pairs(as)do
+local d=c:FindFirstChild("HumanoidRootPart")or c.PrimaryPart
 
-if root then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local pRoot=char and char:FindFirstChild("HumanoidRootPart")
+if d then
+local e=game:GetService("Players").LocalPlayer
+local f=e and e.Character
+local g=f and f:FindFirstChild("HumanoidRootPart")
 
-if pRoot then
-root.CFrame=pRoot.CFrame*CFrame.new(0,0,-5)
+if g then
+d.CFrame=g.CFrame*CFrame.new(0,0,-5)
 end
 end
 end
@@ -4599,259 +4599,259 @@ end
 end)
 end)
 
-local grab_powerups_toggled=true
-local RZGrabPowerups=RZTab:CreateToggle({
+local ap=true
+local aq=ac:CreateToggle({
 Name="Auto Grab Powerups",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-grab_powerups_toggled=value
+Callback=function(aq)
+ap=aq
 end,
 })
 
 game:GetService("RunService").RenderStepped:Connect(function()
-if grab_powerups_toggled then
-local powerups=GameUtils.getPowerups()
+if ap then
+local ar=ab.getPowerups()
 
-for i,v in pairs(powerups)do
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
-local primary=v.PrimaryPart or v:FindFirstChildWhichIsA("BasePart")
+for as,b in pairs(ar)do
+local c=game:GetService("Players").LocalPlayer
+local d=c and c.Character
+local e=d and d:FindFirstChild("HumanoidRootPart")
+local f=b.PrimaryPart or b:FindFirstChildWhichIsA("BasePart")
 
-if primary and root then
-primary.CFrame=root.CFrame
+if f and e then
+f.CFrame=e.CFrame
 end
 end
 end
 end)
 end
 
-return true end function __DARKLUA_BUNDLE_MODULES.r():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.r if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.r=v end return v.c end end do local function __modImpl()
+return true end function a.r():typeof(__modImpl())local aa=a.cache.r if not aa then aa={c=__modImpl()}a.cache.r=aa end return aa.c end end do local function __modImpl()
 
-local Utils=__DARKLUA_BUNDLE_MODULES.b()
+local aa=a.b()
 
-local M={}
+local ab={}
 
-function M.updateAnimalESP(enabled)
-local gameplay=game.Workspace:FindFirstChild("Gameplay")
-local dynamic=gameplay and gameplay:FindFirstChild("Dynamic")
-local animals_=dynamic and dynamic:FindFirstChild("Animals")
-local animals=animals_ and animals_:GetChildren()
+function ab.updateAnimalESP(ac)
+local ad=game.Workspace:FindFirstChild("Gameplay")
+local ae=ad and ad:FindFirstChild("Dynamic")
+local af=ae and ae:FindFirstChild("Animals")
+local ag=af and af:GetChildren()
 
-for i,v in pairs(animals)do
-Utils.updateESP(v,Color3.fromRGB(0,128,255),enabled)
+for ah,ai in pairs(ag)do
+aa.updateESP(ai,Color3.fromRGB(0,128,255),ac)
 end
 end
 
-function M.getTeam()
-local plr=game:GetService("Players").LocalPlayer
-return(plr and plr.Team)or{Name="Not in game"}
+function ab.getTeam()
+local ac=game:GetService("Players").LocalPlayer
+return(ac and ac.Team)or{Name="Not in game"}
 end
 
-function M.isAnimal()
-return M.getTeam().Name=="Animal"
+function ab.isAnimal()
+return ab.getTeam().Name=="Animal"
 end
 
-function M.isKeeper()
-return M.getTeam().Name=="Keeper"
+function ab.isKeeper()
+return ab.getTeam().Name=="Keeper"
 end
 
-function M.isInGame()
-return M.getTeam().Name~="Not in game"
+function ab.isInGame()
+return ab.getTeam().Name~="Not in game"
 end
 
-function M.getKeeper()
-for i,v in pairs(game:GetService("Players"):GetPlayers())do
-if v.Team.Name=="Keeper"then
-return v
-end
-end
-
-return nil
-end
-
-function M.getClosestAnimal()
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
-
-local plrs=game:GetService("Players"):GetPlayers()
-
-local best=nil
-local best_dist=99999999
-
-for i,v in pairs(plrs)do
-local vChar=v.Character
-local vRoot=vChar and vChar:FindFirstChild("HumanoidRootPart")
-
-if vRoot and root then
-local dist=Utils.dist3d(root.Position,vRoot.Position)
-
-if dist<best_dist and v~=plr and v.Team.Name=="Animal"then
-best_dist=dist
-best=v
-end
-end
-end
-
-return best
-end
-
-function M.getPlayersAnimal(plr)
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
-
-if root then
-local gameplay=game.Workspace:FindFirstChild("Gameplay")
-local dynamic=gameplay and gameplay:FindFirstChild("Dynamic")
-local animals_=dynamic and dynamic:FindFirstChild("Animals")
-local animals=animals_ and animals_:GetChildren()
-
-if animals then
-local best=nil
-local best_dist=99999999
-
-for i,v in pairs(animals)do
-local rootPart=v.PrimaryPart
-if rootPart then
-local dist=Utils.dist3d(root.Position,rootPart.Position)
-
-if dist<best_dist then
-best_dist=dist
-best=v
-end
-end
-end
-
-return best
+function ab.getKeeper()
+for ac,ad in pairs(game:GetService("Players"):GetPlayers())do
+if ad.Team.Name=="Keeper"then
+return ad
 end
 end
 
 return nil
 end
 
-return M end function __DARKLUA_BUNDLE_MODULES.s():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.s if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.s=v end return v.c end end do local function __modImpl()
+function ab.getClosestAnimal()
+local ac=game:GetService("Players").LocalPlayer
+local ad=ac and ac.Character
+local ae=ad and ad:FindFirstChild("HumanoidRootPart")
 
-local UI=__DARKLUA_BUNDLE_MODULES.e()
-local Utils=__DARKLUA_BUNDLE_MODULES.b()
-local GameUtils=__DARKLUA_BUNDLE_MODULES.s()
+local af=game:GetService("Players"):GetPlayers()
+
+local ag=nil
+local ah=99999999
+
+for ai,aj in pairs(af)do
+local ak=aj.Character
+local al=ak and ak:FindFirstChild("HumanoidRootPart")
+
+if al and ae then
+local am=aa.dist3d(ae.Position,al.Position)
+
+if am<ah and aj~=ac and aj.Team.Name=="Animal"then
+ah=am
+ag=aj
+end
+end
+end
+
+return ag
+end
+
+function ab.getPlayersAnimal(ac)
+local ad=ac and ac.Character
+local ae=ad and ad:FindFirstChild("HumanoidRootPart")
+
+if ae then
+local af=game.Workspace:FindFirstChild("Gameplay")
+local ag=af and af:FindFirstChild("Dynamic")
+local ah=ag and ag:FindFirstChild("Animals")
+local ai=ah and ah:GetChildren()
+
+if ai then
+local aj=nil
+local ak=99999999
+
+for al,am in pairs(ai)do
+local an=am.PrimaryPart
+if an then
+local ao=aa.dist3d(ae.Position,an.Position)
+
+if ao<ak then
+ak=ao
+aj=am
+end
+end
+end
+
+return aj
+end
+end
+
+return nil
+end
+
+return ab end function a.s():typeof(__modImpl())local aa=a.cache.s if not aa then aa={c=__modImpl()}a.cache.s=aa end return aa.c end end do local function __modImpl()
+
+local aa=a.e()
+local ab=a.b()
+local ac=a.s()
 
 if game.PlaceId==139233844569220 then
-local ZOOTab=UI.Window:CreateTab("ZOO or OOF","gamepad-2")
-local ZOOESPSection=ZOOTab:CreateSection("ESP")
+local ad=aa.Window:CreateTab("ZOO or OOF","gamepad-2")
+local ae=ad:CreateSection("ESP")
 
-local zoo_esp_toggled=true
-local ZOOESPToggle=ZOOTab:CreateToggle({
+local af=true
+local ag=ad:CreateToggle({
 Name="Animal ESP",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-zoo_esp_toggled=value
-GameUtils.updateAnimalESP(value)
+Callback=function(ag)
+af=ag
+ac.updateAnimalESP(ag)
 end,
 })
 
 game:GetService("RunService").RenderStepped:Connect(function()
-if zoo_esp_toggled then
-GameUtils.updateAnimalESP(zoo_esp_toggled)
+if af then
+ac.updateAnimalESP(af)
 end
 end)
 
-local ZOOFarmSection=ZOOTab:CreateSection("Farm")
+local ah=ad:CreateSection("Farm")
 
-local zoo_farm_toggled=true
-local ZOOFarmToggle=ZOOTab:CreateToggle({
+local ai=true
+local aj=ad:CreateToggle({
 Name="Auto Farm",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-zoo_farm_toggled=value
+Callback=function(aj)
+ai=aj
 end,
 })
 task.spawn(function()
-local isInvis=false
+local ak=false
 
 while task.wait()do
-if zoo_farm_toggled then
-if isInvis and not GameUtils.isInGame()then
-isInvis=false
+if ai then
+if ak and not ac.isInGame()then
+ak=false
 end
 
-if GameUtils.isAnimal()and not isInvis then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+if ac.isAnimal()and not ak then
+local al=game:GetService("Players").LocalPlayer
+local am=al and al.Character
+local an=am and am:FindFirstChild("HumanoidRootPart")
 
-if root then
-task.wait((Utils.isDev()and 1)or 2)
-root.CFrame=CFrame.new(1,51,224)
+if an then
+task.wait((ab.isDev()and 1)or 2)
+an.CFrame=CFrame.new(1,51,224)
 task.wait(1)
-isInvis=true
+ak=true
 end
 end
 
-if isInvis then
-local keeper=GameUtils.getKeeper()
+if ak then
+local al=ac.getKeeper()
 
-if keeper then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+if al then
+local am=game:GetService("Players").LocalPlayer
+local an=am and am.Character
+local ao=an and an:FindFirstChild("HumanoidRootPart")
 
-local kChar=keeper.Character
-local kRoot=kChar and kChar:FindFirstChild("HumanoidRootPart")
+local ap=al.Character
+local aq=ap and ap:FindFirstChild("HumanoidRootPart")
 
-if root and kRoot then
-root.CFrame=kRoot.CFrame
-local args={
+if ao and aq then
+ao.CFrame=aq.CFrame
+local ar={
 [1]="Taunt.play",
 }
 
-game:GetService("ReplicatedStorage").Net:FireServer(unpack(args))
+game:GetService("ReplicatedStorage").Net:FireServer(unpack(ar))
 end
 end
 end
 else
-isInvis=false
+ak=false
 end
 end
 end)
 
-local auto_kill_toggled=true
-local ZOOAutoKillToggle=ZOOTab:CreateToggle({
+local ak=true
+local al=ad:CreateToggle({
 Name="Auto Kill",
 CurrentValue=true,
 Flag=nil,
-Callback=function(value)
-auto_kill_toggled=value
+Callback=function(al)
+ak=al
 end,
 })
 task.spawn(function()
 while task.wait()do
-if GameUtils.isKeeper()and auto_kill_toggled then
-local plr=game:GetService("Players").LocalPlayer
-local char=plr and plr.Character
-local root=char and char:FindFirstChild("HumanoidRootPart")
+if ac.isKeeper()and ak then
+local am=game:GetService("Players").LocalPlayer
+local an=am and am.Character
+local ao=an and an:FindFirstChild("HumanoidRootPart")
 
-local closestAnimal=GameUtils.getClosestAnimal()
+local ap=ac.getClosestAnimal()
 
-if closestAnimal and root then
-local bAnimal=GameUtils.getPlayersAnimal(closestAnimal)
-local bRoot=bAnimal and bAnimal.PrimaryPart
+if ap and ao then
+local aq=ac.getPlayersAnimal(ap)
+local ar=aq and aq.PrimaryPart
 
-if bRoot then
-local args={
+if ar then
+local as={
 [1]="Shooting.shotPlayer",
-[2]=root.CFrame,
-[3]=bRoot.CFrame,
-[4]=closestAnimal,
-[5]=bRoot,
+[2]=ao.CFrame,
+[3]=ar.CFrame,
+[4]=ap,
+[5]=ar,
 [6]=CFrame.new(0.8038291931152344,0.09816551208496094,-8.88824462890625E-4)
 *CFrame.Angles(3.1407759189605713,1.3910810947418213,3.129187822341919),
 }
 
-game:GetService("ReplicatedStorage").Net:FireServer(unpack(args))
+game:GetService("ReplicatedStorage").Net:FireServer(unpack(as))
 end
 end
 end
@@ -4859,7 +4859,7 @@ end
 end)
 end
 
-return true end function __DARKLUA_BUNDLE_MODULES.t():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.t if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.t=v end return v.c end end do local function __modImpl()__DARKLUA_BUNDLE_MODULES.h()__DARKLUA_BUNDLE_MODULES.j()__DARKLUA_BUNDLE_MODULES.l()__DARKLUA_BUNDLE_MODULES.n()__DARKLUA_BUNDLE_MODULES.p()__DARKLUA_BUNDLE_MODULES.r()__DARKLUA_BUNDLE_MODULES.t()
+return true end function a.t():typeof(__modImpl())local aa=a.cache.t if not aa then aa={c=__modImpl()}a.cache.t=aa end return aa.c end end do local function __modImpl()a.h()a.j()a.l()a.n()a.p()a.r()a.t()
 
 
 
@@ -4869,103 +4869,103 @@ return true end function __DARKLUA_BUNDLE_MODULES.t():typeof(__modImpl())local v
 
 
 
-return true end function __DARKLUA_BUNDLE_MODULES.u():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.u if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.u=v end return v.c end end do local function __modImpl()
+return true end function a.u():typeof(__modImpl())local aa=a.cache.u if not aa then aa={c=__modImpl()}a.cache.u=aa end return aa.c end end do local function __modImpl()
 
-local UI=__DARKLUA_BUNDLE_MODULES.e()
+local aa=a.e()
 
-local M={}
+local ab={}
 
-local ExternalsTab=UI.Window:CreateTab("Externals","telescope")
+local ac=aa.Window:CreateTab("Externals","telescope")
 
-ExternalsTab:CreateSection("Dex")
+ac:CreateSection("Dex")
 
-M.dex_injected=false
-M.iy_injected=false
-M.rs_injected=false
+ab.dex_injected=false
+ab.iy_injected=false
+ab.rs_injected=false
 
-local DexButton=ExternalsTab:CreateButton({
+local ad=ac:CreateButton({
 Name="Inject Dex",
 Callback=function()
-if M.dex_injected then
+if ab.dex_injected then
 return
 end
-M.dex_injected=true
+ab.dex_injected=true
 loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
 end,
 })
 
-M.DexToggle=ExternalsTab:CreateToggle({
+ab.DexToggle=ac:CreateToggle({
 Name="Load Dex on Startup",
 CurrentValue=false,
 Flag="LoadDexOnStartup",
-Callback=function(value)end,
+Callback=function(ae)end,
 })
 
-ExternalsTab:CreateSection("Infinite Yield")
+ac:CreateSection("Infinite Yield")
 
-local IYButton=ExternalsTab:CreateButton({
+local ae=ac:CreateButton({
 Name="Inject IY",
 Callback=function()
-if M.iy_injected then
+if ab.iy_injected then
 return
 end
-M.iy_injected=true
+ab.iy_injected=true
 loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
 end,
 })
 
-M.IYToggle=ExternalsTab:CreateToggle({
+ab.IYToggle=ac:CreateToggle({
 Name="Load IY on Startup",
 CurrentValue=false,
 Flag="LoadIYOnStartup",
-Callback=function(value)end,
+Callback=function(af)end,
 })
 
-ExternalsTab:CreateSection("Cobalt Spy")
+ac:CreateSection("Cobalt Spy")
 
-local RSButton=ExternalsTab:CreateButton({
+local af=ac:CreateButton({
 Name="Inject Cobalt Spy",
 Callback=function()
-if M.rs_injected then
+if ab.rs_injected then
 return
 end
-M.rs_injected=true
+ab.rs_injected=true
 loadstring(game:HttpGet("https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau"))()
 end,
 })
 
-M.RSToggle=ExternalsTab:CreateToggle({
+ab.RSToggle=ac:CreateToggle({
 Name="Load Cobalt on Startup",
 CurrentValue=false,
 Flag="LoadRSOnStartup",
-Callback=function(value)end,
+Callback=function(ag)end,
 })
 
-return M end function __DARKLUA_BUNDLE_MODULES.v():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.v if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.v=v end return v.c end end end
+return ab end function a.v():typeof(__modImpl())local aa=a.cache.v if not aa then aa={c=__modImpl()}a.cache.v=aa end return aa.c end end end
 
-local Utils=__DARKLUA_BUNDLE_MODULES.b()
+local aa=a.b()
 
-Utils.WaitForGameAndPlayer()
+aa.WaitForGameAndPlayer()
 
-local UI=__DARKLUA_BUNDLE_MODULES.e()__DARKLUA_BUNDLE_MODULES.f()__DARKLUA_BUNDLE_MODULES.u()
+local ab=a.e()a.f()a.u()
 
 
 
-local Externals=__DARKLUA_BUNDLE_MODULES.v()
+local ac=a.v()
 
-UI.Library:LoadConfiguration()
+ab.Library:LoadConfiguration()
 
-if Externals.DexToggle.CurrentValue then
-Externals.dex_injected=true
+if ac.DexToggle.CurrentValue then
+ac.dex_injected=true
 loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-DEX-Explorer-29920"))()
 end
 
-if Externals.IYToggle.CurrentValue then
-Externals.iy_injected=true
+if ac.IYToggle.CurrentValue then
+ac.iy_injected=true
 loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
 end
 
-if Externals.RSToggle.CurrentValue then
-Externals.rs_injected=true
+if ac.RSToggle.CurrentValue then
+ac.rs_injected=true
 loadstring(game:HttpGet("https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau"))()
 end
