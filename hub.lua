@@ -3129,7 +3129,7 @@ if game.PlaceId == 142823291 then
 			local latency = game:GetService("Players").LocalPlayer:GetNetworkPing() / 2
 			local tVel = root.AssemblyLinearVelocity
 			local tMov = hum and (hum.MoveDirection * hum.WalkSpeed)
-			tVel = tVel:Lerp(tMov, 0.5)
+			tVel = tVel:Lerp(tMov, 0.6)
 			local tPos = root.Position + (tVel * latency)
 
 			shootPos(tPos)
@@ -3151,11 +3151,11 @@ if game.PlaceId == 142823291 then
 
 			root.CFrame = otherRoot.CFrame
 
-			task.wait(latency)
+			task.wait(latency * 2)
 
 			shootPlayer(other)
 
-			task.wait(latency)
+			task.wait(latency * 2)
 
 			root.CFrame = pos
 		end
