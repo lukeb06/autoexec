@@ -1,5 +1,8 @@
 {
-  "generator": "dense",
+  "generator": {
+    "name": "dense",
+    "column_span": 120
+  },
   "bundle": {
     "require_mode": {
       "name": "path"
