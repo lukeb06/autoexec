@@ -8,54 +8,54 @@ local j=Instance.new('NumberValue')j.Name='Transparency'j.Value=i.Transparency j
 end b=g.Stepped:Connect(NoclipLoop)end function e.disable()if d then return end if b then b:Disconnect()local f=game:
 GetService('Players').LocalPlayer for g,h in pairs(f.Character:GetDescendants())do if h:IsA('BasePart')then local i=h:
 FindFirstChild('CouldCollide')if i then h.CanCollide=i.Value i:Destroy()end local j=h:FindFirstChild('Transparency')if j
-then h.Transparency=j.Value j:Destroy()end end end end c=true end function e.toggleNoclip()if c then e.enableNoclip()
-else e.disableNoclip()end end return e end function a.a():typeof(__modImpl())local b=a.cache.a if not b then b={c=
-__modImpl()}a.cache.a=b end return b.c end end do local function __modImpl()local b=a.a()local c={}function c.
-WaitForGameAndPlayer()local d=false local e=false while not(d and e)do if game:IsLoaded()then d=true end if game:
-GetService('Players').LocalPlayer then e=true end task.wait()end end function c.diff3d(d,e)return e-d end function c.
-dist3d(d,e)return c.diff3d(d,e).Magnitude end function c.dir3d(d,e)return c.diff3d(d,e).Unit end function c.isDev()local
-d='pathwise'local e=game:GetService('Players').LocalPlayer if string.sub(e.Name,1,#d)==d then return true end return
-false end function c.isKBM()local d=game:GetService('UserInputService')return d.KeyboardEnabled and d.MouseEnabled end c
-.Noclip=b function c.breakVelocity(d)task.spawn(function()local e=game:GetService('Players').LocalPlayer local f,g=false
-,Vector3.new(0,0,0)task.spawn(function()task.wait(d)f=true end)while not f do for h,i in ipairs(e.Character:
-GetDescendants())do if i:IsA('BasePart')then i.Velocity,i.RotVelocity=g,g end end task.wait()end end)end local d=20
-local e=false function c.get_safeTweening()return e end function c.set_safeTweening(f)e=f end function c.safeTweenToPos(
-f)local g=game:GetService('TweenService')local h=game:GetService('Players').LocalPlayer local i=h and h.Character local
-j=i and i:FindFirstChild('HumanoidRootPart')local k=i and i:FindFirstChildOfClass('Humanoid')local l=c.dist3d(j.Position
-,f.Position)local m=l/d e=true if k and k.SeatPart then k.Sit=false task.wait(0.1)end task.wait(0.1)g:Create(j,TweenInfo
-.new(m,Enum.EasingStyle.Linear),{CFrame=f}):Play()task.delay(m,function()e=false end)c.breakVelocity(m)end function c.
+then h.Transparency=j.Value j:Destroy()end end end end c=true end function e.toggleNoclip()if c then e.enable()else e.
+disable()end end return e end function a.a():typeof(__modImpl())local b=a.cache.a if not b then b={c=__modImpl()}a.cache
+.a=b end return b.c end end do local function __modImpl()local b=a.a()local c={}function c.WaitForGameAndPlayer()local d
+=false local e=false while not(d and e)do if game:IsLoaded()then d=true end if game:GetService('Players').LocalPlayer
+then e=true end task.wait()end end function c.diff3d(d,e)return e-d end function c.dist3d(d,e)return c.diff3d(d,e).
+Magnitude end function c.dir3d(d,e)return c.diff3d(d,e).Unit end function c.isDev()local d='pathwise'local e=game:
+GetService('Players').LocalPlayer if string.sub(e.Name,1,#d)==d then return true end return false end function c.isKBM()
+local d=game:GetService('UserInputService')return d.KeyboardEnabled and d.MouseEnabled end c.Noclip=b function c.
+breakVelocity(d)task.spawn(function()local e=game:GetService('Players').LocalPlayer local f,g=false,Vector3.new(0,0,0)
+task.spawn(function()task.wait(d)f=true end)while not f do for h,i in ipairs(e.Character:GetDescendants())do if i:IsA(
+'BasePart')then i.Velocity,i.RotVelocity=g,g end end task.wait()end end)end local d=20 local e=false function c.
+get_safeTweening()return e end function c.set_safeTweening(f)e=f end function c.safeTweenToPos(f)local g=game:
+GetService('TweenService')local h=game:GetService('Players').LocalPlayer local i=h and h.Character local j=i and i:
+FindFirstChild('HumanoidRootPart')local k=i and i:FindFirstChildOfClass('Humanoid')local l=c.dist3d(j.Position,f.
+Position)local m=l/d e=true if k and k.SeatPart then k.Sit=false task.wait(0.1)end task.wait(0.1)g:Create(j,TweenInfo.
+new(m,Enum.EasingStyle.Linear),{CFrame=f}):Play()task.delay(m,function()e=false end)c.breakVelocity(m)end function c.
 safeTweenToPart(f)if f:IsA('BasePart')then local g=game:GetService('Players').LocalPlayer local h=g and g.Character
 local i=h and h:FindFirstChild('HumanoidRootPart')local j=h and h:FindFirstChildWhichIsA('Humanoid')local k=c.dist3d(i.
 Position,f.Position)local l=k/d e=true if j and j.SeatPart then j.Sit=false task.wait(0.1)end task.wait(0.1)local m=nil
-e=true c.enableNoclip()game.Workspace.Gravity=0 m=game:GetService('RunService').Heartbeat:Connect(function(n)if not i or
-not f or not f.Parent then m:Disconnect()e=false c.disableNoclip()game.Workspace.Gravity=196.21 if j then j:ChangeState(
-Enum.HumanoidStateType.GettingUp)end return end local o=i.Position local p=f.Position local q=c.dist3d(o,p)local r=d*n
-if q<=r then i.CFrame=f.CFrame m:Disconnect()e=false c.disableNoclip()if j then j:ChangeState(Enum.HumanoidStateType.
-GettingUp)end game.Workspace.Gravity=196.21 else local s=c.dir3d(o,p)local t=o+(s*r)if j then j:ChangeState(Enum.
-HumanoidStateType.Physics)end i.CFrame=CFrame.new(t)*(f.CFrame-f.CFrame.Position)end end)c.breakVelocity(l)end end
-function c.flingCharacter(f)local g=game:GetService('Players').LocalPlayer local h=g and g.Character local i=h and h:
-FindFirstChild('HumanoidRootPart')local j=f and f:FindFirstChild('HumanoidRootPart')if i and j then c.enableNoclip()task
-.wait(0.2)local k=i.CFrame task.wait(0.1)for l,m in pairs(h:GetDescendants())do if m:IsA('BasePart')then m.
-CustomPhysicalProperties=PhysicalProperties.new(100,0.3,0.5)end end for l,m in h:GetChildren()do if m:IsA('BasePart')
-then m.CanCollide=false m.Massless=true m.Velocity=Vector3.new(0,0,0)end end local l=99999 local m=l local n n=game:
-GetService('RunService').Heartbeat:Connect(function(o)if not j or not j.Parent then return end local p=math.random(-100,
-100)local q=j.AssemblyLinearVelocity if q.Magnitude>500 then n:Disconnect()end local r=j.Position+(q*0.08)if r.Y<=game.
-Workspace.FallenPartsDestroyHeight+50 then return end i.CFrame=(CFrame.new(r+Vector3.new(0.1,0,0.1)))*(i.CFrame-i.CFrame
-.Position)i.AssemblyLinearVelocity=Vector3.new(l+p,-100,l+p)i.AssemblyAngularVelocity=Vector3.new(0,m,0)end)task.spawn(
-function()while n.Connected do m=l task.wait(0.2)m=0 task.wait(0.1)end end)task.delay(3,function()for o,p in pairs(h:
-GetDescendants())do if p.ClassName=='Part'or p.ClassName=='MeshPart'then p.CustomPhysicalProperties=PhysicalProperties.
-new(0.7,0.3,0.5)end end c.disableNoclip()n:Disconnect()c.breakVelocity(0.2)task.wait(0.1)i.CFrame=k end)end end function
-c.flingPlayer(f)local g=f and f.Character c.flingCharacter(g)end function c.isFriendsWith(f)local g=game:GetService(
-'Players').LocalPlayer return g:IsFriendsWith(f.UserId)end function c.updateESP(f,g,h)local i=f:FindFirstChild('ESPHL')
-if i then if not h then i:Destroy()elseif g~=i.FillColor then i.FillColor=g i.OutlineColor=g end elseif h then local j=
-Instance.new('Highlight')j.Name='ESPHL'j.Adornee=f j.FillColor=g j.OutlineColor=g j.Parent=f end end return c end
-function a.b():typeof(__modImpl())local b=a.cache.b if not b then b={c=__modImpl()}a.cache.b=b end return b.c end end do
-local function __modImpl()local b={Default={TextColor=Color3.fromRGB(240,240,240),Background=Color3.fromRGB(25,25,25),
-Topbar=Color3.fromRGB(34,34,34),Shadow=Color3.fromRGB(20,20,20),NotificationBackground=Color3.fromRGB(20,20,20),
-NotificationActionsBackground=Color3.fromRGB(230,230,230),TabBackground=Color3.fromRGB(80,80,80),TabStroke=Color3.
-fromRGB(85,85,85),TabBackgroundSelected=Color3.fromRGB(210,210,210),TabTextColor=Color3.fromRGB(240,240,240),
-SelectedTabTextColor=Color3.fromRGB(50,50,50),ElementBackground=Color3.fromRGB(35,35,35),ElementBackgroundHover=Color3.
-fromRGB(40,40,40),SecondaryElementBackground=Color3.fromRGB(25,25,25),ElementStroke=Color3.fromRGB(50,50,50),
+e=true c.Noclip.enable()game.Workspace.Gravity=0 m=game:GetService('RunService').Heartbeat:Connect(function(n)if not i
+or not f or not f.Parent then m:Disconnect()e=false c.Noclip.disable()game.Workspace.Gravity=196.21 if j then j:
+ChangeState(Enum.HumanoidStateType.GettingUp)end return end local o=i.Position local p=f.Position local q=c.dist3d(o,p)
+local r=d*n if q<=r then i.CFrame=f.CFrame m:Disconnect()e=false c.Noclip.disable()if j then j:ChangeState(Enum.
+HumanoidStateType.GettingUp)end game.Workspace.Gravity=196.21 else local s=c.dir3d(o,p)local t=o+(s*r)if j then j:
+ChangeState(Enum.HumanoidStateType.Physics)end i.CFrame=CFrame.new(t)*(f.CFrame-f.CFrame.Position)end end)c.
+breakVelocity(l)end end function c.flingCharacter(f)local g=game:GetService('Players').LocalPlayer local h=g and g.
+Character local i=h and h:FindFirstChild('HumanoidRootPart')local j=f and f:FindFirstChild('HumanoidRootPart')if i and j
+then c.Noclip.Noclip.enable()task.wait(0.2)local k=i.CFrame task.wait(0.1)for l,m in pairs(h:GetDescendants())do if m:
+IsA('BasePart')then m.CustomPhysicalProperties=PhysicalProperties.new(100,0.3,0.5)end end for l,m in h:GetChildren()do
+if m:IsA('BasePart')then m.CanCollide=false m.Massless=true m.Velocity=Vector3.new(0,0,0)end end local l=99999 local m=l
+local n n=game:GetService('RunService').Heartbeat:Connect(function(o)if not j or not j.Parent then return end local p=
+math.random(-100,100)local q=j.AssemblyLinearVelocity if q.Magnitude>500 then n:Disconnect()end local r=j.Position+(q*
+0.08)if r.Y<=game.Workspace.FallenPartsDestroyHeight+50 then return end i.CFrame=(CFrame.new(r+Vector3.new(0.1,0,0.1)))*
+(i.CFrame-i.CFrame.Position)i.AssemblyLinearVelocity=Vector3.new(l+p,-100,l+p)i.AssemblyAngularVelocity=Vector3.new(0,m,
+0)end)task.spawn(function()while n.Connected do m=l task.wait(0.2)m=0 task.wait(0.1)end end)task.delay(3,function()for o
+,p in pairs(h:GetDescendants())do if p.ClassName=='Part'or p.ClassName=='MeshPart'then p.CustomPhysicalProperties=
+PhysicalProperties.new(0.7,0.3,0.5)end end c.Noclip.disable()n:Disconnect()c.breakVelocity(0.2)task.wait(0.1)i.CFrame=k
+end)end end function c.flingPlayer(f)local g=f and f.Character c.flingCharacter(g)end function c.isFriendsWith(f)local g
+=game:GetService('Players').LocalPlayer return g:IsFriendsWith(f.UserId)end function c.updateESP(f,g,h)local i=f:
+FindFirstChild('ESPHL')if i then if not h then i:Destroy()elseif g~=i.FillColor then i.FillColor=g i.OutlineColor=g end
+elseif h then local j=Instance.new('Highlight')j.Name='ESPHL'j.Adornee=f j.FillColor=g j.OutlineColor=g j.Parent=f end
+end return c end function a.b():typeof(__modImpl())local b=a.cache.b if not b then b={c=__modImpl()}a.cache.b=b end
+return b.c end end do local function __modImpl()local b={Default={TextColor=Color3.fromRGB(240,240,240),Background=
+Color3.fromRGB(25,25,25),Topbar=Color3.fromRGB(34,34,34),Shadow=Color3.fromRGB(20,20,20),NotificationBackground=Color3.
+fromRGB(20,20,20),NotificationActionsBackground=Color3.fromRGB(230,230,230),TabBackground=Color3.fromRGB(80,80,80),
+TabStroke=Color3.fromRGB(85,85,85),TabBackgroundSelected=Color3.fromRGB(210,210,210),TabTextColor=Color3.fromRGB(240,240
+,240),SelectedTabTextColor=Color3.fromRGB(50,50,50),ElementBackground=Color3.fromRGB(35,35,35),ElementBackgroundHover=
+Color3.fromRGB(40,40,40),SecondaryElementBackground=Color3.fromRGB(25,25,25),ElementStroke=Color3.fromRGB(50,50,50),
 SecondaryElementStroke=Color3.fromRGB(40,40,40),SliderBackground=Color3.fromRGB(50,138,220),SliderProgress=Color3.
 fromRGB(50,138,220),SliderStroke=Color3.fromRGB(58,163,255),ToggleBackground=Color3.fromRGB(30,30,30),ToggleEnabled=
 Color3.fromRGB(0,146,214),ToggleDisabled=Color3.fromRGB(100,100,100),ToggleEnabledStroke=Color3.fromRGB(0,170,255),
