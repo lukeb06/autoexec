@@ -435,8 +435,8 @@ FindFirstChild'ActionEvent'if H.Value then game.ReplicatedStorage.RemoteEvent:Fi
 'Lighting'.Atmosphere.Density=0 game:GetService'Lighting'.Atmosphere.Offset=0 game:GetService'Lighting'.Atmosphere.Glare=0 game:GetService'Lighting'.Atmosphere.
 Haze=0 game:GetService'Lighting'.Blur.Enabled=false game:GetService'Lighting'.DepthOfField.Enabled=false game:GetService'Lighting'.Brightness=2 game:GetService
 'Lighting'.ClockTime=14 game:GetService'Lighting'.FogEnd=100000 game:GetService'Lighting'.GlobalShadows=false game:GetService'Lighting'.OutdoorAmbient=Color3.
-fromRGB(128,128,128)end if n then local G=game:GetService'Players'.LocalPlayer if G then G.CameraMode=Enum.CameraMode.Classic G.CameraMaxZoomDistance=30 end end
-if p and not c then local G=ac.findBeast()local H=G and G.Character local I,J=H and H:FindFirstChild'HumanoidRootPart',game:GetService'Players'.LocalPlayer
+fromRGB(128,128,128)end if n then local G=game:GetService'Players'.LocalPlayer if G then G.CameraMode=Enum.CameraMode.Classic G.CameraMaxZoomDistance=100 end
+end if p and not c then local G=ac.findBeast()local H=G and G.Character local I,J=H and H:FindFirstChild'HumanoidRootPart',game:GetService'Players'.LocalPlayer
 local K=J and J.Character local L=K and K:FindFirstChild'HumanoidRootPart'if H then if K then if ac.isInDanger()then if not B then D=L.CFrame E=L.Position game.
 Workspace.Gravity=0 ab.Noclip.enable()task.wait(0.1)B=true end end end elseif B then L.CFrame=D game.Workspace.Gravity=196.2 ab.Noclip.disable()B=false end if B
 then local M=ab.dist3d(E,I.Position)if M>=ac.beast_max_dist then L.CFrame=D game.Workspace.Gravity=196.21 ab.Noclip.disable()B=false else local N=I.CFrame*

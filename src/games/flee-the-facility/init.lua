@@ -648,7 +648,7 @@ if game.GameId == 372226183 then
 				local player = game:GetService("Players").LocalPlayer
 				if player then
 					player.CameraMode = Enum.CameraMode.Classic
-					player.CameraMaxZoomDistance = 30
+					player.CameraMaxZoomDistance = 100
 				end
 			end
 
