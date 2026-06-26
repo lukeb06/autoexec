@@ -394,6 +394,7 @@ if game.GameId == 372226183 then
 		Flag = nil,
 		Callback = function(value)
 			avoid_beast_toggled = value
+			print("avoid_beast_toggled", avoid_beast_toggled)
 		end,
 	})
 
