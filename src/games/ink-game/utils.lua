@@ -157,9 +157,11 @@ end
 
 function M.updateGlassBridgeESP(enabled)
 	local parts = M.getGlassParts()
+	print("parts", parts)
 
 	for i, p in pairs(parts) do
 		local isFake = M.isFakeGlass(p)
+		print("isFake", isFake)
 
 		Utils.updateESP(p, Color3.fromRGB(255, 0, 0), enabled and isFake)
 	end
@@ -175,6 +177,70 @@ function M.hasKnife(plr)
 	end
 
 	return false
+end
+
+function M.getGunEvent()
+	local remotes = game:GetService("ReplicatedStorage"):FindFirstChild("Remotes")
+	local fgc = remotes and remotes:FindFirstChild("FiredGunClient")
+	return fgc
+end
+
+function M.getMP5()
+	local plr = game:GetService("Players").LocalPlayer
+	local char = plr and plr.Character
+	local gun = char and char:FindFirstChild("MP5")
+
+	return gun
+end
+
+function M.silentShoot()
+	local gun = M.getMP5()
+	local event = M.getGunEvent()
+
+	local bulletCF = CFrame.new()
+	local instance = Instance.new("Part")
+	local pos = Vector3.new()
+	local bulletSize = Vector3.new(1, 1, 1)
+	local firePos = Vector3.new()
+
+	if gun and event then
+		event:FireServer({
+			gun,
+			{
+				ClientRayNormal = Vector3.new(0, 0, -1),
+				FiredGun = true,
+				bulletCF = bulletCF,
+				ClientRayInstance = instance,
+				SecondaryHitTargets = {},
+				ClientRayPosition = pos,
+				HitTargets = {},
+				bulletSizeC = bulletSize,
+				NoMuzzleFX = false,
+				FirePosition = firePos,
+			},
+		})
+	end
+end
+
+function M.getDoll()
+	local doll = game.Workspace:FindFirstChild("SQUIDDOLL123")
+	return doll
+end
+
+function M.gotoDoll()
+	local doll = M.getDoll()
+	if doll then
+		local plr = game:GetService("Players").LocalPlayer
+		local char = plr and plr.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+
+		if root then
+			local part = doll:FindFirstChildWhichIsA("BasePart") or doll:FindFirstChildWhichIsA("MeshPart")
+			if part then
+				root.CFrame = part.CFrame
+			end
+		end
+	end
 end
 
 return M

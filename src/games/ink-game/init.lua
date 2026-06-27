@@ -20,12 +20,12 @@ if game.GameId == 7008097940 then
 		Callback = Funcs.onGuardESPToggle,
 	})
 
-	InkGameTab:CreateToggle({
-		Name = "Glass Bridge ESP",
-		CurrentValue = Funcs.State.glass_bridge_esp_toggled,
-		Flag = nil,
-		Callback = Funcs.onGlassBridgeESPToggle,
-	})
+	-- InkGameTab:CreateToggle({
+	-- 	Name = "Glass Bridge ESP",
+	-- 	CurrentValue = Funcs.State.glass_bridge_esp_toggled,
+	-- 	Flag = nil,
+	-- 	Callback = Funcs.onGlassBridgeESPToggle,
+	-- })
 end
 
 return true
