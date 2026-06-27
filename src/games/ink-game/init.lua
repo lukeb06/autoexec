@@ -20,3 +20,5 @@ if game.GameId == 7008097940 then
 		Callback = Funcs.onGuardESPToggle,
 	})
 end
+
+return true
