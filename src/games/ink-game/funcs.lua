@@ -2,31 +2,33 @@ local GameUtils = require("./utils")
 
 local M = {}
 
-local player_esp_toggled = true
-local guard_esp_toggled = true
+M.State = {
+	player_esp_toggled = true,
+	guard_esp_toggled = true,
+}
 
 function M.onPlayerESPToggle(value)
-	player_esp_toggled = value
+	M.State.player_esp_toggled = value
 	GameUtils.updatePlayerESP(value)
 end
 
 task.spawn(function()
 	while task.wait(1) do
-		if player_esp_toggled then
-			GameUtils.updatePlayerESP(player_esp_toggled)
+		if M.State.player_esp_toggled then
+			GameUtils.updatePlayerESP(M.State.player_esp_toggled)
 		end
 	end
 end)
 
 function M.onGuardESPToggle(value)
-	guard_esp_toggled = value
+	M.State.guard_esp_toggled = value
 	GameUtils.updateGuardESP(value)
 end
 
 task.spawn(function()
 	while task.wait(1) do
-		if guard_esp_toggled then
-			GameUtils.updateGuardESP(guard_esp_toggled)
+		if M.State.guard_esp_toggled then
+			GameUtils.updateGuardESP(M.State.guard_esp_toggled)
 		end
 	end
 end)
