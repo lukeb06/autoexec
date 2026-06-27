@@ -9,7 +9,14 @@ function M.updatePlayerESP(enabled)
 		local char = v and v.Character
 
 		local isFriend = Utils.isFriendsWith(v)
-		local color = (isFriend and Color3.fromRGB(0, 255, 0)) or Color3.fromRGB(255, 0, 0)
+		local hasKnife = M.hasKnife(v)
+
+		local normalColor = (isFriend and Color3.fromRGB(0, 255, 0)) or Color3.fromRGB(255, 0, 0)
+
+		local color = (
+			(M.getCurrentGame() == "HideAndSeek" and not isFriend) and (hasKnife and Color3.fromRGB(255, 0, 0))
+			or Color3.fromRGB(0, 255, 0)
+		) or normalColor
 
 		if char and v ~= plr then
 			Utils.updateESP(char, color, enabled and M.isAlive(char))
@@ -156,6 +163,18 @@ function M.updateGlassBridgeESP(enabled)
 
 		Utils.updateESP(p, Color3.fromRGB(255, 0, 0), enabled and isFake)
 	end
+end
+
+function M.hasKnife(plr)
+	local char = plr and plr.Character
+	local backpack = plr and plr:FindFirstChild("Backpack")
+	local knife = (backpack and backpack:FindFirstChild("Knife")) or (char and char:FindFirstChild("Knife"))
+
+	if knife then
+		return true
+	end
+
+	return false
 end
 
 return M
