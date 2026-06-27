@@ -22,7 +22,7 @@ end)
 
 function M.onGuardESPToggle(value)
 	M.State.player_esp_toggled = value
-	GameUtils.updatePlayerESP(value)
+	GameUtils.updateGuardESP(value)
 end
 
 task.spawn(function()

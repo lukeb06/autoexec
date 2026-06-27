@@ -481,7 +481,7 @@ function ab.getGuards()local ac,ad=ab.getLiving(),{}for ae,af in pairs(ac:GetChi
 ab end function a.o():typeof(__modImpl())local aa=a.cache.o if not aa then aa={c=__modImpl()}a.cache.o=aa end return aa.c end end do local function __modImpl()
 local aa,ab=a.o(),{}ab.State={player_esp_toggled=true,guard_esp_toggled=true}function ab.onPlayerESPToggle(ac)ab.State.player_esp_toggled=ac aa.updatePlayerESP(
 ac)end task.spawn(function()while task.wait(1)do if ab.State.player_esp_toggled then aa.updatePlayerESP(ab.State.player_esp_toggled)end end end)function ab.
-onGuardESPToggle(ac)ab.State.player_esp_toggled=ac aa.updatePlayerESP(ac)end task.spawn(function()while task.wait(1)do if ab.State.guard_esp_toggled then aa.
+onGuardESPToggle(ac)ab.State.player_esp_toggled=ac aa.updateGuardESP(ac)end task.spawn(function()while task.wait(1)do if ab.State.guard_esp_toggled then aa.
 updateGuardESP(ab.State.guard_esp_toggled)end end end)return ab end function a.p():typeof(__modImpl())local aa=a.cache.p if not aa then aa={c=__modImpl()}a.
 cache.p=aa end return aa.c end end do local function __modImpl()local aa,ab=a.e(),a.p()if game.GameId==7008097940 then local ac=aa.Window:CreateTab('Ink Game',
 'gamepad-2')ac:CreateSection'ESP'ac:CreateToggle{Name='Player ESP',CurrentValue=ab.State.player_esp_toggled,Flag=nil,Callback=ab.onPlayerESPToggle}ac:
