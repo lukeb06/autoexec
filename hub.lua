@@ -475,7 +475,7 @@ and am:FindFirstChild'HumanoidRootPart'if an then an.CFrame=ai.CFrame end end en
 a.n():typeof(__modImpl())local aa=a.cache.n if not aa then aa={c=__modImpl()}a.cache.n=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b()
 ,{}function ab.updatePlayerESP(ac)local ad=game:GetService'Players'.LocalPlayer for ae,af in pairs(game:GetService'Players':GetPlayers())do local ag,ah,ai=af
 and af.Character,aa.isFriendsWith(af),ab.hasKnife(af)local aj=(ah and Color3.fromRGB(0,255,0))or Color3.fromRGB(255,0,0)local ak=((ab.getCurrentGame()==
-'HideAndSeek'and not ah)and(ai and Color3.fromRGB(255,0,0))or Color3.fromRGB(0,255,0))or aj if ag and af~=ad then aa.updateESP(ag,ak,ac and ab.isAlive(ag))end
+'HideAndSeek'and not ah)and((ai and Color3.fromRGB(255,0,0))or Color3.fromRGB(0,255,0)))or aj if ag and af~=ad then aa.updateESP(ag,ak,ac and ab.isAlive(ag))end
 end end function ab.updateGuardESP(ac)local ad=ab.getGuards()for ae,af in pairs(ad)do aa.updateESP(af,Color3.fromRGB(0,0,255),ac and ab.isAlive(af))end end
 function ab.getLiving()local ac=game.Workspace:FindFirstChild'Live'return ac end function ab.isGuard(ac)local ad=ac:FindFirstChild'TypeOfGuard'if ad then return
 true end return false end function ab.getGuards()local ac,ad=ab.getLiving(),{}for ae,af in pairs(ac:GetChildren())do if ab.isGuard(af)then table.insert(ad,af)

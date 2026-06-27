@@ -14,8 +14,8 @@ function M.updatePlayerESP(enabled)
 		local normalColor = (isFriend and Color3.fromRGB(0, 255, 0)) or Color3.fromRGB(255, 0, 0)
 
 		local color = (
-			(M.getCurrentGame() == "HideAndSeek" and not isFriend) and (hasKnife and Color3.fromRGB(255, 0, 0))
-			or Color3.fromRGB(0, 255, 0)
+			(M.getCurrentGame() == "HideAndSeek" and not isFriend)
+			and ((hasKnife and Color3.fromRGB(255, 0, 0)) or Color3.fromRGB(0, 255, 0))
 		) or normalColor
 
 		if char and v ~= plr then
