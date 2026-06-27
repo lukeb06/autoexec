@@ -63,4 +63,99 @@ function M.isAlive(entity)
 	return true
 end
 
+function M.getValues()
+	local values = game.Workspace:FindFirstChild("Values")
+	return values
+end
+
+function M.getCurrentGame()
+	local values = M.getValues()
+	local cg = values:FindFirstChild("CurrentGame")
+
+	if cg then
+		return cg.Value
+	end
+
+	return nil
+end
+
+function M.getGlassBridge()
+	local gb = game.Workspace:FindFirstChild("GlassBridge")
+	return gb
+end
+
+function M.getGlassHolder()
+	local gb = M.getGlassBridge()
+
+	if gb then
+		local gh = gb:FindFirstChild("GlassHolder")
+		return gh
+	end
+
+	return nil
+end
+
+function M.getGlassPanels()
+	local gh = M.getGlassHolder()
+
+	if gh then
+		local panels = gh:GetChildren()
+		return panels
+	end
+
+	return {}
+end
+
+function M.getGlassModels(panel)
+	if panel then
+		local models = panel:GetChildren()
+		return models
+	end
+
+	return {}
+end
+
+function M.getGlassPart(model)
+	local part = model and model:FindFirstChild("glasspart")
+	return part
+end
+
+function M.isFakeGlass(part)
+	local blur = part and part:FindFirstChild("Blur")
+
+	if blur then
+		return true
+	end
+
+	return false
+end
+
+function M.getGlassParts()
+	local parts = {}
+	local panels = M.getGlassPanels()
+
+	for i, p in pairs(panels) do
+		local models = M.getGlassModels(p)
+
+		for j, m in pairs(models) do
+			local part = M.getGlassPart(m)
+			if part then
+				table.insert(parts, part)
+			end
+		end
+	end
+
+	return parts
+end
+
+function M.updateGlassBridgeESP(enabled)
+	local parts = M.getGlassParts()
+
+	for i, p in pairs(parts) do
+		local isFake = M.isFakeGlass(p)
+
+		Utils.updateESP(p, Color3.fromRGB(255, 0, 0), enabled and isFake)
+	end
+end
+
 return M

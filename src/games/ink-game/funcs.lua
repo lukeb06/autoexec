@@ -5,6 +5,7 @@ local M = {}
 M.State = {
 	player_esp_toggled = true,
 	guard_esp_toggled = true,
+	glass_bridge_esp_toggled = true,
 }
 
 function M.onPlayerESPToggle(value)
@@ -29,6 +30,19 @@ task.spawn(function()
 	while task.wait(1) do
 		if M.State.guard_esp_toggled then
 			GameUtils.updateGuardESP(M.State.guard_esp_toggled)
+		end
+	end
+end)
+
+function M.onGlassBridgeESPToggle(value)
+	M.State.glass_bridge_esp_toggled = value
+	GameUtils.updateGlassBridgeESP(value)
+end
+
+task.spawn(function()
+	while task.wait(1) do
+		if M.State.glass_bridge_esp_toggled then
+			GameUtils.updateGlassBridgeESP(M.State.glass_bridge_esp_toggled)
 		end
 	end
 end)
