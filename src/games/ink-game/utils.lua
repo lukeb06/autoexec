@@ -12,7 +12,7 @@ function M.updatePlayerESP(enabled)
 		local color = (isFriend and Color3.fromRGB(0, 255, 0)) or Color3.fromRGB(255, 0, 0)
 
 		if char and v ~= plr then
-			Utils.updateESP(char, color, enabled)
+			Utils.updateESP(char, color, enabled and M.isAlive(char))
 		end
 	end
 end
@@ -21,7 +21,7 @@ function M.updateGuardESP(enabled)
 	local guards = M.getGuards()
 
 	for i, v in pairs(guards) do
-		Utils.updateESP(v, Color3.fromRGB(0, 0, 255), enabled)
+		Utils.updateESP(v, Color3.fromRGB(0, 0, 255), enabled and M.isAlive(v))
 	end
 end
 
@@ -51,6 +51,16 @@ function M.getGuards()
 	end
 
 	return guards
+end
+
+function M.isAlive(entity)
+	local hum = entity:FindFirstChild("Humanoid")
+
+	if hum then
+		return hum.Health > 0
+	end
+
+	return true
 end
 
 return M
