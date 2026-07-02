@@ -157,11 +157,9 @@ end
 
 function M.updateGlassBridgeESP(enabled)
 	local parts = M.getGlassParts()
-	print("parts", parts)
 
 	for i, p in pairs(parts) do
 		local isFake = M.isFakeGlass(p)
-		print("isFake", isFake)
 
 		Utils.updateESP(p, Color3.fromRGB(255, 0, 0), enabled and isFake)
 	end
