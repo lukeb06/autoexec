@@ -77,7 +77,7 @@ end
 
 function M.getCurrentGame()
 	local values = M.getValues()
-	local cg = values:FindFirstChild("CurrentGame")
+	local cg = values and values:FindFirstChild("CurrentGame")
 
 	if cg then
 		return cg.Value
@@ -93,13 +93,9 @@ end
 
 function M.getGlassHolder()
 	local gb = M.getGlassBridge()
+	local gh = gb and gb:FindFirstChild("GlassHolder")
 
-	if gb then
-		local gh = gb:FindFirstChild("GlassHolder")
-		return gh
-	end
-
-	return nil
+	return gh
 end
 
 function M.getGlassPanels()

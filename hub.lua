@@ -479,13 +479,13 @@ ab.isAlive(ag))end end end function ab.updateGuardESP(ac)local ad=ab.getGuards()
 isAlive(af))end end function ab.getLiving()local ac=game.Workspace:FindFirstChild'Live'return ac end function ab.isGuard(ac)local ad=ac:FindFirstChild
 'TypeOfGuard'if ad then return true end return false end function ab.getGuards()local ac,ad=ab.getLiving(),{}for ae,af in pairs(ac:GetChildren())do if ab.
 isGuard(af)then table.insert(ad,af)end end return ad end function ab.isAlive(ac)local ad=ac:FindFirstChild'Humanoid'if ad then return ad.Health>0 end return
-true end function ab.getValues()local ac=game.Workspace:FindFirstChild'Values'return ac end function ab.getCurrentGame()local ac=ab.getValues()local ad=ac:
-FindFirstChild'CurrentGame'if ad then return ad.Value end return nil end function ab.getGlassBridge()local ac=game.Workspace:FindFirstChild'GlassBridge'return
-ac end function ab.getGlassHolder()local ac=ab.getGlassBridge()if ac then local ad=ac:FindFirstChild'GlassHolder'return ad end return nil end function ab.
-getGlassPanels()local ac=ab.getGlassHolder()if ac then local ad=ac:GetChildren()return ad end return{}end function ab.getGlassModels(ac)if ac then local ad=ac:
-GetChildren()return ad end return{}end function ab.getGlassPart(ac)local ad=ac and ac:FindFirstChild'glasspart'return ad end function ab.isFakeGlass(ac)local ad
-=ac and ac:FindFirstChild'Blur'if ad then return true end return false end function ab.getGlassParts()local ac,ad={},ab.getGlassPanels()for ae,af in pairs(ad)do
-local ag=ab.getGlassModels(af)for ah,ai in pairs(ag)do local aj=ab.getGlassPart(ai)if aj then table.insert(ac,aj)end end end return ac end function ab.
+true end function ab.getValues()local ac=game.Workspace:FindFirstChild'Values'return ac end function ab.getCurrentGame()local ac=ab.getValues()local ad=ac and
+ac:FindFirstChild'CurrentGame'if ad then return ad.Value end return nil end function ab.getGlassBridge()local ac=game.Workspace:FindFirstChild'GlassBridge'
+return ac end function ab.getGlassHolder()local ac=ab.getGlassBridge()local ad=ac and ac:FindFirstChild'GlassHolder'return ad end function ab.getGlassPanels()
+local ac=ab.getGlassHolder()if ac then local ad=ac:GetChildren()return ad end return{}end function ab.getGlassModels(ac)if ac then local ad=ac:GetChildren()
+return ad end return{}end function ab.getGlassPart(ac)local ad=ac and ac:FindFirstChild'glasspart'return ad end function ab.isFakeGlass(ac)local ad=ac and ac:
+FindFirstChild'Blur'if ad then return true end return false end function ab.getGlassParts()local ac,ad={},ab.getGlassPanels()for ae,af in pairs(ad)do local ag=
+ab.getGlassModels(af)for ah,ai in pairs(ag)do local aj=ab.getGlassPart(ai)if aj then table.insert(ac,aj)end end end return ac end function ab.
 updateGlassBridgeESP(ac)local ad=ab.getGlassParts()for ae,af in pairs(ad)do local ag=ab.isFakeGlass(af)aa.updateESP(af,Color3.fromRGB(255,0,0),ac and ag)end end
 function ab.hasKnife(ac)local ad,ae=ac and ac.Character,ac and ac:FindFirstChild'Backpack'local af=(ae and ae:FindFirstChild'Knife')or(ad and ad:FindFirstChild
 'Knife')if af then return true end return false end function ab.getGunEvent()local ac=game:GetService'ReplicatedStorage':FindFirstChild'Remotes'local ad=ac and
