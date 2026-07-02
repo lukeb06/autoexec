@@ -1,7 +1,7 @@
 local UI = require("../../ui")
 
 if game.GameId == 7008097940 then
-    local Funcs = require("./funcs")
+	local Funcs = require("./funcs")
 
 	local InkGameTab = UI.Window:CreateTab("Ink Game", "gamepad-2")
 
@@ -17,7 +17,7 @@ if game.GameId == 7008097940 then
 	InkGameTab:CreateToggle({
 		Name = "Guard ESP",
 		CurrentValue = Funcs.State.guard_esp_toggled,
-		Flag = nil,)
+		Flag = nil,
 		Callback = Funcs.onGuardESPToggle,
 	})
 

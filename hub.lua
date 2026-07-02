@@ -502,13 +502,13 @@ player_esp_toggled then aa.updatePlayerESP(ab.State.player_esp_toggled)end end e
 updateGuardESP(ac)end task.spawn(function()while task.wait(1)do if ab.State.guard_esp_toggled then aa.updateGuardESP(ab.State.guard_esp_toggled)end end end)
 function ab.onGlassBridgeESPToggle(ac)ab.State.glass_bridge_esp_toggled=ac aa.updateGlassBridgeESP(ac)end task.spawn(function()while task.wait(1)do if ab.State.
 glass_bridge_esp_toggled then aa.updateGlassBridgeESP(ab.State.glass_bridge_esp_toggled)end end end)return ab end function a.p():typeof(__modImpl())local aa=a.
-cache.p if not aa then aa={c=__modImpl()}a.cache.p=aa end return aa.c end end do local function __modImpl()local aa,ab=a.e(),a.p()if game.GameId==7008097940
-then local ac=aa.Window:CreateTab('Ink Game','gamepad-2')ac:CreateSection'ESP'ac:CreateToggle{Name='Player ESP',CurrentValue=ab.State.player_esp_toggled,Flag=
-nil,Callback=ab.onPlayerESPToggle}ac:CreateToggle{Name='Guard ESP',CurrentValue=ab.State.guard_esp_toggled,Flag=nil,Callback=ab.onGuardESPToggle}end return true
-end function a.q():typeof(__modImpl())local aa=a.cache.q if not aa then aa={c=__modImpl()}a.cache.q=aa end return aa.c end end do local function __modImpl()
-local aa,ab=a.b(),{}function ab.plrHasItem(ac,ad)local ae,af=ac:FindFirstChild'Backpack',ac.Character local ag,ah=ae and ae:FindFirstChild(ad),af and af:
-FindFirstChild(ad)if ag or ah then return true end return false end function ab.plrHasKnife(ac)return ab.plrHasItem(ac,'Knife')end function ab.plrHasGun(ac)
-return ab.plrHasItem(ac,'Gun')end local ac,ad task.spawn(function()game:GetService'ReplicatedStorage':WaitForChild'Remotes':WaitForChild'Gameplay':WaitForChild
+cache.p if not aa then aa={c=__modImpl()}a.cache.p=aa end return aa.c end end do local function __modImpl()local aa=a.e()if game.GameId==7008097940 then local
+ab,ac=a.p(),aa.Window:CreateTab('Ink Game','gamepad-2')ac:CreateSection'ESP'ac:CreateToggle{Name='Player ESP',CurrentValue=ab.State.player_esp_toggled,Flag=nil,
+Callback=ab.onPlayerESPToggle}ac:CreateToggle{Name='Guard ESP',CurrentValue=ab.State.guard_esp_toggled,Flag=nil,Callback=ab.onGuardESPToggle}end return true end
+function a.q():typeof(__modImpl())local aa=a.cache.q if not aa then aa={c=__modImpl()}a.cache.q=aa end return aa.c end end do local function __modImpl()local aa
+,ab=a.b(),{}function ab.plrHasItem(ac,ad)local ae,af=ac:FindFirstChild'Backpack',ac.Character local ag,ah=ae and ae:FindFirstChild(ad),af and af:FindFirstChild(
+ad)if ag or ah then return true end return false end function ab.plrHasKnife(ac)return ab.plrHasItem(ac,'Knife')end function ab.plrHasGun(ac)return ab.
+plrHasItem(ac,'Gun')end local ac,ad task.spawn(function()game:GetService'ReplicatedStorage':WaitForChild'Remotes':WaitForChild'Gameplay':WaitForChild
 'PlayerDataChanged'.OnClientEvent:Connect(function(ae)ac=nil ad=nil for af,ag in pairs(ae)do local ah=game:GetService'Players':FindFirstChild(af)for ai,aj in
 pairs(ag)do if ai=='Role'then if aj=='Murderer'then ac=ah end if aj=='Sheriff'then ad=ah end end end end end)game:GetService'ReplicatedStorage':WaitForChild
 'Remotes':WaitForChild'Gameplay':WaitForChild'RoundEndFade'.OnClientEvent:Connect(function(ae)ac=nil ad=nil end)end)function ab.getMurderer()if not ac then for
