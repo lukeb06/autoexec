@@ -107,7 +107,7 @@ function M.fireProximityPrompt(pp, base)
 
 		local attempts = 0
 		repeat
-			task.wait()
+			task.wait(0.05)
 			attempts = attempts + 1
 		until pp:InputHoldBegin() or attempts > 10
 

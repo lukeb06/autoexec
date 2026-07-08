@@ -310,12 +310,12 @@ then return ab.Items end local ac,ad={},ab.getItemFolders()for ae,af in pairs(ad
 ac return ac end function ab.getItem(ac)local ad=ab.getItems()for ae,af in pairs(ad)do if af.Name==ac then return af end end return nil end function ab.
 fireProximityPrompt(ac,ad)local ae=game:GetService'Players'.LocalPlayer local af=ae and ae.Character local ag=af and af:FindFirstChild'HumanoidRootPart'if ag
 then local ah,ai,aj=game.Workspace.CurrentCamera,ag.CFrame,game.Workspace.Gravity task.wait()aa.Noclip.enable()game.Workspace.Gravity=0 task.wait()ag.CFrame=ad.
-CFrame*CFrame.new(0,0,-2)ah.CFrame=CFrame.lookAt(ah.CFrame.Position,ad.Position)task.wait()ac.Enabled=false ac.Enabled=true local ak=0 repeat task.wait()ak=ak+1
-until ac:InputHoldBegin()or ak>10 fireproximityprompt(ac)ac:InputHoldEnd()task.wait()ag.CFrame=ai task.wait()aa.Noclip.disable()game.Workspace.Gravity=aj task.
-wait()local al=game:GetService'Players'.LocalPlayer local am=al and al.Character local an=am and am:FindFirstChildWhichIsA'Humanoid'an.PlatformStand=false end
-end function ab.grabItem(ac)local ad=ab.getItem(ac)if ad then local ae,af=ad:FindFirstChild'PP',ad.PrimaryPart or ad:FindFirstChildWhichIsA'BasePart'if ae and
-af then ab.Queue:add(function()ab.fireProximityPrompt(ae,af)end)end end end function ab.getCheckInHL()local ac=game.Workspace:FindFirstChild'Misc'local ad=ac
-and ac:FindFirstChild'CheckIn'local ae=ad and ad:FindFirstChild('CheckStepHighlight',true)return ae end function ab.getNPCHL()local ac=game.Workspace:
+CFrame*CFrame.new(0,0,-2)ah.CFrame=CFrame.lookAt(ah.CFrame.Position,ad.Position)task.wait()ac.Enabled=false ac.Enabled=true local ak=0 repeat task.wait(0.05)ak=
+ak+1 until ac:InputHoldBegin()or ak>10 fireproximityprompt(ac)ac:InputHoldEnd()task.wait()ag.CFrame=ai task.wait()aa.Noclip.disable()game.Workspace.Gravity=aj
+task.wait()local al=game:GetService'Players'.LocalPlayer local am=al and al.Character local an=am and am:FindFirstChildWhichIsA'Humanoid'an.PlatformStand=false
+end end function ab.grabItem(ac)local ad=ab.getItem(ac)if ad then local ae,af=ad:FindFirstChild'PP',ad.PrimaryPart or ad:FindFirstChildWhichIsA'BasePart'if ae
+and af then ab.Queue:add(function()ab.fireProximityPrompt(ae,af)end)end end end function ab.getCheckInHL()local ac=game.Workspace:FindFirstChild'Misc'local ad=
+ac and ac:FindFirstChild'CheckIn'local ae=ad and ad:FindFirstChild('CheckStepHighlight',true)return ae end function ab.getNPCHL()local ac=game.Workspace:
 FindFirstChild'NPCs'local ad=ac and(ac:FindFirstChild('CheckStepHighlight',true)or ac:FindFirstChild('PatientHighlight',true))return ad end function ab.
 getMedicalHL()local ac=game.Workspace:FindFirstChild'Rooms'local ad=ac and ac:FindFirstChild'Medical'local ae=ad and ad:FindFirstChild('PatientHighlight',true)
 return ae end function ab.getPPFromHL(ac)return ac.Parent.Parent:FindFirstChild'PP2'or ac.Parent:FindFirstChild'PP'end return ab end function a.i():typeof(
