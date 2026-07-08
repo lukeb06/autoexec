@@ -4,6 +4,12 @@ if game.GameId == 10148749921 then
 	local Funcs = require("./funcs")
 
 	local AHTab = UI.Window:CreateTab("Animal Hospital", "gamepad-2")
+
+	AHTab:CreateToggle({
+		Name = "Auto",
+		Callback = Funcs.toggleAuto,
+	})
+
 	AHTab:CreateSection("Items")
 
 	-- Eye Drops
