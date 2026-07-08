@@ -175,7 +175,7 @@ function M.flingCharacter(pChar)
 	local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
 
 	if root and pRoot then
-		M.Noclip.Noclip.enable()
+		M.Noclip.enable()
 
 		task.wait(0.2)
 

@@ -24,13 +24,13 @@ Workspace.Gravity=196.21 if j then j:ChangeState(Enum.HumanoidStateType.GettingU
 q<=r then i.CFrame=f.CFrame m:Disconnect()e=false c.Noclip.disable()if j then j:ChangeState(Enum.HumanoidStateType.GettingUp)end game.Workspace.Gravity=196.21
 else local s=c.dir3d(o,p)local t=o+(s*r)if j then j:ChangeState(Enum.HumanoidStateType.Physics)end i.CFrame=CFrame.new(t)*(f.CFrame-f.CFrame.Position)end end)c.
 breakVelocity(l)end end function c.flingCharacter(f)local g=game:GetService'Players'.LocalPlayer local h=g and g.Character local i,j=h and h:FindFirstChild
-'HumanoidRootPart',f and f:FindFirstChild'HumanoidRootPart'if i and j then c.Noclip.Noclip.enable()task.wait(0.2)local k=i.CFrame task.wait(0.1)for l,m in
-pairs(h:GetDescendants())do if m:IsA'BasePart'then m.CustomPhysicalProperties=PhysicalProperties.new(100,0.3,0.5)end end for l,m in h:GetChildren()do if m:IsA
-'BasePart'then m.CanCollide=false m.Massless=true m.Velocity=Vector3.new(0,0,0)end end local l=99999 local m,n=l n=game:GetService'RunService'.Heartbeat:
-Connect(function(o)if not j or not j.Parent then return end local p,q=math.random(-100,100),j.AssemblyLinearVelocity if q.Magnitude>500 then n:Disconnect()end
-local r=j.Position+(q*0.08)if r.Y<=game.Workspace.FallenPartsDestroyHeight+50 then return end i.CFrame=(CFrame.new(r+Vector3.new(0.1,0,0.1)))*(i.CFrame-i.CFrame
-.Position)i.AssemblyLinearVelocity=Vector3.new(l+p,-100,l+p)i.AssemblyAngularVelocity=Vector3.new(0,m,0)end)task.spawn(function()while n.Connected do m=l task.
-wait(0.2)m=0 task.wait(0.1)end end)task.delay(3,function()for o,p in pairs(h:GetDescendants())do if p.ClassName=='Part'or p.ClassName=='MeshPart'then p.
+'HumanoidRootPart',f and f:FindFirstChild'HumanoidRootPart'if i and j then c.Noclip.enable()task.wait(0.2)local k=i.CFrame task.wait(0.1)for l,m in pairs(h:
+GetDescendants())do if m:IsA'BasePart'then m.CustomPhysicalProperties=PhysicalProperties.new(100,0.3,0.5)end end for l,m in h:GetChildren()do if m:IsA'BasePart'
+then m.CanCollide=false m.Massless=true m.Velocity=Vector3.new(0,0,0)end end local l=99999 local m,n=l n=game:GetService'RunService'.Heartbeat:Connect(function(
+o)if not j or not j.Parent then return end local p,q=math.random(-100,100),j.AssemblyLinearVelocity if q.Magnitude>500 then n:Disconnect()end local r=j.Position
++(q*0.08)if r.Y<=game.Workspace.FallenPartsDestroyHeight+50 then return end i.CFrame=(CFrame.new(r+Vector3.new(0.1,0,0.1)))*(i.CFrame-i.CFrame.Position)i.
+AssemblyLinearVelocity=Vector3.new(l+p,-100,l+p)i.AssemblyAngularVelocity=Vector3.new(0,m,0)end)task.spawn(function()while n.Connected do m=l task.wait(0.2)m=0
+task.wait(0.1)end end)task.delay(3,function()for o,p in pairs(h:GetDescendants())do if p.ClassName=='Part'or p.ClassName=='MeshPart'then p.
 CustomPhysicalProperties=PhysicalProperties.new(0.7,0.3,0.5)end end c.Noclip.disable()n:Disconnect()c.breakVelocity(0.2)task.wait(0.1)i.CFrame=k end)end end
 function c.flingPlayer(f)local g=f and f.Character c.flingCharacter(g)end function c.isFriendsWith(f)local g=game:GetService'Players'.LocalPlayer return g:
 IsFriendsWith(f.UserId)end function c.updateESP(f,g,h)local i=f:FindFirstChild'ESPHL'if i then if not h then i:Destroy()elseif g~=i.FillColor then i.FillColor=g
