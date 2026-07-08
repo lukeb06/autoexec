@@ -7,6 +7,8 @@ if game.GameId == 10148749921 then
 
 	AHTab:CreateToggle({
 		Name = "Auto",
+		CurrentValue = false,
+		Flag = nil,
 		Callback = Funcs.toggleAuto,
 	})
 

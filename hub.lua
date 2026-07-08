@@ -327,22 +327,22 @@ grabItem'Herbs'end local ac=false function ab.toggleAuto(ad)ac=ad end task.spawn
 getCheckInHL()or aa.getNPCHL()or aa.getMedicalHL()if ae then local af=aa.getPPFromHL(ae)if af then local ag=af.Parent local ah=ag.PrimaryPart or ag:
 FindFirstChildWhichIsA'BasePart'if ah then ad=false aa.Queue:add(function()aa.fireProximityPrompt(af,ah)end,function()ad=true end)end end end end end end)return
 ab end function a.j():typeof(__modImpl())local aa=a.cache.j if not aa then aa={c=__modImpl()}a.cache.j=aa end return aa.c end end do local function __modImpl()
-local aa=a.e()if game.GameId==10148749921 then local ab,ac=a.j(),aa.Window:CreateTab('Animal Hospital','gamepad-2')ac:CreateToggle{Name='Auto',Callback=ab.
-toggleAuto}ac:CreateSection'Items'ac:CreateButton{Name='Eye Drops',Callback=ab.getEyeDrops}ac:CreateButton{Name='IV Drops',Callback=ab.getIVDrops}ac:
-CreateButton{Name='Medkit',Callback=ab.getMedkit}ac:CreateButton{Name='Thermo',Callback=ab.getThermo}ac:CreateButton{Name='Ointment',Callback=ab.getOintment}ac:
-CreateButton{Name='Bandages',Callback=ab.getBandages}ac:CreateButton{Name='Maple Syrup',Callback=ab.getMapleSyrup}ac:CreateButton{Name='Cough Syrup',Callback=ab
-.getCoughSyrup}ac:CreateButton{Name='Medicine',Callback=ab.getMedicine}ac:CreateButton{Name='Herbs',Callback=ab.getHerbs}end return true end function a.k():
-typeof(__modImpl())local aa=a.cache.k if not aa then aa={c=__modImpl()}a.cache.k=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}
-function ab.getCurrentMap()for ac,ad in pairs(game.Workspace:GetChildren())do if ad:FindFirstChild'ComputerTable'then return ad end end return nil end function
-ab.getCurrentMapChildren()local ac=ab.getCurrentMap()if not ac then return{}end return ac:GetChildren()end function ab.getExits()local ac,ad={},ab.
-getCurrentMapChildren()for ae,af in pairs(ad)do if af.Name=='ExitDoor'then table.insert(ac,af)end end return ac end function ab.getExitArea(ac)local ad=ac:
-FindFirstChild'ExitArea'return ad end function ab.getExitTrigger(ac)local ad=ac:FindFirstChild'ExitDoorTrigger'return ad end function ab.exitNeedsToOpen(ac)
-local ad=ab.getExitTrigger(ac)local ae=ad and ad:FindFirstChild'ActionSign'if ae then return ae.Value~=0 end return false end function ab.exitIsOpen(ac)local ad
-=ab.getExitTrigger(ac)if not ad then return true end return false end function ab.getClosestClosedExit()local ac,ad=ab.getExits(),{}for ae,af in pairs(ac)do if
-not ab.exitIsOpen(af)and ab.exitNeedsToOpen(af)then table.insert(ad,af)end end local af,ag,ae=99999999,game:GetService'Players'.LocalPlayer local ah=ag and ag.
-Character local ai=ah and ah:FindFirstChild'HumanoidRootPart'if ai then for aj,ak in pairs(ad)do local al=ab.getExitTrigger(ak)local am=aa.dist3d(al.Position,ai
-.Position)if am<af then af=am ae=ak end end end return ae end function ab.findOpenExit()local ac={}for ad,ae in pairs(ab.getExits())do if ab.exitIsOpen(ae)then
-table.insert(ac,ae)end end local ae,af,ad=99999999,game:GetService'Players'.LocalPlayer local ag=af and af.Character local ah=ag and ag:FindFirstChild
+local aa=a.e()if game.GameId==10148749921 then local ab,ac=a.j(),aa.Window:CreateTab('Animal Hospital','gamepad-2')ac:CreateToggle{Name='Auto',CurrentValue=
+false,Flag=nil,Callback=ab.toggleAuto}ac:CreateSection'Items'ac:CreateButton{Name='Eye Drops',Callback=ab.getEyeDrops}ac:CreateButton{Name='IV Drops',Callback=
+ab.getIVDrops}ac:CreateButton{Name='Medkit',Callback=ab.getMedkit}ac:CreateButton{Name='Thermo',Callback=ab.getThermo}ac:CreateButton{Name='Ointment',Callback=
+ab.getOintment}ac:CreateButton{Name='Bandages',Callback=ab.getBandages}ac:CreateButton{Name='Maple Syrup',Callback=ab.getMapleSyrup}ac:CreateButton{Name=
+'Cough Syrup',Callback=ab.getCoughSyrup}ac:CreateButton{Name='Medicine',Callback=ab.getMedicine}ac:CreateButton{Name='Herbs',Callback=ab.getHerbs}end return
+true end function a.k():typeof(__modImpl())local aa=a.cache.k if not aa then aa={c=__modImpl()}a.cache.k=aa end return aa.c end end do local function __modImpl(
+)local aa,ab=a.b(),{}function ab.getCurrentMap()for ac,ad in pairs(game.Workspace:GetChildren())do if ad:FindFirstChild'ComputerTable'then return ad end end
+return nil end function ab.getCurrentMapChildren()local ac=ab.getCurrentMap()if not ac then return{}end return ac:GetChildren()end function ab.getExits()local
+ac,ad={},ab.getCurrentMapChildren()for ae,af in pairs(ad)do if af.Name=='ExitDoor'then table.insert(ac,af)end end return ac end function ab.getExitArea(ac)local
+ad=ac:FindFirstChild'ExitArea'return ad end function ab.getExitTrigger(ac)local ad=ac:FindFirstChild'ExitDoorTrigger'return ad end function ab.exitNeedsToOpen(
+ac)local ad=ab.getExitTrigger(ac)local ae=ad and ad:FindFirstChild'ActionSign'if ae then return ae.Value~=0 end return false end function ab.exitIsOpen(ac)local
+ad=ab.getExitTrigger(ac)if not ad then return true end return false end function ab.getClosestClosedExit()local ac,ad=ab.getExits(),{}for ae,af in pairs(ac)do
+if not ab.exitIsOpen(af)and ab.exitNeedsToOpen(af)then table.insert(ad,af)end end local af,ag,ae=99999999,game:GetService'Players'.LocalPlayer local ah=ag and
+ag.Character local ai=ah and ah:FindFirstChild'HumanoidRootPart'if ai then for aj,ak in pairs(ad)do local al=ab.getExitTrigger(ak)local am=aa.dist3d(al.Position
+,ai.Position)if am<af then af=am ae=ak end end end return ae end function ab.findOpenExit()local ac={}for ad,ae in pairs(ab.getExits())do if ab.exitIsOpen(ae)
+then table.insert(ac,ae)end end local ae,af,ad=99999999,game:GetService'Players'.LocalPlayer local ag=af and af.Character local ah=ag and ag:FindFirstChild
 'HumanoidRootPart'if ah then for ai,aj in pairs(ac)do local ak=ab.getExitArea(aj)local al=aa.dist3d(ak.Position,ah.Position)if al<ae then ae=al ad=aj end end
 end return ad end function ab.findBeast()for ac,ad in pairs(game:GetService'Players':GetPlayers())do if ad.Character and ad.Character:FindFirstChild
 'BeastPowers'and ad~=game:GetService'Players'.LocalPlayer then return ad end end return nil end function ab.findBeastIncludingLocal()for ac,ad in pairs(game:
