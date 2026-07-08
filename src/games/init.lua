@@ -1,4 +1,5 @@
 require("./agoraphobia")
+require("./animal-hospital")
 require("./flee-the-facility")
 require("./granny-shooters")
 require("./hide-and-seek")

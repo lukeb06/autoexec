@@ -301,169 +301,200 @@ updateSurvivorESP()updateBeastESP()end local ag=true local function updateComput
 getComputerModel(aj),ac.getComputerColor(aj)if ak then ab.updateESP(ak,al,ag)end end end ad:CreateToggle{Name='Player ESP',CurrentValue=true,Flag=nil,Callback=
 function(ah)af=ah updatePlayerESP()end}ad:CreateToggle{Name='Computer ESP',CurrentValue=true,Flag=nil,Callback=function(ai)ag=ai updateComputerESP()end}task.
 spawn(function()while task.wait(1)do updatePlayerESP()updateComputerESP()end updatePlayerESP()updateComputerESP()end)end return true end function a.h():typeof(
-__modImpl())local aa=a.cache.h if not aa then aa={c=__modImpl()}a.cache.h=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function
-ab.getCurrentMap()for ac,ad in pairs(game.Workspace:GetChildren())do if ad:FindFirstChild'ComputerTable'then return ad end end return nil end function ab.
-getCurrentMapChildren()local ac=ab.getCurrentMap()if not ac then return{}end return ac:GetChildren()end function ab.getExits()local ac,ad={},ab.
-getCurrentMapChildren()for ae,af in pairs(ad)do if af.Name=='ExitDoor'then table.insert(ac,af)end end return ac end function ab.getExitArea(ac)local ad=ac:
-FindFirstChild'ExitArea'return ad end function ab.getExitTrigger(ac)local ad=ac:FindFirstChild'ExitDoorTrigger'return ad end function ab.exitNeedsToOpen(ac)
-local ad=ab.getExitTrigger(ac)local ae=ad and ad:FindFirstChild'ActionSign'if ae then return ae.Value~=0 end return false end function ab.exitIsOpen(ac)local ad
-=ab.getExitTrigger(ac)if not ad then return true end return false end function ab.getClosestClosedExit()local ac,ad=ab.getExits(),{}for ae,af in pairs(ac)do if
-not ab.exitIsOpen(af)and ab.exitNeedsToOpen(af)then table.insert(ad,af)end end local af,ag,ae=99999999,game:GetService'Players'.LocalPlayer local ah=ag and ag.
-Character local ai=ah and ah:FindFirstChild'HumanoidRootPart'if ai then for aj,ak in pairs(ad)do local al=ab.getExitTrigger(ak)local am=aa.dist3d(al.Position,ai
-.Position)if am<af then af=am ae=ak end end end return ae end function ab.findOpenExit()local ac={}for ad,ae in pairs(ab.getExits())do if ab.exitIsOpen(ae)then
-table.insert(ac,ae)end end local ae,af,ad=99999999,game:GetService'Players'.LocalPlayer local ag=af and af.Character local ah=ag and ag:FindFirstChild
-'HumanoidRootPart'if ah then for ai,aj in pairs(ac)do local ak=ab.getExitArea(aj)local al=aa.dist3d(ak.Position,ah.Position)if al<ae then ae=al ad=aj end end
-end return ad end function ab.findBeast()for ac,ad in pairs(game:GetService'Players':GetPlayers())do if ad.Character and ad.Character:FindFirstChild
-'BeastPowers'and ad~=game:GetService'Players'.LocalPlayer then return ad end end return nil end function ab.findBeastIncludingLocal()for ac,ad in pairs(game:
-GetService'Players':GetPlayers())do if ad.Character and ad.Character:FindFirstChild'BeastPowers'then return ad end end return nil end function ab.getHammer()
-local ac=ab.findBeastIncludingLocal()local ad=ac and ac.Character local ae=ad and ad:FindFirstChild'Hammer'return ae end function ab.getHammerHandle()local ac=
-ab.findBeast()local ad=ac and ac.Character local ae=ad and ad:FindFirstChild'Hammer'local af=ae and ae:FindFirstChild'Handle'return af end function ab.
-getHammerEvent()local ac=ab.getHammer()if ac then return ac:FindFirstChild'HammerEvent'end return nil end function ab.getPowerEvent()local ac=ab.
-findBeastIncludingLocal()local ad=ac and ac.Character local ae=ad and ad:FindFirstChild'BeastPowers'local af=ae and ae:FindFirstChild'PowersEvent'return af end
-function ab.clickHammer()local ac=ab.getHammerEvent()if ac then ac:FireServer('HammerClick',true)end end function ab.getStats(ac)local ad=ac and ac:
-FindFirstChild'TempPlayerStatsModule'return ad end function ab.isRagdoll(ac)local ad=ab.getStats(ac)local ae=ad and ad:FindFirstChild'Ragdoll'local af=ae and ae
-.Value if af==nil then return false end return af end function ab.isCaptured(ac)local ad=ab.getStats(ac)local ae=ad and ad:FindFirstChild'Captured'local af=ae
-and ae.Value if af==nil then return false end return af end function ab.hitPlayer(ac)local ad=ac and ac.Character local ae=ad and ad:FindFirstChild
-'HumanoidRootPart'if ae then local af=ab.getHammerEvent()if af then ab.clickHammer()af:FireServer('HammerHit',ae)end end end function ab.tiePlayer(ac)local ad=
-ac and ac.Character local ae=ad and ad:FindFirstChild'HumanoidRootPart'if ae then local af=ab.getHammerEvent()if af then af:FireServer('HammerTieUp',ae,ae.
-Position)end end end function ab.getChaseMusic()local ac=ab.getHammerHandle()local ad=ac and ac:FindFirstChild'SoundChaseMusic'return ad end local ac,ad=0.4,0.4
-task.spawn(function()while task.wait()do local ae=ab.getChaseMusic()if ae then ae.Volume=ad end end end)function ab.updateChaseVolume(ae)ad=((ae/100)*ac)end
-function ab.isGameActive()return game.ReplicatedStorage.IsGameActive.Value and game.ReplicatedStorage.GameTimer.Value~=0 end function ab.isBeast()local ae=game:
-GetService'Players'.LocalPlayer local af=ae and ae.Character if ab.isGameActive()and af then task.wait()return af:FindFirstChild'BeastPowers'end return false
-end function ab.getDistToBeast()local ae=ab.findBeast()local af=ae and ae.Character local ag,ah=af and af:FindFirstChild'HumanoidRootPart',game:GetService
-'Players'.LocalPlayer local ai=ah and ah.Character local aj=ai and ai:FindFirstChild'HumanoidRootPart'if ag and aj then return aa.dist3d(aj.Position,ag.Position
-)end return 99999999 end function ab.getActivePlayers()local ae,af={},game:GetService'Players'.LocalPlayer local ag=af and af:FindFirstChild'PlayerGui'local ah=
-ag and ag:FindFirstChild'ScreenGui'local ai=ah and ah:FindFirstChild'StatusBars'local aj=ai and ai:GetChildren()if aj then for ak,al in pairs(aj)do if al:IsA
-'TextLabel'and al.TextColor3==Color3.fromRGB(255,255,255)then local am=al.ContentText local an=game:GetService'Players':FindFirstChild(am)if an then table.
-insert(ae,an)end end end end return ae end function ab.isPlayerCaptured(ae)local af=ab.getStats(ae)local ag=af and af:FindFirstChild'Captured'if ag then return
-ag.Value end return false end function ab.getCapturablePlayers()local ae,af={},game:GetService'Players'.LocalPlayer for ag,ah in pairs(ab.getActivePlayers())do
-if ah~=af then if not ab.isPlayerCaptured(ah)then table.insert(ae,ah)end end end return ae end function ab.triggerEvent(ae,af)local ag=game:GetService
-'ReplicatedStorage'.RemoteEvent ag:FireServer('Input','Trigger',af,ae)end function ab.triggerInput(ae)local af=game:GetService'ReplicatedStorage'.RemoteEvent af
-:FireServer('Input','Action',ae)end function ab.triggerCrawl(ae)local af=game:GetService'ReplicatedStorage'.RemoteEvent af:FireServer('Input','Crawl',ae)end
-function ab.triggerPod(ae)local af=ae:FindFirstChild'Event'if af then local ag=ab.getStats(game:GetService'Players'.LocalPlayer)local ah=ag and ag:
-FindFirstChild'ActionEvent'local ai=ah and ah.Value task.spawn(function()ab.triggerEvent(af,true)ab.triggerInput(true)task.wait(1)ab.triggerEvent(af,false)ab.
-triggerInput(false)task.wait(1)if ai then ab.triggerEvent(ai,true)ab.triggerInput(true)end end)end end function ab.findNearestFreezePod()local af,ag,ae=99999999
-,game:GetService'Players'.LocalPlayer local ah=ag and ag.Character local ai=ah and ah:FindFirstChild'HumanoidRootPart'for aj,ak in pairs(game.Workspace:
-GetDescendants())do if ak.Name=='FreezePod'then local al=ak:FindFirstChild'PodTrigger'if al then local am=al:FindFirstChild'CapturedTorso'if am.Value==nil then
-local an=aa.dist3d(ai.Position,al.Position)if an<af then ae=al af=an end end end end end return ae end function ab.triggerNearestFreezePod()local ae=ab.
-findNearestFreezePod()if ae then ab.triggerPod(ae)end end function ab.teleportToNearestFreezePod()local ae=game:GetService'Players'.LocalPlayer local af=ae and
-ae.Character local ag=af and af:FindFirstChild'HumanoidRootPart'if ag then local ah=ab.findNearestFreezePod()aa.Noclip.enable()ag.CFrame=ah.CFrame task.delay(1,
-aa.Noclip.disable)end end function ab.isInGame()local ae,af=game:GetService'Players'.LocalPlayer,ab.getActivePlayers()if ae and af then for ag,ah in pairs(af)do
-if ah==ae then return true end end end return false end function ab.partCloseToModel(ae,af,ag)local ah if af.PrimaryPart then ah=af.PrimaryPart else local ai=af
-:GetDescendants()for aj,ak in pairs(ai)do if ak:IsA'BasePart'then ah=ak break end end end if ae and ah then local ai=aa.dist3d(ae.Position,ah.Position)return ai
-<=ag end return false end function ab.isCloseToModel(ae,af)local ag=game:GetService'Players'.LocalPlayer local ah=ag and ag.Character local ai=ah and ah:
-FindFirstChild'HumanoidRootPart'return ab.partCloseToModel(ai,ae,af)end function ab.partCloseToModelName(ae,af,ag)for ah,ai in pairs(ab.getCurrentMapChildren())
-do if ai.Name==af then if ab.partCloseToModel(ae,ai,ag)then return true,ai end end end return false,nil end function ab.isCloseToModelName(ae,af)for ag,ah in
-pairs(ab.getCurrentMapChildren())do if ah.Name==ae then if ab.isCloseToModel(ah,af)then return true,ah end end end return false,nil end function ab.
-partCloseToComputer(ae)return ab.partCloseToModelName(ae,'ComputerTable',20)end function ab.isCloseToComputer()return ab.isCloseToModelName('ComputerTable',8.5)
-end function ab.isCloseToFreezePod()return ab.isCloseToModelName('FreezePod',10)end function ab.isCloseToExit()return ab.isCloseToModelName('ExitDoor',20)end
-function ab.getLockers()return game:GetService'CollectionService':GetTagged'LOCKER'end function ab.findNearestLocker()local ae=game:GetService'Players'.
-LocalPlayer local af=ae and ae.Character local ag=af and af:FindFirstChild'HumanoidRootPart'if ag then local ai,ah=999999999 for aj,ak in pairs(ab.getLockers())
-do local al=ak:FindFirstChildOfClass'Part'if al then local am=aa.dist3d(ag.Position,al.Position)if am<ai then ai=am ah=ak end end end return ah end return nil
-end function ab.getCurrentPower()local ae=game:GetService'ReplicatedStorage':FindFirstChild'CurrentPower'if ae then return ae.Value end return''end function ab.
-isPowerActive()local ae=game:GetService'ReplicatedStorage':FindFirstChild'PowerActive'if ae then return ae.Value end return false end function ab.isSeerActive()
-local ae=ab.getCurrentPower()=='Seer'return ae and ab.isPowerActive()end local ae,af=Color3.fromRGB(13,105,172),Color3.fromRGB(196,40,28)function ab.
-getClosestComputer(ag)local ah=game:GetService'Players'.LocalPlayer local ai=ah and ah.Character local aj,al,ak=ai and ai:FindFirstChild'HumanoidRootPart',
-99999999 if aj then for am,an in pairs(ab.getCurrentMapChildren())do if an.Name=='ComputerTable'then local ao=an.PrimaryPart if ao then local ap=aa.dist3d(aj.
-Position,ao.Position)if ag then if ap<al then al=ap ak=an end else local aq=an:FindFirstChild'Screen'if aq and(aq.Color==ae or aq.Color==af)then if ap<al then
-al=ap ak=an end end end end end end end return ak end function ab.getValidSpot(ag)local ah=ag:FindFirstChild'Screen'if ah and(ah.Color==ae or ah.Color==af)then
-local ai,aj,ak=ag:FindFirstChild'ComputerTrigger1',ag:FindFirstChild'ComputerTrigger2',ag:FindFirstChild'ComputerTrigger3'local al,am={ai,aj,ak},{}for an,ao in
-pairs(al)do local ap=ao:FindFirstChild'ActionSign'if ap then if ap.Value~=0 then table.insert(am,ao)end end end local an,ap,ao=99999999,game:GetService'Players'
-.LocalPlayer local aq=ap and ap.Character local ar=aq and aq:FindFirstChild'HumanoidRootPart'if ar then for as,b in pairs(am)do local c=aa.dist3d(ar.Position,b.
-Position)if c<an then an=c ao=b end end end return ao end return nil end local ag=20 ab.beast_max_dist=ag function ab.doBeastRaycast(ah)local ai=ab.findBeast()
-local aj=ai and ai.Character local ak=aj and aj:FindFirstChild'Head'if ak and ah then local al,am=ah.Position,ak.Position local an,ao,ap=(am-al)*1.5,game:
-GetService'Players':GetPlayers(),{ah,ah.Parent}for aq,ar in pairs(ao)do local as=ar.Character if as and ar~=ai then table.insert(ap,as)end end local aq=
-RaycastParams.new()aq.FilterType=Enum.RaycastFilterType.Exclude aq.FilterDescendantsInstances=ap aq.IgnoreWater=true local ar=game.Workspace:Raycast(al,an,aq)if
-ar then local as=ar.Instance if as then if as:IsDescendantOf(aj)then return true end end end end return false end function ab.LOSToBeast()local ah=game:
-GetService'Players'.LocalPlayer local ai=ah and ah.Character local aj,ak,al,am=ai and ai:FindFirstChild'HumanoidRootPart',ai and ai:FindFirstChild'Head',ai and
-ai:FindFirstChild'Left Leg',ai and ai:FindFirstChild'Right Leg'local an={aj,ak,al,am}for ao,ap in pairs(an)do if ap then if ab.doBeastRaycast(ap)then return
-true end end end return false end function ab.isInDanger()return ab.getDistToBeast()<=ag and ab.LOSToBeast()end function ab.shouldEasyHack()return ab.
-getDistToBeast()>30 or not ab.LOSToBeast()end return ab end function a.i():typeof(__modImpl())local aa=a.cache.i if not aa then aa={c=__modImpl()}a.cache.i=aa
-end return aa.c end end do local function __modImpl()local aa,ab,ac=a.e(),a.b(),a.i()if game.GameId==372226183 then local ad,ae=aa.Window:CreateTab'ESP',true
-function UpdateBeastESP()for af,ag in pairs(game.Players:GetPlayers())do if ag.Character and ag.Character:FindFirstChild'BeastPowers'and ag~=game.Players.
-LocalPlayer then ab.updateESP(ag.Character,Color3.fromRGB(255,0,0),ae)end end end ad:CreateToggle{Name='Beast ESP',CurrentValue=true,Flag=nil,Callback=function(
-af)ae=af UpdateBeastESP()end}local ag=true function UpdatePlrESP()for ah,ai in pairs(game.Players:GetPlayers())do if ai.Character and not ai.Character:
-FindFirstChild'BeastPowers'and ai~=game.Players.LocalPlayer then ab.updateESP(ai.Character,Color3.fromRGB(0,255,0),ag)end end end ad:CreateToggle{Name=
-'Player ESP',CurrentValue=true,Flag=nil,Callback=function(ah)ag=ah UpdatePlrESP()end}task.spawn(function()while task.wait(1)do for ai,aj in pairs(ac.getExits())
-do local ak=ac.getExitTrigger(aj)if ak then ak.Size=Vector3.new(20,20,20)end end end end)local ai=true local function updatePCESP()for aj,ak in pairs(ac.
-getCurrentMapChildren())do if ak.Name=='ComputerTable'and ak:FindFirstChild'Screen'then ab.updateESP(ak,ak.Screen.Color,ai)end end end ad:CreateToggle{Name=
-'Computer ESP',CurrentValue=true,Flag=nil,Callback=function(aj)ai=aj updatePCESP()end}local ak=not ab.isDev()local function updateLockerESP()local al=ac.
-getLockers()for am,an in pairs(al)do ab.updateESP(an,Color3.fromRGB(255,255,0),ak)end end ad:CreateToggle{Name='Locker ESP',CurrentValue=ak,Flag=nil,Callback=
-function(al)ak=al updateLockerESP()end}task.spawn(function()while task.wait(1)do UpdateBeastESP()UpdatePlrESP()updatePCESP()updateLockerESP()end UpdateBeastESP(
-)UpdatePlrESP()updatePCESP()updateLockerESP()end)local am=aa.Window:CreateTab'Utils'am:CreateButton{Name='Fling Beast',Callback=function()local an=ac.findBeast(
-)if an then ab.flingPlayer(an)end end}local ao=false am:CreateToggle{Name='Slow Beast',CurrentValue=false,Flag=nil,Callback=function(ap)ao=ap end}task.spawn(
-function()while task.wait()do if ao and not ac.isBeast()then local aq=ac.getPowerEvent()if aq then aq:FireServer'Jumped'end end end end)local aq=false am:
-CreateToggle{Name='Make Beast Untie',CurrentValue=false,Flag=nil,Callback=function(ar)aq=ar end}task.spawn(function()while task.wait()do if aq then ac.
-clickHammer()end end end)local as=false am:CreateToggle{Name='Auto Save',CurrentValue=false,Flag=nil,Callback=function(b)as=b end}local c=false task.spawn(
-function()while task.wait()do if as and ac.isInGame()and not ac.isBeast()then local d=ac.getCurrentMapChildren()for e,f in pairs(d)do if f.Name=='FreezePod'then
-local g=f:FindFirstChild'PodTrigger'if g then local h=g:FindFirstChild'CapturedTorso'if h.Value~=nil then ac.triggerPod(g)end end end end end end end)local d=
-true am:CreateToggle{Name='Auto Tie',CurrentValue=true,Flag=nil,Callback=function(e)d=e end}task.spawn(function()while task.wait()do if d and ac.isBeast()then
-local f=game:GetService'Players'.LocalPlayer local g=f and f.Character local h=g and g:FindFirstChild'HumanoidRootPart'if h then for i,j in pairs(game:
-GetService'Players':GetPlayers())do if j~=f and not ab.isFriendsWith(j)and ac.isRagdoll(j)and not ac.isCaptured(j)then local k=j.Character and j.Character:
-FindFirstChild'HumanoidRootPart'if k then if ab.dist3d(h.Position,k.Position)<=15 then ac.tiePlayer(j)end end end end end end end end)local f=ab.isDev()am:
-CreateToggle{Name='Auto Hit',CurrentValue=f,Flag=nil,Callback=function(g)f=g end}task.spawn(function()while task.wait()do if f then local h=game:GetService
-'Players'.LocalPlayer local i=h and h.Character local j=i and i:FindFirstChild'HumanoidRootPart'if j then for k,l in pairs(game:GetService'Players':GetPlayers()
-)do if l~=h and not ab.isFriendsWith(l)and not ac.isRagdoll(l)and not ac.isCaptured(l)then local m=l.Character and l.Character:FindFirstChild'HumanoidRootPart'
-if m then if ab.dist3d(j.Position,m.Position)<=15 then ac.hitPlayer(l)end end end end end end end end)local h=ab.isDev()am:CreateToggle{Name='Auto Beast',
-CurrentValue=h,Flag=nil,Callback=function(i)h=i end}task.spawn(function()while task.wait()do if h and ac.isBeast()then local j=game:GetService'Players'.
-LocalPlayer local k=j and j.Character local l=k and k:FindFirstChild'HumanoidRootPart'if l then local m=ac.getCapturablePlayers()for n,o in pairs(m)do local p=o
-and o.Character local q=p and p:FindFirstChild'HumanoidRootPart'if q and l and not ab.isFriendsWith(o)then l.CFrame=q.CFrame task.wait(0.1)ac.hitPlayer(o)task.
-wait(0.1)ac.tiePlayer(o)task.wait(0.1)ac.triggerNearestFreezePod()end end end end end end)local j=true am:CreateToggle{Name='No Errors',CurrentValue=true,Flag=
-nil,Callback=function(k)j=k end}local l=true am:CreateToggle{Name='No Fog',CurrentValue=true,Flag=nil,Callback=function(m)l=m end}local n=true am:CreateToggle{
-Name='Better Camera',CurrentValue=true,Flag=nil,Callback=function(o)n=o end}local p=false am:CreateToggle{Name='Avoid Beast',CurrentValue=p,Flag=nil,Callback=
-function(q)p=q end}local r=false am:CreateToggle{Name='Auto Exit',CurrentValue=r,Flag=nil,Callback=function(s)r=s end}task.spawn(function()local t=false while
-task.wait(1)do if t and not ac.isCloseToExit()then task.wait(10)t=false end if r and ac.isInGame()and not ac.isBeast()and not t then local u=ac.findOpenExit()if
-u then local v,w=ac.getExitArea(u),game:GetService'Players'.LocalPlayer local x=w and w.Character local y=x and x:FindFirstChild'HumanoidRootPart'if y then y.
-CFrame=v.CFrame t=true end end end end end)local t=false am:CreateToggle{Name='Auto Open Exit',CurrentValue=t,Flag=nil,Callback=function(u)t=u end}task.spawn(
-function()local v=false while task.wait()do if v and not ac.isCloseToExit()then task.wait(10)v=false end if t and ac.isInGame()and not ac.isBeast()and not v
-then local w=ac.findOpenExit()if w then return end local x=ac.getClosestClosedExit()if x then local y=ac.getExitTrigger(x)if y then local z=game:GetService
-'Players'.LocalPlayer local A=z and z.Character local B=A and A:FindFirstChild'HumanoidRootPart'if B then B.CFrame=y.CFrame v=true end end end end end end)local
-v,w,x,y=true,true,false y=am:CreateToggle{Name='Auto E',CurrentValue=true,Flag=nil,Callback=function(z)v=z if w and not z then y:Set(true)end end}local z z=am:
-CreateToggle{Name='Easy Hack (Requires Auto E)',CurrentValue=true,Flag=nil,Callback=function(A)w=A if A then y:Set(true)end if x and not A then z:Set(true)end
-end}am:CreateToggle{Name='Auto Hack (Requires Easy Hack)',CurrentValue=false,Flag=nil,Callback=function(A)x=A if A then z:Set(true)end end}local B=false task.
-spawn(function()local C while task.wait(0.1)do local D,E=ac.isCloseToComputer()local F,H=ac.isCloseToFreezePod(),ac.isCloseToExit()if(ac.isInGame()and v and(D
-or F or H))or(ac.isBeast()and v and F)and ac.shouldEasyHack()then game.ReplicatedStorage.RemoteEvent:FireServer('Input','Action',true)task.wait(0.1)game.
-ReplicatedStorage.RemoteEvent:FireServer('Input','Action',false)end if ac.isInGame()and w and D and C~=E and not ac.isInDanger()and not B then local J=game:
-GetService'Players'.LocalPlayer local K=J and J.Character local L=K and K:FindFirstChild'HumanoidRootPart'if L then local M=ac.getValidSpot(E)task.spawn(
-function()local N=true task.spawn(function()while N and not ac.isInDanger()and not B do if M then L.CFrame=M.CFrame*CFrame.new(0,0,0.1)end task.wait()end end)
-task.delay(1,function()N=false end)end)end end if ac.isInGame()and x and not ac.isInDanger()and not B then local J=ac.getClosestComputer(false)if not ab.
-get_safeTweening()and J and J~=E then local K=ac.getValidSpot(J)if K then ab.set_safeTweening(true)task.delay(1,function()local L=game:GetService'Players'.
-LocalPlayer local M=L and L.Character local _=M and M:FindFirstChild'HumanoidRootPart'ab.safeTweenToPart(K)end)end end end C=E end end)am:CreateKeybind{Name=
-'Teleport to Freeze Pod',CurrentKeybind='F',HoldToInteract=false,Flag='FTFFreezePodKeybind',Callback=ac.teleportToNearestFreezePod}task.spawn(function()local F,
-D,E=(Vector3.new(0,0,0))while task.wait()do if j then local G=ac.getStats(game:GetService'Players'.LocalPlayer)local H=G and G:FindFirstChild'ActionEvent'if H.
-Value then game.ReplicatedStorage.RemoteEvent:FireServer('SetPlayerMinigameResult',true)end end if l then game:GetService'Lighting'.Atmosphere.Density=0 game:
-GetService'Lighting'.Atmosphere.Offset=0 game:GetService'Lighting'.Atmosphere.Glare=0 game:GetService'Lighting'.Atmosphere.Haze=0 game:GetService'Lighting'.Blur
-.Enabled=false game:GetService'Lighting'.DepthOfField.Enabled=false game:GetService'Lighting'.Brightness=2 game:GetService'Lighting'.ClockTime=14 game:
-GetService'Lighting'.FogEnd=100000 game:GetService'Lighting'.GlobalShadows=false game:GetService'Lighting'.OutdoorAmbient=Color3.fromRGB(128,128,128)end if n
-then local G=game:GetService'Players'.LocalPlayer if G then G.CameraMode=Enum.CameraMode.Classic G.CameraMaxZoomDistance=100 end end if p and not c then local G
-=ac.findBeast()local H=G and G.Character local I,J=H and H:FindFirstChild'HumanoidRootPart',game:GetService'Players'.LocalPlayer local K=J and J.Character local
-L=K and K:FindFirstChild'HumanoidRootPart'if H then if K then if ac.isInDanger()then if not B then D=L.CFrame E=L.Position game.Workspace.Gravity=0 ab.Noclip.
-enable()task.wait(0.1)B=true end end end elseif B then L.CFrame=D game.Workspace.Gravity=196.2 ab.Noclip.disable()B=false end if B then local M=ab.dist3d(E,I.
-Position)if M>=ac.beast_max_dist then L.CFrame=D game.Workspace.Gravity=196.21 ab.Noclip.disable()B=false else local N=I.CFrame*CFrame.new(0,-10,0)L.CFrame=N
-for O,P in ipairs(K:GetDescendants())do if P:IsA'BasePart'then P.Velocity,P.RotVelocity=F,F end end end end elseif B then local G=game:GetService'Players'.
-LocalPlayer local H=G and G.Character local I=H and H:FindFirstChild'HumanoidRootPart'if I then I.CFrame=D end game.Workspace.Gravity=196.21 ab.Noclip.disable()
-B=false end end end)am:CreateSlider{Name='Chase Music Volume',Range={0,100},Increment=1,Suffix='%',CurrentValue=100,Flag='FTFChaseMusicVolume',Callback=function
-(D)ac.updateChaseVolume(D)end}end return true end function a.j():typeof(__modImpl())local aa=a.cache.j if not aa then aa={c=__modImpl()}a.cache.j=aa end return
-aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function ab.getCurrentGun()local ac=game:GetService'Players'.LocalPlayer local ad=ac and ac.
-Character local ae=ad and ad:FindFirstChildOfClass'Tool'return ae end function ab.getGunFireEvent()local ac=ab.getCurrentGun()local ad=ac and ac:FindFirstChild
-'Events'local ae=ad and ad:FindFirstChild'Fire'return ae end function ab.getGunReloadEvent()local ac=ab.getCurrentGun()local ad=ac and ac:FindFirstChild'Events'
-local ae=ad and ad:FindFirstChild'Reload'return ae end function ab.getGunAmmo()local ac=ab.getCurrentGun()local ad=ac and ac:FindFirstChild'GunServer'local ae=
-ad and ad:FindFirstChild'Ammo'local af=(ae and ae.Value)or 0 return af end function ab.reloadGun()local ac=ab.getGunReloadEvent()if ac then ac:FireServer()end
-end function ab.shootChar(ac)local ad,ae,af=ab.getGunFireEvent(),ac and ac:FindFirstChild'HumanoidRootPart',ac and ac:FindFirstChildWhichIsA'Humanoid'if ae and
-af and ad then local ag,ah,ai=game:GetService'Players'.LocalPlayer:GetNetworkPing()/2,ae.AssemblyLinearVelocity,af and(af.MoveDirection*af.WalkSpeed)ah=ah:Lerp(
-ai,0.6)local aj,ak=ae.Position+(ah*ag),Random.new()ad:FireServer{Origin=ae.Position,Timestamp=game.Workspace:GetServerTimeNow(),Direction=aa.dir3d(ae.Position,
-aj),Seed=ak:NextInteger(0,100)}end end function ab.findClosestChar()local ac=game:GetService'Players'.LocalPlayer local ad=ac and ac.Character local ae=ad and
-ad:FindFirstChild'HumanoidRootPart'if ae then local ag,af=99999999 for ah,ai in pairs(game:GetService'Players':GetPlayers())do if ai~=ac then local aj=ai and ai
-.Character local ak,al,am=aj and aj:FindFirstChild'HumanoidRootPart',aj and aj:FindFirstChildOfClass'ForceField',aj and aj:FindFirstChildOfClass'Humanoid'if ak
+__modImpl())local aa=a.cache.h if not aa then aa={c=__modImpl()}a.cache.h=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}ab.Queue={
+running=false,items={},add=function(ac,ad,ae)table.insert(ac.items,{item=ad,onDone=ae})end,update=function(ac)if not ac.running and#ac.items>0 then local ad=
+table.remove(ac.items,1)ac.running=true ad.item()ac.running=false if ad.onDone then ad.onDone()end end end}task.spawn(function()while task.wait()do ab.Queue:
+update()end end)function ab.getItemFolders()if ab.ItemFolders then return ab.ItemFolders end local ac={}for ad,ae in pairs(game.Workspace:GetChildren())do if ae
+.Name=='Model'then local af=ae:FindFirstChild'Items'if af then table.insert(ac,af)end end end ab.ItemFolders=ac return ac end function ab.getItems()if ab.Items
+then return ab.Items end local ac,ad={},ab.getItemFolders()for ae,af in pairs(ad)do for ag,ah in pairs(af:GetChildren())do table.insert(ac,ah)end end ab.Items=
+ac return ac end function ab.getItem(ac)local ad=ab.getItems()for ae,af in pairs(ad)do if af.Name==ac then return af end end return nil end function ab.
+fireProximityPrompt(ac,ad)local ae=game:GetService'Players'.LocalPlayer local af=ae and ae.Character local ag=af and af:FindFirstChild'HumanoidRootPart'if ag
+then local ah,ai,aj=game.Workspace.CurrentCamera,ag.CFrame,game.Workspace.Gravity task.wait()aa.Noclip.enable()game.Workspace.Gravity=0 task.wait()ag.CFrame=ad.
+CFrame*CFrame.new(0,0,-2)ah.CFrame=CFrame.lookAt(ah.CFrame.Position,ad.Position)task.wait()ac.Enabled=false ac.Enabled=true local ak=0 repeat task.wait()ak=ak+1
+until ac:InputHoldBegin()or ak>10 fireproximityprompt(ac)ac:InputHoldEnd()task.wait()ag.CFrame=ai task.wait()aa.Noclip.disable()game.Workspace.Gravity=aj task.
+wait()local al=game:GetService'Players'.LocalPlayer local am=al and al.Character local an=am and am:FindFirstChildWhichIsA'Humanoid'an.PlatformStand=false end
+end function ab.grabItem(ac)local ad=ab.getItem(ac)if ad then local ae,af=ad:FindFirstChild'PP',ad.PrimaryPart or ad:FindFirstChildWhichIsA'BasePart'if ae and
+af then ab.Queue:add(function()ab.fireProximityPrompt(ae,af)end)end end end function ab.getCheckInHL()local ac=game.Workspace:FindFirstChild'Misc'local ad=ac
+and ac:FindFirstChild'CheckIn'local ae=ad and ad:FindFirstChild('CheckStepHighlight',true)return ae end function ab.getNPCHL()local ac=game.Workspace:
+FindFirstChild'NPCs'local ad=ac and(ac:FindFirstChild('CheckStepHighlight',true)or ac:FindFirstChild('PatientHighlight',true))return ad end function ab.
+getMedicalHL()local ac=game.Workspace:FindFirstChild'Rooms'local ad=ac and ac:FindFirstChild'Medical'local ae=ad and ad:FindFirstChild('PatientHighlight',true)
+return ae end function ab.getPPFromHL(ac)return ac.Parent.Parent:FindFirstChild'PP2'or ac.Parent:FindFirstChild'PP'end return ab end function a.i():typeof(
+__modImpl())local aa=a.cache.i if not aa then aa={c=__modImpl()}a.cache.i=aa end return aa.c end end do local function __modImpl()local aa,ab=a.i(),{}function
+ab.getEyeDrops()aa.grabItem'Eye Drops'end function ab.getIVDrops()aa.grabItem'IV Drops'end function ab.getMedkit()aa.grabItem'Medkit'end function ab.getThermo()
+aa.grabItem'Thermo'end function ab.getOintment()aa.grabItem'Ointment'end function ab.getBandages()aa.grabItem'Bandages'end function ab.getMapleSyrup()aa.
+grabItem'Maple Syrup'end function ab.getCoughSyrup()aa.grabItem'Cough Syrup'end function ab.getMedicine()aa.grabItem'Medicine'end function ab.getHerbs()aa.
+grabItem'Herbs'end local ac=false function ab.toggleAuto(ad)ac=ad end task.spawn(function()local ad=true while task.wait()do if ac and ad then local ae=aa.
+getCheckInHL()or aa.getNPCHL()or aa.getMedicalHL()if ae then local af=aa.getPPFromHL(ae)if af then local ag=af.Parent local ah=ag.PrimaryPart or ag:
+FindFirstChildWhichIsA'BasePart'if ah then ad=false aa.Queue:add(function()aa.fireProximityPrompt(af,ah)end,function()ad=true end)end end end end end end)return
+ab end function a.j():typeof(__modImpl())local aa=a.cache.j if not aa then aa={c=__modImpl()}a.cache.j=aa end return aa.c end end do local function __modImpl()
+local aa=a.e()if game.GameId==10148749921 then local ab,ac=a.j(),aa.Window:CreateTab('Animal Hospital','gamepad-2')ac:CreateSection'Items'ac:CreateButton{Name=
+'Eye Drops',Callback=ab.getEyeDrops}ac:CreateButton{Name='IV Drops',Callback=ab.getIVDrops}ac:CreateButton{Name='Medkit',Callback=ab.getMedkit}ac:CreateButton{
+Name='Thermo',Callback=ab.getThermo}ac:CreateButton{Name='Ointment',Callback=ab.getOintment}ac:CreateButton{Name='Bandages',Callback=ab.getBandages}ac:
+CreateButton{Name='Maple Syrup',Callback=ab.getMapleSyrup}ac:CreateButton{Name='Cough Syrup',Callback=ab.getCoughSyrup}ac:CreateButton{Name='Medicine',Callback=
+ab.getMedicine}ac:CreateButton{Name='Herbs',Callback=ab.getHerbs}end return true end function a.k():typeof(__modImpl())local aa=a.cache.k if not aa then aa={c=
+__modImpl()}a.cache.k=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function ab.getCurrentMap()for ac,ad in pairs(game.Workspace:
+GetChildren())do if ad:FindFirstChild'ComputerTable'then return ad end end return nil end function ab.getCurrentMapChildren()local ac=ab.getCurrentMap()if not
+ac then return{}end return ac:GetChildren()end function ab.getExits()local ac,ad={},ab.getCurrentMapChildren()for ae,af in pairs(ad)do if af.Name=='ExitDoor'
+then table.insert(ac,af)end end return ac end function ab.getExitArea(ac)local ad=ac:FindFirstChild'ExitArea'return ad end function ab.getExitTrigger(ac)local
+ad=ac:FindFirstChild'ExitDoorTrigger'return ad end function ab.exitNeedsToOpen(ac)local ad=ab.getExitTrigger(ac)local ae=ad and ad:FindFirstChild'ActionSign'if
+ae then return ae.Value~=0 end return false end function ab.exitIsOpen(ac)local ad=ab.getExitTrigger(ac)if not ad then return true end return false end function
+ab.getClosestClosedExit()local ac,ad=ab.getExits(),{}for ae,af in pairs(ac)do if not ab.exitIsOpen(af)and ab.exitNeedsToOpen(af)then table.insert(ad,af)end end
+local af,ag,ae=99999999,game:GetService'Players'.LocalPlayer local ah=ag and ag.Character local ai=ah and ah:FindFirstChild'HumanoidRootPart'if ai then for aj,
+ak in pairs(ad)do local al=ab.getExitTrigger(ak)local am=aa.dist3d(al.Position,ai.Position)if am<af then af=am ae=ak end end end return ae end function ab.
+findOpenExit()local ac={}for ad,ae in pairs(ab.getExits())do if ab.exitIsOpen(ae)then table.insert(ac,ae)end end local ae,af,ad=99999999,game:GetService
+'Players'.LocalPlayer local ag=af and af.Character local ah=ag and ag:FindFirstChild'HumanoidRootPart'if ah then for ai,aj in pairs(ac)do local ak=ab.
+getExitArea(aj)local al=aa.dist3d(ak.Position,ah.Position)if al<ae then ae=al ad=aj end end end return ad end function ab.findBeast()for ac,ad in pairs(game:
+GetService'Players':GetPlayers())do if ad.Character and ad.Character:FindFirstChild'BeastPowers'and ad~=game:GetService'Players'.LocalPlayer then return ad end
+end return nil end function ab.findBeastIncludingLocal()for ac,ad in pairs(game:GetService'Players':GetPlayers())do if ad.Character and ad.Character:
+FindFirstChild'BeastPowers'then return ad end end return nil end function ab.getHammer()local ac=ab.findBeastIncludingLocal()local ad=ac and ac.Character local
+ae=ad and ad:FindFirstChild'Hammer'return ae end function ab.getHammerHandle()local ac=ab.findBeast()local ad=ac and ac.Character local ae=ad and ad:
+FindFirstChild'Hammer'local af=ae and ae:FindFirstChild'Handle'return af end function ab.getHammerEvent()local ac=ab.getHammer()if ac then return ac:
+FindFirstChild'HammerEvent'end return nil end function ab.getPowerEvent()local ac=ab.findBeastIncludingLocal()local ad=ac and ac.Character local ae=ad and ad:
+FindFirstChild'BeastPowers'local af=ae and ae:FindFirstChild'PowersEvent'return af end function ab.clickHammer()local ac=ab.getHammerEvent()if ac then ac:
+FireServer('HammerClick',true)end end function ab.getStats(ac)local ad=ac and ac:FindFirstChild'TempPlayerStatsModule'return ad end function ab.isRagdoll(ac)
+local ad=ab.getStats(ac)local ae=ad and ad:FindFirstChild'Ragdoll'local af=ae and ae.Value if af==nil then return false end return af end function ab.isCaptured
+(ac)local ad=ab.getStats(ac)local ae=ad and ad:FindFirstChild'Captured'local af=ae and ae.Value if af==nil then return false end return af end function ab.
+hitPlayer(ac)local ad=ac and ac.Character local ae=ad and ad:FindFirstChild'HumanoidRootPart'if ae then local af=ab.getHammerEvent()if af then ab.clickHammer()
+af:FireServer('HammerHit',ae)end end end function ab.tiePlayer(ac)local ad=ac and ac.Character local ae=ad and ad:FindFirstChild'HumanoidRootPart'if ae then
+local af=ab.getHammerEvent()if af then af:FireServer('HammerTieUp',ae,ae.Position)end end end function ab.getChaseMusic()local ac=ab.getHammerHandle()local ad=
+ac and ac:FindFirstChild'SoundChaseMusic'return ad end local ac,ad=0.4,0.4 task.spawn(function()while task.wait()do local ae=ab.getChaseMusic()if ae then ae.
+Volume=ad end end end)function ab.updateChaseVolume(ae)ad=((ae/100)*ac)end function ab.isGameActive()return game.ReplicatedStorage.IsGameActive.Value and game.
+ReplicatedStorage.GameTimer.Value~=0 end function ab.isBeast()local ae=game:GetService'Players'.LocalPlayer local af=ae and ae.Character if ab.isGameActive()and
+af then task.wait()return af:FindFirstChild'BeastPowers'end return false end function ab.getDistToBeast()local ae=ab.findBeast()local af=ae and ae.Character
+local ag,ah=af and af:FindFirstChild'HumanoidRootPart',game:GetService'Players'.LocalPlayer local ai=ah and ah.Character local aj=ai and ai:FindFirstChild
+'HumanoidRootPart'if ag and aj then return aa.dist3d(aj.Position,ag.Position)end return 99999999 end function ab.getActivePlayers()local ae,af={},game:
+GetService'Players'.LocalPlayer local ag=af and af:FindFirstChild'PlayerGui'local ah=ag and ag:FindFirstChild'ScreenGui'local ai=ah and ah:FindFirstChild
+'StatusBars'local aj=ai and ai:GetChildren()if aj then for ak,al in pairs(aj)do if al:IsA'TextLabel'and al.TextColor3==Color3.fromRGB(255,255,255)then local am=
+al.ContentText local an=game:GetService'Players':FindFirstChild(am)if an then table.insert(ae,an)end end end end return ae end function ab.isPlayerCaptured(ae)
+local af=ab.getStats(ae)local ag=af and af:FindFirstChild'Captured'if ag then return ag.Value end return false end function ab.getCapturablePlayers()local ae,af
+={},game:GetService'Players'.LocalPlayer for ag,ah in pairs(ab.getActivePlayers())do if ah~=af then if not ab.isPlayerCaptured(ah)then table.insert(ae,ah)end
+end end return ae end function ab.triggerEvent(ae,af)local ag=game:GetService'ReplicatedStorage'.RemoteEvent ag:FireServer('Input','Trigger',af,ae)end function
+ab.triggerInput(ae)local af=game:GetService'ReplicatedStorage'.RemoteEvent af:FireServer('Input','Action',ae)end function ab.triggerCrawl(ae)local af=game:
+GetService'ReplicatedStorage'.RemoteEvent af:FireServer('Input','Crawl',ae)end function ab.triggerPod(ae)local af=ae:FindFirstChild'Event'if af then local ag=ab
+.getStats(game:GetService'Players'.LocalPlayer)local ah=ag and ag:FindFirstChild'ActionEvent'local ai=ah and ah.Value task.spawn(function()ab.triggerEvent(af,
+true)ab.triggerInput(true)task.wait(1)ab.triggerEvent(af,false)ab.triggerInput(false)task.wait(1)if ai then ab.triggerEvent(ai,true)ab.triggerInput(true)end end
+)end end function ab.findNearestFreezePod()local af,ag,ae=99999999,game:GetService'Players'.LocalPlayer local ah=ag and ag.Character local ai=ah and ah:
+FindFirstChild'HumanoidRootPart'for aj,ak in pairs(game.Workspace:GetDescendants())do if ak.Name=='FreezePod'then local al=ak:FindFirstChild'PodTrigger'if al
+then local am=al:FindFirstChild'CapturedTorso'if am.Value==nil then local an=aa.dist3d(ai.Position,al.Position)if an<af then ae=al af=an end end end end end
+return ae end function ab.triggerNearestFreezePod()local ae=ab.findNearestFreezePod()if ae then ab.triggerPod(ae)end end function ab.teleportToNearestFreezePod(
+)local ae=game:GetService'Players'.LocalPlayer local af=ae and ae.Character local ag=af and af:FindFirstChild'HumanoidRootPart'if ag then local ah=ab.
+findNearestFreezePod()aa.Noclip.enable()ag.CFrame=ah.CFrame task.delay(1,aa.Noclip.disable)end end function ab.isInGame()local ae,af=game:GetService'Players'.
+LocalPlayer,ab.getActivePlayers()if ae and af then for ag,ah in pairs(af)do if ah==ae then return true end end end return false end function ab.partCloseToModel
+(ae,af,ag)local ah if af.PrimaryPart then ah=af.PrimaryPart else local ai=af:GetDescendants()for aj,ak in pairs(ai)do if ak:IsA'BasePart'then ah=ak break end
+end end if ae and ah then local ai=aa.dist3d(ae.Position,ah.Position)return ai<=ag end return false end function ab.isCloseToModel(ae,af)local ag=game:
+GetService'Players'.LocalPlayer local ah=ag and ag.Character local ai=ah and ah:FindFirstChild'HumanoidRootPart'return ab.partCloseToModel(ai,ae,af)end function
+ab.partCloseToModelName(ae,af,ag)for ah,ai in pairs(ab.getCurrentMapChildren())do if ai.Name==af then if ab.partCloseToModel(ae,ai,ag)then return true,ai end
+end end return false,nil end function ab.isCloseToModelName(ae,af)for ag,ah in pairs(ab.getCurrentMapChildren())do if ah.Name==ae then if ab.isCloseToModel(ah,
+af)then return true,ah end end end return false,nil end function ab.partCloseToComputer(ae)return ab.partCloseToModelName(ae,'ComputerTable',20)end function ab.
+isCloseToComputer()return ab.isCloseToModelName('ComputerTable',8.5)end function ab.isCloseToFreezePod()return ab.isCloseToModelName('FreezePod',10)end function
+ab.isCloseToExit()return ab.isCloseToModelName('ExitDoor',20)end function ab.getLockers()return game:GetService'CollectionService':GetTagged'LOCKER'end function
+ab.findNearestLocker()local ae=game:GetService'Players'.LocalPlayer local af=ae and ae.Character local ag=af and af:FindFirstChild'HumanoidRootPart'if ag then
+local ai,ah=999999999 for aj,ak in pairs(ab.getLockers())do local al=ak:FindFirstChildOfClass'Part'if al then local am=aa.dist3d(ag.Position,al.Position)if am<
+ai then ai=am ah=ak end end end return ah end return nil end function ab.getCurrentPower()local ae=game:GetService'ReplicatedStorage':FindFirstChild
+'CurrentPower'if ae then return ae.Value end return''end function ab.isPowerActive()local ae=game:GetService'ReplicatedStorage':FindFirstChild'PowerActive'if ae
+then return ae.Value end return false end function ab.isSeerActive()local ae=ab.getCurrentPower()=='Seer'return ae and ab.isPowerActive()end local ae,af=Color3.
+fromRGB(13,105,172),Color3.fromRGB(196,40,28)function ab.getClosestComputer(ag)local ah=game:GetService'Players'.LocalPlayer local ai=ah and ah.Character local
+aj,al,ak=ai and ai:FindFirstChild'HumanoidRootPart',99999999 if aj then for am,an in pairs(ab.getCurrentMapChildren())do if an.Name=='ComputerTable'then local
+ao=an.PrimaryPart if ao then local ap=aa.dist3d(aj.Position,ao.Position)if ag then if ap<al then al=ap ak=an end else local aq=an:FindFirstChild'Screen'if aq
+and(aq.Color==ae or aq.Color==af)then if ap<al then al=ap ak=an end end end end end end end return ak end function ab.getValidSpot(ag)local ah=ag:FindFirstChild
+'Screen'if ah and(ah.Color==ae or ah.Color==af)then local ai,aj,ak=ag:FindFirstChild'ComputerTrigger1',ag:FindFirstChild'ComputerTrigger2',ag:FindFirstChild
+'ComputerTrigger3'local al,am={ai,aj,ak},{}for an,ao in pairs(al)do local ap=ao:FindFirstChild'ActionSign'if ap then if ap.Value~=0 then table.insert(am,ao)end
+end end local an,ap,ao=99999999,game:GetService'Players'.LocalPlayer local aq=ap and ap.Character local ar=aq and aq:FindFirstChild'HumanoidRootPart'if ar then
+for as,b in pairs(am)do local c=aa.dist3d(ar.Position,b.Position)if c<an then an=c ao=b end end end return ao end return nil end local ag=20 ab.beast_max_dist=
+ag function ab.doBeastRaycast(ah)local ai=ab.findBeast()local aj=ai and ai.Character local ak=aj and aj:FindFirstChild'Head'if ak and ah then local al,am=ah.
+Position,ak.Position local an,ao,ap=(am-al)*1.5,game:GetService'Players':GetPlayers(),{ah,ah.Parent}for aq,ar in pairs(ao)do local as=ar.Character if as and ar
+~=ai then table.insert(ap,as)end end local aq=RaycastParams.new()aq.FilterType=Enum.RaycastFilterType.Exclude aq.FilterDescendantsInstances=ap aq.IgnoreWater=
+true local ar=game.Workspace:Raycast(al,an,aq)if ar then local as=ar.Instance if as then if as:IsDescendantOf(aj)then return true end end end end return false
+end function ab.LOSToBeast()local ah=game:GetService'Players'.LocalPlayer local ai=ah and ah.Character local aj,ak,al,am=ai and ai:FindFirstChild
+'HumanoidRootPart',ai and ai:FindFirstChild'Head',ai and ai:FindFirstChild'Left Leg',ai and ai:FindFirstChild'Right Leg'local an={aj,ak,al,am}for ao,ap in
+pairs(an)do if ap then if ab.doBeastRaycast(ap)then return true end end end return false end function ab.isInDanger()return ab.getDistToBeast()<=ag and ab.
+LOSToBeast()end function ab.shouldEasyHack()return ab.getDistToBeast()>30 or not ab.LOSToBeast()end return ab end function a.l():typeof(__modImpl())local aa=a.
+cache.l if not aa then aa={c=__modImpl()}a.cache.l=aa end return aa.c end end do local function __modImpl()local aa,ab,ac=a.e(),a.b(),a.l()if game.GameId==
+372226183 then local ad,ae=aa.Window:CreateTab'ESP',true function UpdateBeastESP()for af,ag in pairs(game.Players:GetPlayers())do if ag.Character and ag.
+Character:FindFirstChild'BeastPowers'and ag~=game.Players.LocalPlayer then ab.updateESP(ag.Character,Color3.fromRGB(255,0,0),ae)end end end ad:CreateToggle{Name
+='Beast ESP',CurrentValue=true,Flag=nil,Callback=function(af)ae=af UpdateBeastESP()end}local ag=true function UpdatePlrESP()for ah,ai in pairs(game.Players:
+GetPlayers())do if ai.Character and not ai.Character:FindFirstChild'BeastPowers'and ai~=game.Players.LocalPlayer then ab.updateESP(ai.Character,Color3.fromRGB(0
+,255,0),ag)end end end ad:CreateToggle{Name='Player ESP',CurrentValue=true,Flag=nil,Callback=function(ah)ag=ah UpdatePlrESP()end}task.spawn(function()while task
+.wait(1)do for ai,aj in pairs(ac.getExits())do local ak=ac.getExitTrigger(aj)if ak then ak.Size=Vector3.new(20,20,20)end end end end)local ai=true local 
+function updatePCESP()for aj,ak in pairs(ac.getCurrentMapChildren())do if ak.Name=='ComputerTable'and ak:FindFirstChild'Screen'then ab.updateESP(ak,ak.Screen.
+Color,ai)end end end ad:CreateToggle{Name='Computer ESP',CurrentValue=true,Flag=nil,Callback=function(aj)ai=aj updatePCESP()end}local ak=not ab.isDev()local 
+function updateLockerESP()local al=ac.getLockers()for am,an in pairs(al)do ab.updateESP(an,Color3.fromRGB(255,255,0),ak)end end ad:CreateToggle{Name=
+'Locker ESP',CurrentValue=ak,Flag=nil,Callback=function(al)ak=al updateLockerESP()end}task.spawn(function()while task.wait(1)do UpdateBeastESP()UpdatePlrESP()
+updatePCESP()updateLockerESP()end UpdateBeastESP()UpdatePlrESP()updatePCESP()updateLockerESP()end)local am=aa.Window:CreateTab'Utils'am:CreateButton{Name=
+'Fling Beast',Callback=function()local an=ac.findBeast()if an then ab.flingPlayer(an)end end}local ao=false am:CreateToggle{Name='Slow Beast',CurrentValue=false
+,Flag=nil,Callback=function(ap)ao=ap end}task.spawn(function()while task.wait()do if ao and not ac.isBeast()then local aq=ac.getPowerEvent()if aq then aq:
+FireServer'Jumped'end end end end)local aq=false am:CreateToggle{Name='Make Beast Untie',CurrentValue=false,Flag=nil,Callback=function(ar)aq=ar end}task.spawn(
+function()while task.wait()do if aq then ac.clickHammer()end end end)local as=false am:CreateToggle{Name='Auto Save',CurrentValue=false,Flag=nil,Callback=
+function(b)as=b end}local c=false task.spawn(function()while task.wait()do if as and ac.isInGame()and not ac.isBeast()then local d=ac.getCurrentMapChildren()for
+e,f in pairs(d)do if f.Name=='FreezePod'then local g=f:FindFirstChild'PodTrigger'if g then local h=g:FindFirstChild'CapturedTorso'if h.Value~=nil then ac.
+triggerPod(g)end end end end end end end)local d=true am:CreateToggle{Name='Auto Tie',CurrentValue=true,Flag=nil,Callback=function(e)d=e end}task.spawn(function
+()while task.wait()do if d and ac.isBeast()then local f=game:GetService'Players'.LocalPlayer local g=f and f.Character local h=g and g:FindFirstChild
+'HumanoidRootPart'if h then for i,j in pairs(game:GetService'Players':GetPlayers())do if j~=f and not ab.isFriendsWith(j)and ac.isRagdoll(j)and not ac.
+isCaptured(j)then local k=j.Character and j.Character:FindFirstChild'HumanoidRootPart'if k then if ab.dist3d(h.Position,k.Position)<=15 then ac.tiePlayer(j)end
+end end end end end end end)local f=ab.isDev()am:CreateToggle{Name='Auto Hit',CurrentValue=f,Flag=nil,Callback=function(g)f=g end}task.spawn(function()while
+task.wait()do if f then local h=game:GetService'Players'.LocalPlayer local i=h and h.Character local j=i and i:FindFirstChild'HumanoidRootPart'if j then for k,l
+in pairs(game:GetService'Players':GetPlayers())do if l~=h and not ab.isFriendsWith(l)and not ac.isRagdoll(l)and not ac.isCaptured(l)then local m=l.Character and
+l.Character:FindFirstChild'HumanoidRootPart'if m then if ab.dist3d(j.Position,m.Position)<=15 then ac.hitPlayer(l)end end end end end end end end)local h=ab.
+isDev()am:CreateToggle{Name='Auto Beast',CurrentValue=h,Flag=nil,Callback=function(i)h=i end}task.spawn(function()while task.wait()do if h and ac.isBeast()then
+local j=game:GetService'Players'.LocalPlayer local k=j and j.Character local l=k and k:FindFirstChild'HumanoidRootPart'if l then local m=ac.
+getCapturablePlayers()for n,o in pairs(m)do local p=o and o.Character local q=p and p:FindFirstChild'HumanoidRootPart'if q and l and not ab.isFriendsWith(o)then
+l.CFrame=q.CFrame task.wait(0.1)ac.hitPlayer(o)task.wait(0.1)ac.tiePlayer(o)task.wait(0.1)ac.triggerNearestFreezePod()end end end end end end)local j=true am:
+CreateToggle{Name='No Errors',CurrentValue=true,Flag=nil,Callback=function(k)j=k end}local l=true am:CreateToggle{Name='No Fog',CurrentValue=true,Flag=nil,
+Callback=function(m)l=m end}local n=true am:CreateToggle{Name='Better Camera',CurrentValue=true,Flag=nil,Callback=function(o)n=o end}local p=false am:
+CreateToggle{Name='Avoid Beast',CurrentValue=p,Flag=nil,Callback=function(q)p=q end}local r=false am:CreateToggle{Name='Auto Exit',CurrentValue=r,Flag=nil,
+Callback=function(s)r=s end}task.spawn(function()local t=false while task.wait(1)do if t and not ac.isCloseToExit()then task.wait(10)t=false end if r and ac.
+isInGame()and not ac.isBeast()and not t then local u=ac.findOpenExit()if u then local v,w=ac.getExitArea(u),game:GetService'Players'.LocalPlayer local x=w and w
+.Character local y=x and x:FindFirstChild'HumanoidRootPart'if y then y.CFrame=v.CFrame t=true end end end end end)local t=false am:CreateToggle{Name=
+'Auto Open Exit',CurrentValue=t,Flag=nil,Callback=function(u)t=u end}task.spawn(function()local v=false while task.wait()do if v and not ac.isCloseToExit()then
+task.wait(10)v=false end if t and ac.isInGame()and not ac.isBeast()and not v then local w=ac.findOpenExit()if w then return end local x=ac.getClosestClosedExit(
+)if x then local y=ac.getExitTrigger(x)if y then local z=game:GetService'Players'.LocalPlayer local A=z and z.Character local B=A and A:FindFirstChild
+'HumanoidRootPart'if B then B.CFrame=y.CFrame v=true end end end end end end)local v,w,x,y=true,true,false y=am:CreateToggle{Name='Auto E',CurrentValue=true,
+Flag=nil,Callback=function(z)v=z if w and not z then y:Set(true)end end}local z z=am:CreateToggle{Name='Easy Hack (Requires Auto E)',CurrentValue=true,Flag=nil,
+Callback=function(A)w=A if A then y:Set(true)end if x and not A then z:Set(true)end end}am:CreateToggle{Name='Auto Hack (Requires Easy Hack)',CurrentValue=false
+,Flag=nil,Callback=function(A)x=A if A then z:Set(true)end end}local B=false task.spawn(function()local C while task.wait(0.1)do local D,E=ac.isCloseToComputer(
+)local F,H=ac.isCloseToFreezePod(),ac.isCloseToExit()if(ac.isInGame()and v and(D or F or H))or(ac.isBeast()and v and F)and ac.shouldEasyHack()then game.
+ReplicatedStorage.RemoteEvent:FireServer('Input','Action',true)task.wait(0.1)game.ReplicatedStorage.RemoteEvent:FireServer('Input','Action',false)end if ac.
+isInGame()and w and D and C~=E and not ac.isInDanger()and not B then local J=game:GetService'Players'.LocalPlayer local K=J and J.Character local L=K and K:
+FindFirstChild'HumanoidRootPart'if L then local M=ac.getValidSpot(E)task.spawn(function()local N=true task.spawn(function()while N and not ac.isInDanger()and
+not B do if M then L.CFrame=M.CFrame*CFrame.new(0,0,0.1)end task.wait()end end)task.delay(1,function()N=false end)end)end end if ac.isInGame()and x and not ac.
+isInDanger()and not B then local J=ac.getClosestComputer(false)if not ab.get_safeTweening()and J and J~=E then local K=ac.getValidSpot(J)if K then ab.
+set_safeTweening(true)task.delay(1,function()local L=game:GetService'Players'.LocalPlayer local M=L and L.Character local _=M and M:FindFirstChild
+'HumanoidRootPart'ab.safeTweenToPart(K)end)end end end C=E end end)am:CreateKeybind{Name='Teleport to Freeze Pod',CurrentKeybind='F',HoldToInteract=false,Flag=
+'FTFFreezePodKeybind',Callback=ac.teleportToNearestFreezePod}task.spawn(function()local F,D,E=(Vector3.new(0,0,0))while task.wait()do if j then local G=ac.
+getStats(game:GetService'Players'.LocalPlayer)local H=G and G:FindFirstChild'ActionEvent'if H.Value then game.ReplicatedStorage.RemoteEvent:FireServer(
+'SetPlayerMinigameResult',true)end end if l then game:GetService'Lighting'.Atmosphere.Density=0 game:GetService'Lighting'.Atmosphere.Offset=0 game:GetService
+'Lighting'.Atmosphere.Glare=0 game:GetService'Lighting'.Atmosphere.Haze=0 game:GetService'Lighting'.Blur.Enabled=false game:GetService'Lighting'.DepthOfField.
+Enabled=false game:GetService'Lighting'.Brightness=2 game:GetService'Lighting'.ClockTime=14 game:GetService'Lighting'.FogEnd=100000 game:GetService'Lighting'.
+GlobalShadows=false game:GetService'Lighting'.OutdoorAmbient=Color3.fromRGB(128,128,128)end if n then local G=game:GetService'Players'.LocalPlayer if G then G.
+CameraMode=Enum.CameraMode.Classic G.CameraMaxZoomDistance=100 end end if p and not c then local G=ac.findBeast()local H=G and G.Character local I,J=H and H:
+FindFirstChild'HumanoidRootPart',game:GetService'Players'.LocalPlayer local K=J and J.Character local L=K and K:FindFirstChild'HumanoidRootPart'if H then if K
+then if ac.isInDanger()then if not B then D=L.CFrame E=L.Position game.Workspace.Gravity=0 ab.Noclip.enable()task.wait(0.1)B=true end end end elseif B then L.
+CFrame=D game.Workspace.Gravity=196.2 ab.Noclip.disable()B=false end if B then local M=ab.dist3d(E,I.Position)if M>=ac.beast_max_dist then L.CFrame=D game.
+Workspace.Gravity=196.21 ab.Noclip.disable()B=false else local N=I.CFrame*CFrame.new(0,-10,0)L.CFrame=N for O,P in ipairs(K:GetDescendants())do if P:IsA
+'BasePart'then P.Velocity,P.RotVelocity=F,F end end end end elseif B then local G=game:GetService'Players'.LocalPlayer local H=G and G.Character local I=H and H
+:FindFirstChild'HumanoidRootPart'if I then I.CFrame=D end game.Workspace.Gravity=196.21 ab.Noclip.disable()B=false end end end)am:CreateSlider{Name=
+'Chase Music Volume',Range={0,100},Increment=1,Suffix='%',CurrentValue=100,Flag='FTFChaseMusicVolume',Callback=function(D)ac.updateChaseVolume(D)end}end return
+true end function a.m():typeof(__modImpl())local aa=a.cache.m if not aa then aa={c=__modImpl()}a.cache.m=aa end return aa.c end end do local function __modImpl(
+)local aa,ab=a.b(),{}function ab.getCurrentGun()local ac=game:GetService'Players'.LocalPlayer local ad=ac and ac.Character local ae=ad and ad:
+FindFirstChildOfClass'Tool'return ae end function ab.getGunFireEvent()local ac=ab.getCurrentGun()local ad=ac and ac:FindFirstChild'Events'local ae=ad and ad:
+FindFirstChild'Fire'return ae end function ab.getGunReloadEvent()local ac=ab.getCurrentGun()local ad=ac and ac:FindFirstChild'Events'local ae=ad and ad:
+FindFirstChild'Reload'return ae end function ab.getGunAmmo()local ac=ab.getCurrentGun()local ad=ac and ac:FindFirstChild'GunServer'local ae=ad and ad:
+FindFirstChild'Ammo'local af=(ae and ae.Value)or 0 return af end function ab.reloadGun()local ac=ab.getGunReloadEvent()if ac then ac:FireServer()end end
+function ab.shootChar(ac)local ad,ae,af=ab.getGunFireEvent(),ac and ac:FindFirstChild'HumanoidRootPart',ac and ac:FindFirstChildWhichIsA'Humanoid'if ae and af
+and ad then local ag,ah,ai=game:GetService'Players'.LocalPlayer:GetNetworkPing()/2,ae.AssemblyLinearVelocity,af and(af.MoveDirection*af.WalkSpeed)ah=ah:Lerp(ai,
+0.6)local aj,ak=ae.Position+(ah*ag),Random.new()ad:FireServer{Origin=ae.Position,Timestamp=game.Workspace:GetServerTimeNow(),Direction=aa.dir3d(ae.Position,aj),
+Seed=ak:NextInteger(0,100)}end end function ab.findClosestChar()local ac=game:GetService'Players'.LocalPlayer local ad=ac and ac.Character local ae=ad and ad:
+FindFirstChild'HumanoidRootPart'if ae then local ag,af=99999999 for ah,ai in pairs(game:GetService'Players':GetPlayers())do if ai~=ac then local aj=ai and ai.
+Character local ak,al,am=aj and aj:FindFirstChild'HumanoidRootPart',aj and aj:FindFirstChildOfClass'ForceField',aj and aj:FindFirstChildOfClass'Humanoid'if ak
 and not al and(am and am.Health>0)then local an=aa.dist3d(ae.Position,ak.Position)if an<ag then af=aj ag=an end end end end return af end return nil end return
-ab end function a.k():typeof(__modImpl())local aa=a.cache.k if not aa then aa={c=__modImpl()}a.cache.k=aa end return aa.c end end do local function __modImpl()
-local aa,ab=a.e(),a.k()if game.GameId==10141757860 then local ac,ad=aa.Window:CreateTab('Granny Shooters','gamepad-2'),true ac:CreateToggle{Name='Auto Kill',
+ab end function a.n():typeof(__modImpl())local aa=a.cache.n if not aa then aa={c=__modImpl()}a.cache.n=aa end return aa.c end end do local function __modImpl()
+local aa,ab=a.e(),a.n()if game.GameId==10141757860 then local ac,ad=aa.Window:CreateTab('Granny Shooters','gamepad-2'),true ac:CreateToggle{Name='Auto Kill',
 CurrentValue=ad,Flag=nil,Callback=function(ae)ad=ae end}task.spawn(function()while task.wait()do if ad then local af=ab.findClosestChar()ab.shootChar(af)end end
 end)local af=true ac:CreateToggle{Name='Auto Reload',CurrentValue=af,Flag=nil,Callback=function(ag)af=ag end}task.spawn(function()while task.wait()do if af then
-if ab.getGunAmmo()==0 then ab.reloadGun()task.wait(5)end end end end)end return true end function a.l():typeof(__modImpl())local aa=a.cache.l if not aa then aa=
-{c=__modImpl()}a.cache.l=aa end return aa.c end end do local function __modImpl()local aa={}function aa.isSeeker(ab)local ac=ab and ab.Character local ad=ac and
-ac:FindFirstChild'ItScript'return ad~=nil end return aa end function a.m():typeof(__modImpl())local aa=a.cache.m if not aa then aa={c=__modImpl()}a.cache.m=aa
-end return aa.c end end do local function __modImpl()local aa,ab,ac=a.e(),a.b(),a.m()if game.GameId==93740418 then local ad=aa.Window:CreateTab('Hide and Seek',
+if ab.getGunAmmo()==0 then ab.reloadGun()task.wait(5)end end end end)end return true end function a.o():typeof(__modImpl())local aa=a.cache.o if not aa then aa=
+{c=__modImpl()}a.cache.o=aa end return aa.c end end do local function __modImpl()local aa={}function aa.isSeeker(ab)local ac=ab and ab.Character local ad=ac and
+ac:FindFirstChild'ItScript'return ad~=nil end return aa end function a.p():typeof(__modImpl())local aa=a.cache.p if not aa then aa={c=__modImpl()}a.cache.p=aa
+end return aa.c end end do local function __modImpl()local aa,ab,ac=a.e(),a.b(),a.p()if game.GameId==93740418 then local ad=aa.Window:CreateTab('Hide and Seek',
 'gamepad-2')ad:CreateSection'ESP'local ae=true local function updatePlayerESP()for af,ag in pairs(game:GetService'Players':GetPlayers())do if ag~=game:
 GetService'Players'.LocalPlayer then local ah,ai=ag and ag.Character,(ac.isSeeker(ag)and Color3.fromRGB(255,0,0))or(ab.isFriendsWith(ag)and Color3.fromRGB(0,0,
 255))or Color3.fromRGB(0,255,0)if ah then ab.updateESP(ah,ai,ae)end end end end ad:CreateToggle{Name='Player ESP',CurrentValue=ae,Flag=nil,Callback=function(af)
@@ -471,7 +502,7 @@ ae=af updatePlayerESP()end}task.spawn(function()while task.wait(1)do if ae then 
 'Kill All',Callback=function()local ag=game:GetService'Players'.LocalPlayer local ah=ag and ag.Character local ai=ah and ah:FindFirstChild'HumanoidRootPart'if
 ai then local aj=0 ab.Noclip.enable()while aj<10 do for ak,al in pairs(game:GetService'Players':GetPlayers())do if al~=ag then local am=al and al.Character
 local an=am and am:FindFirstChild'HumanoidRootPart'if an then an.CFrame=ai.CFrame end end end aj=aj+1 task.wait()end ab.Noclip.disable()end end}end return true
-end function a.n():typeof(__modImpl())local aa=a.cache.n if not aa then aa={c=__modImpl()}a.cache.n=aa end return aa.c end end do local function __modImpl()
+end function a.q():typeof(__modImpl())local aa=a.cache.q if not aa then aa={c=__modImpl()}a.cache.q=aa end return aa.c end end do local function __modImpl()
 local aa,ab=a.b(),{}function ab.updatePlayerESP(ac)local ad=game:GetService'Players'.LocalPlayer for ae,af in pairs(game:GetService'Players':GetPlayers())do
 local ag,ah,ai=af and af.Character,aa.isFriendsWith(af),ab.hasKnife(af)local aj=(ah and Color3.fromRGB(0,255,0))or Color3.fromRGB(255,0,0)local ak=((ab.
 getCurrentGame()=='HideAndSeek'and not ah)and((ai and Color3.fromRGB(255,0,0))or Color3.fromRGB(0,255,0)))or aj if ag and af~=ad then aa.updateESP(ag,ak,ac and
@@ -495,17 +526,17 @@ ac:FindFirstChild'FiredGunClient'return ad end function ab.getMP5()local ac=game
 SecondaryHitTargets={},ClientRayPosition=ag,HitTargets={},bulletSizeC=ah,NoMuzzleFX=false,FirePosition=ai}}end end function ab.getDoll()local ac=game.Workspace:
 FindFirstChild'SQUIDDOLL123'return ac end function ab.gotoDoll()local ac=ab.getDoll()if ac then local ad=game:GetService'Players'.LocalPlayer local ae=ad and ad
 .Character local af=ae and ae:FindFirstChild'HumanoidRootPart'if af then local ag=ac:FindFirstChildWhichIsA'BasePart'or ac:FindFirstChildWhichIsA'MeshPart'if ag
-then af.CFrame=ag.CFrame end end end end return ab end function a.o():typeof(__modImpl())local aa=a.cache.o if not aa then aa={c=__modImpl()}a.cache.o=aa end
-return aa.c end end do local function __modImpl()local aa,ab=a.o(),{}ab.State={player_esp_toggled=true,guard_esp_toggled=true,glass_bridge_esp_toggled=true}
+then af.CFrame=ag.CFrame end end end end return ab end function a.r():typeof(__modImpl())local aa=a.cache.r if not aa then aa={c=__modImpl()}a.cache.r=aa end
+return aa.c end end do local function __modImpl()local aa,ab=a.r(),{}ab.State={player_esp_toggled=true,guard_esp_toggled=true,glass_bridge_esp_toggled=true}
 function ab.onPlayerESPToggle(ac)ab.State.player_esp_toggled=ac aa.updatePlayerESP(ac)end task.spawn(function()while task.wait(1)do if ab.State.
 player_esp_toggled then aa.updatePlayerESP(ab.State.player_esp_toggled)end end end)function ab.onGuardESPToggle(ac)ab.State.guard_esp_toggled=ac aa.
 updateGuardESP(ac)end task.spawn(function()while task.wait(1)do if ab.State.guard_esp_toggled then aa.updateGuardESP(ab.State.guard_esp_toggled)end end end)
 function ab.onGlassBridgeESPToggle(ac)ab.State.glass_bridge_esp_toggled=ac aa.updateGlassBridgeESP(ac)end task.spawn(function()while task.wait(1)do if ab.State.
-glass_bridge_esp_toggled then aa.updateGlassBridgeESP(ab.State.glass_bridge_esp_toggled)end end end)return ab end function a.p():typeof(__modImpl())local aa=a.
-cache.p if not aa then aa={c=__modImpl()}a.cache.p=aa end return aa.c end end do local function __modImpl()local aa=a.e()if game.GameId==7008097940 then local
-ab,ac=a.p(),aa.Window:CreateTab('Ink Game','gamepad-2')ac:CreateSection'ESP'ac:CreateToggle{Name='Player ESP',CurrentValue=ab.State.player_esp_toggled,Flag=nil,
+glass_bridge_esp_toggled then aa.updateGlassBridgeESP(ab.State.glass_bridge_esp_toggled)end end end)return ab end function a.s():typeof(__modImpl())local aa=a.
+cache.s if not aa then aa={c=__modImpl()}a.cache.s=aa end return aa.c end end do local function __modImpl()local aa=a.e()if game.GameId==7008097940 then local
+ab,ac=a.s(),aa.Window:CreateTab('Ink Game','gamepad-2')ac:CreateSection'ESP'ac:CreateToggle{Name='Player ESP',CurrentValue=ab.State.player_esp_toggled,Flag=nil,
 Callback=ab.onPlayerESPToggle}ac:CreateToggle{Name='Guard ESP',CurrentValue=ab.State.guard_esp_toggled,Flag=nil,Callback=ab.onGuardESPToggle}end return true end
-function a.q():typeof(__modImpl())local aa=a.cache.q if not aa then aa={c=__modImpl()}a.cache.q=aa end return aa.c end end do local function __modImpl()local aa
+function a.t():typeof(__modImpl())local aa=a.cache.t if not aa then aa={c=__modImpl()}a.cache.t=aa end return aa.c end end do local function __modImpl()local aa
 ,ab=a.b(),{}function ab.plrHasItem(ac,ad)local ae,af=ac:FindFirstChild'Backpack',ac.Character local ag,ah=ae and ae:FindFirstChild(ad),af and af:FindFirstChild(
 ad)if ag or ah then return true end return false end function ab.plrHasKnife(ac)return ab.plrHasItem(ac,'Knife')end function ab.plrHasGun(ac)return ab.
 plrHasItem(ac,'Gun')end local ac,ad task.spawn(function()game:GetService'ReplicatedStorage':WaitForChild'Remotes':WaitForChild'Gameplay':WaitForChild
@@ -530,8 +561,8 @@ Character local ag,ah=af and af:FindFirstChild'Humanoid',af and af:FindFirstChil
 and ai:FindFirstChild'Knife'if aj then ag:EquipTool(aj)task.wait()end local ak=ae.Character:FindFirstChild'Knife'if ak then task.spawn(function()local al=true
 task.spawn(function()task.wait(1)al=false end)while al do for am,an in pairs(game:GetService'Players':GetPlayers())do local ao=an.Character local ap=ao and ao:
 FindFirstChild'HumanoidRootPart'if ao and an~=game:GetService'Players'.LocalPlayer then ap.CFrame=ah.CFrame*CFrame.new(0,0,-3)end end task.wait()end end)task.
-wait()ak:Activate()end end end return ab end function a.r():typeof(__modImpl())local aa=a.cache.r if not aa then aa={c=__modImpl()}a.cache.r=aa end return aa.c
-end end do local function __modImpl()local aa,ab,ac=a.e(),a.b(),a.r()if game.PlaceId==142823291 then local ad=aa.Window:CreateTab('Murder Mystery 2','gamepad-2'
+wait()ak:Activate()end end end return ab end function a.u():typeof(__modImpl())local aa=a.cache.u if not aa then aa={c=__modImpl()}a.cache.u=aa end return aa.c
+end end do local function __modImpl()local aa,ab,ac=a.e(),a.b(),a.u()if game.PlaceId==142823291 then local ad=aa.Window:CreateTab('Murder Mystery 2','gamepad-2'
 )ad:CreateSection'ESP'local af=true ad:CreateToggle{Name='Player ESP',CurrentValue=true,Flag=nil,Callback=function(ag)af=ag ac.updatePlayerESP(ag)end}game:
 GetService'RunService'.RenderStepped:Connect(function()if af then ac.updatePlayerESP(af)end end)local ah=true ad:CreateToggle{Name='Coin ESP',CurrentValue=true,
 Flag=nil,Callback=function(ai)ah=ai ac.updateCoinESP(ai)end}game:GetService'RunService'.RenderStepped:Connect(function()if ah then ac.updateCoinESP(ah)end end)
@@ -547,15 +578,15 @@ while task.wait()do if ar then local b=ac.getMurderer()if b then ac.flingMurdere
 'Collect Coins',CurrentValue=false,Flag=nil,Callback=function(c)b=c end}task.spawn(function()while task.wait()do if b and not ab.get_safeTweening()then local d=
 game:GetService'Players'.LocalPlayer local e=d and d.Character local f=e and e:FindFirstChild'HumanoidRootPart'if f then local g=game.Workspace:FindFirstChild(
 'CoinContainer',true)if g then local i,h=99999999 for j,k in pairs(g:GetChildren())do if k.Name=='Coin_Server'then local l=ab.dist3d(f.Position,k.Position)if l<
-i then i=l h=k end end end if h then ab.safeTweenToPart(h)end end end end end end)end return true end function a.s():typeof(__modImpl())local aa=a.cache.s if
-not aa then aa={c=__modImpl()}a.cache.s=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function ab.getZombies()local ac=game.
+i then i=l h=k end end end if h then ab.safeTweenToPart(h)end end end end end end)end return true end function a.v():typeof(__modImpl())local aa=a.cache.v if
+not aa then aa={c=__modImpl()}a.cache.v=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function ab.getZombies()local ac=game.
 Workspace:FindFirstChild'Zombies'return(ac and ac:GetChildren())or{}end function ab.getBox()local ac=game.Workspace:FindFirstChild'Interactions'return ac and ac
 :FindFirstChild'Mystery'end function ab.getPack()local ac=game.Workspace:FindFirstChild'Interactions'return ac and ac:FindFirstChild'Pack-a-Punch'end function
 ab.getPowerups()local ac=game.Workspace:FindFirstChild'Power-ups'return(ac and ac:GetChildren())or{}end function ab.updateZombieESP(ac)local ad=ab.getZombies()
 for ae,af in pairs(ad)do aa.updateESP(af,Color3.fromRGB(255,0,255),ac)end end function ab.updateBoxESP(ac)local ad=ab.getBox()if ad then aa.updateESP(ad,Color3.
 fromRGB(255,255,0),ac)end end function ab.updatePowerupESP(ac)local ad=ab.getPowerups()for ae,af in pairs(ad)do aa.updateESP(af,Color3.fromRGB(107,176,255),ac)
-end end return ab end function a.t():typeof(__modImpl())local aa=a.cache.t if not aa then aa={c=__modImpl()}a.cache.t=aa end return aa.c end end do local 
-function __modImpl()local aa,ab=a.e(),a.t()if game.GameId==1003981402 then local ac=aa.Window:CreateTab('Reminiscence Zombies','gamepad-2')ac:CreateSection'ESP'
+end end return ab end function a.w():typeof(__modImpl())local aa=a.cache.w if not aa then aa={c=__modImpl()}a.cache.w=aa end return aa.c end end do local 
+function __modImpl()local aa,ab=a.e(),a.w()if game.GameId==1003981402 then local ac=aa.Window:CreateTab('Reminiscence Zombies','gamepad-2')ac:CreateSection'ESP'
 local ae=true ac:CreateToggle{Name='Zombie ESP',CurrentValue=true,Flag=nil,Callback=function(af)ae=af ab.updateZombieESP(af)end}local ag=true ac:CreateToggle{
 Name='Box ESP',CurrentValue=true,Flag=nil,Callback=function(ah)ag=ah ab.updateBoxESP(ah)end}local ai=true ac:CreateToggle{Name='Powerup ESP',CurrentValue=true,
 Flag=nil,Callback=function(aj)ai=aj ab.updatePowerupESP(aj)end}game:GetService'RunService'.RenderStepped:Connect(function()if ae then ab.updateZombieESP(ae)end
@@ -572,7 +603,7 @@ PrimaryPart if d then local e=game:GetService'Players'.LocalPlayer local f=e and
 g.CFrame*CFrame.new(0,0,-5)end end end end end)end)local ap=true ac:CreateToggle{Name='Auto Grab Powerups',CurrentValue=true,Flag=nil,Callback=function(aq)ap=aq
 end}game:GetService'RunService'.RenderStepped:Connect(function()if ap then local ar=ab.getPowerups()for as,b in pairs(ar)do local c=game:GetService'Players'.
 LocalPlayer local d=c and c.Character local e,f=d and d:FindFirstChild'HumanoidRootPart',b.PrimaryPart or b:FindFirstChildWhichIsA'BasePart'if f and e then f.
-CFrame=e.CFrame end end end end)end return true end function a.u():typeof(__modImpl())local aa=a.cache.u if not aa then aa={c=__modImpl()}a.cache.u=aa end
+CFrame=e.CFrame end end end end)end return true end function a.x():typeof(__modImpl())local aa=a.cache.x if not aa then aa={c=__modImpl()}a.cache.x=aa end
 return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function ab.updateAnimalESP(ac)local ad=game.Workspace:FindFirstChild'Gameplay'local ae=ad
 and ad:FindFirstChild'Dynamic'local af=ae and ae:FindFirstChild'Animals'local ag=af and af:GetChildren()for ah,ai in pairs(ag)do aa.updateESP(ai,Color3.fromRGB(
 0,128,255),ac)end end function ab.getTeam()local ac=game:GetService'Players'.LocalPlayer return(ac and ac.Team)or{Name='Not in game'}end function ab.isAnimal()
@@ -584,8 +615,8 @@ then local am=aa.dist3d(ae.Position,al.Position)if am<ah and aj~=ac and aj.Team.
 getPlayersAnimal(ac)local ad=ac and ac.Character local ae=ad and ad:FindFirstChild'HumanoidRootPart'if ae then local af=game.Workspace:FindFirstChild'Gameplay'
 local ag=af and af:FindFirstChild'Dynamic'local ah=ag and ag:FindFirstChild'Animals'local ai=ah and ah:GetChildren()if ai then local ak,aj=99999999 for al,am in
 pairs(ai)do local an=am.PrimaryPart if an then local ao=aa.dist3d(ae.Position,an.Position)if ao<ak then ak=ao aj=am end end end return aj end end return nil end
-return ab end function a.v():typeof(__modImpl())local aa=a.cache.v if not aa then aa={c=__modImpl()}a.cache.v=aa end return aa.c end end do local function 
-__modImpl()local aa,ab,ac=a.e(),a.b(),a.v()if game.PlaceId==139233844569220 then local ad=aa.Window:CreateTab('ZOO or OOF','gamepad-2')ad:CreateSection'ESP'
+return ab end function a.y():typeof(__modImpl())local aa=a.cache.y if not aa then aa={c=__modImpl()}a.cache.y=aa end return aa.c end end do local function 
+__modImpl()local aa,ab,ac=a.e(),a.b(),a.y()if game.PlaceId==139233844569220 then local ad=aa.Window:CreateTab('ZOO or OOF','gamepad-2')ad:CreateSection'ESP'
 local af=true ad:CreateToggle{Name='Animal ESP',CurrentValue=true,Flag=nil,Callback=function(ag)af=ag ac.updateAnimalESP(ag)end}game:GetService'RunService'.
 RenderStepped:Connect(function()if af then ac.updateAnimalESP(af)end end)ad:CreateSection'Farm'local ai=true ad:CreateToggle{Name='Auto Farm',CurrentValue=true,
 Flag=nil,Callback=function(aj)ai=aj end}task.spawn(function()local ak=false while task.wait()do if ai then if ak and not ac.isInGame()then ak=false end if ac.
@@ -598,18 +629,18 @@ function()while task.wait()do if ac.isKeeper()and ak then local am=game:GetServi
 FindFirstChild'HumanoidRootPart',ac.getClosestAnimal()if ap and ao then local aq=ac.getPlayersAnimal(ap)local ar=aq and aq.PrimaryPart if ar then local as={[1]=
 'Shooting.shotPlayer',[2]=ao.CFrame,[3]=ar.CFrame,[4]=ap,[5]=ar,[6]=CFrame.new(0.8038291931152344,0.09816551208496094,-8.88824462890625E-4)*CFrame.Angles(
 3.1407759189605713,1.3910810947418213,3.129187822341919)}game:GetService'ReplicatedStorage'.Net:FireServer(unpack(as))end end end end end)end return true end
-function a.w():typeof(__modImpl())local aa=a.cache.w if not aa then aa={c=__modImpl()}a.cache.w=aa end return aa.c end end do local function __modImpl()a.h()a.
-j()a.l()a.n()a.q()a.s()a.u()a.w()return true end function a.x():typeof(__modImpl())local aa=a.cache.x if not aa then aa={c=__modImpl()}a.cache.x=aa end return
-aa.c end end do local function __modImpl()local aa,ab=a.e(),{}local ac=aa.Window:CreateTab('Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=false ab
-.iy_injected=false ab.rs_injected=false ac:CreateButton{Name='Inject Dex',Callback=function()if ab.dex_injected then return end ab.dex_injected=true loadstring(
-game:HttpGet[[https://raw.githubusercontent.com/infyiff/backup/main/dex.lua]])()end}ab.DexToggle=ac:CreateToggle{Name='Load Dex on Startup',CurrentValue=false,
-Flag='LoadDexOnStartup',Callback=function(ae)end}ac:CreateSection'Infinite Yield'ac:CreateButton{Name='Inject IY',Callback=function()if ab.iy_injected then
-return end ab.iy_injected=true loadstring(game:HttpGet[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end}ab.IYToggle=ac:CreateToggle
-{Name='Load IY on Startup',CurrentValue=false,Flag='LoadIYOnStartup',Callback=function(af)end}ac:CreateSection'Cobalt Spy'ac:CreateButton{Name=
-'Inject Cobalt Spy',Callback=function()if ab.rs_injected then return end ab.rs_injected=true loadstring(game:HttpGet
+function a.z():typeof(__modImpl())local aa=a.cache.z if not aa then aa={c=__modImpl()}a.cache.z=aa end return aa.c end end do local function __modImpl()a.h()a.
+k()a.m()a.o()a.q()a.t()a.v()a.x()a.z()return true end function a.A():typeof(__modImpl())local aa=a.cache.A if not aa then aa={c=__modImpl()}a.cache.A=aa end
+return aa.c end end do local function __modImpl()local aa,ab=a.e(),{}local ac=aa.Window:CreateTab('Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=
+false ab.iy_injected=false ab.rs_injected=false ac:CreateButton{Name='Inject Dex',Callback=function()if ab.dex_injected then return end ab.dex_injected=true
+loadstring(game:HttpGet[[https://raw.githubusercontent.com/infyiff/backup/main/dex.lua]])()end}ab.DexToggle=ac:CreateToggle{Name='Load Dex on Startup',
+CurrentValue=false,Flag='LoadDexOnStartup',Callback=function(ae)end}ac:CreateSection'Infinite Yield'ac:CreateButton{Name='Inject IY',Callback=function()if ab.
+iy_injected then return end ab.iy_injected=true loadstring(game:HttpGet[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end}ab.
+IYToggle=ac:CreateToggle{Name='Load IY on Startup',CurrentValue=false,Flag='LoadIYOnStartup',Callback=function(af)end}ac:CreateSection'Cobalt Spy'ac:
+CreateButton{Name='Inject Cobalt Spy',Callback=function()if ab.rs_injected then return end ab.rs_injected=true loadstring(game:HttpGet
 [[https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau]])()end}ab.RSToggle=ac:CreateToggle{Name='Load Cobalt on Startup',CurrentValue=false,
-Flag='LoadRSOnStartup',Callback=function(ag)end}return ab end function a.y():typeof(__modImpl())local aa=a.cache.y if not aa then aa={c=__modImpl()}a.cache.y=aa
-end return aa.c end end end local aa=a.b()aa.WaitForGameAndPlayer()local ab=a.e()a.f()a.x()local ac=a.y()ab.Library:LoadConfiguration()if ac.DexToggle.
+Flag='LoadRSOnStartup',Callback=function(ag)end}return ab end function a.B():typeof(__modImpl())local aa=a.cache.B if not aa then aa={c=__modImpl()}a.cache.B=aa
+end return aa.c end end end local aa=a.b()aa.WaitForGameAndPlayer()local ab=a.e()a.f()a.A()local ac=a.B()ab.Library:LoadConfiguration()if ac.DexToggle.
 CurrentValue then ac.dex_injected=true loadstring(game:HttpGet[[https://rawscripts.net/raw/Universal-Script-DEX-Explorer-29920]])()end if ac.IYToggle.
 CurrentValue then ac.iy_injected=true loadstring(game:HttpGet[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end if ac.RSToggle.
 CurrentValue then ac.rs_injected=true loadstring(game:HttpGet[[https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau]])()end
