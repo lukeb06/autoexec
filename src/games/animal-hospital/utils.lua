@@ -107,11 +107,18 @@ function M.fireProximityPrompt(pp, base)
 		pp.Enabled = false
 		pp.Enabled = true
 
+		local currentFPS = game.Workspace:GetRealPhysicsFPS()
+		if currentFPS < 10 then
+			currentFPS = 60
+		end
+
+		local maxAttempts = (currentFPS / 60) * 10
+
 		local attempts = 0
 		repeat
-			task.wait(1 / 60)
+			task.wait()
 			attempts = attempts + 1
-		until pp:InputHoldBegin() or attempts > 10
+		until pp:InputHoldBegin() or attempts > maxAttempts
 
 		if fireproximityprompt then
 			fireproximityprompt(pp)
