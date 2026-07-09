@@ -3,7 +3,7 @@ local Utils = require("../../utils")
 local M = {}
 
 function M.updatePlayerESP(enabled)
-	local plr = game:GetService("Players").LocalPlayer
+	local plr = Utils.getLocalPlayer()
 
 	for i, v in pairs(game:GetService("Players"):GetPlayers()) do
 		local char = v and v.Character
@@ -180,8 +180,7 @@ function M.getGunEvent()
 end
 
 function M.getMP5()
-	local plr = game:GetService("Players").LocalPlayer
-	local char = plr and plr.Character
+	local char = Utils.getLocalChar()
 	local gun = char and char:FindFirstChild("MP5")
 
 	return gun
@@ -224,9 +223,7 @@ end
 function M.gotoDoll()
 	local doll = M.getDoll()
 	if doll then
-		local plr = game:GetService("Players").LocalPlayer
-		local char = plr and plr.Character
-		local root = char and char:FindFirstChild("HumanoidRootPart")
+		local root = Utils.getLocalRoot()
 
 		if root then
 			local part = doll:FindFirstChildWhichIsA("BasePart") or doll:FindFirstChildWhichIsA("MeshPart")

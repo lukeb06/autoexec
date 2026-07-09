@@ -296,4 +296,23 @@ function M.updateESP(obj, color, enabled)
 	end
 end
 
+function M.getLocalPlayer()
+	return game:GetService("Players").LocalPlayer
+end
+
+function M.getLocalChar()
+	local plr = M.getLocalPlayer()
+	return plr and plr.Character
+end
+
+function M.getLocalRoot()
+	local char = M.getLocalChar()
+	return char and char:FindFirstChild("HumanoidRootPart")
+end
+
+function M.getLocalHumanoid()
+	local root = M.getLocalChar()
+	return root and root:FindFirstChildWhichIsA("Humanoid")
+end
+
 return M

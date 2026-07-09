@@ -90,10 +90,10 @@ function M.getSheriff()
 end
 
 function M.shootPos(pos)
-	local plr = game:GetService("Players").LocalPlayer
+	local plr = Utils.getLocalPlayer()
 
 	if M.plrHasGun(plr) then
-		local char = plr and plr.Character
+		local char = Utils.getLocalChar()
 		local gun = char and char:FindFirstChild("Gun")
 		local shoot = gun and gun:FindFirstChild("Shoot")
 		local handle = gun and gun:FindFirstChild("Handle")
@@ -110,8 +110,10 @@ function M.shootPlayer(plr)
 	local root = char and char:FindFirstChild("HumanoidRootPart")
 	local hum = char and char:FindFirstChildWhichIsA("Humanoid")
 
-	if root then
-		local latency = game:GetService("Players").LocalPlayer:GetNetworkPing() / 2
+	local lplr = Utils.getLocalPlayer()
+
+	if lplr and root then
+		local latency = lplr:GetNetworkPing() / 2
 		local tVel = root.AssemblyLinearVelocity
 		local tMov = hum and (hum.MoveDirection * hum.WalkSpeed)
 		tVel = tVel:Lerp(tMov, 0.6)
@@ -122,9 +124,8 @@ function M.shootPlayer(plr)
 end
 
 function M.tpShoot(other)
-	local plr = game:GetService("Players").LocalPlayer
-	local char = plr and plr.Character
-	local root = char and char:FindFirstChild("HumanoidRootPart")
+	local plr = Utils.getLocalPlayer()
+	local root = Utils.getLocalRoot()
 
 	local otherChar = other and other.Character
 	local otherRoot = otherChar and otherChar:FindFirstChild("HumanoidRootPart")
