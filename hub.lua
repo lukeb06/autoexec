@@ -311,7 +311,7 @@ ac return ac end function ab.getItem(ac)local ad=ab.getItems()for ae,af in pairs
 fireProximityPrompt(ac,ad)local ae=game:GetService'Players'.LocalPlayer local af=ae and ae.Character local ag=af and af:FindFirstChild'HumanoidRootPart'if ag
 then local ah,ai=game.Workspace.CurrentCamera,ag.CFrame local aj,ak=ah.CFrame,game.Workspace.Gravity task.wait()aa.Noclip.enable()game.Workspace.Gravity=0 task.
 wait()ag.CFrame=ad.CFrame*CFrame.new(0,0,-2)ah.CFrame=CFrame.lookAt(ah.CFrame.Position,ad.Position)task.wait()local al=ac.Enabled ac.Enabled=false ac.Enabled=
-true local am=game.Workspace:GetRealPhysicsFPS()if am<10 then am=60 end local an,ao=am/6,0 repeat task.wait()ao=ao+1 until ac:InputHoldBegin()or ao>an if
+true local am=game.Workspace:GetRealPhysicsFPS()if am<10 then am=60 end local an,ao=(am/60)*10,0 repeat task.wait()ao=ao+1 until ac:InputHoldBegin()or ao>an if
 fireproximityprompt then fireproximityprompt(ac)else task.wait(ac.HoldDuration)end ac:InputHoldEnd()task.wait()ac.Enabled=al ag.CFrame=ai ah.CFrame=aj task.
 wait()aa.Noclip.disable()game.Workspace.Gravity=ak aa.breakVelocity(0.5)task.wait()local ap=game:GetService'Players'.LocalPlayer local aq=ap and ap.Character
 local ar=aq and aq:FindFirstChildWhichIsA'Humanoid'ar.PlatformStand=false end end function ab.grabItem(ac)local ad=ab.getItem(ac)if ad then local ae,af=ad:

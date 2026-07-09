@@ -112,7 +112,7 @@ function M.fireProximityPrompt(pp, base)
 			currentFPS = 60
 		end
 
-		local maxAttempts = currentFPS / 6
+		local maxAttempts = (currentFPS / 60) * 10
 
 		local attempts = 0
 		repeat
