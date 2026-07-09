@@ -267,21 +267,21 @@ then local aq,ar=an.Size.Y,ao.HipHeight ak.CFrame=an.CFrame*CFrame.new(0,-(aq/2)
 =an.Size.Y,aq.Size.Y ak.CFrame=an.CFrame*CFrame.new(0,-(ar/2)-as-0.5,0)end end end else if aj then aj:Destroy()aj=nil end end end end)ac:CreateSection
 'Ctrl+Click Delete'ac:CreateLabel[[Ctrl+Left-Click a part to delete. Ctrl+Right-Click to restore]]local al=true ac:CreateToggle{Name='Ctrl+Click Delete',
 CurrentValue=true,Flag=nil,Callback=function(am)al=am end}task.spawn(function()local an=game:GetService'Players'.LocalPlayer local ao,ap=an:GetMouse(),Instance.
-new('Folder',game.Workspace)ap.Name='DELETED_PARTS'local aq=1 local function isControlDown()local ar=game:GetService'UserInputService'return ar:IsKeyDown(Enum.
-KeyCode.LeftControl)or ar:IsKeyDown(Enum.KeyCode.LeftMeta)end ao.Button1Down:Connect(function()if not al then return end if not isControlDown()then return end
-if not ao.Target then return end local ar=Instance.new('ObjectValue',ap)ar.Value=ao.Target ar.Name=''..aq local as=Instance.new('Vector3Value',ar)as.Value=ao.
-Target.Position as.Name='pos'ao.Target.Position=Vector3.new(100000000,100000000,100000000)aq=aq+1 end)ao.Button2Down:Connect(function()if not al then return end
-if not isControlDown()then return end ap:GetChildren()[#ap:GetChildren()].Value.Position=ap:GetChildren()[#ap:GetChildren()].pos.Value ap:GetChildren()[#ap:
-GetChildren()]:Destroy()end)local ar,as=Instance.new('Part',game.Workspace),Instance.new('ObjectValue',ap)as.Value=ar as.Name='0'local b=Instance.new(
-'Vector3Value',as)b.Name='pos'b.Value=Vector3.new(100000000,100000000,100000000)end)ac:CreateSection'Universal ESP'local function updateUniversalESP(ao)for ap,
-aq in pairs(game:GetService'Players':GetPlayers())do if aq.Character and aq~=game:GetService'Players'.LocalPlayer then ab.updateESP(aq.Character,Color3.fromRGB(
-255,0,0),ao)end end end local ao=false ac:CreateToggle{Name='Universal ESP',CurrentValue=false,Flag=nil,Callback=function(ap)ao=ap updateUniversalESP(ao)end}
-game:GetService'RunService'.RenderStepped:Connect(function()if ao then updateUniversalESP(ao)end end)local aq=game:GetService'Players'.LocalPlayer game:
-GetService'TweenService'local as=aq and aq.Character local b=as and as:FindFirstChild'Humanoid'local c=(b and b.WalkSpeed)or 16 ac:CreateSection'Speed'local e=
-ac:CreateSlider{Name='Speed',Range={0,100},Increment=1,Suffix='',CurrentValue=c,Flag=nil,Callback=function(e)local f=game:GetService'Players'.LocalPlayer local
-g=f and f.Character local h=g and g:FindFirstChildWhichIsA'Humanoid'if h then h.WalkSpeed=e end end}ac:CreateButton{Name='Set to 16',Callback=function()e:Set(16
-)end}ac:CreateButton{Name='Set to 18',Callback=function()e:Set(18)end}ac:CreateButton{Name='Set to 20',Callback=function()e:Set(20)end}local f,g ac:CreateToggle
-{Name='Loop Speed',CurrentValue=false,Flag=nil,Callback=function(h)local i=game:GetService'Players'.LocalPlayer local j=i and i.Character local k=j and j:
+new('Folder',game.Workspace)ap.Name='DELETED_PARTS'local aq=Instance.new('IntValue',game.Workspace)aq.Name='DELETED_PART_INDEX'aq.Value=0 local function get()
+return aq.Value end local function set(ar)aq.Value=ar end local function inc()local ar=get()set(ar+1)end local function dec()local ar=get()set(ar-1)end local 
+function isControlDown()local ar=game:GetService'UserInputService'return ar:IsKeyDown(Enum.KeyCode.LeftControl)or ar:IsKeyDown(Enum.KeyCode.LeftMeta)end ao.
+Button1Down:Connect(function()if al and isControlDown()and ao.Target then inc()local ar=Instance.new('ObjectValue',ap)ar.Value=ao.Target ar.Name=''..get()local
+as=Instance.new('Vector3Value',ar)as.Value=ao.Target.Position as.Name='pos'ao.Target.Position=Vector3.new(100000000,100000000,100000000)end end)ao.Button2Down:
+Connect(function()if al and isControlDown()then local ar=ap:FindFirstChild(tostring(get()))if ar and ar.Value then local as=ar:FindFirstChild'pos'if as and as.
+Value then ar.Value.Position=as.Value ar:Destroy()dec()end end end end)end)ac:CreateSection'Universal ESP'local function updateUniversalESP(ao)for ap,aq in
+pairs(game:GetService'Players':GetPlayers())do if aq.Character and aq~=game:GetService'Players'.LocalPlayer then ab.updateESP(aq.Character,Color3.fromRGB(255,0,
+0),ao)end end end local ao=false ac:CreateToggle{Name='Universal ESP',CurrentValue=false,Flag=nil,Callback=function(ap)ao=ap updateUniversalESP(ao)end}game:
+GetService'RunService'.RenderStepped:Connect(function()if ao then updateUniversalESP(ao)end end)local aq=game:GetService'Players'.LocalPlayer game:GetService
+'TweenService'local as=aq and aq.Character local b=as and as:FindFirstChild'Humanoid'local c=(b and b.WalkSpeed)or 16 ac:CreateSection'Speed'local e=ac:
+CreateSlider{Name='Speed',Range={0,100},Increment=1,Suffix='',CurrentValue=c,Flag=nil,Callback=function(e)local f=game:GetService'Players'.LocalPlayer local g=f
+and f.Character local h=g and g:FindFirstChildWhichIsA'Humanoid'if h then h.WalkSpeed=e end end}ac:CreateButton{Name='Set to 16',Callback=function()e:Set(16)end
+}ac:CreateButton{Name='Set to 18',Callback=function()e:Set(18)end}ac:CreateButton{Name='Set to 20',Callback=function()e:Set(20)end}local f,g ac:CreateToggle{
+Name='Loop Speed',CurrentValue=false,Flag=nil,Callback=function(h)local i=game:GetService'Players'.LocalPlayer local j=i and i.Character local k=j and j:
 FindFirstChildWhichIsA'Humanoid'if h and k then local function SetWalkspeed()local l=game:GetService'Players'.LocalPlayer local m=l and l.Character local n=m
 and m:FindFirstChildWhichIsA'Humanoid'if n then n.WalkSpeed=e.CurrentValue end end SetWalkspeed()f=(f and f:Disconnect()and false)or k:GetPropertyChangedSignal
 'WalkSpeed':Connect(SetWalkspeed)g=(g and g:Disconnect()and false)or i.CharacterAdded:Connect(function(l)k=l:WaitForChild'Humanoid'SetWalkspeed()f=(f and f:

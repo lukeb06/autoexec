@@ -126,54 +126,63 @@ task.spawn(function()
 	local deletedParts = Instance.new("Folder", game.Workspace)
 	deletedParts.Name = "DELETED_PARTS"
 
-	local index = 1
+	local deletedPartIndexVal = Instance.new("IntValue", game.Workspace)
+	deletedPartIndexVal.Name = "DELETED_PART_INDEX"
+	deletedPartIndexVal.Value = 0
+
+	local function get()
+		return deletedPartIndexVal.Value
+	end
+
+	local function set(value)
+		deletedPartIndexVal.Value = value
+	end
+
+	local function inc()
+		local val = get()
+		set(val + 1)
+	end
+
+	local function dec()
+		local val = get()
+		set(val - 1)
+	end
 
 	local function isControlDown()
 		local UIS = game:GetService("UserInputService")
-
 		return UIS:IsKeyDown(Enum.KeyCode.LeftControl) or UIS:IsKeyDown(Enum.KeyCode.LeftMeta)
 	end
 
 	Mouse.Button1Down:Connect(function()
-		if not ctrl_click_delete_toggled then
-			return
-		end
-		if not isControlDown() then
-			return
-		end
-		if not Mouse.Target then
-			return
-		end
-		local objHolder = Instance.new("ObjectValue", deletedParts)
-		objHolder.Value = Mouse.Target
-		objHolder.Name = "" .. index
-		local objPos = Instance.new("Vector3Value", objHolder)
-		objPos.Value = Mouse.Target.Position
-		objPos.Name = "pos"
-		Mouse.Target.Position = Vector3.new(100000000, 100000000, 100000000)
+		if ctrl_click_delete_toggled and isControlDown() and Mouse.Target then
+			inc()
 
-		index = index + 1
+			local objHolder = Instance.new("ObjectValue", deletedParts)
+			objHolder.Value = Mouse.Target
+			objHolder.Name = "" .. get()
+
+			local objPos = Instance.new("Vector3Value", objHolder)
+			objPos.Value = Mouse.Target.Position
+			objPos.Name = "pos"
+
+			Mouse.Target.Position = Vector3.new(100000000, 100000000, 100000000)
+		end
 	end)
 
 	Mouse.Button2Down:Connect(function()
-		if not ctrl_click_delete_toggled then
-			return
-		end
-		if not isControlDown() then
-			return
-		end
-		deletedParts:GetChildren()[#deletedParts:GetChildren()].Value.Position =
-			deletedParts:GetChildren()[#deletedParts:GetChildren()].pos.Value
-		deletedParts:GetChildren()[#deletedParts:GetChildren()]:Destroy()
-	end)
+		if ctrl_click_delete_toggled and isControlDown() then
+			local pVal = deletedParts:FindFirstChild(tostring(get()))
 
-	local h = Instance.new("Part", game.Workspace)
-	local j = Instance.new("ObjectValue", deletedParts)
-	j.Value = h
-	j.Name = "0"
-	local k = Instance.new("Vector3Value", j)
-	k.Name = "pos"
-	k.Value = Vector3.new(100000000, 100000000, 100000000)
+			if pVal and pVal.Value then
+				local posVal = pVal:FindFirstChild("pos")
+				if posVal and posVal.Value then
+					pVal.Value.Position = posVal.Value
+					pVal:Destroy()
+					dec()
+				end
+			end
+		end
+	end)
 end)
 
 local UniversalESPSection = UniversalTab:CreateSection("Universal ESP")
