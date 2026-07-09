@@ -7,6 +7,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/lukeb06/autoexec/refs
 ## Games
 
 - Agoraphobia
+- Animal Hospital
 - Flee the Facility
 - Granny Shooters
 - Hide and Seek
