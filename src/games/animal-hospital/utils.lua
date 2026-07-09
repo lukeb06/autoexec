@@ -87,6 +87,7 @@ function M.fireProximityPrompt(pp, base)
 	if root then
 		local camera = game.Workspace.CurrentCamera
 		local pos = root.CFrame
+		local camCF = camera.CFrame
 		local grav = game.Workspace.Gravity
 
 		task.wait()
@@ -102,27 +103,36 @@ function M.fireProximityPrompt(pp, base)
 		-- task.wait(0.1)
 		task.wait()
 
+		local prevEnabled = pp.Enabled
 		pp.Enabled = false
 		pp.Enabled = true
 
 		local attempts = 0
 		repeat
-			task.wait(0.05)
+			task.wait()
 			attempts = attempts + 1
-		until pp:InputHoldBegin() or attempts > 10
+		until pp:InputHoldBegin() or attempts > 60
 
-		fireproximityprompt(pp)
+		if fireproximityprompt then
+			fireproximityprompt(pp)
+		else
+			task.wait(pp.HoldDuration)
+		end
+
 		pp:InputHoldEnd()
 
 		-- task.wait(0.1)
 		task.wait()
 
+		pp.Enabled = prevEnabled
 		root.CFrame = pos
+		camera.CFrame = camCF
 
 		task.wait()
 
 		Utils.Noclip.disable()
 		game.Workspace.Gravity = grav
+		Utils.breakVelocity(0.5)
 
 		task.wait()
 

@@ -5,59 +5,34 @@ if game.GameId == 10148749921 then
 
 	local AHTab = UI.Window:CreateTab("Animal Hospital", "gamepad-2")
 
+	AHTab:CreateSection("Utils")
+
 	AHTab:CreateToggle({
-		Name = "Auto",
+		Name = "Auto Check-In",
 		CurrentValue = false,
 		Flag = nil,
-		Callback = Funcs.toggleAuto,
+		Callback = Funcs.toggleAutoCheckIn,
+	})
+
+	AHTab:CreateToggle({
+		Name = "Auto NPC",
+		CurrentValue = false,
+		Flag = nil,
+		Callback = Funcs.toggleAutoNPC,
+	})
+
+	AHTab:CreateToggle({
+		Name = "Auto Medical",
+		CurrentValue = false,
+		Flag = nil,
+		Callback = Funcs.toggleAutoMedical,
 	})
 
 	AHTab:CreateSection("Items")
 
-	-- Eye Drops
-	-- IV Drops
-	-- Medkit
-	-- Thermo
-	-- Ointment
-	-- Bandages
-	-- Maple Syrup
-	-- Cough Syrup
-	-- Medicine
-	-- Herbs
-
-	AHTab:CreateButton({
-		Name = "Eye Drops",
-		Callback = Funcs.getEyeDrops,
-	})
-
-	AHTab:CreateButton({
-		Name = "IV Drops",
-		Callback = Funcs.getIVDrops,
-	})
-
-	AHTab:CreateButton({
-		Name = "Medkit",
-		Callback = Funcs.getMedkit,
-	})
-
-	AHTab:CreateButton({
-		Name = "Thermo",
-		Callback = Funcs.getThermo,
-	})
-
-	AHTab:CreateButton({
-		Name = "Ointment",
-		Callback = Funcs.getOintment,
-	})
-
 	AHTab:CreateButton({
 		Name = "Bandages",
 		Callback = Funcs.getBandages,
-	})
-
-	AHTab:CreateButton({
-		Name = "Maple Syrup",
-		Callback = Funcs.getMapleSyrup,
 	})
 
 	AHTab:CreateButton({
@@ -66,13 +41,43 @@ if game.GameId == 10148749921 then
 	})
 
 	AHTab:CreateButton({
-		Name = "Medicine",
-		Callback = Funcs.getMedicine,
+		Name = "Eye Drops",
+		Callback = Funcs.getEyeDrops,
 	})
 
 	AHTab:CreateButton({
 		Name = "Herbs",
 		Callback = Funcs.getHerbs,
+	})
+
+	AHTab:CreateButton({
+		Name = "IV Drops",
+		Callback = Funcs.getIVDrops,
+	})
+
+	AHTab:CreateButton({
+		Name = "Maple Syrup",
+		Callback = Funcs.getMapleSyrup,
+	})
+
+	AHTab:CreateButton({
+		Name = "Medicine",
+		Callback = Funcs.getMedicine,
+	})
+
+	AHTab:CreateButton({
+		Name = "Medkit",
+		Callback = Funcs.getMedkit,
+	})
+
+	AHTab:CreateButton({
+		Name = "Ointment",
+		Callback = Funcs.getOintment,
+	})
+
+	AHTab:CreateButton({
+		Name = "Thermo",
+		Callback = Funcs.getThermo,
 	})
 end
 

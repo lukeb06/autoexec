@@ -42,16 +42,28 @@ function M.getHerbs()
 	GameUtils.grabItem("Herbs")
 end
 
-local auto_toggled = false
-function M.toggleAuto(value)
-	auto_toggled = value
+local auto_check_in_toggled = false
+function M.toggleAutoCheckIn(value)
+	auto_check_in_toggled = value
+end
+
+local auto_npc_toggled = false
+function M.toggleAutoNPC(value)
+	auto_npc_toggled = value
+end
+
+local auto_medical_toggled = false
+function M.toggleAutoMedical(value)
+	auto_medical_toggled = value
 end
 
 task.spawn(function()
 	local doRun = true
 	while task.wait() do
-		if auto_toggled and doRun then
-			local hl = GameUtils.getCheckInHL() or GameUtils.getNPCHL() or GameUtils.getMedicalHL()
+		if (auto_check_in_toggled or auto_npc_toggled or auto_medical_toggled) and doRun then
+			local hl = (auto_check_in_toggled and GameUtils.getCheckInHL())
+				or (auto_npc_toggled and GameUtils.getNPCHL())
+				or (auto_medical_toggled and GameUtils.getMedicalHL())
 
 			if hl then
 				local pp = GameUtils.getPPFromHL(hl)
