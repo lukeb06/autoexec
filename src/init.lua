@@ -8,6 +8,8 @@ require("./universal")
 require("./games")
 local Externals = require("./externals")
 
+require("./emotes")
+
 UI.Library:LoadConfiguration()
 
 if Externals.DexToggle.CurrentValue then
