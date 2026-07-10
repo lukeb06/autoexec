@@ -650,14 +650,15 @@ if not aa then aa={c=__modImpl()}a.cache.B=aa end return aa.c end end do local f
 'Obby Head',Id=122814100170962},{Name='Floating',Id=131950236025472},{Name='Katseye',Id=100829635809504},{Name='Floating Headless',Id=98728517497209},{Name=
 'Levitate',Id=111499780397123},{Name='67',Id=88672473602461},{Name='Hide',Id=117450501566142},{Name='Biblically Accurate',Id=133596366979822},{Name='Best Mates'
 ,Id=113016438012253},{Name='Car',Id=71229119391920},{Name='Dab',Id=114366486943553},{Name='Tank',Id=109896367267714},{Name='Heart',Id=100501857801770},{Name=
-'Plane',Id=111917372615551},{Name='Headless',Id=74738520664045}}local function getTrueId(ae)local af,ag,ah=(ab.getLocalHumanoid())ag=af.AnimationPlayed:Connect(
-function(ai)if ai.Animation and ai.Animation.AnimationId~=''then ah=ai.Animation.AnimationId ai:Stop()end end)local ai=af:WaitForChild'HumanoidDescription'ai:
-AddEmote(ae.Name,ae.Id)af:PlayEmote(ae.Name)local aj=0 while not ah and aj<2 do task.wait(0.1)aj+=0.1 end if ag then ag:Disconnect()end return ah end local ae
-local function stopAnimations()if ae then ae:Stop()ae=nil end end ac:CreateButton{Name='Stop Emote',Callback=stopAnimations}ac:CreateSection'Emotes'for af,ag in
-pairs(ad)do ac:CreateButton{Name=ag.Name,Callback=function()local ah=ab.getLocalHumanoid()local ai=ah:FindFirstChild'Animator'stopAnimations()local aj,ak=
-Instance.new'Animation',getTrueId(ag)if ak then print(ak)aj.AnimationId=ak ae=ai:LoadAnimation(aj)ae.Looped=true ae.Priority=Enum.AnimationPriority.Action4 ae:
-Play()else warn'Failed to add emote'end end}end return true end function a.C():typeof(__modImpl())local aa=a.cache.C if not aa then aa={c=__modImpl()}a.cache.C=
-aa end return aa.c end end end local aa=a.b()aa.WaitForGameAndPlayer()local ab=a.e()a.f()a.A()local ac=a.B()a.C()ab.Library:LoadConfiguration()if ac.DexToggle.
-CurrentValue then ac.dex_injected=true loadstring(game:HttpGet[[https://rawscripts.net/raw/Universal-Script-DEX-Explorer-29920]])()end if ac.IYToggle.
-CurrentValue then ac.iy_injected=true loadstring(game:HttpGet[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end if ac.RSToggle.
-CurrentValue then ac.rs_injected=true loadstring(game:HttpGet[[https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau]])()end
+'Plane',Id=111917372615551},{Name='Headless',Id=74738520664045},{Name='NLE',Id=133293268056643}}local function getTrueId(ae)local af,ag,ah=(ab.getLocalHumanoid(
+))ag=af.AnimationPlayed:Connect(function(ai)if ai.Animation and ai.Animation.AnimationId~=''then ah=ai.Animation.AnimationId ai:Stop()end end)local ai=af:
+WaitForChild'HumanoidDescription'ai:AddEmote(ae.Name,ae.Id)af:PlayEmote(ae.Name)local aj=0 while not ah and aj<2 do task.wait(0.1)aj+=0.1 end if ag then ag:
+Disconnect()end return ah end local ae local function stopAnimations()if ae then ae:Stop()ae=nil end end ac:CreateButton{Name='Stop Emote',Callback=
+stopAnimations}ac:CreateSection'Emotes'for af,ag in pairs(ad)do ac:CreateButton{Name=ag.Name,Callback=function()local ah=ab.getLocalHumanoid()local ai=ah:
+FindFirstChild'Animator'stopAnimations()local aj,ak=Instance.new'Animation',getTrueId(ag)if ak then print(ak)aj.AnimationId=ak ae=ai:LoadAnimation(aj)ae.Looped=
+true ae.Priority=Enum.AnimationPriority.Action4 ae:Play()else warn'Failed to add emote'end end}end return true end function a.C():typeof(__modImpl())local aa=a.
+cache.C if not aa then aa={c=__modImpl()}a.cache.C=aa end return aa.c end end end local aa=a.b()aa.WaitForGameAndPlayer()local ab=a.e()a.f()a.A()local ac=a.B()a
+.C()ab.Library:LoadConfiguration()if ac.DexToggle.CurrentValue then ac.dex_injected=true loadstring(game:HttpGet
+[[https://rawscripts.net/raw/Universal-Script-DEX-Explorer-29920]])()end if ac.IYToggle.CurrentValue then ac.iy_injected=true loadstring(game:HttpGet
+[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end if ac.RSToggle.CurrentValue then ac.rs_injected=true loadstring(game:HttpGet
+[[https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau]])()end

@@ -23,6 +23,7 @@ local emotes = {
 	{ Name = "Heart", Id = 100501857801770 },
 	{ Name = "Plane", Id = 111917372615551 },
 	{ Name = "Headless", Id = 74738520664045 },
+	{ Name = "NLE", Id = 133293268056643 },
 }
 
 local function getTrueId(emote)
