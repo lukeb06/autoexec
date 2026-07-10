@@ -24,6 +24,9 @@ local emotes = {
 	{ Name = "Plane", Id = 111917372615551 },
 	{ Name = "Headless", Id = 74738520664045 },
 	{ Name = "NLE", Id = 133293268056643 },
+	{ Name = "Zesty Backflip", Id = 91510776097850 },
+	{ Name = "Throw It In A Circle", Id = 85405186226004 },
+	{ Name = "Cute Bouncy Jiggly Shake", Id = 97975134806779 },
 }
 
 local function getTrueId(emote)
