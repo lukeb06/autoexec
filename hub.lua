@@ -567,7 +567,7 @@ local ai=ae:FindFirstChild'Backpack'local aj=ai and ai:FindFirstChild'Knife'if a
 'Knife'if ak then task.spawn(function()local al=true task.spawn(function()task.wait(1)al=false end)while al do for am,an in pairs(game:GetService'Players':
 GetPlayers())do local ao=an.Character local ap=ao and ao:FindFirstChild'HumanoidRootPart'if ao and an~=game:GetService'Players'.LocalPlayer then ap.CFrame=ah.
 CFrame*CFrame.new(0,0,-3)end end task.wait()end end)task.wait()ak:Activate()end end end return ab end function a.u():typeof(__modImpl())local aa=a.cache.u if
-not aa then aa={c=__modImpl()}a.cache.u=aa end return aa.c end end do local function __modImpl()local aa,ab,ac=a.e(),a.b(),a.u()if game.PlaceId==66654135 then
+not aa then aa={c=__modImpl()}a.cache.u=aa end return aa.c end end do local function __modImpl()local aa,ab,ac=a.e(),a.b(),a.u()if game.GameId==66654135 then
 local ad=aa.Window:CreateTab('Murder Mystery 2','gamepad-2')ad:CreateSection'ESP'local af=true ad:CreateToggle{Name='Player ESP',CurrentValue=true,Flag=nil,
 Callback=function(ag)af=ag ac.updatePlayerESP(ag)end}game:GetService'RunService'.RenderStepped:Connect(function()if af then ac.updatePlayerESP(af)end end)local
 ah=true ad:CreateToggle{Name='Coin ESP',CurrentValue=true,Flag=nil,Callback=function(ai)ah=ai ac.updateCoinESP(ai)end}game:GetService'RunService'.RenderStepped:
