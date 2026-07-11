@@ -27,6 +27,19 @@ local emotes = {
 	{ Name = "Zesty Backflip", Id = 91510776097850 },
 	{ Name = "Throw It In A Circle", Id = 85405186226004 },
 	{ Name = "Cute Bouncy Jiggly Shake", Id = 97975134806779 },
+	{ Name = "Hip", Id = 98287740564271 },
+	{ Name = "Cute sitting with legs out", Id = 89755161074689 },
+	{ Name = "Kawaii Sitting Cutely", Id = 134682231294570 },
+	{ Name = "Cute Profile Pose", Id = 129838364671769 },
+	{ Name = "Kicking Feet Sit", Id = 92676668301699 },
+	{ Name = "Daydreaming", Id = 89174456614428 },
+	{ Name = "Feet Kicking", Id = 78224683906191 },
+	{ Name = "Bouncy Circle Shake", Id = 118582721407059 },
+	{ Name = "Nya San", Id = 118688124889191 },
+	{ Name = "Splits", Id = 137064024843676 },
+	{ Name = "Caramelldansen", Id = 97847706148165 },
+	{ Name = "Kawaii Wiggling", Id = 98074497797170 },
+	{ Name = "Iron Mouse", Id = 96409366076000 },
 }
 
 local function getTrueId(emote)

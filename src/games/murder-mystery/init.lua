@@ -2,7 +2,7 @@ local UI = require("../../ui")
 local Utils = require("../../utils")
 local GameUtils = require("./utils")
 
-if game.PlaceId == 142823291 then
+if game.PlaceId == 66654135 then
 	local MMTab = UI.Window:CreateTab("Murder Mystery 2", "gamepad-2")
 	local MMESPSection = MMTab:CreateSection("ESP")
 
