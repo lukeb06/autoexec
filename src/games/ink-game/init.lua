@@ -27,6 +27,8 @@ if game.GameId == 7008097940 then
 	-- 	Flag = nil,
 	-- 	Callback = Funcs.onGlassBridgeESPToggle,
 	-- })
+
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/wefwef34/inkgames.github.io/refs/heads/main/ringta.lua"))()
 end
 
 return true
