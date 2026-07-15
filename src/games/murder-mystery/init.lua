@@ -161,13 +161,13 @@ local function init()
 								if dist < best_dist then
 									best_dist = dist
 									best = v
-									current_best = v
 								end
 							end
 						end
 
 						if best and (not current_best or not current_best.Parent) then
 							Utils.safeTweenToPart(best)
+							current_best = best
 						end
 					end
 				end
