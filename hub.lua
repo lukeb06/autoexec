@@ -596,8 +596,8 @@ end}game:GetService'RunService'.RenderStepped:Connect(function()if ah then ac.up
 'Kill All (Murderer)',Callback=ac.killAll}local al=false ad:CreateToggle{Name='Auto Kill All',CurrentValue=false,Flag=nil,Callback=function(am)al=am end}task.
 spawn(function()while task.wait()do if al then ac.killAll()task.wait(4)end end end)ad:CreateKeybind{Name='Shoot Murderer',CurrentKeybind='G',HoldToInteract=
 false,Flag='MMShootMurdererKeybind',Callback=function()local an=ac.getMurderer()if an then ac.tpShoot(an)end end}local ao=true ad:CreateToggle{Name=
-'Auto Grab Gun',CurrentValue=true,Flag=nil,Callback=function(ap)ao=ap end}task.spawn(function()while task.wait()do if ao then local aq=game.Workspace:
-FindFirstChild('GunDrop',true)if aq then if not ab.isDev()then task.wait(0.1)end local ar=ab.getLocalRoot()aq.CFrame=ar.CFrame end end end end)ad:CreateButton{
+'Auto Grab Gun',CurrentValue=true,Flag=nil,Callback=function(ap)ao=ap end}task.spawn(function()while task.wait()do if ao then local aq,ar=game.Workspace:
+FindFirstChild('GunDrop',true),ab.getLocalRoot()if aq and ar then if not ab.isDev()then task.wait(0.1)end aq.CFrame=ar.CFrame end end end end)ad:CreateButton{
 Name='Fling Murderer',Callback=function()ac.flingMurderer()end}local ar=false ad:CreateToggle{Name='Auto Fling Murderer',CurrentValue=false,Flag=nil,Callback=
 function(as)ar=as end}task.spawn(function()while task.wait()do if ar then local b=ac.getMurderer()if b then ac.flingMurderer()task.wait(4)end end end end)local
 b=false ad:CreateToggle{Name='Collect Coins',CurrentValue=false,Flag=nil,Callback=function(c)b=c end}task.spawn(function()while task.wait()do if b and not ab.

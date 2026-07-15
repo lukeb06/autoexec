@@ -90,12 +90,12 @@ local function init()
 		while task.wait() do
 			if mm_grab_gun_toggled then
 				local gun = game.Workspace:FindFirstChild("GunDrop", true)
+				local root = Utils.getLocalRoot()
 
-				if gun then
+				if gun and root then
 					if not Utils.isDev() then
 						task.wait(0.1)
 					end
-					local root = Utils.getLocalRoot()
 					gun.CFrame = root.CFrame
 				end
 			end
