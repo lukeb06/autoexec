@@ -141,7 +141,6 @@ local function init()
 		end,
 	})
 	task.spawn(function()
-		local current_best = nil
 		while task.wait() do
 			if mm_collect_coin_toggled and not Utils.get_safeTweening() then
 				local plr = game:GetService("Players").LocalPlayer
@@ -165,9 +164,9 @@ local function init()
 							end
 						end
 
-						if best and (not current_best or not current_best.Parent) then
+						if best then
 							Utils.safeTweenToPart(best)
-							current_best = best
+							Utils.set_safeTweening(true)
 						end
 					end
 				end
