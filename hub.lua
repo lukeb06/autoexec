@@ -294,16 +294,17 @@ Value then ar.Value.Position=as.Value ar:Destroy()dec()end end end end)end)ac:Cr
 pairs(game:GetService'Players':GetPlayers())do if aq~=game:GetService'Players'.LocalPlayer then ab.updatePlayerESP(aq,Color3.fromRGB(255,0,0),ao,Color3.fromRGB(
 255,0,255))end end end local ao=false ac:CreateToggle{Name='Universal ESP',CurrentValue=false,Flag=nil,Callback=function(ap)ao=ap updateUniversalESP(ao)end}game
 :GetService'RunService'.RenderStepped:Connect(function()if ao then updateUniversalESP(ao)end end)ac:CreateToggle{Name='Show Player Names',CurrentValue=ab.
-esp_show_names,Flag='EspShowNames',Callback=function(aq)ab.esp_show_names=aq end}local ar=game:GetService'Players'.LocalPlayer game:GetService'TweenService'
-local b=ar and ar.Character local c=b and b:FindFirstChild'Humanoid'local d=(c and c.WalkSpeed)or 16 ac:CreateSection'Speed'local f=ac:CreateSlider{Name='Speed'
-,Range={0,100},Increment=1,Suffix='',CurrentValue=d,Flag=nil,Callback=function(f)local g=game:GetService'Players'.LocalPlayer local h=g and g.Character local i=
-h and h:FindFirstChildWhichIsA'Humanoid'if i then i.WalkSpeed=f end end}ac:CreateButton{Name='Set to 16',Callback=function()f:Set(16)end}ac:CreateButton{Name=
-'Set to 18',Callback=function()f:Set(18)end}ac:CreateButton{Name='Set to 20',Callback=function()f:Set(20)end}local g,h ac:CreateToggle{Name='Loop Speed',
-CurrentValue=false,Flag=nil,Callback=function(i)local j=game:GetService'Players'.LocalPlayer local k=j and j.Character local l=k and k:FindFirstChildWhichIsA
-'Humanoid'if i and l then local function SetWalkspeed()local m=game:GetService'Players'.LocalPlayer local n=m and m.Character local o=n and n:
-FindFirstChildWhichIsA'Humanoid'if o then o.WalkSpeed=f.CurrentValue end end SetWalkspeed()g=(g and g:Disconnect()and false)or l:GetPropertyChangedSignal
-'WalkSpeed':Connect(SetWalkspeed)h=(h and h:Disconnect()and false)or j.CharacterAdded:Connect(function(m)l=m:WaitForChild'Humanoid'SetWalkspeed()g=(g and g:
-Disconnect()and false)or l:GetPropertyChangedSignal'WalkSpeed':Connect(SetWalkspeed)end)else g=(g and g:Disconnect()and false)or nil h=(h and h:Disconnect()and
+esp_show_names,Flag='EspShowNames',Callback=function(aq)ab.esp_show_names=aq end}ac:CreateToggle{Name='Show Player Health',CurrentValue=ab.esp_show_health,Flag=
+'EspShowHealth',Callback=function(ar)ab.esp_show_health=ar end}local as=game:GetService'Players'.LocalPlayer game:GetService'TweenService'local c=as and as.
+Character local d=c and c:FindFirstChild'Humanoid'local e=(d and d.WalkSpeed)or 16 ac:CreateSection'Speed'local g=ac:CreateSlider{Name='Speed',Range={0,100},
+Increment=1,Suffix='',CurrentValue=e,Flag=nil,Callback=function(g)local h=game:GetService'Players'.LocalPlayer local i=h and h.Character local j=i and i:
+FindFirstChildWhichIsA'Humanoid'if j then j.WalkSpeed=g end end}ac:CreateButton{Name='Set to 16',Callback=function()g:Set(16)end}ac:CreateButton{Name=
+'Set to 18',Callback=function()g:Set(18)end}ac:CreateButton{Name='Set to 20',Callback=function()g:Set(20)end}local h,i ac:CreateToggle{Name='Loop Speed',
+CurrentValue=false,Flag=nil,Callback=function(j)local k=game:GetService'Players'.LocalPlayer local l=k and k.Character local m=l and l:FindFirstChildWhichIsA
+'Humanoid'if j and m then local function SetWalkspeed()local n=game:GetService'Players'.LocalPlayer local o=n and n.Character local p=o and o:
+FindFirstChildWhichIsA'Humanoid'if p then p.WalkSpeed=g.CurrentValue end end SetWalkspeed()h=(h and h:Disconnect()and false)or m:GetPropertyChangedSignal
+'WalkSpeed':Connect(SetWalkspeed)i=(i and i:Disconnect()and false)or k.CharacterAdded:Connect(function(n)m=n:WaitForChild'Humanoid'SetWalkspeed()h=(h and h:
+Disconnect()and false)or m:GetPropertyChangedSignal'WalkSpeed':Connect(SetWalkspeed)end)else h=(h and h:Disconnect()and false)or nil i=(i and i:Disconnect()and
 false)or nil end end}return true end function a.f():typeof(__modImpl())local aa=a.cache.f if not aa then aa={c=__modImpl()}a.cache.f=aa end return aa.c end end
 do local function __modImpl()a.b()local ab={}function ab.getMap()local ac=game.Workspace:FindFirstChild'Map'return ac end function ab.getFunctionals()local ac=
 ab.getMap()local ad=ac and ac:FindFirstChild'Functionals'return ad end function ab.getComputers()local ac=ab.getFunctionals()local ad=ac and ac:FindFirstChild

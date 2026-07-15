@@ -220,6 +220,15 @@ local ShowESPNamesToggle = UniversalTab:CreateToggle({
 	end,
 })
 
+local ShowESPHealthToggle = UniversalTab:CreateToggle({
+	Name = "Show Player Health",
+	CurrentValue = Utils.esp_show_health,
+	Flag = "EspShowHealth",
+	Callback = function(value)
+		Utils.esp_show_health = value
+	end,
+})
+
 local ussPlr = game:GetService("Players").LocalPlayer
 local TweenService = game:GetService("TweenService")
 local ussChar = ussPlr and ussPlr.Character
