@@ -141,7 +141,6 @@ local function init()
 		end,
 	})
 	task.spawn(function()
-		local prev = nil
 		while task.wait() do
 			if mm_collect_coin_toggled and not Utils.get_safeTweening() then
 				local plr = game:GetService("Players").LocalPlayer
@@ -155,14 +154,10 @@ local function init()
 						local best = nil
 						local best_dist = 99999999
 
-						if prev then
-							prev:Destroy()
-						end
-
 						for i, v in pairs(coins:GetChildren()) do
-							if v.Name == "Coin_Server" then
+							if v.Name == "Coin_Server" and v.Transparency < 1 then
 								local dist = Utils.dist3d(root.Position, v.Position)
-								if dist < best_dist and dist > 5 then
+								if dist < best_dist then
 									best_dist = dist
 									best = v
 								end
@@ -170,7 +165,6 @@ local function init()
 						end
 
 						if best then
-							prev = best
 							Utils.safeTweenToPart(best)
 						end
 					end
