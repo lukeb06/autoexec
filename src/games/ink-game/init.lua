@@ -28,7 +28,11 @@ if game.GameId == 7008097940 then
 	-- 	Callback = Funcs.onGlassBridgeESPToggle,
 	-- })
 
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/wefwef34/inkgames.github.io/refs/heads/main/ringta.lua"))()
+	task.spawn(function()
+		loadstring(
+			game:HttpGet("https://raw.githubusercontent.com/wefwef34/inkgames.github.io/refs/heads/main/ringta.lua")
+		)()
+	end)
 end
 
 return true
