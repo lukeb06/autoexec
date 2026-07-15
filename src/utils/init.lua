@@ -333,7 +333,7 @@ task.spawn(function()
 
 						local percent = math.floor(health * 100)
 
-						local col = Color3.fromHSV(health * (120 / 360), 0.8, 0.8)
+						local col = Color3.fromHSV(health * (100 / 360), 0.8, 0.8)
 
 						return { health = percent, color = col }
 					else
