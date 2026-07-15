@@ -99,6 +99,7 @@ function M.shootPos(pos)
 			-- shoot:FireServer(handle.CFrame, cf)
 			-- shoot:FireServer(handle.CFrame, CFrame.new(pos))
 			shoot:FireServer(root.CFrame, CFrame.new(pos))
+			-- shoot:FireServer(CFrame.new(pos), CFrame.new(pos))
 		end
 	end
 end

@@ -87,33 +87,16 @@ if game.GameId == 66654135 then
 		end,
 	})
 	task.spawn(function()
-		local pickupGun = true
-
 		while task.wait() do
 			if mm_grab_gun_toggled then
 				local gun = game.Workspace:FindFirstChild("GunDrop", true)
 
-				if not gun and not pickupGun then
-					pickupGun = true
-				end
-
-				if gun and pickupGun then
-					local plr = game:GetService("Players").LocalPlayer
-					local char = plr and plr.Character
-					local root = char and char:FindFirstChild("HumanoidRootPart")
-					local pos = root and root.CFrame
-
-					if root then
-						task.wait(0.3)
-						if not Utils.isDev() then
-							task.wait(0.1)
-						end
-						root.CFrame = gun.CFrame
-						task.wait()
-						root.CFrame = pos
+				if gun then
+					if not Utils.isDev() then
+						task.wait(0.1)
 					end
-
-					pickupGun = false
+					local root = Utils.getLocalRoot()
+					gun.CFrame = root.CFrame
 				end
 			end
 		end
