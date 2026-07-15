@@ -297,15 +297,85 @@ function M.updateESP(obj, color, enabled)
 end
 
 M.esp_players = {}
+M.esp_show_names = false
+
 function M.updatePlayerESP(plr, color, enabled, friendColor)
 	local char = plr and plr.Character
 
-	M.esp_players[plr] = enabled
+	local col = (M.isFriendsWith(plr) and (friendColor or color)) or color
+
+	M.esp_players[plr] = { enabled = enabled, color = col }
 
 	if char then
-		M.updateESP(char, (M.isFriendsWith(plr) and (friendColor or color)) or color, enabled)
+		M.updateESP(char, col, enabled)
 	end
 end
+
+task.spawn(function()
+	local GlobalESPHolder = Instance.new("Folder", game.CoreGui)
+	while task.wait() do
+		if M.esp_show_names then
+			if not GlobalESPHolder or not GlobalESPHolder.Parent then
+				GlobalESPHolder = Instance.new("Folder", game.CoreGui)
+			end
+
+			for plr, data in pairs(M.esp_players) do
+				local enabled = data.enabled
+				local color = data.color
+				local esp = GlobalESPHolder:FindFirstChild(plr.Name .. "_ESP")
+
+				if enabled then
+					local char = plr and plr.Character
+					local head = char and char:FindFirstChild("Head")
+
+					if not esp then
+						if head then
+							local ESPholder = Instance.new("Folder", GlobalESPHolder)
+							ESPholder.Name = plr.Name .. "_ESP"
+
+							local bb = Instance.new("BillboardGui", ESPholder)
+							local label = Instance.new("TextLabel", bb)
+
+							bb.Adornee = head
+							bb.Size = UDim2.new(0, 100, 0, 150)
+							bb.StudsOffset = Vector3.new(0, 1, 0)
+							bb.AlwaysOnTop = true
+							label.BackgroundTransparency = 1
+							label.Position = UDim2.new(0, 0, 0, -50)
+							label.Size = UDim2.new(0, 100, 0, 100)
+							label.Font = Enum.Font.SourceSansSemibold
+							label.TextSize = 20
+							label.TextColor3 = color
+							label.TextStrokeTransparency = 0
+							label.TextStrokeColor3 = Color3.new(0, 0, 0)
+							label.TextYAlignment = Enum.TextYAlignment.Bottom
+							label.Text = plr.Name
+							label.ZIndex = 10
+						end
+					else
+						local bb = esp:FindFirstChild("BillboardGui")
+
+						if bb and head then
+							bb.Adornee = head
+
+							local label = bb:FindFirstChild("TextLabel")
+
+							if label then
+								label.TextColor3 = color
+							end
+						end
+					end
+				else
+					if esp then
+						esp:Destroy()
+					end
+				end
+			end
+		else
+			GlobalESPHolder:Destroy()
+		end
+	end
+end)
 
 function M.getLocalPlayer()
 	return game:GetService("Players").LocalPlayer

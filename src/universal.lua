@@ -211,6 +211,15 @@ game:GetService("RunService").RenderStepped:Connect(function()
 	end
 end)
 
+local ShowESPNamesToggle = UniversalTab:CreateToggle({
+	Name = "Show Player Names",
+	CurrentValue = Utils.esp_show_names,
+	Flag = "EspShowNames",
+	Callback = function(value)
+		Utils.esp_show_names = value
+	end,
+})
+
 local ussPlr = game:GetService("Players").LocalPlayer
 local TweenService = game:GetService("TweenService")
 local ussChar = ussPlr and ussPlr.Character
