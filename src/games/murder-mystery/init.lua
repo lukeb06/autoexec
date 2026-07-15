@@ -155,7 +155,7 @@ local function init()
 						local best_dist = 99999999
 
 						for i, v in pairs(coins:GetChildren()) do
-							if v.Name == "Coin_Server" and v.Transparency < 1 then
+							if v.Name == "Coin_Server" and v:FindFirstChild("CoinVisual") then
 								local dist = Utils.dist3d(root.Position, v.Position)
 								if dist < best_dist then
 									best_dist = dist
