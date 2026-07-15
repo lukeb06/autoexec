@@ -5,21 +5,18 @@ local M = {}
 function M.updatePlayerESP(enabled)
 	local plr = Utils.getLocalPlayer()
 
+	local isHAS = M.getCurrentGame() == "HideAndSeek"
+
 	for i, v in pairs(game:GetService("Players"):GetPlayers()) do
 		local char = v and v.Character
 
-		local isFriend = Utils.isFriendsWith(v)
 		local hasKnife = M.hasKnife(v)
 
-		local normalColor = (isFriend and Color3.fromRGB(0, 255, 0)) or Color3.fromRGB(255, 0, 0)
+		local color = (isHAS and ((hasKnife and Color3.fromRGB(255, 0, 0)) or Color3.fromRGB(0, 255, 0)))
+			or Color3.fromRGB(255, 0, 0)
 
-		local color = (
-			(M.getCurrentGame() == "HideAndSeek" and not isFriend)
-			and ((hasKnife and Color3.fromRGB(255, 0, 0)) or Color3.fromRGB(0, 255, 0))
-		) or normalColor
-
-		if char and v ~= plr then
-			Utils.updateESP(char, color, enabled and M.isAlive(char))
+		if v ~= plr then
+			Utils.updatePlayerESP(char, color, enabled and M.isAlive(char), Color3.fromRGB(255, 0, 255))
 		end
 	end
 end

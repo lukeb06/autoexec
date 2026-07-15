@@ -189,8 +189,8 @@ local UniversalESPSection = UniversalTab:CreateSection("Universal ESP")
 
 local function updateUniversalESP(enabled)
 	for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-		if v.Character and v ~= game:GetService("Players").LocalPlayer then
-			Utils.updateESP(v.Character, Color3.fromRGB(255, 0, 0), enabled)
+		if v ~= game:GetService("Players").LocalPlayer then
+			Utils.updatePlayerESP(v, Color3.fromRGB(255, 0, 0), enabled, Color3.fromRGB(255, 0, 255))
 		end
 	end
 end

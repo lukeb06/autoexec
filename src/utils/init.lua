@@ -296,6 +296,17 @@ function M.updateESP(obj, color, enabled)
 	end
 end
 
+M.esp_players = {}
+function M.updatePlayerESP(plr, color, enabled, friendColor)
+	local char = plr and plr.Character
+
+	M.esp_players[plr] = enabled
+
+	if char then
+		M.updateESP(char, (M.isFriendsWith(plr) and (friendColor or color)) or color, enabled)
+	end
+end
+
 function M.getLocalPlayer()
 	return game:GetService("Players").LocalPlayer
 end

@@ -10,14 +10,9 @@ if game.GameId == 93740418 then
 	local function updatePlayerESP()
 		for i, v in pairs(game:GetService("Players"):GetPlayers()) do
 			if v ~= game:GetService("Players").LocalPlayer then
-				local char = v and v.Character
-				local color = (GameUtils.isSeeker(v) and Color3.fromRGB(255, 0, 0))
-					or (Utils.isFriendsWith(v) and Color3.fromRGB(0, 0, 255))
-					or Color3.fromRGB(0, 255, 0)
+				local color = (GameUtils.isSeeker(v) and Color3.fromRGB(255, 0, 0)) or Color3.fromRGB(0, 255, 0)
 
-				if char then
-					Utils.updateESP(char, color, player_esp_toggled)
-				end
+				Utils.updatePlayerESP(v, color, player_esp_toggled, Color3.fromRGB(255, 0, 255))
 			end
 		end
 	end

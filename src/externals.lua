@@ -17,7 +17,8 @@ local DexButton = ExternalsTab:CreateButton({
 			return
 		end
 		M.dex_injected = true
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
+		-- loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
+		loadstring(game:HttpGet("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua"))()
 	end,
 })
 

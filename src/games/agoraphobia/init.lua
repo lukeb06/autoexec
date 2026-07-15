@@ -4,21 +4,23 @@ local GameUtils = require("./utils")
 
 if game.GameId == 7585283196 then
 	local AGTab = UI.Window:CreateTab("Agoraphobia", "gamepad-2")
-	local AGESPSection = AGTab:CreateSection("ESP")
+	AGTab:CreateSection("ESP")
 
 	local player_esp_toggled = true
 
 	local function updateSurvivorESP()
 		local survs = GameUtils.getSurvivors()
-		for i, v in pairs(survs) do
-			Utils.updateESP(v, Color3.fromRGB(0, 255, 0), player_esp_toggled)
+		for _, v in pairs(survs) do
+			local plr = game:GetService("Players"):FindFirstChild(v.Name)
+			Utils.updatePlayerESP(plr, Color3.fromRGB(0, 255, 0), player_esp_toggled, Color3.fromRGB(255, 0, 255))
 		end
 	end
 
 	local function updateBeastESP()
 		local beasts = GameUtils.getBeasts()
-		for i, v in pairs(beasts) do
-			Utils.updateESP(v, Color3.fromRGB(255, 0, 0), player_esp_toggled)
+		for _, v in pairs(beasts) do
+			local plr = game:GetService("Players"):FindFirstChild(v.Name)
+			Utils.updatePlayerESP(plr, Color3.fromRGB(255, 0, 0), player_esp_toggled, Color3.fromRGB(255, 0, 255))
 		end
 	end
 

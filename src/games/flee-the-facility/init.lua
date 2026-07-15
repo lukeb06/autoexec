@@ -7,9 +7,9 @@ if game.GameId == 372226183 then
 
 	local beast_esp_toggled = true
 	function UpdateBeastESP()
-		for i, v in pairs(game.Players:GetPlayers()) do
+		for _, v in pairs(game.Players:GetPlayers()) do
 			if v.Character and v.Character:FindFirstChild("BeastPowers") and v ~= game.Players.LocalPlayer then
-				Utils.updateESP(v.Character, Color3.fromRGB(255, 0, 0), beast_esp_toggled)
+				Utils.updatePlayerESP(v, Color3.fromRGB(255, 0, 0), beast_esp_toggled, Color3.fromRGB(255, 0, 255))
 			end
 		end
 	end
@@ -28,7 +28,7 @@ if game.GameId == 372226183 then
 	function UpdatePlrESP()
 		for i, v in pairs(game.Players:GetPlayers()) do
 			if v.Character and not v.Character:FindFirstChild("BeastPowers") and v ~= game.Players.LocalPlayer then
-				Utils.updateESP(v.Character, Color3.fromRGB(0, 255, 0), player_esp_toggled)
+				Utils.updatePlayerESP(v, Color3.fromRGB(0, 255, 0), player_esp_toggled, Color3.fromRGB(255, 0, 255))
 			end
 		end
 	end

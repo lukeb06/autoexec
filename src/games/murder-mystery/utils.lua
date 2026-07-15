@@ -113,14 +113,68 @@ function M.shootPlayer(plr)
 	local lplr = Utils.getLocalPlayer()
 
 	if lplr and root then
-		local latency = lplr:GetNetworkPing() / 2
+		local latency = lplr:GetNetworkPing() * 1.5
 		local tVel = root.AssemblyLinearVelocity
-		local tMov = hum and (hum.MoveDirection * hum.WalkSpeed)
-		tVel = tVel:Lerp(tMov, 0.6)
+		-- local tMov = hum and (hum.MoveDirection * hum.WalkSpeed)
+		-- tVel = tVel:Lerp(tMov, 0.6)
 		local tPos = root.Position + (tVel * latency)
 
 		M.shootPos(tPos)
 	end
+end
+
+function M.doMurderRaycast(origin, target)
+	local char = Utils.getLocalChar()
+
+	local dir = (target - origin) - ((target - origin).Unit * 3)
+
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+	params.FilterDescendantsInstances = { char }
+	params.IgnoreWater = true
+
+	local result = game.Workspace:Raycast(origin, dir, params)
+
+	if not result then
+		return true
+	end
+
+	return false
+end
+
+function M.getValidOffset(otherRoot, offsets)
+	for _, offset in pairs(offsets) do
+		local origin = otherRoot.Position + offset
+		local target = otherRoot.Position
+		if M.doMurderRaycast(origin, target) then
+			return offset
+		end
+	end
+
+	return Vector3.new(0, 0, 0)
+end
+
+function M.getShotPos(other)
+	local root = Utils.getLocalRoot()
+
+	local otherChar = other and other.Character
+	local otherRoot = otherChar and otherChar:FindFirstChild("HumanoidRootPart")
+
+	local offsets = {
+		Vector3.new(0, 0, -10),
+		Vector3.new(0, 0, 10),
+		Vector3.new(0, -10, 0),
+		Vector3.new(0, 10, 0),
+		Vector3.new(-10, 0, 0),
+		Vector3.new(10, 0, 0),
+	}
+
+	if root and otherRoot then
+		local offset = M.getValidOffset(otherRoot, offsets)
+		return otherRoot.CFrame * CFrame.new(offset)
+	end
+
+	return nil
 end
 
 function M.tpShoot(other)
@@ -135,7 +189,9 @@ function M.tpShoot(other)
 		local pos = root.CFrame
 		task.wait(0.1)
 
-		root.CFrame = otherRoot.CFrame
+		local cf = M.getShotPos(other)
+
+		root.CFrame = cf
 
 		task.wait(latency * 2)
 
@@ -148,21 +204,20 @@ function M.tpShoot(other)
 end
 
 function M.updatePlayerESP(enabled)
-	local murderer = M.getMurderer()
-	local sheriff = M.getSheriff()
+	local _murderer = M.getMurderer()
+	local _sheriff = M.getSheriff()
 
 	for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-		local char = v.Character
-		if char and v ~= game:GetService("Players").LocalPlayer then
-			local isMurderer = v == murderer
-			local isSheriff = v == sheriff
+		if v ~= game:GetService("Players").LocalPlayer then
+			local isMurderer = v == _murderer
+			local isSheriff = v == _sheriff
 
 			if isSheriff then
-				Utils.updateESP(char, Color3.fromRGB(0, 0, 255), enabled)
+				Utils.updatePlayerESP(v, Color3.fromRGB(0, 0, 255), enabled, Color3.fromRGB(255, 0, 255))
 			elseif isMurderer then
-				Utils.updateESP(char, Color3.fromRGB(255, 0, 0), enabled)
+				Utils.updatePlayerESP(v, Color3.fromRGB(255, 0, 0), enabled, Color3.fromRGB(255, 0, 255))
 			else
-				Utils.updateESP(char, Color3.fromRGB(0, 255, 0), enabled)
+				Utils.updatePlayerESP(v, Color3.fromRGB(0, 255, 0), enabled, Color3.fromRGB(255, 0, 255))
 			end
 		end
 	end
@@ -219,7 +274,7 @@ function M.killAll()
 						local pChar = v.Character
 						local pRoot = pChar and pChar:FindFirstChild("HumanoidRootPart")
 
-						if pChar and v ~= game:GetService("Players").LocalPlayer then
+						if pChar and v ~= game:GetService("Players").LocalPlayer and not Utils.isFriendsWith(v) then
 							pRoot.CFrame = root.CFrame * CFrame.new(0, 0, -3)
 						end
 					end

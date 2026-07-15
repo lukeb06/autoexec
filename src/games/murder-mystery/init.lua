@@ -104,12 +104,12 @@ if game.GameId == 66654135 then
 					local pos = root and root.CFrame
 
 					if root then
-						task.wait(0.5)
+						task.wait(0.3)
 						if not Utils.isDev() then
 							task.wait(0.1)
 						end
 						root.CFrame = gun.CFrame
-						task.wait(0.1)
+						task.wait()
 						root.CFrame = pos
 					end
 
@@ -186,6 +186,17 @@ if game.GameId == 66654135 then
 						end
 					end
 				end
+			end
+		end
+	end)
+
+	task.spawn(function()
+		while task.wait(0.1) do
+			local base = game.Workspace:FindFirstChild("Base", true)
+			local gp = base and base:FindFirstChild("GlitchProof")
+
+			if gp then
+				gp:Destroy()
 			end
 		end
 	end)
