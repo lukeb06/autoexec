@@ -301,13 +301,15 @@ M.esp_show_names = false
 
 function M.updatePlayerESP(plr, color, enabled, friendColor)
 	local char = plr and plr.Character
+	local hum = char and char:FindFirstChildWhichIsA("Humanoid")
+	local isAlive = hum and hum.Health > 0
 
 	local col = (M.isFriendsWith(plr) and (friendColor or color)) or color
 
-	M.esp_players[plr] = { enabled = enabled, color = col }
+	M.esp_players[plr] = { enabled = enabled and isAlive, color = col }
 
 	if char then
-		M.updateESP(char, col, enabled)
+		M.updateESP(char, col, enabled and isAlive)
 	end
 end
 
