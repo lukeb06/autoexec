@@ -105,7 +105,7 @@ function M.safeTweenToPos(cframe)
 	M.breakVelocity(t)
 end
 
-function M.safeTweenToPart(part)
+function M.safeTweenToPart(part, stopIf)
 	if part:IsA("BasePart") then
 		local plr = game:GetService("Players").LocalPlayer
 		local char = plr and plr.Character
@@ -126,7 +126,7 @@ function M.safeTweenToPart(part)
 		M.Noclip.enable()
 		game.Workspace.Gravity = 0
 		conn = game:GetService("RunService").Heartbeat:Connect(function(dt)
-			if not root or not part or not part.Parent then
+			if not root or not part or not part.Parent or stopIf(part) then
 				conn:Disconnect()
 				safeTweening = false
 				M.Noclip.disable()
