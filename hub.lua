@@ -35,21 +35,22 @@ CustomPhysicalProperties=PhysicalProperties.new(0.7,0.3,0.5)end end c.Noclip.dis
 function c.flingPlayer(f)local g=f and f.Character c.flingCharacter(g)end function c.isFriendsWith(f)local g=game:GetService'Players'.LocalPlayer return g:
 IsFriendsWith(f.UserId)end function c.updateESP(f,g,h)local i=f:FindFirstChild'ESPHL'if i then if not h then i:Destroy()elseif g~=i.FillColor then i.FillColor=g
 i.OutlineColor=g end elseif h then local j=Instance.new'Highlight'j.Name='ESPHL'j.Adornee=f j.FillColor=g j.OutlineColor=g j.Parent=f end end c.esp_players={}c.
-esp_show_names=false function c.updatePlayerESP(f,g,h,i)local j=f and f.Character local k=j and j:FindFirstChildWhichIsA'Humanoid'local l,m=k and k.Health>0,(c.
-isFriendsWith(f)and(i or g))or g c.esp_players[f]={enabled=h and l,color=m}if j then c.updateESP(j,m,h and l)end end task.spawn(function()local f=Instance.new(
-'Folder',game.CoreGui)while task.wait()do if c.esp_show_names then if not f or not f.Parent then f=Instance.new('Folder',game.CoreGui)end for g,h in pairs(c.
-esp_players)do local i,j,k=h.enabled,h.color,f:FindFirstChild(g.Name..'_ESP')local function getHealth()local l=g and g.Character local m=l and l:
-FindFirstChildWhichIsA'Humanoid'if m then local n=m.Health/m.MaxHealth local o,p=math.floor(n*100),Color3.fromHSV(n*(0.2777777777777778),0.8,0.8)return{health=o
-,color=p}else return{health=0,color=Color3.fromRGB(0,0,0)}end end if i then local l=g and g.Character local m=l and l:FindFirstChild'Head'if not k then if m
-then local n=Instance.new('Folder',f)n.Name=g.Name..'_ESP'local o=Instance.new('BillboardGui',n)local p,q=Instance.new('TextLabel',o),Instance.new('TextLabel',o
-)o.Adornee=m o.Size=UDim2.new(0,100,0,40)o.StudsOffset=Vector3.new(0,2,0)o.AlwaysOnTop=true p.Name='NameLabel'p.BackgroundTransparency=1 p.Position=UDim2.new(0,
-0,0,0)p.Size=UDim2.new(0,100,0,20)p.Font=Enum.Font.SourceSansSemibold p.TextSize=20 p.TextColor3=j p.TextStrokeTransparency=0 p.TextStrokeColor3=Color3.new(0,0,
-0)p.TextYAlignment=Enum.TextYAlignment.Bottom p.Text=g.Name p.ZIndex=10 q.Name='HealthLabel'q.BackgroundTransparency=1 q.Position=UDim2.new(0,0,0,20)q.Size=
-UDim2.new(0,100,0,20)q.Font=Enum.Font.SourceSansSemibold q.TextSize=20 q.TextColor3=j q.TextStrokeTransparency=0 q.TextStrokeColor3=Color3.new(0,0,0)q.
-TextYAlignment=Enum.TextYAlignment.Bottom q.Text=''q.ZIndex=10 end else local n=k:FindFirstChild'BillboardGui'if n and m then n.Adornee=m local o=n:
-FindFirstChild'NameLabel'if o then o.TextColor3=j end local p=n:FindFirstChild'HealthLabel'if p then local q=getHealth()local r,s=q.health,q.color p.Text=r..'%'
-p.TextColor3=s end end end else if k then k:Destroy()end end end else f:Destroy()end end end)function c.getLocalPlayer()return game:GetService'Players'.
-LocalPlayer end function c.getLocalChar()local f=c.getLocalPlayer()return f and f.Character end function c.getLocalRoot()local f=c.getLocalChar()return f and f:
+esp_show_names=false c.esp_show_health=false function c.updatePlayerESP(f,g,h,i)local j=f and f.Character local k=j and j:FindFirstChildWhichIsA'Humanoid'local
+l,m=k and k.Health>0,(c.isFriendsWith(f)and(i or g))or g c.esp_players[f]={enabled=h and l,color=m}if j then c.updateESP(j,m,h and l)end end task.spawn(function
+()local f=Instance.new('Folder',game.CoreGui)while task.wait()do if c.esp_show_names or c.esp_show_health then if not f or not f.Parent then f=Instance.new(
+'Folder',game.CoreGui)end for g,h in pairs(c.esp_players)do local i,j,k=h.enabled,h.color,f:FindFirstChild(g.Name..'_ESP')local function getHealth()local l=g
+and g.Character local m=l and l:FindFirstChildWhichIsA'Humanoid'if m then local n=m.Health/m.MaxHealth local o,p=math.floor(n*100),Color3.fromHSV(n*(
+0.2777777777777778),0.8,0.8)return{health=o,color=p}else return{health=0,color=Color3.fromRGB(0,0,0)}end end if i then local l=g and g.Character local m=l and l
+:FindFirstChild'Head'if not k then if m then local n=Instance.new('Folder',f)n.Name=g.Name..'_ESP'local o=Instance.new('BillboardGui',n)local p,q=Instance.new(
+'TextLabel',o),Instance.new('TextLabel',o)o.Adornee=m o.Size=UDim2.new(0,100,0,40)o.StudsOffset=Vector3.new(0,2,0)o.AlwaysOnTop=true p.Name='NameLabel'p.
+BackgroundTransparency=1 p.Position=UDim2.new(0,0,0,0)p.Size=UDim2.new(0,100,0,20)p.Font=Enum.Font.SourceSansSemibold p.TextSize=20 p.TextColor3=j p.
+TextStrokeTransparency=0 p.TextStrokeColor3=Color3.new(0,0,0)p.TextYAlignment=Enum.TextYAlignment.Bottom p.Text=''p.ZIndex=10 q.Name='HealthLabel'q.
+BackgroundTransparency=1 q.Position=UDim2.new(0,0,0,20)q.Size=UDim2.new(0,100,0,20)q.Font=Enum.Font.SourceSansSemibold q.TextSize=20 q.TextColor3=j q.
+TextStrokeTransparency=0 q.TextStrokeColor3=Color3.new(0,0,0)q.TextYAlignment=Enum.TextYAlignment.Bottom q.Text=''q.ZIndex=10 end else local n=k:FindFirstChild
+'BillboardGui'if n and m then n.Adornee=m local o=n:FindFirstChild'NameLabel'if o then if c.esp_show_names then o.Text=g.Name o.TextColor3=j else o.Text=''end
+end local p=n:FindFirstChild'HealthLabel'if p then if c.esp_show_health then local q=getHealth()local r,s=q.health,q.color p.Text=r..'%'p.TextColor3=s else p.
+Text=''end end end end else if k then k:Destroy()end end end else f:Destroy()end end end)function c.getLocalPlayer()return game:GetService'Players'.LocalPlayer
+end function c.getLocalChar()local f=c.getLocalPlayer()return f and f.Character end function c.getLocalRoot()local f=c.getLocalChar()return f and f:
 FindFirstChild'HumanoidRootPart'end function c.getLocalHumanoid()local f=c.getLocalChar()return f and f:FindFirstChildWhichIsA'Humanoid'end return c end
 function a.b():typeof(__modImpl())local b=a.cache.b if not b then b={c=__modImpl()}a.cache.b=b end return b.c end end do local function __modImpl()local b={
 Default={TextColor=Color3.fromRGB(240,240,240),Background=Color3.fromRGB(25,25,25),Topbar=Color3.fromRGB(34,34,34),Shadow=Color3.fromRGB(20,20,20),

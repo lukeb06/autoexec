@@ -298,6 +298,7 @@ end
 
 M.esp_players = {}
 M.esp_show_names = false
+M.esp_show_health = false
 
 function M.updatePlayerESP(plr, color, enabled, friendColor)
 	local char = plr and plr.Character
@@ -316,7 +317,7 @@ end
 task.spawn(function()
 	local GlobalESPHolder = Instance.new("Folder", game.CoreGui)
 	while task.wait() do
-		if M.esp_show_names then
+		if M.esp_show_names or M.esp_show_health then
 			if not GlobalESPHolder or not GlobalESPHolder.Parent then
 				GlobalESPHolder = Instance.new("Folder", game.CoreGui)
 			end
@@ -371,7 +372,7 @@ task.spawn(function()
 							label.TextStrokeTransparency = 0
 							label.TextStrokeColor3 = Color3.new(0, 0, 0)
 							label.TextYAlignment = Enum.TextYAlignment.Bottom
-							label.Text = plr.Name
+							label.Text = ""
 							label.ZIndex = 10
 
 							hLabel.Name = "HealthLabel"
@@ -396,18 +397,27 @@ task.spawn(function()
 							local label = bb:FindFirstChild("NameLabel")
 
 							if label then
-								label.TextColor3 = color
+								if M.esp_show_names then
+									label.Text = plr.Name
+									label.TextColor3 = color
+								else
+									label.Text = ""
+								end
 							end
 
 							local hLabel = bb:FindFirstChild("HealthLabel")
 
 							if hLabel then
-								local h = getHealth()
-								local hp = h.health
-								local hc = h.color
+								if M.esp_show_health then
+									local h = getHealth()
+									local hp = h.health
+									local hc = h.color
 
-								hLabel.Text = hp .. "%"
-								hLabel.TextColor3 = hc
+									hLabel.Text = hp .. "%"
+									hLabel.TextColor3 = hc
+								else
+									hLabel.Text = ""
+								end
 							end
 						end
 					end
