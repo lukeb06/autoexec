@@ -14,15 +14,21 @@ UI.Library:LoadConfiguration()
 
 if Externals.DexToggle.CurrentValue then
 	Externals.dex_injected = true
-	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-DEX-Explorer-29920"))()
+	task.spawn(function()
+		loadstring(game:HttpGet("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua"))()
+	end)
 end
 
 if Externals.IYToggle.CurrentValue then
 	Externals.iy_injected = true
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+	task.spawn(function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+	end)
 end
 
 if Externals.RSToggle.CurrentValue then
 	Externals.rs_injected = true
-	loadstring(game:HttpGet("https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau"))()
+	task.spawn(function()
+		loadstring(game:HttpGet("https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau"))()
+	end)
 end

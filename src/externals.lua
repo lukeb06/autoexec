@@ -17,8 +17,9 @@ local DexButton = ExternalsTab:CreateButton({
 			return
 		end
 		M.dex_injected = true
-		-- loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
-		loadstring(game:HttpGet("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua"))()
+		task.spawn(function()
+			loadstring(game:HttpGet("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua"))()
+		end)
 	end,
 })
 
@@ -38,7 +39,9 @@ local IYButton = ExternalsTab:CreateButton({
 			return
 		end
 		M.iy_injected = true
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+		task.spawn(function()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+		end)
 	end,
 })
 
@@ -58,7 +61,9 @@ local RSButton = ExternalsTab:CreateButton({
 			return
 		end
 		M.rs_injected = true
-		loadstring(game:HttpGet("https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau"))()
+		task.spawn(function()
+			loadstring(game:HttpGet("https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau"))()
+		end)
 	end,
 })
 
