@@ -1,8 +1,8 @@
-local UI = require("../../ui")
-local Utils = require("../../utils")
-local GameUtils = require("./utils")
+local function init()
+	local UI = require("../../ui")
+	local Utils = require("../../utils")
+	local GameUtils = require("./utils")
 
-if game.GameId == 66654135 then
 	local MMTab = UI.Window:CreateTab("Murder Mystery 2", "gamepad-2")
 	local MMESPSection = MMTab:CreateSection("ESP")
 
@@ -185,4 +185,4 @@ if game.GameId == 66654135 then
 	end)
 end
 
-return true
+return init

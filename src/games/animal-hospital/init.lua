@@ -1,6 +1,5 @@
-local UI = require("../../ui")
-
-if game.GameId == 10148749921 then
+local function init()
+	local UI = require("../../ui")
 	local Funcs = require("./funcs")
 
 	local AHTab = UI.Window:CreateTab("Animal Hospital", "gamepad-2")
@@ -81,4 +80,4 @@ if game.GameId == 10148749921 then
 	})
 end
 
-return true
+return init

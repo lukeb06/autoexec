@@ -1,7 +1,7 @@
-local UI = require("../../ui")
-local GameUtils = require("./utils")
+local function init()
+	local UI = require("../../ui")
+	local GameUtils = require("./utils")
 
-if game.GameId == 10141757860 then
 	local GSTab = UI.Window:CreateTab("Granny Shooters", "gamepad-2")
 
 	local auto_kill_toggled = true
@@ -45,4 +45,4 @@ if game.GameId == 10141757860 then
 	end)
 end
 
-return true
+return init

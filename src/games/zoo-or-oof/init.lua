@@ -1,8 +1,8 @@
-local UI = require("../../ui")
-local Utils = require("../../utils")
-local GameUtils = require("./utils")
+local function init()
+	local UI = require("../../ui")
+	local Utils = require("../../utils")
+	local GameUtils = require("./utils")
 
-if game.PlaceId == 139233844569220 then
 	local ZOOTab = UI.Window:CreateTab("ZOO or OOF", "gamepad-2")
 	local ZOOESPSection = ZOOTab:CreateSection("ESP")
 
@@ -124,4 +124,4 @@ if game.PlaceId == 139233844569220 then
 	end)
 end
 
-return true
+return init

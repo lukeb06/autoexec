@@ -1,6 +1,5 @@
-local UI = require("../../ui")
-
-if game.GameId == 7008097940 then
+local function init()
+	local UI = require("../../ui")
 	local Funcs = require("./funcs")
 
 	local InkGameTab = UI.Window:CreateTab("Ink Game", "gamepad-2")
@@ -35,4 +34,4 @@ if game.GameId == 7008097940 then
 	end)
 end
 
-return true
+return init

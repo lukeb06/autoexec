@@ -230,7 +230,6 @@ local ShowESPHealthToggle = UniversalTab:CreateToggle({
 })
 
 local ussPlr = game:GetService("Players").LocalPlayer
-local TweenService = game:GetService("TweenService")
 local ussChar = ussPlr and ussPlr.Character
 local ussHum = ussChar and ussChar:FindFirstChild("Humanoid")
 

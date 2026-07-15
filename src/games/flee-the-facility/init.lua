@@ -1,8 +1,8 @@
-local UI = require("../../ui")
-local Utils = require("../../utils")
-local GameUtils = require("./utils")
+local function init()
+	local UI = require("../../ui")
+	local Utils = require("../../utils")
+	local GameUtils = require("./utils")
 
-if game.GameId == 372226183 then
 	local FTFEspTab = UI.Window:CreateTab("ESP")
 
 	local beast_esp_toggled = true
@@ -730,4 +730,4 @@ if game.GameId == 372226183 then
 	})
 end
 
-return true
+return init

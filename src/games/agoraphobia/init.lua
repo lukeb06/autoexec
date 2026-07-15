@@ -1,8 +1,8 @@
-local UI = require("../../ui")
-local Utils = require("../../utils")
-local GameUtils = require("./utils")
+local function init()
+	local UI = require("../../ui")
+	local Utils = require("../../utils")
+	local GameUtils = require("./utils")
 
-if game.GameId == 7585283196 then
 	local AGTab = UI.Window:CreateTab("Agoraphobia", "gamepad-2")
 	AGTab:CreateSection("ESP")
 
@@ -74,4 +74,4 @@ if game.GameId == 7585283196 then
 	end)
 end
 
-return true
+return init

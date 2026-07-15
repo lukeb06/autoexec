@@ -1,8 +1,8 @@
-local UI = require("../../ui")
-local Utils = require("../../utils")
-local GameUtils = require("./utils")
+local function init()
+	local UI = require("../../ui")
+	local Utils = require("../../utils")
+	local GameUtils = require("./utils")
 
-if game.GameId == 93740418 then
 	local HSTab = UI.Window:CreateTab("Hide and Seek", "gamepad-2")
 	HSTab:CreateSection("ESP")
 
@@ -67,4 +67,4 @@ if game.GameId == 93740418 then
 	})
 end
 
-return true
+return init

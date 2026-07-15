@@ -1,7 +1,7 @@
-local UI = require("../../ui")
-local GameUtils = require("./utils")
+local function init()
+	local UI = require("../../ui")
+	local GameUtils = require("./utils")
 
-if game.GameId == 1003981402 then
 	local RZTab = UI.Window:CreateTab("Reminiscence Zombies", "gamepad-2")
 	local RZESPSection = RZTab:CreateSection("ESP")
 
@@ -176,4 +176,4 @@ if game.GameId == 1003981402 then
 	end)
 end
 
-return true
+return init
