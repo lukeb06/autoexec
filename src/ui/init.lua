@@ -24,12 +24,16 @@ local SETTINGS = {
 
 local M = {}
 
-if Utils.isKBM() then
-	M.Library = require("./library")
-else
-	M.Library = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+if not M.Library then
+	if Utils.isKBM() then
+		M.Library = require("./library")
+	else
+		M.Library = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+	end
 end
 
-M.Window = M.Library:CreateWindow(SETTINGS)
+if M.Library and not M.Window then
+	M.Window = M.Library:CreateWindow(SETTINGS)
+end
 
 return M
