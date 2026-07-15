@@ -64,12 +64,10 @@ task.spawn(function()
 end)
 
 function M.getMurderer()
-	if not murderer then
-		for i, plr in pairs(game:GetService("Players"):GetPlayers()) do
-			if M.plrHasKnife(plr) then
-				murderer = plr
-				break
-			end
+	for _, plr in pairs(game:GetService("Players"):GetPlayers()) do
+		if M.plrHasKnife(plr) then
+			murderer = plr
+			break
 		end
 	end
 
@@ -77,12 +75,10 @@ function M.getMurderer()
 end
 
 function M.getSheriff()
-	if not sheriff then
-		for i, plr in pairs(game:GetService("Players"):GetPlayers()) do
-			if M.plrHasGun(plr) then
-				sheriff = plr
-				break
-			end
+	for _, plr in pairs(game:GetService("Players"):GetPlayers()) do
+		if M.plrHasGun(plr) then
+			sheriff = plr
+			break
 		end
 	end
 
