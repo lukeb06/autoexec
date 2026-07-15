@@ -163,7 +163,6 @@ function M.safeTweenToPart(part)
 				root.CFrame = CFrame.new(newPosition) * (part.CFrame - part.CFrame.Position)
 			end
 		end)
-		M.breakVelocity(t)
 	end
 end
 

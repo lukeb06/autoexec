@@ -157,7 +157,7 @@ local function init()
 						for i, v in pairs(coins:GetChildren()) do
 							if v.Name == "Coin_Server" then
 								local dist = Utils.dist3d(root.Position, v.Position)
-								if dist < best_dist then
+								if dist < best_dist and dist > 5 then
 									best_dist = dist
 									best = v
 								end
@@ -166,7 +166,6 @@ local function init()
 
 						if best then
 							Utils.safeTweenToPart(best)
-							Utils.set_safeTweening(true)
 						end
 					end
 				end
