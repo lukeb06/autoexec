@@ -552,15 +552,15 @@ ae)ac=nil ad=nil for af,ag in pairs(ae)do local ah=game:GetService'Players':Find
 ac=ah end if aj=='Sheriff'then ad=ah end end end end end)game:GetService'ReplicatedStorage':WaitForChild'Remotes':WaitForChild'Gameplay':WaitForChild
 'RoundEndFade'.OnClientEvent:Connect(function(ae)ac=nil ad=nil end)end)function ab.getMurderer()for ae,af in pairs(game:GetService'Players':GetPlayers())do if
 ab.plrHasKnife(af)then ac=af break end end return ac end function ab.getSheriff()for ae,af in pairs(game:GetService'Players':GetPlayers())do if ab.plrHasGun(af)
-then ad=af break end end return ad end function ab.shootPos(ae)local af=aa.getLocalPlayer()if ab.plrHasGun(af)then local ag=aa.getLocalChar()local ah=ag and ag:
-FindFirstChild'Gun'local ai,aj=ah and ah:FindFirstChild'Shoot',ah and ah:FindFirstChild'Handle'if ai and aj then ai:FireServer(aj.CFrame,CFrame.new(ae))end end
-end function ab.shootPlayer(ae)local af=ae and ae.Character local ag,_,ai=af and af:FindFirstChild'HumanoidRootPart',af and af:FindFirstChildWhichIsA'Humanoid',
-aa.getLocalPlayer()if ai and ag then local aj,ak=ai:GetNetworkPing()*1.5,ag.AssemblyLinearVelocity local al=ag.Position+(ak*aj)ab.shootPos(al)end end function
-ab.doMurderRaycast(ae,af)local ag,ah,ai=aa.getLocalChar(),(af-ae)-((af-ae).Unit*3),RaycastParams.new()ai.FilterType=Enum.RaycastFilterType.Exclude ai.
+then ad=af break end end return ad end function ab.shootPos(ae)local af=aa.getLocalPlayer()if ab.plrHasGun(af)then local ag,ah=aa.getLocalChar(),aa.
+getLocalRoot()local ai=ag and ag:FindFirstChild'Gun'local aj=ai and ai:FindFirstChild'Shoot'if aj and ah then aj:FireServer(ah.CFrame,CFrame.new(ae))end end end
+function ab.shootPlayer(ae)local af=ae and ae.Character local ag,_,ai=af and af:FindFirstChild'HumanoidRootPart',af and af:FindFirstChildWhichIsA'Humanoid',aa.
+getLocalPlayer()if ai and ag then local aj,ak=ai:GetNetworkPing()*1.5,ag.AssemblyLinearVelocity local al=ag.Position+(ak*aj)ab.shootPos(al)end end function ab.
+doMurderRaycast(ae,af)local ag,ah,ai=aa.getLocalChar(),(af-ae)-((af-ae).Unit*3),RaycastParams.new()ai.FilterType=Enum.RaycastFilterType.Exclude ai.
 FilterDescendantsInstances={ag}ai.IgnoreWater=true local aj=game.Workspace:Raycast(ae,ah,ai)if not aj then return true end return false end function ab.
 getValidOffset(ae,af)for ag,ah in pairs(af)do local ai,aj=ae.Position+ah,ae.Position if ab.doMurderRaycast(ai,aj)then return ah end end return Vector3.new(0,0,0
-)end function ab.getShotPos(ae)local af,ag=aa.getLocalRoot(),ae and ae.Character local ah,ai=ag and ag:FindFirstChild'HumanoidRootPart',{Vector3.new(0,0,-10),
-Vector3.new(0,0,10),Vector3.new(0,-10,0),Vector3.new(0,10,0),Vector3.new(-10,0,0),Vector3.new(10,0,0)}if af and ah then local aj=ab.getValidOffset(ah,ai)return
+)end function ab.getShotPos(ae)local af,ag=aa.getLocalRoot(),ae and ae.Character local ah,ai=ag and ag:FindFirstChild'HumanoidRootPart',{Vector3.new(0,0,-15),
+Vector3.new(0,0,15),Vector3.new(0,-15,0),Vector3.new(0,15,0),Vector3.new(-15,0,0),Vector3.new(15,0,0)}if af and ah then local aj=ab.getValidOffset(ah,ai)return
 ah.CFrame*CFrame.new(aj)end return nil end function ab.tpShoot(ae)local af,ag,ah=aa.getLocalPlayer(),aa.getLocalRoot(),ae and ae.Character local ai,aj=ah and ah
 :FindFirstChild'HumanoidRootPart',af:GetNetworkPing()if ag and ai then local ak=ag.CFrame task.wait(0.1)local al=ab.getShotPos(ae)ag.CFrame=al task.wait(aj*2)ab
 .shootPlayer(ae)task.wait(aj*2)ag.CFrame=ak end end function ab.updatePlayerESP(ae)local af,ag=ab.getMurderer(),ab.getSheriff()for ah,ai in pairs(game:

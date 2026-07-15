@@ -90,13 +90,15 @@ function M.shootPos(pos)
 
 	if M.plrHasGun(plr) then
 		local char = Utils.getLocalChar()
+		local root = Utils.getLocalRoot()
 		local gun = char and char:FindFirstChild("Gun")
 		local shoot = gun and gun:FindFirstChild("Shoot")
-		local handle = gun and gun:FindFirstChild("Handle")
+		-- local handle = gun and gun:FindFirstChild("Handle")
 
-		if shoot and handle then
+		if shoot and root then
 			-- shoot:FireServer(handle.CFrame, cf)
-			shoot:FireServer(handle.CFrame, CFrame.new(pos))
+			-- shoot:FireServer(handle.CFrame, CFrame.new(pos))
+			shoot:FireServer(root.CFrame, CFrame.new(pos))
 		end
 	end
 end
@@ -157,12 +159,12 @@ function M.getShotPos(other)
 	local otherRoot = otherChar and otherChar:FindFirstChild("HumanoidRootPart")
 
 	local offsets = {
-		Vector3.new(0, 0, -10),
-		Vector3.new(0, 0, 10),
-		Vector3.new(0, -10, 0),
-		Vector3.new(0, 10, 0),
-		Vector3.new(-10, 0, 0),
-		Vector3.new(10, 0, 0),
+		Vector3.new(0, 0, -15),
+		Vector3.new(0, 0, 15),
+		Vector3.new(0, -15, 0),
+		Vector3.new(0, 15, 0),
+		Vector3.new(-15, 0, 0),
+		Vector3.new(15, 0, 0),
 	}
 
 	if root and otherRoot then
