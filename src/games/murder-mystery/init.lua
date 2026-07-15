@@ -141,6 +141,7 @@ local function init()
 		end,
 	})
 	task.spawn(function()
+		local prev = nil
 		while task.wait() do
 			if mm_collect_coin_toggled and not Utils.get_safeTweening() then
 				local plr = game:GetService("Players").LocalPlayer
@@ -153,6 +154,10 @@ local function init()
 					if coins then
 						local best = nil
 						local best_dist = 99999999
+
+						if prev then
+							prev:Destroy()
+						end
 
 						for i, v in pairs(coins:GetChildren()) do
 							if v.Name == "Coin_Server" then
