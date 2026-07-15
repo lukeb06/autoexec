@@ -58,7 +58,7 @@ function M.getGuards()
 end
 
 function M.isAlive(entity)
-	local hum = entity:FindFirstChild("Humanoid")
+	local hum = entity and entity:FindFirstChild("Humanoid")
 
 	if hum then
 		return hum.Health > 0
