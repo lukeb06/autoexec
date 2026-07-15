@@ -16,7 +16,7 @@ function M.updatePlayerESP(enabled)
 			or Color3.fromRGB(255, 0, 0)
 
 		if v ~= plr then
-			Utils.updatePlayerESP(char, color, enabled and M.isAlive(char), Color3.fromRGB(255, 0, 255))
+			Utils.updatePlayerESP(v, color, enabled and M.isAlive(char), Color3.fromRGB(255, 0, 255))
 		end
 	end
 end

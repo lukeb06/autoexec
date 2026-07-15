@@ -521,7 +521,7 @@ ak,al in pairs(game:GetService'Players':GetPlayers())do if al~=ag then local am=
 then an.CFrame=ai.CFrame end end end aj=aj+1 task.wait()end ab.Noclip.disable()end end}end return true end function a.q():typeof(__modImpl())local aa=a.cache.q
 if not aa then aa={c=__modImpl()}a.cache.q=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function ab.updatePlayerESP(ac)local ad,
 ae=aa.getLocalPlayer(),ab.getCurrentGame()=='HideAndSeek'for af,ag in pairs(game:GetService'Players':GetPlayers())do local ah,ai=ag and ag.Character,ab.
-hasKnife(ag)local aj=(ae and((ai and Color3.fromRGB(255,0,0))or Color3.fromRGB(0,255,0)))or Color3.fromRGB(255,0,0)if ag~=ad then aa.updatePlayerESP(ah,aj,ac
+hasKnife(ag)local aj=(ae and((ai and Color3.fromRGB(255,0,0))or Color3.fromRGB(0,255,0)))or Color3.fromRGB(255,0,0)if ag~=ad then aa.updatePlayerESP(ag,aj,ac
 and ab.isAlive(ah),Color3.fromRGB(255,0,255))end end end function ab.updateGuardESP(ac)local ad=ab.getGuards()for ae,af in pairs(ad)do aa.updateESP(af,Color3.
 fromRGB(0,0,255),ac and ab.isAlive(af))end end function ab.getLiving()local ac=game.Workspace:FindFirstChild'Live'return ac end function ab.isGuard(ac)local ad=
 ac:FindFirstChild'TypeOfGuard'if ad then return true end return false end function ab.getGuards()local ac,ad=ab.getLiving(),{}for ae,af in pairs(ac:GetChildren(
