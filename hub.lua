@@ -37,66 +37,71 @@ IsFriendsWith(f.UserId)end function c.updateESP(f,g,h)local i=f:FindFirstChild'E
 i.OutlineColor=g end elseif h then local j=Instance.new'Highlight'j.Name='ESPHL'j.Adornee=f j.FillColor=g j.OutlineColor=g j.Parent=f end end c.esp_players={}c.
 esp_show_names=false function c.updatePlayerESP(f,g,h,i)local j,k=f and f.Character,(c.isFriendsWith(f)and(i or g))or g c.esp_players[f]={enabled=h,color=k}if j
 then c.updateESP(j,k,h)end end task.spawn(function()local f=Instance.new('Folder',game.CoreGui)while task.wait()do if c.esp_show_names then if not f or not f.
-Parent then f=Instance.new('Folder',game.CoreGui)end for g,h in pairs(c.esp_players)do local i,j,k=h.enabled,h.color,f:FindFirstChild(g.Name..'_ESP')if i then
-local l=g and g.Character local m=l and l:FindFirstChild'Head'if not k then if m then local n=Instance.new('Folder',f)n.Name=g.Name..'_ESP'local o=Instance.new(
-'BillboardGui',n)local p=Instance.new('TextLabel',o)o.Adornee=m o.Size=UDim2.new(0,100,0,150)o.StudsOffset=Vector3.new(0,1,0)o.AlwaysOnTop=true p.
-BackgroundTransparency=1 p.Position=UDim2.new(0,0,0,-50)p.Size=UDim2.new(0,100,0,100)p.Font=Enum.Font.SourceSansSemibold p.TextSize=20 p.TextColor3=j p.
-TextStrokeTransparency=0 p.TextStrokeColor3=Color3.new(0,0,0)p.TextYAlignment=Enum.TextYAlignment.Bottom p.Text=g.Name p.ZIndex=10 end else local n=k:
-FindFirstChild'BillboardGui'if n and m then n.Adornee=m local o=n:FindFirstChild'TextLabel'if o then o.TextColor3=j end end end else if k then k:Destroy()end
-end end else f:Destroy()end end end)function c.getLocalPlayer()return game:GetService'Players'.LocalPlayer end function c.getLocalChar()local f=c.
-getLocalPlayer()return f and f.Character end function c.getLocalRoot()local f=c.getLocalChar()return f and f:FindFirstChild'HumanoidRootPart'end function c.
-getLocalHumanoid()local f=c.getLocalChar()return f and f:FindFirstChildWhichIsA'Humanoid'end return c end function a.b():typeof(__modImpl())local b=a.cache.b if
-not b then b={c=__modImpl()}a.cache.b=b end return b.c end end do local function __modImpl()local b={Default={TextColor=Color3.fromRGB(240,240,240),Background=
-Color3.fromRGB(25,25,25),Topbar=Color3.fromRGB(34,34,34),Shadow=Color3.fromRGB(20,20,20),NotificationBackground=Color3.fromRGB(20,20,20),
-NotificationActionsBackground=Color3.fromRGB(230,230,230),TabBackground=Color3.fromRGB(80,80,80),TabStroke=Color3.fromRGB(85,85,85),TabBackgroundSelected=Color3
-.fromRGB(210,210,210),TabTextColor=Color3.fromRGB(240,240,240),SelectedTabTextColor=Color3.fromRGB(50,50,50),ElementBackground=Color3.fromRGB(35,35,35),
-ElementBackgroundHover=Color3.fromRGB(40,40,40),SecondaryElementBackground=Color3.fromRGB(25,25,25),ElementStroke=Color3.fromRGB(50,50,50),
-SecondaryElementStroke=Color3.fromRGB(40,40,40),SliderBackground=Color3.fromRGB(50,138,220),SliderProgress=Color3.fromRGB(50,138,220),SliderStroke=Color3.
-fromRGB(58,163,255),ToggleBackground=Color3.fromRGB(30,30,30),ToggleEnabled=Color3.fromRGB(0,146,214),ToggleDisabled=Color3.fromRGB(100,100,100),
-ToggleEnabledStroke=Color3.fromRGB(0,170,255),ToggleDisabledStroke=Color3.fromRGB(125,125,125),ToggleEnabledOuterStroke=Color3.fromRGB(100,100,100),
-ToggleDisabledOuterStroke=Color3.fromRGB(65,65,65),DropdownSelected=Color3.fromRGB(40,40,40),DropdownUnselected=Color3.fromRGB(30,30,30),InputBackground=Color3.
-fromRGB(30,30,30),InputStroke=Color3.fromRGB(65,65,65),PlaceholderColor=Color3.fromRGB(178,178,178)},Ocean={TextColor=Color3.fromRGB(230,240,240),Background=
-Color3.fromRGB(20,30,30),Topbar=Color3.fromRGB(25,40,40),Shadow=Color3.fromRGB(15,20,20),NotificationBackground=Color3.fromRGB(25,35,35),
-NotificationActionsBackground=Color3.fromRGB(230,240,240),TabBackground=Color3.fromRGB(40,60,60),TabStroke=Color3.fromRGB(50,70,70),TabBackgroundSelected=Color3
-.fromRGB(100,180,180),TabTextColor=Color3.fromRGB(210,230,230),SelectedTabTextColor=Color3.fromRGB(20,50,50),ElementBackground=Color3.fromRGB(30,50,50),
-ElementBackgroundHover=Color3.fromRGB(40,60,60),SecondaryElementBackground=Color3.fromRGB(30,45,45),ElementStroke=Color3.fromRGB(45,70,70),
-SecondaryElementStroke=Color3.fromRGB(40,65,65),SliderBackground=Color3.fromRGB(0,110,110),SliderProgress=Color3.fromRGB(0,140,140),SliderStroke=Color3.fromRGB(
-0,160,160),ToggleBackground=Color3.fromRGB(30,50,50),ToggleEnabled=Color3.fromRGB(0,130,130),ToggleDisabled=Color3.fromRGB(70,90,90),ToggleEnabledStroke=Color3.
-fromRGB(0,160,160),ToggleDisabledStroke=Color3.fromRGB(85,105,105),ToggleEnabledOuterStroke=Color3.fromRGB(50,100,100),ToggleDisabledOuterStroke=Color3.fromRGB(
-45,65,65),DropdownSelected=Color3.fromRGB(30,60,60),DropdownUnselected=Color3.fromRGB(25,40,40),InputBackground=Color3.fromRGB(30,50,50),InputStroke=Color3.
-fromRGB(50,70,70),PlaceholderColor=Color3.fromRGB(140,160,160)},AmberGlow={TextColor=Color3.fromRGB(255,245,230),Background=Color3.fromRGB(45,30,20),Topbar=
-Color3.fromRGB(55,40,25),Shadow=Color3.fromRGB(35,25,15),NotificationBackground=Color3.fromRGB(50,35,25),NotificationActionsBackground=Color3.fromRGB(245,230,
-215),TabBackground=Color3.fromRGB(75,50,35),TabStroke=Color3.fromRGB(90,60,45),TabBackgroundSelected=Color3.fromRGB(230,180,100),TabTextColor=Color3.fromRGB(250
-,220,200),SelectedTabTextColor=Color3.fromRGB(50,30,10),ElementBackground=Color3.fromRGB(60,45,35),ElementBackgroundHover=Color3.fromRGB(70,50,40),
-SecondaryElementBackground=Color3.fromRGB(55,40,30),ElementStroke=Color3.fromRGB(85,60,45),SecondaryElementStroke=Color3.fromRGB(75,50,35),SliderBackground=
-Color3.fromRGB(220,130,60),SliderProgress=Color3.fromRGB(250,150,75),SliderStroke=Color3.fromRGB(255,170,85),ToggleBackground=Color3.fromRGB(55,40,30),
-ToggleEnabled=Color3.fromRGB(240,130,30),ToggleDisabled=Color3.fromRGB(90,70,60),ToggleEnabledStroke=Color3.fromRGB(255,160,50),ToggleDisabledStroke=Color3.
-fromRGB(110,85,75),ToggleEnabledOuterStroke=Color3.fromRGB(200,100,50),ToggleDisabledOuterStroke=Color3.fromRGB(75,60,55),DropdownSelected=Color3.fromRGB(70,50,
-40),DropdownUnselected=Color3.fromRGB(55,40,30),InputBackground=Color3.fromRGB(60,45,35),InputStroke=Color3.fromRGB(90,65,50),PlaceholderColor=Color3.fromRGB(
-190,150,130)},Light={TextColor=Color3.fromRGB(40,40,40),Background=Color3.fromRGB(245,245,245),Topbar=Color3.fromRGB(230,230,230),Shadow=Color3.fromRGB(200,200,
-200),NotificationBackground=Color3.fromRGB(250,250,250),NotificationActionsBackground=Color3.fromRGB(240,240,240),TabBackground=Color3.fromRGB(235,235,235),
-TabStroke=Color3.fromRGB(215,215,215),TabBackgroundSelected=Color3.fromRGB(255,255,255),TabTextColor=Color3.fromRGB(80,80,80),SelectedTabTextColor=Color3.
-fromRGB(0,0,0),ElementBackground=Color3.fromRGB(240,240,240),ElementBackgroundHover=Color3.fromRGB(225,225,225),SecondaryElementBackground=Color3.fromRGB(235,
-235,235),ElementStroke=Color3.fromRGB(210,210,210),SecondaryElementStroke=Color3.fromRGB(210,210,210),SliderBackground=Color3.fromRGB(150,180,220),
-SliderProgress=Color3.fromRGB(100,150,200),SliderStroke=Color3.fromRGB(120,170,220),ToggleBackground=Color3.fromRGB(220,220,220),ToggleEnabled=Color3.fromRGB(0,
-146,214),ToggleDisabled=Color3.fromRGB(150,150,150),ToggleEnabledStroke=Color3.fromRGB(0,170,255),ToggleDisabledStroke=Color3.fromRGB(170,170,170),
-ToggleEnabledOuterStroke=Color3.fromRGB(100,100,100),ToggleDisabledOuterStroke=Color3.fromRGB(180,180,180),DropdownSelected=Color3.fromRGB(230,230,230),
-DropdownUnselected=Color3.fromRGB(220,220,220),InputBackground=Color3.fromRGB(240,240,240),InputStroke=Color3.fromRGB(180,180,180),PlaceholderColor=Color3.
-fromRGB(140,140,140)},Amethyst={TextColor=Color3.fromRGB(240,240,240),Background=Color3.fromRGB(30,20,40),Topbar=Color3.fromRGB(40,25,50),Shadow=Color3.fromRGB(
-20,15,30),NotificationBackground=Color3.fromRGB(35,20,40),NotificationActionsBackground=Color3.fromRGB(240,240,250),TabBackground=Color3.fromRGB(60,40,80),
-TabStroke=Color3.fromRGB(70,45,90),TabBackgroundSelected=Color3.fromRGB(180,140,200),TabTextColor=Color3.fromRGB(230,230,240),SelectedTabTextColor=Color3.
-fromRGB(50,20,50),ElementBackground=Color3.fromRGB(45,30,60),ElementBackgroundHover=Color3.fromRGB(50,35,70),SecondaryElementBackground=Color3.fromRGB(40,30,55)
-,ElementStroke=Color3.fromRGB(70,50,85),SecondaryElementStroke=Color3.fromRGB(65,45,80),SliderBackground=Color3.fromRGB(100,60,150),SliderProgress=Color3.
-fromRGB(130,80,180),SliderStroke=Color3.fromRGB(150,100,200),ToggleBackground=Color3.fromRGB(45,30,55),ToggleEnabled=Color3.fromRGB(120,60,150),ToggleDisabled=
-Color3.fromRGB(94,47,117),ToggleEnabledStroke=Color3.fromRGB(140,80,170),ToggleDisabledStroke=Color3.fromRGB(124,71,150),ToggleEnabledOuterStroke=Color3.
-fromRGB(90,40,120),ToggleDisabledOuterStroke=Color3.fromRGB(80,50,110),DropdownSelected=Color3.fromRGB(50,35,70),DropdownUnselected=Color3.fromRGB(35,25,50),
-InputBackground=Color3.fromRGB(45,30,60),InputStroke=Color3.fromRGB(80,50,110),PlaceholderColor=Color3.fromRGB(178,150,200)},Green={TextColor=Color3.fromRGB(30,
-60,30),Background=Color3.fromRGB(235,245,235),Topbar=Color3.fromRGB(210,230,210),Shadow=Color3.fromRGB(200,220,200),NotificationBackground=Color3.fromRGB(240,
-250,240),NotificationActionsBackground=Color3.fromRGB(220,235,220),TabBackground=Color3.fromRGB(215,235,215),TabStroke=Color3.fromRGB(190,210,190),
-TabBackgroundSelected=Color3.fromRGB(245,255,245),TabTextColor=Color3.fromRGB(50,80,50),SelectedTabTextColor=Color3.fromRGB(20,60,20),ElementBackground=Color3.
-fromRGB(225,240,225),ElementBackgroundHover=Color3.fromRGB(210,225,210),SecondaryElementBackground=Color3.fromRGB(235,245,235),ElementStroke=Color3.fromRGB(180,
-200,180),SecondaryElementStroke=Color3.fromRGB(180,200,180),SliderBackground=Color3.fromRGB(90,160,90),SliderProgress=Color3.fromRGB(70,130,70),SliderStroke=
-Color3.fromRGB(100,180,100),ToggleBackground=Color3.fromRGB(215,235,215),ToggleEnabled=Color3.fromRGB(60,130,60),ToggleDisabled=Color3.fromRGB(150,175,150),
+Parent then f=Instance.new('Folder',game.CoreGui)end for g,h in pairs(c.esp_players)do local i,j,k=h.enabled,h.color,f:FindFirstChild(g.Name..'_ESP')local 
+function getHealth()local l=g and g.Character local m=l and l:FindFirstChildWhichIsA'Humanoid'if m then local n=m.Health/m.MaxHealth local o,p=math.floor(n*100)
+,Color3.fromHSV(n*(0.3333333333333333),0.8,0.8)return{health=o,color=p}else return{health=0,color=Color3.fromRGB(0,0,0)}end end if i then local l=g and g.
+Character local m=l and l:FindFirstChild'Head'if not k then if m then local n=Instance.new('Folder',f)n.Name=g.Name..'_ESP'local o=Instance.new('BillboardGui',n
+)local p,q=Instance.new('TextLabel',o),Instance.new('TextLabel',o)o.Adornee=m o.Size=UDim2.new(0,100,0,40)o.StudsOffset=Vector3.new(0,2,0)o.AlwaysOnTop=true p.
+Name='NameLabel'p.BackgroundTransparency=1 p.Position=UDim2.new(0,0,0,0)p.Size=UDim2.new(0,100,0,20)p.Font=Enum.Font.SourceSansSemibold p.TextSize=20 p.
+TextColor3=j p.TextStrokeTransparency=0 p.TextStrokeColor3=Color3.new(0,0,0)p.TextYAlignment=Enum.TextYAlignment.Bottom p.Text=g.Name p.ZIndex=10 q.Name=
+'HealthLabel'q.BackgroundTransparency=1 q.Position=UDim2.new(0,0,0,20)q.Size=UDim2.new(0,100,0,20)q.Font=Enum.Font.SourceSansSemibold q.TextSize=20 q.TextColor3
+=j q.TextStrokeTransparency=0 q.TextStrokeColor3=Color3.new(0,0,0)q.TextYAlignment=Enum.TextYAlignment.Bottom q.Text=''q.ZIndex=10 end else local n=k:
+FindFirstChild'BillboardGui'if n and m then n.Adornee=m local o=n:FindFirstChild'NameLabel'if o then o.TextColor3=j end local p=n:FindFirstChild'HealthLabel'if
+p then local q=getHealth()local r,s=q.health,q.color p.Text=r..'%'p.TextColor3=s end end end else if k then k:Destroy()end end end else f:Destroy()end end end)
+function c.getLocalPlayer()return game:GetService'Players'.LocalPlayer end function c.getLocalChar()local f=c.getLocalPlayer()return f and f.Character end
+function c.getLocalRoot()local f=c.getLocalChar()return f and f:FindFirstChild'HumanoidRootPart'end function c.getLocalHumanoid()local f=c.getLocalChar()return
+f and f:FindFirstChildWhichIsA'Humanoid'end return c end function a.b():typeof(__modImpl())local b=a.cache.b if not b then b={c=__modImpl()}a.cache.b=b end
+return b.c end end do local function __modImpl()local b={Default={TextColor=Color3.fromRGB(240,240,240),Background=Color3.fromRGB(25,25,25),Topbar=Color3.
+fromRGB(34,34,34),Shadow=Color3.fromRGB(20,20,20),NotificationBackground=Color3.fromRGB(20,20,20),NotificationActionsBackground=Color3.fromRGB(230,230,230),
+TabBackground=Color3.fromRGB(80,80,80),TabStroke=Color3.fromRGB(85,85,85),TabBackgroundSelected=Color3.fromRGB(210,210,210),TabTextColor=Color3.fromRGB(240,240,
+240),SelectedTabTextColor=Color3.fromRGB(50,50,50),ElementBackground=Color3.fromRGB(35,35,35),ElementBackgroundHover=Color3.fromRGB(40,40,40),
+SecondaryElementBackground=Color3.fromRGB(25,25,25),ElementStroke=Color3.fromRGB(50,50,50),SecondaryElementStroke=Color3.fromRGB(40,40,40),SliderBackground=
+Color3.fromRGB(50,138,220),SliderProgress=Color3.fromRGB(50,138,220),SliderStroke=Color3.fromRGB(58,163,255),ToggleBackground=Color3.fromRGB(30,30,30),
+ToggleEnabled=Color3.fromRGB(0,146,214),ToggleDisabled=Color3.fromRGB(100,100,100),ToggleEnabledStroke=Color3.fromRGB(0,170,255),ToggleDisabledStroke=Color3.
+fromRGB(125,125,125),ToggleEnabledOuterStroke=Color3.fromRGB(100,100,100),ToggleDisabledOuterStroke=Color3.fromRGB(65,65,65),DropdownSelected=Color3.fromRGB(40,
+40,40),DropdownUnselected=Color3.fromRGB(30,30,30),InputBackground=Color3.fromRGB(30,30,30),InputStroke=Color3.fromRGB(65,65,65),PlaceholderColor=Color3.
+fromRGB(178,178,178)},Ocean={TextColor=Color3.fromRGB(230,240,240),Background=Color3.fromRGB(20,30,30),Topbar=Color3.fromRGB(25,40,40),Shadow=Color3.fromRGB(15,
+20,20),NotificationBackground=Color3.fromRGB(25,35,35),NotificationActionsBackground=Color3.fromRGB(230,240,240),TabBackground=Color3.fromRGB(40,60,60),
+TabStroke=Color3.fromRGB(50,70,70),TabBackgroundSelected=Color3.fromRGB(100,180,180),TabTextColor=Color3.fromRGB(210,230,230),SelectedTabTextColor=Color3.
+fromRGB(20,50,50),ElementBackground=Color3.fromRGB(30,50,50),ElementBackgroundHover=Color3.fromRGB(40,60,60),SecondaryElementBackground=Color3.fromRGB(30,45,45)
+,ElementStroke=Color3.fromRGB(45,70,70),SecondaryElementStroke=Color3.fromRGB(40,65,65),SliderBackground=Color3.fromRGB(0,110,110),SliderProgress=Color3.
+fromRGB(0,140,140),SliderStroke=Color3.fromRGB(0,160,160),ToggleBackground=Color3.fromRGB(30,50,50),ToggleEnabled=Color3.fromRGB(0,130,130),ToggleDisabled=
+Color3.fromRGB(70,90,90),ToggleEnabledStroke=Color3.fromRGB(0,160,160),ToggleDisabledStroke=Color3.fromRGB(85,105,105),ToggleEnabledOuterStroke=Color3.fromRGB(
+50,100,100),ToggleDisabledOuterStroke=Color3.fromRGB(45,65,65),DropdownSelected=Color3.fromRGB(30,60,60),DropdownUnselected=Color3.fromRGB(25,40,40),
+InputBackground=Color3.fromRGB(30,50,50),InputStroke=Color3.fromRGB(50,70,70),PlaceholderColor=Color3.fromRGB(140,160,160)},AmberGlow={TextColor=Color3.fromRGB(
+255,245,230),Background=Color3.fromRGB(45,30,20),Topbar=Color3.fromRGB(55,40,25),Shadow=Color3.fromRGB(35,25,15),NotificationBackground=Color3.fromRGB(50,35,25)
+,NotificationActionsBackground=Color3.fromRGB(245,230,215),TabBackground=Color3.fromRGB(75,50,35),TabStroke=Color3.fromRGB(90,60,45),TabBackgroundSelected=
+Color3.fromRGB(230,180,100),TabTextColor=Color3.fromRGB(250,220,200),SelectedTabTextColor=Color3.fromRGB(50,30,10),ElementBackground=Color3.fromRGB(60,45,35),
+ElementBackgroundHover=Color3.fromRGB(70,50,40),SecondaryElementBackground=Color3.fromRGB(55,40,30),ElementStroke=Color3.fromRGB(85,60,45),
+SecondaryElementStroke=Color3.fromRGB(75,50,35),SliderBackground=Color3.fromRGB(220,130,60),SliderProgress=Color3.fromRGB(250,150,75),SliderStroke=Color3.
+fromRGB(255,170,85),ToggleBackground=Color3.fromRGB(55,40,30),ToggleEnabled=Color3.fromRGB(240,130,30),ToggleDisabled=Color3.fromRGB(90,70,60),
+ToggleEnabledStroke=Color3.fromRGB(255,160,50),ToggleDisabledStroke=Color3.fromRGB(110,85,75),ToggleEnabledOuterStroke=Color3.fromRGB(200,100,50),
+ToggleDisabledOuterStroke=Color3.fromRGB(75,60,55),DropdownSelected=Color3.fromRGB(70,50,40),DropdownUnselected=Color3.fromRGB(55,40,30),InputBackground=Color3.
+fromRGB(60,45,35),InputStroke=Color3.fromRGB(90,65,50),PlaceholderColor=Color3.fromRGB(190,150,130)},Light={TextColor=Color3.fromRGB(40,40,40),Background=Color3
+.fromRGB(245,245,245),Topbar=Color3.fromRGB(230,230,230),Shadow=Color3.fromRGB(200,200,200),NotificationBackground=Color3.fromRGB(250,250,250),
+NotificationActionsBackground=Color3.fromRGB(240,240,240),TabBackground=Color3.fromRGB(235,235,235),TabStroke=Color3.fromRGB(215,215,215),TabBackgroundSelected=
+Color3.fromRGB(255,255,255),TabTextColor=Color3.fromRGB(80,80,80),SelectedTabTextColor=Color3.fromRGB(0,0,0),ElementBackground=Color3.fromRGB(240,240,240),
+ElementBackgroundHover=Color3.fromRGB(225,225,225),SecondaryElementBackground=Color3.fromRGB(235,235,235),ElementStroke=Color3.fromRGB(210,210,210),
+SecondaryElementStroke=Color3.fromRGB(210,210,210),SliderBackground=Color3.fromRGB(150,180,220),SliderProgress=Color3.fromRGB(100,150,200),SliderStroke=Color3.
+fromRGB(120,170,220),ToggleBackground=Color3.fromRGB(220,220,220),ToggleEnabled=Color3.fromRGB(0,146,214),ToggleDisabled=Color3.fromRGB(150,150,150),
+ToggleEnabledStroke=Color3.fromRGB(0,170,255),ToggleDisabledStroke=Color3.fromRGB(170,170,170),ToggleEnabledOuterStroke=Color3.fromRGB(100,100,100),
+ToggleDisabledOuterStroke=Color3.fromRGB(180,180,180),DropdownSelected=Color3.fromRGB(230,230,230),DropdownUnselected=Color3.fromRGB(220,220,220),
+InputBackground=Color3.fromRGB(240,240,240),InputStroke=Color3.fromRGB(180,180,180),PlaceholderColor=Color3.fromRGB(140,140,140)},Amethyst={TextColor=Color3.
+fromRGB(240,240,240),Background=Color3.fromRGB(30,20,40),Topbar=Color3.fromRGB(40,25,50),Shadow=Color3.fromRGB(20,15,30),NotificationBackground=Color3.fromRGB(
+35,20,40),NotificationActionsBackground=Color3.fromRGB(240,240,250),TabBackground=Color3.fromRGB(60,40,80),TabStroke=Color3.fromRGB(70,45,90),
+TabBackgroundSelected=Color3.fromRGB(180,140,200),TabTextColor=Color3.fromRGB(230,230,240),SelectedTabTextColor=Color3.fromRGB(50,20,50),ElementBackground=
+Color3.fromRGB(45,30,60),ElementBackgroundHover=Color3.fromRGB(50,35,70),SecondaryElementBackground=Color3.fromRGB(40,30,55),ElementStroke=Color3.fromRGB(70,50,
+85),SecondaryElementStroke=Color3.fromRGB(65,45,80),SliderBackground=Color3.fromRGB(100,60,150),SliderProgress=Color3.fromRGB(130,80,180),SliderStroke=Color3.
+fromRGB(150,100,200),ToggleBackground=Color3.fromRGB(45,30,55),ToggleEnabled=Color3.fromRGB(120,60,150),ToggleDisabled=Color3.fromRGB(94,47,117),
+ToggleEnabledStroke=Color3.fromRGB(140,80,170),ToggleDisabledStroke=Color3.fromRGB(124,71,150),ToggleEnabledOuterStroke=Color3.fromRGB(90,40,120),
+ToggleDisabledOuterStroke=Color3.fromRGB(80,50,110),DropdownSelected=Color3.fromRGB(50,35,70),DropdownUnselected=Color3.fromRGB(35,25,50),InputBackground=Color3
+.fromRGB(45,30,60),InputStroke=Color3.fromRGB(80,50,110),PlaceholderColor=Color3.fromRGB(178,150,200)},Green={TextColor=Color3.fromRGB(30,60,30),Background=
+Color3.fromRGB(235,245,235),Topbar=Color3.fromRGB(210,230,210),Shadow=Color3.fromRGB(200,220,200),NotificationBackground=Color3.fromRGB(240,250,240),
+NotificationActionsBackground=Color3.fromRGB(220,235,220),TabBackground=Color3.fromRGB(215,235,215),TabStroke=Color3.fromRGB(190,210,190),TabBackgroundSelected=
+Color3.fromRGB(245,255,245),TabTextColor=Color3.fromRGB(50,80,50),SelectedTabTextColor=Color3.fromRGB(20,60,20),ElementBackground=Color3.fromRGB(225,240,225),
+ElementBackgroundHover=Color3.fromRGB(210,225,210),SecondaryElementBackground=Color3.fromRGB(235,245,235),ElementStroke=Color3.fromRGB(180,200,180),
+SecondaryElementStroke=Color3.fromRGB(180,200,180),SliderBackground=Color3.fromRGB(90,160,90),SliderProgress=Color3.fromRGB(70,130,70),SliderStroke=Color3.
+fromRGB(100,180,100),ToggleBackground=Color3.fromRGB(215,235,215),ToggleEnabled=Color3.fromRGB(60,130,60),ToggleDisabled=Color3.fromRGB(150,175,150),
 ToggleEnabledStroke=Color3.fromRGB(80,150,80),ToggleDisabledStroke=Color3.fromRGB(130,150,130),ToggleEnabledOuterStroke=Color3.fromRGB(100,160,100),
 ToggleDisabledOuterStroke=Color3.fromRGB(160,180,160),DropdownSelected=Color3.fromRGB(225,240,225),DropdownUnselected=Color3.fromRGB(210,225,210),
 InputBackground=Color3.fromRGB(235,245,235),InputStroke=Color3.fromRGB(180,200,180),PlaceholderColor=Color3.fromRGB(120,140,120)},Bloom={TextColor=Color3.

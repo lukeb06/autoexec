@@ -324,6 +324,23 @@ task.spawn(function()
 				local color = data.color
 				local esp = GlobalESPHolder:FindFirstChild(plr.Name .. "_ESP")
 
+				local function getHealth()
+					local char = plr and plr.Character
+					local hum = char and char:FindFirstChildWhichIsA("Humanoid")
+
+					if hum then
+						local health = hum.Health / hum.MaxHealth
+
+						local percent = math.floor(health * 100)
+
+						local col = Color3.fromHSV(health * (120 / 360), 0.8, 0.8)
+
+						return { health = percent, color = col }
+					else
+						return { health = 0, color = Color3.fromRGB(0, 0, 0) }
+					end
+				end
+
 				if enabled then
 					local char = plr and plr.Character
 					local head = char and char:FindFirstChild("Head")
@@ -335,14 +352,17 @@ task.spawn(function()
 
 							local bb = Instance.new("BillboardGui", ESPholder)
 							local label = Instance.new("TextLabel", bb)
+							local hLabel = Instance.new("TextLabel", bb)
 
 							bb.Adornee = head
-							bb.Size = UDim2.new(0, 100, 0, 150)
-							bb.StudsOffset = Vector3.new(0, 1, 0)
+							bb.Size = UDim2.new(0, 100, 0, 40)
+							bb.StudsOffset = Vector3.new(0, 2, 0)
 							bb.AlwaysOnTop = true
+
+							label.Name = "NameLabel"
 							label.BackgroundTransparency = 1
-							label.Position = UDim2.new(0, 0, 0, -50)
-							label.Size = UDim2.new(0, 100, 0, 100)
+							label.Position = UDim2.new(0, 0, 0, 0)
+							label.Size = UDim2.new(0, 100, 0, 20)
 							label.Font = Enum.Font.SourceSansSemibold
 							label.TextSize = 20
 							label.TextColor3 = color
@@ -351,6 +371,19 @@ task.spawn(function()
 							label.TextYAlignment = Enum.TextYAlignment.Bottom
 							label.Text = plr.Name
 							label.ZIndex = 10
+
+							hLabel.Name = "HealthLabel"
+							hLabel.BackgroundTransparency = 1
+							hLabel.Position = UDim2.new(0, 0, 0, 20)
+							hLabel.Size = UDim2.new(0, 100, 0, 20)
+							hLabel.Font = Enum.Font.SourceSansSemibold
+							hLabel.TextSize = 20
+							hLabel.TextColor3 = color
+							hLabel.TextStrokeTransparency = 0
+							hLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+							hLabel.TextYAlignment = Enum.TextYAlignment.Bottom
+							hLabel.Text = ""
+							hLabel.ZIndex = 10
 						end
 					else
 						local bb = esp:FindFirstChild("BillboardGui")
@@ -358,10 +391,21 @@ task.spawn(function()
 						if bb and head then
 							bb.Adornee = head
 
-							local label = bb:FindFirstChild("TextLabel")
+							local label = bb:FindFirstChild("NameLabel")
 
 							if label then
 								label.TextColor3 = color
+							end
+
+							local hLabel = bb:FindFirstChild("HealthLabel")
+
+							if hLabel then
+								local h = getHealth()
+								local hp = h.health
+								local hc = h.color
+
+								hLabel.Text = hp .. "%"
+								hLabel.TextColor3 = hc
 							end
 						end
 					end
