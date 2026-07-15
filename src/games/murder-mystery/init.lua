@@ -141,6 +141,7 @@ local function init()
 		end,
 	})
 	task.spawn(function()
+		local current_best = nil
 		while task.wait() do
 			if mm_collect_coin_toggled and not Utils.get_safeTweening() then
 				local plr = game:GetService("Players").LocalPlayer
@@ -150,8 +151,9 @@ local function init()
 				if root then
 					local coins = game.Workspace:FindFirstChild("CoinContainer", true)
 
-					if coins then
+					if coins and (not current_best or not current_best.Parent) then
 						local best = nil
+						current_best = nil
 						local best_dist = 99999999
 
 						for i, v in pairs(coins:GetChildren()) do
