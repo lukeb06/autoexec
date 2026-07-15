@@ -170,6 +170,7 @@ local function init()
 						end
 
 						if best then
+							prev = best
 							Utils.safeTweenToPart(best)
 						end
 					end
