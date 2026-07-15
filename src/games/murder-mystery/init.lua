@@ -151,9 +151,8 @@ local function init()
 				if root then
 					local coins = game.Workspace:FindFirstChild("CoinContainer", true)
 
-					if coins and (not current_best or not current_best.Parent) then
+					if coins then
 						local best = nil
-						current_best = nil
 						local best_dist = 99999999
 
 						for i, v in pairs(coins:GetChildren()) do
@@ -166,7 +165,7 @@ local function init()
 							end
 						end
 
-						if best then
+						if best and (not current_best or not current_best.Parent) then
 							Utils.safeTweenToPart(best)
 						end
 					end
