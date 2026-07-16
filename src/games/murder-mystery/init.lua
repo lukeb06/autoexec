@@ -184,7 +184,7 @@ local function init()
 						end
 
 						if best then
-							Utils.set_safeTweenSpeed(32)
+							Utils.set_safeTweenSpeed(26)
 							Utils.safeTweenToPart(best, coinCollected)
 						end
 					end

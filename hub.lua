@@ -605,7 +605,7 @@ b=false ad:CreateToggle{Name='Collect Coins',CurrentValue=false,Flag=nil,Callbac
 end return false end while task.wait()do if b and not ab.get_safeTweening()then local d=game:GetService'Players'.LocalPlayer local e=d and d.Character local f=e
 and e:FindFirstChild'HumanoidRootPart'if f then local g=game.Workspace:FindFirstChild('CoinContainer',true)if g then local i,h=99999999 for j,k in pairs(g:
 GetChildren())do if k.Name=='Coin_Server'and not coinCollected(k)then local l=ab.dist3d(f.Position,k.Position)if l<i and l>1 then i=l h=k end end end if h then
-ab.set_safeTweenSpeed(32)ab.safeTweenToPart(h,coinCollected)end end end end end end)task.spawn(function()while task.wait(0.1)do local d=game.Workspace:
+ab.set_safeTweenSpeed(26)ab.safeTweenToPart(h,coinCollected)end end end end end end)task.spawn(function()while task.wait(0.1)do local d=game.Workspace:
 FindFirstChild('Base',true)local e=d and d:FindFirstChild'GlitchProof'if e then e:Destroy()end end end)end return init end function a.v():typeof(__modImpl())
 local aa=a.cache.v if not aa then aa={c=__modImpl()}a.cache.v=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function ab.getZombies
 ()local ac=game.Workspace:FindFirstChild'Zombies'return(ac and ac:GetChildren())or{}end function ab.getBox()local ac=game.Workspace:FindFirstChild'Interactions'
