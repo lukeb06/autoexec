@@ -10,10 +10,11 @@ local NoClipToggle = UniversalTab:CreateToggle({
 	CurrentValue = false,
 	Flag = nil,
 	Callback = function(value)
-		Utils.Noclip.set_manual(value)
 		if value then
 			Utils.Noclip.enable()
+			Utils.Noclip.set_manual(value)
 		else
+			Utils.Noclip.set_manual(value)
 			Utils.Noclip.disable()
 		end
 	end,

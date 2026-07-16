@@ -14,6 +14,9 @@ function M.get_manual()
 end
 
 function M.enable()
+	if manual_noclip then
+		return
+	end
 	local speaker = game:GetService("Players").LocalPlayer
 	local RunService = game:GetService("RunService")
 

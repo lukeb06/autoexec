@@ -125,14 +125,14 @@ end
 function M.doMurderRaycast(origin, target)
 	local char = Utils.getLocalChar()
 
-	local dir = (target - origin) - ((target - origin).Unit * 3)
+	local dir = (target - origin) - ((target - origin).Unit * 1.5)
 
 	local params = RaycastParams.new()
 	params.FilterType = Enum.RaycastFilterType.Exclude
 	params.FilterDescendantsInstances = { char }
 	params.IgnoreWater = true
 
-	local result = game.Workspace:Raycast(origin, dir, params)
+	local result = game.Workspace:Spherecast(origin, 1.5, dir, params)
 
 	if not result then
 		return true

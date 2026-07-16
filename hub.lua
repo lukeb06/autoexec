@@ -1,33 +1,33 @@
 local a={cache={}::any}do do local function __modImpl()local c,d,e,b=true,false,{}function e.set_manual(f)d=f end function e.get_manual()return d end function e
-.enable()local f,g=game:GetService'Players'.LocalPlayer,game:GetService'RunService'c=false task.wait(0.1)local function NoclipLoop()if c==false and f.Character
-~=nil then for h,i in pairs(f.Character:GetDescendants())do if i:IsA'BasePart'and i.CanCollide==true then local j=i:FindFirstChild'CouldCollide'if not j then
-local k=Instance.new'BoolValue'k.Name='CouldCollide'k.Value=i.CanCollide k.Parent=i end i.CanCollide=false end if i:IsA'BasePart'and i.Transparency~=1 and i.
-Transparency~=0.5 then local j=Instance.new'NumberValue'j.Name='Transparency'j.Value=i.Transparency j.Parent=i i.Transparency=0.5 end end end end b=g.Stepped:
-Connect(NoclipLoop)end function e.disable()if d then return end if b then b:Disconnect()local f=game:GetService'Players'.LocalPlayer for g,h in pairs(f.
-Character:GetDescendants())do if h:IsA'BasePart'then local i=h:FindFirstChild'CouldCollide'if i then h.CanCollide=i.Value i:Destroy()end local j=h:
-FindFirstChild'Transparency'if j then h.Transparency=j.Value j:Destroy()end end end end c=true end function e.toggleNoclip()if c then e.enable()else e.disable()
-end end return e end function a.a():typeof(__modImpl())local b=a.cache.a if not b then b={c=__modImpl()}a.cache.a=b end return b.c end end do local function 
-__modImpl()local b,c=a.a(),{}function c.WaitForGameAndPlayer()local d,e=false,false while not(d and e)do if game:IsLoaded()then d=true end if game:GetService
-'Players'.LocalPlayer then e=true end task.wait()end end function c.diff3d(d,e)return e-d end function c.dist3d(d,e)return c.diff3d(d,e).Magnitude end function
-c.dir3d(d,e)return c.diff3d(d,e).Unit end function c.isDev()local d,e='pathwise',game:GetService'Players'.LocalPlayer if string.sub(e.Name,1,#d)==d then return
-true end return false end function c.isKBM()local d=game:GetService'UserInputService'return d.KeyboardEnabled and d.MouseEnabled end c.Noclip=b function c.
-breakVelocity(d)task.spawn(function()local e,f,g=game:GetService'Players'.LocalPlayer,false,Vector3.new(0,0,0)task.spawn(function()task.wait(d)f=true end)while
-not f do for h,i in ipairs(e.Character:GetDescendants())do if i:IsA'BasePart'then i.Velocity,i.RotVelocity=g,g end end task.wait()end end)end local d,e=20,false
-function c.get_safeTweening()return e end function c.set_safeTweening(f)e=f end function c.set_safeTweenSpeed(f)d=f end function c.safeTweenToPos(f)local g,h=
-game:GetService'TweenService',game:GetService'Players'.LocalPlayer local i=h and h.Character local j,k=i and i:FindFirstChild'HumanoidRootPart',i and i:
-FindFirstChildOfClass'Humanoid'local l=c.dist3d(j.Position,f.Position)local m=l/d e=true if k and k.SeatPart then k.Sit=false task.wait(0.1)end task.wait(0.1)g:
-Create(j,TweenInfo.new(m,Enum.EasingStyle.Linear),{CFrame=f}):Play()task.delay(m,function()e=false end)c.breakVelocity(m)end function c.safeTweenToPart(f,g)if f
-:IsA'BasePart'then local h=game:GetService'Players'.LocalPlayer local i=h and h.Character local j,k=i and i:FindFirstChild'HumanoidRootPart',i and i:
-FindFirstChildWhichIsA'Humanoid'local l=c.dist3d(j.Position,f.Position)local _=l/d e=true if k and k.SeatPart then k.Sit=false task.wait(0.1)end local n e=true
-c.Noclip.enable()game.Workspace.Gravity=0 n=game:GetService'RunService'.Heartbeat:Connect(function(o)if not j or not f or not f.Parent or(g and g(f))then n:
-Disconnect()e=false c.Noclip.disable()game.Workspace.Gravity=196.21 if k then k:ChangeState(Enum.HumanoidStateType.GettingUp)end return end local p,q=j.Position
-,f.Position local r,s=c.dist3d(p,q),d*o if r<=s then j.CFrame=f.CFrame n:Disconnect()e=false c.Noclip.disable()if k then k:ChangeState(Enum.HumanoidStateType.
-GettingUp)end game.Workspace.Gravity=196.21 else local t=c.dir3d(p,q)local u=p+(t*s)if k then k:ChangeState(Enum.HumanoidStateType.Physics)end j.CFrame=CFrame.
-new(u)*(f.CFrame-f.CFrame.Position)end end)end end function c.flingCharacter(f)local g=game:GetService'Players'.LocalPlayer local h=g and g.Character local i,j=
-h and h:FindFirstChild'HumanoidRootPart',f and f:FindFirstChild'HumanoidRootPart'if i and j then c.Noclip.enable()task.wait(0.2)local k=i.CFrame task.wait(0.1)
-for l,m in pairs(h:GetDescendants())do if m:IsA'BasePart'then m.CustomPhysicalProperties=PhysicalProperties.new(100,0.3,0.5)end end for l,m in h:GetChildren()do
-if m:IsA'BasePart'then m.CanCollide=false m.Massless=true m.Velocity=Vector3.new(0,0,0)end end local l=99999 local m,n=l n=game:GetService'RunService'.Heartbeat
-:Connect(function(o)if not j or not j.Parent then return end local p,q=math.random(-100,100),j.AssemblyLinearVelocity if q.Magnitude>500 then n:Disconnect()end
+.enable()if d then return end local f,g=game:GetService'Players'.LocalPlayer,game:GetService'RunService'c=false task.wait(0.1)local function NoclipLoop()if c==
+false and f.Character~=nil then for h,i in pairs(f.Character:GetDescendants())do if i:IsA'BasePart'and i.CanCollide==true then local j=i:FindFirstChild
+'CouldCollide'if not j then local k=Instance.new'BoolValue'k.Name='CouldCollide'k.Value=i.CanCollide k.Parent=i end i.CanCollide=false end if i:IsA'BasePart'and
+i.Transparency~=1 and i.Transparency~=0.5 then local j=Instance.new'NumberValue'j.Name='Transparency'j.Value=i.Transparency j.Parent=i i.Transparency=0.5 end
+end end end b=g.Stepped:Connect(NoclipLoop)end function e.disable()if d then return end if b then b:Disconnect()local f=game:GetService'Players'.LocalPlayer for
+g,h in pairs(f.Character:GetDescendants())do if h:IsA'BasePart'then local i=h:FindFirstChild'CouldCollide'if i then h.CanCollide=i.Value i:Destroy()end local j=
+h:FindFirstChild'Transparency'if j then h.Transparency=j.Value j:Destroy()end end end end c=true end function e.toggleNoclip()if c then e.enable()else e.
+disable()end end return e end function a.a():typeof(__modImpl())local b=a.cache.a if not b then b={c=__modImpl()}a.cache.a=b end return b.c end end do local 
+function __modImpl()local b,c=a.a(),{}function c.WaitForGameAndPlayer()local d,e=false,false while not(d and e)do if game:IsLoaded()then d=true end if game:
+GetService'Players'.LocalPlayer then e=true end task.wait()end end function c.diff3d(d,e)return e-d end function c.dist3d(d,e)return c.diff3d(d,e).Magnitude end
+function c.dir3d(d,e)return c.diff3d(d,e).Unit end function c.isDev()local d,e='pathwise',game:GetService'Players'.LocalPlayer if string.sub(e.Name,1,#d)==d
+then return true end return false end function c.isKBM()local d=game:GetService'UserInputService'return d.KeyboardEnabled and d.MouseEnabled end c.Noclip=b
+function c.breakVelocity(d)task.spawn(function()local e,f,g=game:GetService'Players'.LocalPlayer,false,Vector3.new(0,0,0)task.spawn(function()task.wait(d)f=true
+end)while not f do for h,i in ipairs(e.Character:GetDescendants())do if i:IsA'BasePart'then i.Velocity,i.RotVelocity=g,g end end task.wait()end end)end local d,
+e=20,false function c.get_safeTweening()return e end function c.set_safeTweening(f)e=f end function c.set_safeTweenSpeed(f)d=f end function c.safeTweenToPos(f)
+local g,h=game:GetService'TweenService',game:GetService'Players'.LocalPlayer local i=h and h.Character local j,k=i and i:FindFirstChild'HumanoidRootPart',i and
+i:FindFirstChildOfClass'Humanoid'local l=c.dist3d(j.Position,f.Position)local m=l/d e=true if k and k.SeatPart then k.Sit=false task.wait(0.1)end task.wait(0.1)
+g:Create(j,TweenInfo.new(m,Enum.EasingStyle.Linear),{CFrame=f}):Play()task.delay(m,function()e=false end)c.breakVelocity(m)end function c.safeTweenToPart(f,g)if
+f:IsA'BasePart'then local h=game:GetService'Players'.LocalPlayer local i=h and h.Character local j,k=i and i:FindFirstChild'HumanoidRootPart',i and i:
+FindFirstChildWhichIsA'Humanoid'e=true if k and k.SeatPart then k.Sit=false task.wait(0.1)end local l c.Noclip.enable()game.Workspace.Gravity=0 l=game:
+GetService'RunService'.Heartbeat:Connect(function(m)c.breakVelocity(0.1)if not j or not f or not f.Parent or(g and g(f))then l:Disconnect()e=false c.Noclip.
+disable()game.Workspace.Gravity=196.21 if k then k:ChangeState(Enum.HumanoidStateType.GettingUp)end return end local n,o=j.Position,f.Position local p,q=c.
+dist3d(n,o),d*m if p<=q then j.CFrame=f.CFrame l:Disconnect()e=false c.Noclip.disable()if k then k:ChangeState(Enum.HumanoidStateType.GettingUp)end game.
+Workspace.Gravity=196.21 else local r=c.dir3d(n,o)local s=n+(r*q)if k then k:ChangeState(Enum.HumanoidStateType.Physics)end j.CFrame=CFrame.new(s)*(f.CFrame-f.
+CFrame.Position)end end)end end function c.flingCharacter(f)local g=game:GetService'Players'.LocalPlayer local h=g and g.Character local i,j=h and h:
+FindFirstChild'HumanoidRootPart',f and f:FindFirstChild'HumanoidRootPart'if i and j then c.Noclip.enable()task.wait(0.2)local k=i.CFrame task.wait(0.1)for l,m
+in pairs(h:GetDescendants())do if m:IsA'BasePart'then m.CustomPhysicalProperties=PhysicalProperties.new(100,0.3,0.5)end end for l,m in h:GetChildren()do if m:
+IsA'BasePart'then m.CanCollide=false m.Massless=true m.Velocity=Vector3.new(0,0,0)end end local l=99999 local m,n=l n=game:GetService'RunService'.Heartbeat:
+Connect(function(o)if not j or not j.Parent then return end local p,q=math.random(-100,100),j.AssemblyLinearVelocity if q.Magnitude>500 then n:Disconnect()end
 local r=j.Position+(q*0.08)if r.Y<=game.Workspace.FallenPartsDestroyHeight+50 then return end i.CFrame=(CFrame.new(r+Vector3.new(0.1,0,0.1)))*(i.CFrame-i.CFrame
 .Position)i.AssemblyLinearVelocity=Vector3.new(l+p,-100,l+p)i.AssemblyAngularVelocity=Vector3.new(0,m,0)end)task.spawn(function()while n.Connected do m=l task.
 wait(0.2)m=0 task.wait(0.1)end end)task.delay(3,function()for o,p in pairs(h:GetDescendants())do if p.ClassName=='Part'or p.ClassName=='MeshPart'then p.
@@ -272,14 +272,14 @@ then aa={c=__modImpl()}a.cache.d=aa end return aa.c end end do local function __
 false,ConfigurationSaving={Enabled=true,FolderName=nil,FileName='Lukes Script Hub'},KeySystem=false},{}if aa.isKBM()then ac.Library=a.d()else ac.Library=
 loadstring(game:HttpGet'https://sirius.menu/rayfield')()end ac.Window=ac.Library:CreateWindow(ab)return ac end function a.e():typeof(__modImpl())local aa=a.
 cache.e if not aa then aa={c=__modImpl()}a.cache.e=aa end return aa.c end end do local function __modImpl()local aa,ab=a.e(),a.b()local ac=aa.Window:CreateTab(
-'Universal','globe')ac:CreateSection'Noclip'local ae=ac:CreateToggle{Name='Toggle Noclip',CurrentValue=false,Flag=nil,Callback=function(ae)ab.Noclip.set_manual(
-ae)if ae then ab.Noclip.enable()else ab.Noclip.disable()end end}ac:CreateKeybind{Name='Toggle Noclip',CurrentKeybind='V',HoldToInteract=false,Flag=
-'NoClipKeybind',Callback=function()if ae.CurrentValue then aa.Library:Notify{Title='Noclip Disabled',Content='Noclip is now disabled.',Duration=3,Image='ban'}
-else aa.Library:Notify{Title='Noclip Enabled',Content='Noclip is now enabled.',Duration=3,Image='check'}end ae:Set(not ae.CurrentValue)end}ac:CreateSection
-'Path'local ah=false ac:CreateKeybind{Name='Toggle Paths',CurrentKeybind='N',HoldToInteract=false,Flag='PathKeybind',Callback=function()ah=not ah end}task.
-spawn(function()local aj local function getPath()if not aj then aj=Instance.new('Part',game.Workspace)aj.Size=Vector3.new(3,1,3)aj.Anchored=true end return aj
-end while task.wait()do if ah==true then local ak,al=getPath(),game:GetService'Players'.LocalPlayer local am=al and al.Character local an,ao=am and am:
-FindFirstChild'HumanoidRootPart',am and am:FindFirstChildWhichIsA'Humanoid'local ap=ao and ao.RigType if an and ao and ap then if ap==Enum.HumanoidRigType.R15
+'Universal','globe')ac:CreateSection'Noclip'local ae=ac:CreateToggle{Name='Toggle Noclip',CurrentValue=false,Flag=nil,Callback=function(ae)if ae then ab.Noclip.
+enable()ab.Noclip.set_manual(ae)else ab.Noclip.set_manual(ae)ab.Noclip.disable()end end}ac:CreateKeybind{Name='Toggle Noclip',CurrentKeybind='V',HoldToInteract=
+false,Flag='NoClipKeybind',Callback=function()if ae.CurrentValue then aa.Library:Notify{Title='Noclip Disabled',Content='Noclip is now disabled.',Duration=3,
+Image='ban'}else aa.Library:Notify{Title='Noclip Enabled',Content='Noclip is now enabled.',Duration=3,Image='check'}end ae:Set(not ae.CurrentValue)end}ac:
+CreateSection'Path'local ah=false ac:CreateKeybind{Name='Toggle Paths',CurrentKeybind='N',HoldToInteract=false,Flag='PathKeybind',Callback=function()ah=not ah
+end}task.spawn(function()local aj local function getPath()if not aj then aj=Instance.new('Part',game.Workspace)aj.Size=Vector3.new(3,1,3)aj.Anchored=true end
+return aj end while task.wait()do if ah==true then local ak,al=getPath(),game:GetService'Players'.LocalPlayer local am=al and al.Character local an,ao=am and am
+:FindFirstChild'HumanoidRootPart',am and am:FindFirstChildWhichIsA'Humanoid'local ap=ao and ao.RigType if an and ao and ap then if ap==Enum.HumanoidRigType.R15
 then local aq,ar=an.Size.Y,ao.HipHeight ak.CFrame=an.CFrame*CFrame.new(0,-(aq/2)-ar-0.5,0)else local aq=am and am:FindFirstChild'Left Leg'if aq then local ar,as
 =an.Size.Y,aq.Size.Y ak.CFrame=an.CFrame*CFrame.new(0,-(ar/2)-as-0.5,0)end end end else if aj then aj:Destroy()aj=nil end end end end)ac:CreateSection
 'Ctrl+Click Delete'ac:CreateLabel[[Ctrl+Left-Click a part to delete. Ctrl+Right-Click to restore]]local al=true ac:CreateToggle{Name='Ctrl+Click Delete',
@@ -570,17 +570,17 @@ GetPlayers())do if ab.plrHasGun(af)then ad=af break end end return ad end functi
 ah=aa.getLocalChar(),aa.getLocalRoot()local ai=ag and ag:FindFirstChild'Gun'local aj=ai and ai:FindFirstChild'Shoot'if aj and ah then aj:FireServer(ah.CFrame,
 CFrame.new(ae))end end end function ab.shootPlayer(ae)local af=ae and ae.Character local ag,_,ai=af and af:FindFirstChild'HumanoidRootPart',af and af:
 FindFirstChildWhichIsA'Humanoid',aa.getLocalPlayer()if ai and ag then local aj,ak=ai:GetNetworkPing()*1.5,ag.AssemblyLinearVelocity local al=ag.Position+(ak*aj)
-ab.shootPos(al)end end function ab.doMurderRaycast(ae,af)local ag,ah,ai=aa.getLocalChar(),(af-ae)-((af-ae).Unit*3),RaycastParams.new()ai.FilterType=Enum.
-RaycastFilterType.Exclude ai.FilterDescendantsInstances={ag}ai.IgnoreWater=true local aj=game.Workspace:Raycast(ae,ah,ai)if not aj then return true end return
-false end function ab.getValidOffset(ae,af)for ag,ah in pairs(af)do local ai,aj=ae.Position+ah,ae.Position if ab.doMurderRaycast(ai,aj)then return ah end end
-return Vector3.new(0,0,0)end function ab.getShotPos(ae)local af,ag=aa.getLocalRoot(),ae and ae.Character local ah,ai=ag and ag:FindFirstChild'HumanoidRootPart',
-{Vector3.new(0,0,-15),Vector3.new(0,0,15),Vector3.new(0,-15,0),Vector3.new(0,15,0),Vector3.new(-15,0,0),Vector3.new(15,0,0)}if af and ah then local aj=ab.
-getValidOffset(ah,ai)return ah.CFrame*CFrame.new(aj)end return nil end function ab.tpShoot(ae)local af,ag,ah=aa.getLocalPlayer(),aa.getLocalRoot(),ae and ae.
-Character local ai,aj=ah and ah:FindFirstChild'HumanoidRootPart',af:GetNetworkPing()if ag and ai then local ak=ag.CFrame task.wait(0.1)local al=ab.getShotPos(ae
-)ag.CFrame=al task.wait(aj*2)ab.shootPlayer(ae)task.wait(aj*2)ag.CFrame=ak end end function ab.updatePlayerESP(ae)local af,ag=ab.getMurderer(),ab.getSheriff()
-for ah,ai in pairs(game:GetService'Players':GetPlayers())do if ai~=game:GetService'Players'.LocalPlayer then local aj,ak=ai==af,ai==ag if ak then aa.
-updatePlayerESP(ai,Color3.fromRGB(0,0,255),ae,Color3.fromRGB(255,0,255))elseif aj then aa.updatePlayerESP(ai,Color3.fromRGB(255,0,0),ae,Color3.fromRGB(255,0,255
-))else aa.updatePlayerESP(ai,Color3.fromRGB(0,255,0),ae,Color3.fromRGB(255,0,255))end end end end function ab.updateCoinESP(ae)local af=game.Workspace:
+ab.shootPos(al)end end function ab.doMurderRaycast(ae,af)local ag,ah,ai=aa.getLocalChar(),(af-ae)-((af-ae).Unit*1.5),RaycastParams.new()ai.FilterType=Enum.
+RaycastFilterType.Exclude ai.FilterDescendantsInstances={ag}ai.IgnoreWater=true local aj=game.Workspace:Spherecast(ae,1.5,ah,ai)if not aj then return true end
+return false end function ab.getValidOffset(ae,af)for ag,ah in pairs(af)do local ai,aj=ae.Position+ah,ae.Position if ab.doMurderRaycast(ai,aj)then return ah end
+end return Vector3.new(0,0,0)end function ab.getShotPos(ae)local af,ag=aa.getLocalRoot(),ae and ae.Character local ah,ai=ag and ag:FindFirstChild
+'HumanoidRootPart',{Vector3.new(0,0,-15),Vector3.new(0,0,15),Vector3.new(0,-15,0),Vector3.new(0,15,0),Vector3.new(-15,0,0),Vector3.new(15,0,0)}if af and ah then
+local aj=ab.getValidOffset(ah,ai)return ah.CFrame*CFrame.new(aj)end return nil end function ab.tpShoot(ae)local af,ag,ah=aa.getLocalPlayer(),aa.getLocalRoot(),
+ae and ae.Character local ai,aj=ah and ah:FindFirstChild'HumanoidRootPart',af:GetNetworkPing()if ag and ai then local ak=ag.CFrame task.wait(0.1)local al=ab.
+getShotPos(ae)ag.CFrame=al task.wait(aj*2)ab.shootPlayer(ae)task.wait(aj*2)ag.CFrame=ak end end function ab.updatePlayerESP(ae)local af,ag=ab.getMurderer(),ab.
+getSheriff()for ah,ai in pairs(game:GetService'Players':GetPlayers())do if ai~=game:GetService'Players'.LocalPlayer then local aj,ak=ai==af,ai==ag if ak then aa
+.updatePlayerESP(ai,Color3.fromRGB(0,0,255),ae,Color3.fromRGB(255,0,255))elseif aj then aa.updatePlayerESP(ai,Color3.fromRGB(255,0,0),ae,Color3.fromRGB(255,0,
+255))else aa.updatePlayerESP(ai,Color3.fromRGB(0,255,0),ae,Color3.fromRGB(255,0,255))end end end end function ab.updateCoinESP(ae)local af=game.Workspace:
 FindFirstChild('CoinContainer',true)if af then for ag,ah in pairs(af:GetChildren())do if ah.Name=='CollectedCoin'then ah:Destroy()end end aa.updateESP(af,Color3
 .fromRGB(255,200,0),ae)end end function ab.flingMurderer()local ae=ab.getMurderer()if ae and ae~=game:GetService'Players'.LocalPlayer then aa.flingPlayer(ae)end
 end function ab.killAll()local ae=game:GetService'Players'.LocalPlayer local af=ae and ae.Character local ag,ah=af and af:FindFirstChild'Humanoid',af and af:
@@ -605,7 +605,7 @@ b=false ad:CreateToggle{Name='Collect Coins',CurrentValue=false,Flag=nil,Callbac
 end return false end while task.wait()do if b and not ab.get_safeTweening()then local d=game:GetService'Players'.LocalPlayer local e=d and d.Character local f=e
 and e:FindFirstChild'HumanoidRootPart'if f then local g=game.Workspace:FindFirstChild('CoinContainer',true)if g then local i,h=99999999 for j,k in pairs(g:
 GetChildren())do if k.Name=='Coin_Server'and not coinCollected(k)then local l=ab.dist3d(f.Position,k.Position)if l<i and l>1 then i=l h=k end end end if h then
-ab.set_safeTweenSpeed(26)ab.safeTweenToPart(h,coinCollected)end end end end end end)task.spawn(function()while task.wait(0.1)do local d=game.Workspace:
+ab.set_safeTweenSpeed(22)ab.safeTweenToPart(h,coinCollected)end end end end end end)task.spawn(function()while task.wait(0.1)do local d=game.Workspace:
 FindFirstChild('Base',true)local e=d and d:FindFirstChild'GlitchProof'if e then e:Destroy()end end end)end return init end function a.v():typeof(__modImpl())
 local aa=a.cache.v if not aa then aa={c=__modImpl()}a.cache.v=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function ab.getZombies
 ()local ac=game.Workspace:FindFirstChild'Zombies'return(ac and ac:GetChildren())or{}end function ab.getBox()local ac=game.Workspace:FindFirstChild'Interactions'

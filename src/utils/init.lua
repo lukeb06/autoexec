@@ -116,19 +116,16 @@ function M.safeTweenToPart(part, stopIf)
 		local root = char and char:FindFirstChild("HumanoidRootPart")
 		local hum = char and char:FindFirstChildWhichIsA("Humanoid")
 
-		local dist = M.dist3d(root.Position, part.Position)
-		local t = dist / safeTweenSpeed
-
 		safeTweening = true
 		if hum and hum.SeatPart then
 			hum.Sit = false
 			task.wait(0.1)
 		end
 		local conn = nil
-		safeTweening = true
 		M.Noclip.enable()
 		game.Workspace.Gravity = 0
 		conn = game:GetService("RunService").Heartbeat:Connect(function(dt)
+			M.breakVelocity(0.1)
 			if not root or not part or not part.Parent or (stopIf and stopIf(part)) then
 				conn:Disconnect()
 				safeTweening = false
