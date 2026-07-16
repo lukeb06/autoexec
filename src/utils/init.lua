@@ -80,6 +80,10 @@ function M.set_safeTweening(value)
 	safeTweening = value
 end
 
+function M.set_safeTweenSpeed(value)
+	safeTweenSpeed = value
+end
+
 function M.safeTweenToPos(cframe)
 	local TweenService = game:GetService("TweenService")
 

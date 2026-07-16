@@ -176,7 +176,7 @@ local function init()
 						for i, v in pairs(coins:GetChildren()) do
 							if v.Name == "Coin_Server" and not coinCollected(v) then
 								local dist = Utils.dist3d(root.Position, v.Position)
-								if dist < best_dist and dist > 5 then
+								if dist < best_dist and dist > 1 then
 									best_dist = dist
 									best = v
 								end
@@ -184,6 +184,7 @@ local function init()
 						end
 
 						if best then
+							Utils.set_safeTweenSpeed(32)
 							Utils.safeTweenToPart(best, coinCollected)
 						end
 					end
