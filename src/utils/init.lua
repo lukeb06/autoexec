@@ -120,7 +120,6 @@ function M.safeTweenToPart(part, stopIf)
 			hum.Sit = false
 			task.wait(0.1)
 		end
-		task.wait(0.1)
 		local conn = nil
 		safeTweening = true
 		M.Noclip.enable()
