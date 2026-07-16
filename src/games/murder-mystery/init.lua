@@ -141,6 +141,25 @@ local function init()
 		end,
 	})
 	task.spawn(function()
+		local function coinCollected(part)
+			local cv = part:FindFirstChild("CoinVisual")
+			if not cv then
+				return true
+			end
+
+			local main = cv:FindFirstChild("MainCoin")
+
+			if not main then
+				return true
+			end
+
+			if main.Transparency > 0 then
+				return true
+			end
+
+			return false
+		end
+
 		while task.wait() do
 			if mm_collect_coin_toggled and not Utils.get_safeTweening() then
 				local plr = game:GetService("Players").LocalPlayer
@@ -155,7 +174,7 @@ local function init()
 						local best_dist = 99999999
 
 						for i, v in pairs(coins:GetChildren()) do
-							if v.Name == "Coin_Server" and v:FindFirstChild("CoinVisual") then
+							if v.Name == "Coin_Server" and not coinCollected(v) then
 								local dist = Utils.dist3d(root.Position, v.Position)
 								if dist < best_dist and dist > 5 then
 									best_dist = dist
@@ -165,22 +184,7 @@ local function init()
 						end
 
 						if best then
-							Utils.safeTweenToPart(best, function(part)
-								local cv = part:FindFirstChild("CoinVisual")
-								if not cv then
-									return true
-								end
-
-								local main = cv:FindFirstChild("MainCoin")
-
-								if not main then
-									return true
-								end
-
-								if main.Transparency > 0 then
-									return true
-								end
-							end)
+							Utils.safeTweenToPart(best, coinCollected)
 						end
 					end
 				end
