@@ -19,9 +19,9 @@ dist3d(j.Position,f.Position)local m=l/d e=true if k and k.SeatPart then k.Sit=f
 .Linear),{CFrame=f}):Play()task.delay(m,function()e=false end)c.breakVelocity(m)end function c.safeTweenToPart(f,g)if f:IsA'BasePart'then local h=game:
 GetService'Players'.LocalPlayer local i=h and h.Character local j,k=i and i:FindFirstChild'HumanoidRootPart',i and i:FindFirstChildWhichIsA'Humanoid'local l=c.
 dist3d(j.Position,f.Position)local _=l/d e=true if k and k.SeatPart then k.Sit=false task.wait(0.1)end task.wait(0.1)local n e=true c.Noclip.enable()game.
-Workspace.Gravity=0 n=game:GetService'RunService'.Heartbeat:Connect(function(o)if not j or not f or not f.Parent or g(f)then n:Disconnect()e=false c.Noclip.
-disable()game.Workspace.Gravity=196.21 if k then k:ChangeState(Enum.HumanoidStateType.GettingUp)end return end local p,q=j.Position,f.Position local r,s=c.
-dist3d(p,q),d*o if r<=s then j.CFrame=f.CFrame n:Disconnect()e=false c.Noclip.disable()if k then k:ChangeState(Enum.HumanoidStateType.GettingUp)end game.
+Workspace.Gravity=0 n=game:GetService'RunService'.Heartbeat:Connect(function(o)if not j or not f or not f.Parent or(g and g(f))then n:Disconnect()e=false c.
+Noclip.disable()game.Workspace.Gravity=196.21 if k then k:ChangeState(Enum.HumanoidStateType.GettingUp)end return end local p,q=j.Position,f.Position local r,s=
+c.dist3d(p,q),d*o if r<=s then j.CFrame=f.CFrame n:Disconnect()e=false c.Noclip.disable()if k then k:ChangeState(Enum.HumanoidStateType.GettingUp)end game.
 Workspace.Gravity=196.21 else local t=c.dir3d(p,q)local u=p+(t*s)if k then k:ChangeState(Enum.HumanoidStateType.Physics)end j.CFrame=CFrame.new(u)*(f.CFrame-f.
 CFrame.Position)end end)end end function c.flingCharacter(f)local g=game:GetService'Players'.LocalPlayer local h=g and g.Character local i,j=h and h:
 FindFirstChild'HumanoidRootPart',f and f:FindFirstChild'HumanoidRootPart'if i and j then c.Noclip.enable()task.wait(0.2)local k=i.CFrame task.wait(0.1)for l,m

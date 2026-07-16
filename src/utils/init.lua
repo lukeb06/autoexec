@@ -126,7 +126,7 @@ function M.safeTweenToPart(part, stopIf)
 		M.Noclip.enable()
 		game.Workspace.Gravity = 0
 		conn = game:GetService("RunService").Heartbeat:Connect(function(dt)
-			if not root or not part or not part.Parent or stopIf(part) then
+			if not root or not part or not part.Parent or (stopIf and stopIf(part)) then
 				conn:Disconnect()
 				safeTweening = false
 				M.Noclip.disable()
