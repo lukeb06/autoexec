@@ -527,41 +527,45 @@ GetService'Players':GetPlayers())do if al~=ag then local am=al and al.Character 
 CFrame end end end aj=aj+1 task.wait()end ab.Noclip.disable()end end}end return init end function a.q():typeof(__modImpl())local aa=a.cache.q if not aa then aa=
 {c=__modImpl()}a.cache.q=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function ab.updatePlayerESP(ac)local ad,ae=aa.
 getLocalPlayer(),ab.getCurrentGame()=='HideAndSeek'for af,ag in pairs(game:GetService'Players':GetPlayers())do local ah,ai=ag and ag.Character,ab.hasKnife(ag)
-local aj=(ae and((ai and Color3.fromRGB(255,0,0))or Color3.fromRGB(0,255,0)))or Color3.fromRGB(255,0,0)if ag~=ad then aa.updatePlayerESP(ag,aj,ac and ab.
-isAlive(ah),Color3.fromRGB(255,0,255))end end end function ab.updateGuardESP(ac)local ad=ab.getGuards()for ae,af in pairs(ad)do aa.updateESP(af,Color3.fromRGB(0
-,0,255),ac and ab.isAlive(af))end end function ab.getLiving()local ac=game.Workspace:FindFirstChild'Live'return ac end function ab.isGuard(ac)local ad=ac:
-FindFirstChild'TypeOfGuard'if ad then return true end return false end function ab.getGuards()local ac,ad=ab.getLiving(),{}for ae,af in pairs(ac:GetChildren())
-do if ab.isGuard(af)then table.insert(ad,af)end end return ad end function ab.isAlive(ac)local ad=ac and ac:FindFirstChild'Humanoid'if ad then return ad.Health>
-0 end return true end function ab.getValues()local ac=game.Workspace:FindFirstChild'Values'return ac end function ab.getCurrentGame()local ac=ab.getValues()
-local ad=ac and ac:FindFirstChild'CurrentGame'if ad then return ad.Value end return nil end function ab.getGlassBridge()local ac=game.Workspace:FindFirstChild
-'GlassBridge'return ac end function ab.getGlassHolder()local ac=ab.getGlassBridge()local ad=ac and ac:FindFirstChild'GlassHolder'return ad end function ab.
-getGlassPanels()local ac=ab.getGlassHolder()if ac then local ad=ac:GetChildren()return ad end return{}end function ab.getGlassModels(ac)if ac then local ad=ac:
-GetChildren()return ad end return{}end function ab.getGlassPart(ac)local ad=ac and ac:FindFirstChild'glasspart'return ad end function ab.isFakeGlass(ac)local ad
-=ac and ac:FindFirstChild'Blur'if ad then return true end return false end function ab.getGlassParts()local ac,ad={},ab.getGlassPanels()for ae,af in pairs(ad)do
-local ag=ab.getGlassModels(af)for ah,ai in pairs(ag)do local aj=ab.getGlassPart(ai)if aj then table.insert(ac,aj)end end end return ac end function ab.
-updateGlassBridgeESP(ac)local ad=ab.getGlassParts()for ae,af in pairs(ad)do local ag=ab.isFakeGlass(af)aa.updateESP(af,Color3.fromRGB(255,0,0),ac and ag)end end
-function ab.hasKnife(ac)local ad,ae=ac and ac.Character,ac and ac:FindFirstChild'Backpack'local af=(ae and ae:FindFirstChild'Knife')or(ad and ad:FindFirstChild
-'Knife')if af then return true end return false end function ab.getGunEvent()local ac=game:GetService'ReplicatedStorage':FindFirstChild'Remotes'local ad=ac and
-ac:FindFirstChild'FiredGunClient'return ad end function ab.getMP5()local ac=aa.getLocalChar()local ad=ac and ac:FindFirstChild'MP5'return ad end function ab.
-silentShoot()local ac,ad,ae,af,ag,ah,ai=ab.getMP5(),ab.getGunEvent(),CFrame.new(),Instance.new'Part',Vector3.new(),Vector3.new(1,1,1),Vector3.new()if ac and ad
-then ad:FireServer{ac,{ClientRayNormal=Vector3.new(0,0,-1),FiredGun=true,bulletCF=ae,ClientRayInstance=af,SecondaryHitTargets={},ClientRayPosition=ag,HitTargets
-={},bulletSizeC=ah,NoMuzzleFX=false,FirePosition=ai}}end end function ab.getDoll()local ac=game.Workspace:FindFirstChild'SQUIDDOLL123'return ac end function ab.
-gotoDoll()local ac=ab.getDoll()if ac then local ad=aa.getLocalRoot()if ad then local ae=ac:FindFirstChildWhichIsA'BasePart'or ac:FindFirstChildWhichIsA
-'MeshPart'if ae then ad.CFrame=ae.CFrame end end end end return ab end function a.r():typeof(__modImpl())local aa=a.cache.r if not aa then aa={c=__modImpl()}a.
-cache.r=aa end return aa.c end end do local function __modImpl()local aa,ab=a.r(),{}ab.State={player_esp_toggled=true,guard_esp_toggled=true,
-glass_bridge_esp_toggled=true}function ab.onPlayerESPToggle(ac)ab.State.player_esp_toggled=ac aa.updatePlayerESP(ac)end task.spawn(function()while task.wait(1)
-do if ab.State.player_esp_toggled then aa.updatePlayerESP(ab.State.player_esp_toggled)end end end)function ab.onGuardESPToggle(ac)ab.State.guard_esp_toggled=ac
-aa.updateGuardESP(ac)end task.spawn(function()while task.wait(1)do if ab.State.guard_esp_toggled then aa.updateGuardESP(ab.State.guard_esp_toggled)end end end)
-function ab.onGlassBridgeESPToggle(ac)ab.State.glass_bridge_esp_toggled=ac aa.updateGlassBridgeESP(ac)end task.spawn(function()while task.wait(1)do if ab.State.
-glass_bridge_esp_toggled then aa.updateGlassBridgeESP(ab.State.glass_bridge_esp_toggled)end end end)return ab end function a.s():typeof(__modImpl())local aa=a.
-cache.s if not aa then aa={c=__modImpl()}a.cache.s=aa end return aa.c end end do local function __modImpl()local function init()local aa,ab=a.e(),a.s()local ac=
-aa.Window:CreateTab('Ink Game','gamepad-2')ac:CreateSection'ESP'ac:CreateToggle{Name='Player ESP',CurrentValue=ab.State.player_esp_toggled,Flag=nil,Callback=ab.
-onPlayerESPToggle}ac:CreateToggle{Name='Guard ESP',CurrentValue=ab.State.guard_esp_toggled,Flag=nil,Callback=ab.onGuardESPToggle}task.spawn(function()
-loadstring(game:HttpGet[[https://raw.githubusercontent.com/wefwef34/inkgames.github.io/refs/heads/main/ringta.lua]])()end)end return init end function a.t():
-typeof(__modImpl())local aa=a.cache.t if not aa then aa={c=__modImpl()}a.cache.t=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}
-function ab.plrHasItem(ac,ad)local ae,af=ac:FindFirstChild'Backpack',ac.Character local ag,ah=ae and ae:FindFirstChild(ad),af and af:FindFirstChild(ad)if ag or
-ah then return true end return false end function ab.plrHasKnife(ac)return ab.plrHasItem(ac,'Knife')end function ab.plrHasGun(ac)return ab.plrHasItem(ac,'Gun')
-end local ac,ad task.spawn(function()game:GetService'ReplicatedStorage':WaitForChild'Remotes':WaitForChild'Gameplay':WaitForChild'PlayerDataChanged'.
+local aj=(ab.isGuard(ah)and Color3.fromRGB(0,0,255))or((ae and((ai and Color3.fromRGB(255,0,0))or Color3.fromRGB(0,255,0)))or Color3.fromRGB(255,0,0))if ag~=ad
+then aa.updatePlayerESP(ag,aj,ac and ab.isAlive(ah),Color3.fromRGB(255,0,255))end end end function ab.updateGuardESP(ac)local ad=ab.getGuards()for ae,af in
+pairs(ad)do aa.updateESP(af,Color3.fromRGB(0,0,255),ac and ab.isAlive(af))end end function ab.getLiving()local ac=game.Workspace:FindFirstChild'Live'return ac
+end function ab.isGuard(ac)local ad=ac:FindFirstChild'TypeOfGuard'or ac:FindFirstChild'GuardPlayerOutift'if ad then return true end return false end function ab
+.getGuards()local ac,ad=ab.getLiving(),{}for ae,af in pairs(ac:GetChildren())do if ab.isGuard(af)then table.insert(ad,af)end end return ad end function ab.
+isAlive(ac)local ad=ac and ac:FindFirstChild'Humanoid'if ad then return ad.Health>0 end return true end function ab.getValues()local ac=game.Workspace:
+FindFirstChild'Values'return ac end function ab.getCurrentGame()local ac=ab.getValues()local ad=ac and ac:FindFirstChild'CurrentGame'if ad then return ad.Value
+end return nil end function ab.getGlassBridge()local ac=game.Workspace:FindFirstChild'GlassBridge'return ac end function ab.getGlassHolder()local ac=ab.
+getGlassBridge()local ad=ac and ac:FindFirstChild'GlassHolder'return ad end function ab.getGlassPanels()local ac=ab.getGlassHolder()if ac then local ad=ac:
+GetChildren()return ad end return{}end function ab.getGlassModels(ac)if ac then local ad=ac:GetChildren()return ad end return{}end function ab.getGlassPart(ac)
+local ad=ac and ac:FindFirstChild'glasspart'return ad end function ab.isFakeGlass(ac)local ad=ac and ac:FindFirstChild'Blur'if ad then return true end return
+false end function ab.getGlassParts()local ac,ad={},ab.getGlassPanels()for ae,af in pairs(ad)do local ag=ab.getGlassModels(af)for ah,ai in pairs(ag)do local aj=
+ab.getGlassPart(ai)if aj then table.insert(ac,aj)end end end return ac end function ab.updateGlassBridgeESP(ac)local ad=ab.getGlassParts()for ae,af in pairs(ad)
+do local ag=ab.isFakeGlass(af)aa.updateESP(af,Color3.fromRGB(255,0,0),ac and ag)end end function ab.hasKnife(ac)local ad,ae=ac and ac.Character,ac and ac:
+FindFirstChild'Backpack'local af=(ae and ae:FindFirstChild'Knife')or(ad and ad:FindFirstChild'Knife')if af then return true end return false end function ab.
+getGunEvent()local ac=game:GetService'ReplicatedStorage':FindFirstChild'Remotes'local ad=ac and ac:FindFirstChild'FiredGunClient'return ad end function ab.
+getMP5()local ac=aa.getLocalChar()local ad=ac and ac:FindFirstChild'MP5'return ad end function ab.silentShoot()local ac,ad,ae,af,ag,ah,ai=ab.getMP5(),ab.
+getGunEvent(),CFrame.new(),Instance.new'Part',Vector3.new(),Vector3.new(1,1,1),Vector3.new()if ac and ad then ad:FireServer{ac,{ClientRayNormal=Vector3.new(0,0,
+-1),FiredGun=true,bulletCF=ae,ClientRayInstance=af,SecondaryHitTargets={},ClientRayPosition=ag,HitTargets={},bulletSizeC=ah,NoMuzzleFX=false,FirePosition=ai}}
+end end function ab.getDoll()local ac=game.Workspace:FindFirstChild'SQUIDDOLL123'return ac end function ab.gotoDoll()local ac=ab.getDoll()if ac then local ad=aa
+.getLocalRoot()if ad then local ae=ac:FindFirstChildWhichIsA'BasePart'or ac:FindFirstChildWhichIsA'MeshPart'if ae then ad.CFrame=ae.CFrame end end end end
+return ab end function a.r():typeof(__modImpl())local aa=a.cache.r if not aa then aa={c=__modImpl()}a.cache.r=aa end return aa.c end end do local function 
+__modImpl()local aa,ab,ac=a.r(),a.b(),{}ac.State={player_esp_toggled=true,guard_esp_toggled=true,glass_bridge_esp_toggled=true,guard_tp_toggled=false}function
+ac.onPlayerESPToggle(ad)ac.State.player_esp_toggled=ad aa.updatePlayerESP(ad)end task.spawn(function()while task.wait(1)do if ac.State.player_esp_toggled then
+aa.updatePlayerESP(ac.State.player_esp_toggled)end end end)function ac.onGuardESPToggle(ad)ac.State.guard_esp_toggled=ad aa.updateGuardESP(ad)end task.spawn(
+function()while task.wait(1)do if ac.State.guard_esp_toggled then aa.updateGuardESP(ac.State.guard_esp_toggled)end end end)function ac.onGlassBridgeESPToggle(ad
+)ac.State.glass_bridge_esp_toggled=ad aa.updateGlassBridgeESP(ad)end task.spawn(function()while task.wait(1)do if ac.State.glass_bridge_esp_toggled then aa.
+updateGlassBridgeESP(ac.State.glass_bridge_esp_toggled)end end end)function ac.onGuardTPToggle()ac.State.guard_tp_toggled=not ac.State.guard_tp_toggled end task
+.spawn(function()while task.wait()do if ac.State.guard_tp_toggled then local ad,ae=aa.getGuards(),ab.getLocalRoot()if ae then for af,ag in pairs(ad)do local ah=
+ag and ag:FindFirstChild'HumanoidRootPart'if ah and aa.isAlive(ah)then ah.CFrame=ae.CFrame*CFrame.new(0,0,-10)end end end end end end)return ac end function a.s
+():typeof(__modImpl())local aa=a.cache.s if not aa then aa={c=__modImpl()}a.cache.s=aa end return aa.c end end do local function __modImpl()local function init(
+)local aa,ab=a.e(),a.s()local ac=aa.Window:CreateTab('Ink Game','gamepad-2')ac:CreateSection'ESP'ac:CreateToggle{Name='Player ESP',CurrentValue=ab.State.
+player_esp_toggled,Flag=nil,Callback=ab.onPlayerESPToggle}ac:CreateToggle{Name='Guard ESP',CurrentValue=ab.State.guard_esp_toggled,Flag=nil,Callback=ab.
+onGuardESPToggle}ac:CreateKeybind{Name='Teleport Guards (Experimental)',CurrentKeybind='H',HoldToInteract=false,Flag=nil,Callback=ab.onGuardTPToggle}task.spawn(
+function()loadstring(game:HttpGet[[https://raw.githubusercontent.com/wefwef34/inkgames.github.io/refs/heads/main/ringta.lua]])()end)end return init end function
+a.t():typeof(__modImpl())local aa=a.cache.t if not aa then aa={c=__modImpl()}a.cache.t=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b()
+,{}function ab.plrHasItem(ac,ad)local ae,af=ac:FindFirstChild'Backpack',ac.Character local ag,ah=ae and ae:FindFirstChild(ad),af and af:FindFirstChild(ad)if ag
+or ah then return true end return false end function ab.plrHasKnife(ac)return ab.plrHasItem(ac,'Knife')end function ab.plrHasGun(ac)return ab.plrHasItem(ac,
+'Gun')end local ac,ad task.spawn(function()game:GetService'ReplicatedStorage':WaitForChild'Remotes':WaitForChild'Gameplay':WaitForChild'PlayerDataChanged'.
 OnClientEvent:Connect(function(ae)ac=nil ad=nil for af,ag in pairs(ae)do local ah=game:GetService'Players':FindFirstChild(af)for ai,aj in pairs(ag)do if ai==
 'Role'then if aj=='Murderer'then ac=ah end if aj=='Sheriff'then ad=ah end end end end end)game:GetService'ReplicatedStorage':WaitForChild'Remotes':WaitForChild
 'Gameplay':WaitForChild'RoundEndFade'.OnClientEvent:Connect(function(ae)ac=nil ad=nil end)end)function ab.getMurderer()for ae,af in pairs(game:GetService

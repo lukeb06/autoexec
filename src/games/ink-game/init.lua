@@ -20,6 +20,14 @@ local function init()
 		Callback = Funcs.onGuardESPToggle,
 	})
 
+	InkGameTab:CreateKeybind({
+		Name = "Teleport Guards (Experimental)",
+		CurrentKeybind = "H",
+		HoldToInteract = false,
+		Flag = nil,
+		Callback = Funcs.onGuardTPToggle,
+	})
+
 	-- InkGameTab:CreateToggle({
 	-- 	Name = "Glass Bridge ESP",
 	-- 	CurrentValue = Funcs.State.glass_bridge_esp_toggled,

@@ -12,8 +12,11 @@ function M.updatePlayerESP(enabled)
 
 		local hasKnife = M.hasKnife(v)
 
-		local color = (isHAS and ((hasKnife and Color3.fromRGB(255, 0, 0)) or Color3.fromRGB(0, 255, 0)))
-			or Color3.fromRGB(255, 0, 0)
+		local color = (M.isGuard(char) and Color3.fromRGB(0, 0, 255))
+			or (
+				(isHAS and ((hasKnife and Color3.fromRGB(255, 0, 0)) or Color3.fromRGB(0, 255, 0)))
+				or Color3.fromRGB(255, 0, 0)
+			)
 
 		if v ~= plr then
 			Utils.updatePlayerESP(v, color, enabled and M.isAlive(char), Color3.fromRGB(255, 0, 255))
@@ -35,7 +38,7 @@ function M.getLiving()
 end
 
 function M.isGuard(entity)
-	local tog = entity:FindFirstChild("TypeOfGuard")
+	local tog = entity:FindFirstChild("TypeOfGuard") or entity:FindFirstChild("GuardPlayerOutift")
 
 	if tog then
 		return true
