@@ -166,7 +166,20 @@ local function init()
 
 						if best then
 							Utils.safeTweenToPart(best, function(part)
-								return not part:FindFirstChild("CoinVisual")
+								local cv = part:FindFirstChild("CoinVisual")
+								if not cv then
+									return true
+								end
+
+								local main = cv:FindFirstChild("MainCoin")
+
+								if not main then
+									return true
+								end
+
+								if main.Transparency > 0 then
+									return true
+								end
 							end)
 						end
 					end
