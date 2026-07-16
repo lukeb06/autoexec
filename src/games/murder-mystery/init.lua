@@ -173,7 +173,7 @@ local function init()
 						local best = nil
 						local best_dist = 99999999
 
-						for i, v in pairs(coins:GetChildren()) do
+						for _, v in pairs(coins:GetChildren()) do
 							if v.Name == "Coin_Server" and not coinCollected(v) then
 								local dist = Utils.dist3d(root.Position, v.Position)
 								if dist < best_dist and dist > 1 then
