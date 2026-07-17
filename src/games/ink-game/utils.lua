@@ -38,6 +38,9 @@ function M.getLiving()
 end
 
 function M.isGuard(entity)
+	if not entity then
+		return false
+	end
 	local tog = entity:FindFirstChild("TypeOfGuard") or entity:FindFirstChild("GuardPlayerOutift")
 
 	if tog then
