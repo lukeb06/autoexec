@@ -21,11 +21,19 @@ local function init()
 	})
 
 	InkGameTab:CreateKeybind({
-		Name = "Teleport Guards (Experimental)",
+		Name = "Bring Player Guards",
 		CurrentKeybind = "H",
 		HoldToInteract = false,
 		Flag = nil,
-		Callback = Funcs.onGuardTPToggle,
+		Callback = Funcs.onPlayerGuardTPToggle,
+	})
+
+	InkGameTab:CreateKeybind({
+		Name = "Bring NPC Guards",
+		CurrentKeybind = "J",
+		HoldToInteract = false,
+		Flag = nil,
+		Callback = Funcs.onNPCGuardTPToggle,
 	})
 
 	-- InkGameTab:CreateToggle({

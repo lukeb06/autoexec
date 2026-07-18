@@ -530,80 +530,86 @@ getLocalPlayer(),ab.getCurrentGame()=='HideAndSeek'for af,ag in pairs(game:GetSe
 local aj=(ab.isGuard(ah)and Color3.fromRGB(0,0,255))or((ae and((ai and Color3.fromRGB(255,0,0))or Color3.fromRGB(0,255,0)))or Color3.fromRGB(255,0,0))if ag~=ad
 then aa.updatePlayerESP(ag,aj,ac and ab.isAlive(ah),Color3.fromRGB(255,0,255))end end end function ab.updateGuardESP(ac)local ad=ab.getGuards()for ae,af in
 pairs(ad)do aa.updateESP(af,Color3.fromRGB(0,0,255),ac and ab.isAlive(af))end end function ab.getLiving()local ac=game.Workspace:FindFirstChild'Live'return ac
-end function ab.isGuard(ac)if not ac then return false end local ad=ac:FindFirstChild'TypeOfGuard'or ac:FindFirstChild'GuardPlayerOutift'if ad then return true
-end return false end function ab.getGuards()local ac,ad=ab.getLiving(),{}for ae,af in pairs(ac:GetChildren())do if ab.isGuard(af)then table.insert(ad,af)end end
-return ad end function ab.isAlive(ac)local ad=ac and ac:FindFirstChild'Humanoid'if ad then return ad.Health>0 end return true end function ab.getValues()local
-ac=game.Workspace:FindFirstChild'Values'return ac end function ab.getCurrentGame()local ac=ab.getValues()local ad=ac and ac:FindFirstChild'CurrentGame'if ad
-then return ad.Value end return nil end function ab.getGlassBridge()local ac=game.Workspace:FindFirstChild'GlassBridge'return ac end function ab.getGlassHolder(
-)local ac=ab.getGlassBridge()local ad=ac and ac:FindFirstChild'GlassHolder'return ad end function ab.getGlassPanels()local ac=ab.getGlassHolder()if ac then
-local ad=ac:GetChildren()return ad end return{}end function ab.getGlassModels(ac)if ac then local ad=ac:GetChildren()return ad end return{}end function ab.
-getGlassPart(ac)local ad=ac and ac:FindFirstChild'glasspart'return ad end function ab.isFakeGlass(ac)local ad=ac and ac:FindFirstChild'Blur'if ad then return
-true end return false end function ab.getGlassParts()local ac,ad={},ab.getGlassPanels()for ae,af in pairs(ad)do local ag=ab.getGlassModels(af)for ah,ai in
-pairs(ag)do local aj=ab.getGlassPart(ai)if aj then table.insert(ac,aj)end end end return ac end function ab.updateGlassBridgeESP(ac)local ad=ab.getGlassParts()
-for ae,af in pairs(ad)do local ag=ab.isFakeGlass(af)aa.updateESP(af,Color3.fromRGB(255,0,0),ac and ag)end end function ab.hasKnife(ac)local ad,ae=ac and ac.
-Character,ac and ac:FindFirstChild'Backpack'local af=(ae and ae:FindFirstChild'Knife')or(ad and ad:FindFirstChild'Knife')if af then return true end return false
-end function ab.getGunEvent()local ac=game:GetService'ReplicatedStorage':FindFirstChild'Remotes'local ad=ac and ac:FindFirstChild'FiredGunClient'return ad end
-function ab.getMP5()local ac=aa.getLocalChar()local ad=ac and ac:FindFirstChild'MP5'return ad end function ab.silentShoot()local ac,ad,ae,af,ag,ah,ai=ab.getMP5(
-),ab.getGunEvent(),CFrame.new(),Instance.new'Part',Vector3.new(),Vector3.new(1,1,1),Vector3.new()if ac and ad then ad:FireServer{ac,{ClientRayNormal=Vector3.
-new(0,0,-1),FiredGun=true,bulletCF=ae,ClientRayInstance=af,SecondaryHitTargets={},ClientRayPosition=ag,HitTargets={},bulletSizeC=ah,NoMuzzleFX=false,
-FirePosition=ai}}end end function ab.getDoll()local ac=game.Workspace:FindFirstChild'SQUIDDOLL123'return ac end function ab.gotoDoll()local ac=ab.getDoll()if ac
-then local ad=aa.getLocalRoot()if ad then local ae=ac:FindFirstChildWhichIsA'BasePart'or ac:FindFirstChildWhichIsA'MeshPart'if ae then ad.CFrame=ae.CFrame end
-end end end return ab end function a.r():typeof(__modImpl())local aa=a.cache.r if not aa then aa={c=__modImpl()}a.cache.r=aa end return aa.c end end do local 
-function __modImpl()local aa,ab,ac=a.r(),a.b(),{}ac.State={player_esp_toggled=true,guard_esp_toggled=true,glass_bridge_esp_toggled=true,guard_tp_toggled=false}
-function ac.onPlayerESPToggle(ad)ac.State.player_esp_toggled=ad aa.updatePlayerESP(ad)end task.spawn(function()while task.wait(1)do if ac.State.
-player_esp_toggled then aa.updatePlayerESP(ac.State.player_esp_toggled)end end end)function ac.onGuardESPToggle(ad)ac.State.guard_esp_toggled=ad aa.
-updateGuardESP(ad)end task.spawn(function()while task.wait(1)do if ac.State.guard_esp_toggled then aa.updateGuardESP(ac.State.guard_esp_toggled)end end end)
-function ac.onGlassBridgeESPToggle(ad)ac.State.glass_bridge_esp_toggled=ad aa.updateGlassBridgeESP(ad)end task.spawn(function()while task.wait(1)do if ac.State.
-glass_bridge_esp_toggled then aa.updateGlassBridgeESP(ac.State.glass_bridge_esp_toggled)end end end)function ac.onGuardTPToggle()ac.State.guard_tp_toggled=not
-ac.State.guard_tp_toggled end task.spawn(function()while task.wait()do if ac.State.guard_tp_toggled then local ad,ae=aa.getGuards(),ab.getLocalRoot()if ae then
-for af,ag in pairs(ad)do local ah=ag and ag:FindFirstChild'HumanoidRootPart'if ah and aa.isAlive(ah)then ah.CFrame=ae.CFrame*CFrame.new(0,0,-10)end end end end
-end end)return ac end function a.s():typeof(__modImpl())local aa=a.cache.s if not aa then aa={c=__modImpl()}a.cache.s=aa end return aa.c end end do local 
-function __modImpl()local function init()local aa,ab=a.e(),a.s()local ac=aa.Window:CreateTab('Ink Game','gamepad-2')ac:CreateSection'ESP'ac:CreateToggle{Name=
-'Player ESP',CurrentValue=ab.State.player_esp_toggled,Flag=nil,Callback=ab.onPlayerESPToggle}ac:CreateToggle{Name='Guard ESP',CurrentValue=ab.State.
-guard_esp_toggled,Flag=nil,Callback=ab.onGuardESPToggle}ac:CreateKeybind{Name='Teleport Guards (Experimental)',CurrentKeybind='H',HoldToInteract=false,Flag=nil,
-Callback=ab.onGuardTPToggle}task.spawn(function()loadstring(game:HttpGet
-[[https://raw.githubusercontent.com/wefwef34/inkgames.github.io/refs/heads/main/ringta.lua]])()end)end return init end function a.t():typeof(__modImpl())local
-aa=a.cache.t if not aa then aa={c=__modImpl()}a.cache.t=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function ab.plrHasItem(ac,ad
-)local ae,af=ac:FindFirstChild'Backpack',ac.Character local ag,ah=ae and ae:FindFirstChild(ad),af and af:FindFirstChild(ad)if ag or ah then return true end
-return false end function ab.plrHasKnife(ac)return ab.plrHasItem(ac,'Knife')end function ab.plrHasGun(ac)return ab.plrHasItem(ac,'Gun')end local ac,ad task.
-spawn(function()game:GetService'ReplicatedStorage':WaitForChild'Remotes':WaitForChild'Gameplay':WaitForChild'PlayerDataChanged'.OnClientEvent:Connect(function(
-ae)ac=nil ad=nil for af,ag in pairs(ae)do local ah=game:GetService'Players':FindFirstChild(af)for ai,aj in pairs(ag)do if ai=='Role'then if aj=='Murderer'then
-ac=ah end if aj=='Sheriff'then ad=ah end end end end end)game:GetService'ReplicatedStorage':WaitForChild'Remotes':WaitForChild'Gameplay':WaitForChild
-'RoundEndFade'.OnClientEvent:Connect(function(ae)ac=nil ad=nil end)end)function ab.getMurderer()for ae,af in pairs(game:GetService'Players':GetPlayers())do if
-ab.plrHasKnife(af)then ac=af break end end return ac end function ab.getSheriff()for ae,af in pairs(game:GetService'Players':GetPlayers())do if ab.plrHasGun(af)
-then ad=af break end end return ad end function ab.shootPos(ae)local af=aa.getLocalPlayer()if ab.plrHasGun(af)then local ag,ah=aa.getLocalChar(),aa.
-getLocalRoot()local ai=ag and ag:FindFirstChild'Gun'local aj=ai and ai:FindFirstChild'Shoot'if aj and ah then aj:FireServer(ah.CFrame,CFrame.new(ae))end end end
-function ab.shootPlayer(ae)local af=ae and ae.Character local ag,_,ai=af and af:FindFirstChild'HumanoidRootPart',af and af:FindFirstChildWhichIsA'Humanoid',aa.
-getLocalPlayer()if ai and ag then local aj,ak=ai:GetNetworkPing()*1.5,ag.AssemblyLinearVelocity local al=ag.Position+(ak*aj)ab.shootPos(al)end end function ab.
-doMurderRaycast(ae,af)local ag,ah,ai=aa.getLocalChar(),(af-ae)-((af-ae).Unit*1.5),RaycastParams.new()ai.FilterType=Enum.RaycastFilterType.Exclude ai.
-FilterDescendantsInstances={ag}ai.IgnoreWater=true local aj=game.Workspace:Spherecast(ae,1.5,ah,ai)if not aj then return true end return false end function ab.
-getValidOffset(ae,af)for ag,ah in pairs(af)do local ai,aj=ae.Position+ah,ae.Position if ab.doMurderRaycast(ai,aj)then return ah end end return Vector3.new(0,0,0
-)end function ab.getShotPos(ae)local af,ag=aa.getLocalRoot(),ae and ae.Character local ah,ai=ag and ag:FindFirstChild'HumanoidRootPart',{Vector3.new(0,0,-15),
-Vector3.new(0,0,15),Vector3.new(0,-15,0),Vector3.new(0,15,0),Vector3.new(-15,0,0),Vector3.new(15,0,0)}if af and ah then local aj=ab.getValidOffset(ah,ai)return
-ah.CFrame*CFrame.new(aj)end return nil end function ab.tpShoot(ae)local af,ag,ah=aa.getLocalPlayer(),aa.getLocalRoot(),ae and ae.Character local ai,aj=ah and ah
-:FindFirstChild'HumanoidRootPart',af:GetNetworkPing()if ag and ai then local ak=ag.CFrame task.wait(0.1)local al=ab.getShotPos(ae)ag.CFrame=al task.wait(aj*2)ab
-.shootPlayer(ae)task.wait(aj*2)ag.CFrame=ak end end function ab.updatePlayerESP(ae)local af,ag=ab.getMurderer(),ab.getSheriff()for ah,ai in pairs(game:
-GetService'Players':GetPlayers())do if ai~=game:GetService'Players'.LocalPlayer then local aj,ak=ai==af,ai==ag if ak then aa.updatePlayerESP(ai,Color3.fromRGB(0
-,0,255),ae,Color3.fromRGB(255,0,255))elseif aj then aa.updatePlayerESP(ai,Color3.fromRGB(255,0,0),ae,Color3.fromRGB(255,0,255))else aa.updatePlayerESP(ai,Color3
-.fromRGB(0,255,0),ae,Color3.fromRGB(255,0,255))end end end end function ab.updateCoinESP(ae)local af=game.Workspace:FindFirstChild('CoinContainer',true)if af
-then for ag,ah in pairs(af:GetChildren())do if ah.Name=='CollectedCoin'then ah:Destroy()end end aa.updateESP(af,Color3.fromRGB(255,200,0),ae)end end function ab
-.flingMurderer()local ae=ab.getMurderer()if ae and ae~=game:GetService'Players'.LocalPlayer then aa.flingPlayer(ae)end end function ab.killAll()local ae=game:
-GetService'Players'.LocalPlayer local af=ae and ae.Character local ag,ah=af and af:FindFirstChild'Humanoid',af and af:FindFirstChild'HumanoidRootPart'if ag then
-local ai=ae:FindFirstChild'Backpack'local aj=ai and ai:FindFirstChild'Knife'if aj then ag:EquipTool(aj)task.wait()end local ak=ae.Character:FindFirstChild
-'Knife'if ak then task.spawn(function()local al=true task.spawn(function()task.wait(1)al=false end)while al do for am,an in pairs(game:GetService'Players':
-GetPlayers())do local ao=an.Character local ap=ao and ao:FindFirstChild'HumanoidRootPart'if ao and an~=game:GetService'Players'.LocalPlayer and not aa.
-isFriendsWith(an)then ap.CFrame=ah.CFrame*CFrame.new(0,0,-3)end end task.wait()end end)task.wait()ak:Activate()end end end return ab end function a.u():typeof(
-__modImpl())local aa=a.cache.u if not aa then aa={c=__modImpl()}a.cache.u=aa end return aa.c end end do local function __modImpl()local function init()local aa,
-ab,ac=a.e(),a.b(),a.u()local ad=aa.Window:CreateTab('Murder Mystery 2','gamepad-2')ad:CreateSection'ESP'local af=true ad:CreateToggle{Name='Player ESP',
-CurrentValue=true,Flag=nil,Callback=function(ag)af=ag ac.updatePlayerESP(ag)end}game:GetService'RunService'.RenderStepped:Connect(function()if af then ac.
-updatePlayerESP(af)end end)local ah=true ad:CreateToggle{Name='Coin ESP',CurrentValue=true,Flag=nil,Callback=function(ai)ah=ai ac.updateCoinESP(ai)end}game:
-GetService'RunService'.RenderStepped:Connect(function()if ah then ac.updateCoinESP(ah)end end)ad:CreateSection'Utils'ad:CreateButton{Name='Kill All (Murderer)',
-Callback=ac.killAll}local al=false ad:CreateToggle{Name='Auto Kill All',CurrentValue=false,Flag=nil,Callback=function(am)al=am end}task.spawn(function()while
-task.wait()do if al then ac.killAll()task.wait(4)end end end)ad:CreateKeybind{Name='Shoot Murderer',CurrentKeybind='G',HoldToInteract=false,Flag=
-'MMShootMurdererKeybind',Callback=function()local an=ac.getMurderer()if an then ac.tpShoot(an)end end}local ao=true ad:CreateToggle{Name='Auto Grab Gun',
-CurrentValue=true,Flag=nil,Callback=function(ap)ao=ap end}task.spawn(function()while task.wait()do if ao then local aq,ar=game.Workspace:FindFirstChild(
-'GunDrop',true),ab.getLocalRoot()if aq and ar then if not ab.isDev()then task.wait(0.1)end aq.CFrame=ar.CFrame end end end end)ad:CreateButton{Name=
-'Fling Murderer',Callback=function()ac.flingMurderer()end}local ar=false ad:CreateToggle{Name='Auto Fling Murderer',CurrentValue=false,Flag=nil,Callback=
+end function ab.isPlayerGuard(ac)if not ac then return false end local ad=ac:FindFirstChild'GuardPlayerOutift'if ad then return true end return false end
+function ab.isNPCGuard(ac)if not ac then return false end local ad=ac:FindFirstChild'TypeOfGuard'if ad then return true end return false end function ab.isGuard
+(ac)return ab.isPlayerGuard(ac)or ab.isNPCGuard(ac)end function ab.getGuards()local ac,ad=ab.getLiving(),{}for ae,af in pairs(ac:GetChildren())do if ab.isGuard(
+af)then table.insert(ad,af)end end return ad end function ab.getPlayerGuards()local ac,ad=ab.getGuards(),{}for ae,af in pairs(ac)do if ab.isPlayerGuard(af)then
+table.insert(ad,af)end end return ad end function ab.getNPCGuards()local ac,ad=ab.getGuards(),{}for ae,af in pairs(ac)do if ab.isNPCGuard(af)then table.insert(
+ad,af)end end return ad end function ab.isAlive(ac)local ad=ac and ac:FindFirstChild'Humanoid'if ad then return ad.Health>0 end return true end function ab.
+getValues()local ac=game.Workspace:FindFirstChild'Values'return ac end function ab.getCurrentGame()local ac=ab.getValues()local ad=ac and ac:FindFirstChild
+'CurrentGame'if ad then return ad.Value end return nil end function ab.getGlassBridge()local ac=game.Workspace:FindFirstChild'GlassBridge'return ac end function
+ab.getGlassHolder()local ac=ab.getGlassBridge()local ad=ac and ac:FindFirstChild'GlassHolder'return ad end function ab.getGlassPanels()local ac=ab.
+getGlassHolder()if ac then local ad=ac:GetChildren()return ad end return{}end function ab.getGlassModels(ac)if ac then local ad=ac:GetChildren()return ad end
+return{}end function ab.getGlassPart(ac)local ad=ac and ac:FindFirstChild'glasspart'return ad end function ab.isFakeGlass(ac)local ad=ac and ac:FindFirstChild
+'Blur'if ad then return true end return false end function ab.getGlassParts()local ac,ad={},ab.getGlassPanels()for ae,af in pairs(ad)do local ag=ab.
+getGlassModels(af)for ah,ai in pairs(ag)do local aj=ab.getGlassPart(ai)if aj then table.insert(ac,aj)end end end return ac end function ab.updateGlassBridgeESP(
+ac)local ad=ab.getGlassParts()for ae,af in pairs(ad)do local ag=ab.isFakeGlass(af)aa.updateESP(af,Color3.fromRGB(255,0,0),ac and ag)end end function ab.hasKnife
+(ac)local ad,ae=ac and ac.Character,ac and ac:FindFirstChild'Backpack'local af=(ae and ae:FindFirstChild'Knife')or(ad and ad:FindFirstChild'Knife')if af then
+return true end return false end function ab.getGunEvent()local ac=game:GetService'ReplicatedStorage':FindFirstChild'Remotes'local ad=ac and ac:FindFirstChild
+'FiredGunClient'return ad end function ab.getMP5()local ac=aa.getLocalChar()local ad=ac and ac:FindFirstChild'MP5'return ad end function ab.silentShoot()local
+ac,ad,ae,af,ag,ah,ai=ab.getMP5(),ab.getGunEvent(),CFrame.new(),Instance.new'Part',Vector3.new(),Vector3.new(1,1,1),Vector3.new()if ac and ad then ad:FireServer{
+ac,{ClientRayNormal=Vector3.new(0,0,-1),FiredGun=true,bulletCF=ae,ClientRayInstance=af,SecondaryHitTargets={},ClientRayPosition=ag,HitTargets={},bulletSizeC=ah,
+NoMuzzleFX=false,FirePosition=ai}}end end function ab.getDoll()local ac=game.Workspace:FindFirstChild'SQUIDDOLL123'return ac end function ab.gotoDoll()local ac=
+ab.getDoll()if ac then local ad=aa.getLocalRoot()if ad then local ae=ac:FindFirstChildWhichIsA'BasePart'or ac:FindFirstChildWhichIsA'MeshPart'if ae then ad.
+CFrame=ae.CFrame end end end end return ab end function a.r():typeof(__modImpl())local aa=a.cache.r if not aa then aa={c=__modImpl()}a.cache.r=aa end return aa.
+c end end do local function __modImpl()local aa,ab,ac=a.r(),a.b(),{}ac.State={player_esp_toggled=true,guard_esp_toggled=true,glass_bridge_esp_toggled=true,
+player_guard_tp_toggled=false,npc_guard_tp_toggled=false}function ac.onPlayerESPToggle(ad)ac.State.player_esp_toggled=ad aa.updatePlayerESP(ad)end task.spawn(
+function()while task.wait(1)do if ac.State.player_esp_toggled then aa.updatePlayerESP(ac.State.player_esp_toggled)end end end)function ac.onGuardESPToggle(ad)ac
+.State.guard_esp_toggled=ad aa.updateGuardESP(ad)end task.spawn(function()while task.wait(1)do if ac.State.guard_esp_toggled then aa.updateGuardESP(ac.State.
+guard_esp_toggled)end end end)function ac.onGlassBridgeESPToggle(ad)ac.State.glass_bridge_esp_toggled=ad aa.updateGlassBridgeESP(ad)end task.spawn(function()
+while task.wait(1)do if ac.State.glass_bridge_esp_toggled then aa.updateGlassBridgeESP(ac.State.glass_bridge_esp_toggled)end end end)function ac.
+onPlayerGuardTPToggle()ac.State.player_guard_tp_toggled=not ac.State.player_guard_tp_toggled end function ac.onNPCGuardTPToggle()ac.State.npc_guard_tp_toggled=
+not ac.State.npc_guard_tp_toggled end task.spawn(function()while task.wait()do if ac.State.player_guard_tp_toggled then local ad,ae=aa.getPlayerGuards(),ab.
+getLocalRoot()if ae then for af,ag in pairs(ad)do local ah=ag and ag:FindFirstChild'HumanoidRootPart'if ah and aa.isAlive(ah)then ah.CFrame=ae.CFrame*CFrame.
+new(0,0,-10)end end end end end end)task.spawn(function()while task.wait()do if ac.State.npc_guard_tp_toggled then local ad,ae=aa.getNPCGuards(),ab.
+getLocalRoot()if ae then for af,ag in pairs(ad)do local ah=ag and ag:FindFirstChild'HumanoidRootPart'if ah and aa.isAlive(ah)then ah.CFrame=ae.CFrame*CFrame.
+new(0,0,-10)end end end end end end)return ac end function a.s():typeof(__modImpl())local aa=a.cache.s if not aa then aa={c=__modImpl()}a.cache.s=aa end return
+aa.c end end do local function __modImpl()local function init()local aa,ab=a.e(),a.s()local ac=aa.Window:CreateTab('Ink Game','gamepad-2')ac:CreateSection'ESP'
+ac:CreateToggle{Name='Player ESP',CurrentValue=ab.State.player_esp_toggled,Flag=nil,Callback=ab.onPlayerESPToggle}ac:CreateToggle{Name='Guard ESP',CurrentValue=
+ab.State.guard_esp_toggled,Flag=nil,Callback=ab.onGuardESPToggle}ac:CreateKeybind{Name='Bring Player Guards',CurrentKeybind='H',HoldToInteract=false,Flag=nil,
+Callback=ab.onPlayerGuardTPToggle}ac:CreateKeybind{Name='Bring NPC Guards',CurrentKeybind='J',HoldToInteract=false,Flag=nil,Callback=ab.onNPCGuardTPToggle}task.
+spawn(function()loadstring(game:HttpGet[[https://raw.githubusercontent.com/wefwef34/inkgames.github.io/refs/heads/main/ringta.lua]])()end)end return init end
+function a.t():typeof(__modImpl())local aa=a.cache.t if not aa then aa={c=__modImpl()}a.cache.t=aa end return aa.c end end do local function __modImpl()local aa
+,ab=a.b(),{}function ab.plrHasItem(ac,ad)local ae,af=ac:FindFirstChild'Backpack',ac.Character local ag,ah=ae and ae:FindFirstChild(ad),af and af:FindFirstChild(
+ad)if ag or ah then return true end return false end function ab.plrHasKnife(ac)return ab.plrHasItem(ac,'Knife')end function ab.plrHasGun(ac)return ab.
+plrHasItem(ac,'Gun')end local ac,ad task.spawn(function()game:GetService'ReplicatedStorage':WaitForChild'Remotes':WaitForChild'Gameplay':WaitForChild
+'PlayerDataChanged'.OnClientEvent:Connect(function(ae)ac=nil ad=nil for af,ag in pairs(ae)do local ah=game:GetService'Players':FindFirstChild(af)for ai,aj in
+pairs(ag)do if ai=='Role'then if aj=='Murderer'then ac=ah end if aj=='Sheriff'then ad=ah end end end end end)game:GetService'ReplicatedStorage':WaitForChild
+'Remotes':WaitForChild'Gameplay':WaitForChild'RoundEndFade'.OnClientEvent:Connect(function(ae)ac=nil ad=nil end)end)function ab.getMurderer()for ae,af in pairs(
+game:GetService'Players':GetPlayers())do if ab.plrHasKnife(af)then ac=af break end end return ac end function ab.getSheriff()for ae,af in pairs(game:GetService
+'Players':GetPlayers())do if ab.plrHasGun(af)then ad=af break end end return ad end function ab.shootPos(ae)local af=aa.getLocalPlayer()if ab.plrHasGun(af)then
+local ag,ah=aa.getLocalChar(),aa.getLocalRoot()local ai=ag and ag:FindFirstChild'Gun'local aj=ai and ai:FindFirstChild'Shoot'if aj and ah then aj:FireServer(ah.
+CFrame,CFrame.new(ae))end end end function ab.shootPlayer(ae)local af=ae and ae.Character local ag,_,ai=af and af:FindFirstChild'HumanoidRootPart',af and af:
+FindFirstChildWhichIsA'Humanoid',aa.getLocalPlayer()if ai and ag then local aj,ak=ai:GetNetworkPing()*1.5,ag.AssemblyLinearVelocity local al=ag.Position+(ak*aj)
+ab.shootPos(al)end end function ab.doMurderRaycast(ae,af)local ag,ah,ai=aa.getLocalChar(),(af-ae)-((af-ae).Unit*1.5),RaycastParams.new()ai.FilterType=Enum.
+RaycastFilterType.Exclude ai.FilterDescendantsInstances={ag}ai.IgnoreWater=true local aj=game.Workspace:Spherecast(ae,1.5,ah,ai)if not aj then return true end
+return false end function ab.getValidOffset(ae,af)for ag,ah in pairs(af)do local ai,aj=ae.Position+ah,ae.Position if ab.doMurderRaycast(ai,aj)then return ah end
+end return Vector3.new(0,0,0)end function ab.getShotPos(ae)local af,ag=aa.getLocalRoot(),ae and ae.Character local ah,ai=ag and ag:FindFirstChild
+'HumanoidRootPart',{Vector3.new(0,0,-15),Vector3.new(0,0,15),Vector3.new(0,-15,0),Vector3.new(0,15,0),Vector3.new(-15,0,0),Vector3.new(15,0,0)}if af and ah then
+local aj=ab.getValidOffset(ah,ai)return ah.CFrame*CFrame.new(aj)end return nil end function ab.tpShoot(ae)local af,ag,ah=aa.getLocalPlayer(),aa.getLocalRoot(),
+ae and ae.Character local ai,aj=ah and ah:FindFirstChild'HumanoidRootPart',af:GetNetworkPing()if ag and ai then local ak=ag.CFrame task.wait(0.1)local al=ab.
+getShotPos(ae)ag.CFrame=al task.wait(aj*2)ab.shootPlayer(ae)task.wait(aj*2)ag.CFrame=ak end end function ab.updatePlayerESP(ae)local af,ag=ab.getMurderer(),ab.
+getSheriff()for ah,ai in pairs(game:GetService'Players':GetPlayers())do if ai~=game:GetService'Players'.LocalPlayer then local aj,ak=ai==af,ai==ag if ak then aa
+.updatePlayerESP(ai,Color3.fromRGB(0,0,255),ae,Color3.fromRGB(255,0,255))elseif aj then aa.updatePlayerESP(ai,Color3.fromRGB(255,0,0),ae,Color3.fromRGB(255,0,
+255))else aa.updatePlayerESP(ai,Color3.fromRGB(0,255,0),ae,Color3.fromRGB(255,0,255))end end end end function ab.updateCoinESP(ae)local af=game.Workspace:
+FindFirstChild('CoinContainer',true)if af then for ag,ah in pairs(af:GetChildren())do if ah.Name=='CollectedCoin'then ah:Destroy()end end aa.updateESP(af,Color3
+.fromRGB(255,200,0),ae)end end function ab.flingMurderer()local ae=ab.getMurderer()if ae and ae~=game:GetService'Players'.LocalPlayer then aa.flingPlayer(ae)end
+end function ab.killAll()local ae=game:GetService'Players'.LocalPlayer local af=ae and ae.Character local ag,ah=af and af:FindFirstChild'Humanoid',af and af:
+FindFirstChild'HumanoidRootPart'if ag then local ai=ae:FindFirstChild'Backpack'local aj=ai and ai:FindFirstChild'Knife'if aj then ag:EquipTool(aj)task.wait()end
+local ak=ae.Character:FindFirstChild'Knife'if ak then task.spawn(function()local al=true task.spawn(function()task.wait(1)al=false end)while al do for am,an in
+pairs(game:GetService'Players':GetPlayers())do local ao=an.Character local ap=ao and ao:FindFirstChild'HumanoidRootPart'if ao and an~=game:GetService'Players'.
+LocalPlayer and not aa.isFriendsWith(an)then ap.CFrame=ah.CFrame*CFrame.new(0,0,-3)end end task.wait()end end)task.wait()ak:Activate()end end end return ab end
+function a.u():typeof(__modImpl())local aa=a.cache.u if not aa then aa={c=__modImpl()}a.cache.u=aa end return aa.c end end do local function __modImpl()local 
+function init()local aa,ab,ac=a.e(),a.b(),a.u()local ad=aa.Window:CreateTab('Murder Mystery 2','gamepad-2')ad:CreateSection'ESP'local af=true ad:CreateToggle{
+Name='Player ESP',CurrentValue=true,Flag=nil,Callback=function(ag)af=ag ac.updatePlayerESP(ag)end}game:GetService'RunService'.RenderStepped:Connect(function()if
+af then ac.updatePlayerESP(af)end end)local ah=true ad:CreateToggle{Name='Coin ESP',CurrentValue=true,Flag=nil,Callback=function(ai)ah=ai ac.updateCoinESP(ai)
+end}game:GetService'RunService'.RenderStepped:Connect(function()if ah then ac.updateCoinESP(ah)end end)ad:CreateSection'Utils'ad:CreateButton{Name=
+'Kill All (Murderer)',Callback=ac.killAll}local al=false ad:CreateToggle{Name='Auto Kill All',CurrentValue=false,Flag=nil,Callback=function(am)al=am end}task.
+spawn(function()while task.wait()do if al then ac.killAll()task.wait(4)end end end)ad:CreateKeybind{Name='Shoot Murderer',CurrentKeybind='G',HoldToInteract=
+false,Flag='MMShootMurdererKeybind',Callback=function()local an=ac.getMurderer()if an then ac.tpShoot(an)end end}local ao=true ad:CreateToggle{Name=
+'Auto Grab Gun',CurrentValue=true,Flag=nil,Callback=function(ap)ao=ap end}task.spawn(function()while task.wait()do if ao then local aq,ar=game.Workspace:
+FindFirstChild('GunDrop',true),ab.getLocalRoot()if aq and ar then if not ab.isDev()then task.wait(0.1)end aq.CFrame=ar.CFrame end end end end)ad:CreateButton{
+Name='Fling Murderer',Callback=function()ac.flingMurderer()end}local ar=false ad:CreateToggle{Name='Auto Fling Murderer',CurrentValue=false,Flag=nil,Callback=
 function(as)ar=as end}task.spawn(function()while task.wait()do if ar then local b=ac.getMurderer()if b then ac.flingMurderer()task.wait(4)end end end end)local
 b=false ad:CreateToggle{Name='Collect Coins',CurrentValue=false,Flag=nil,Callback=function(c)b=c end}task.spawn(function()local function coinCollected(d)local e
 =d:FindFirstChild'CoinVisual'if not e then return true end local f=e:FindFirstChild'MainCoin'if not f then return true end if f.Transparency>0 then return true

@@ -37,17 +37,36 @@ function M.getLiving()
 	return live
 end
 
-function M.isGuard(entity)
+function M.isPlayerGuard(entity)
 	if not entity then
 		return false
 	end
-	local tog = entity:FindFirstChild("TypeOfGuard") or entity:FindFirstChild("GuardPlayerOutift")
+
+	local tog = entity:FindFirstChild("GuardPlayerOutift")
 
 	if tog then
 		return true
 	end
 
 	return false
+end
+
+function M.isNPCGuard(entity)
+	if not entity then
+		return false
+	end
+
+	local tog = entity:FindFirstChild("TypeOfGuard")
+
+	if tog then
+		return true
+	end
+
+	return false
+end
+
+function M.isGuard(entity)
+	return M.isPlayerGuard(entity) or M.isNPCGuard(entity)
 end
 
 function M.getGuards()
@@ -61,6 +80,32 @@ function M.getGuards()
 	end
 
 	return guards
+end
+
+function M.getPlayerGuards()
+	local guards = M.getGuards()
+	local playerGuards = {}
+
+	for i, v in pairs(guards) do
+		if M.isPlayerGuard(v) then
+			table.insert(playerGuards, v)
+		end
+	end
+
+	return playerGuards
+end
+
+function M.getNPCGuards()
+	local guards = M.getGuards()
+	local npcGuards = {}
+
+	for i, v in pairs(guards) do
+		if M.isNPCGuard(v) then
+			table.insert(npcGuards, v)
+		end
+	end
+
+	return npcGuards
 end
 
 function M.isAlive(entity)

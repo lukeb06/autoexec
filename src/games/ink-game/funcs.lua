@@ -7,7 +7,8 @@ M.State = {
 	player_esp_toggled = true,
 	guard_esp_toggled = true,
 	glass_bridge_esp_toggled = true,
-	guard_tp_toggled = false,
+	player_guard_tp_toggled = false,
+	npc_guard_tp_toggled = false,
 }
 
 function M.onPlayerESPToggle(value)
@@ -49,14 +50,36 @@ task.spawn(function()
 	end
 end)
 
-function M.onGuardTPToggle()
-	M.State.guard_tp_toggled = not M.State.guard_tp_toggled
+function M.onPlayerGuardTPToggle()
+	M.State.player_guard_tp_toggled = not M.State.player_guard_tp_toggled
+end
+
+function M.onNPCGuardTPToggle()
+	M.State.npc_guard_tp_toggled = not M.State.npc_guard_tp_toggled
 end
 
 task.spawn(function()
 	while task.wait() do
-		if M.State.guard_tp_toggled then
-			local guards = GameUtils.getGuards()
+		if M.State.player_guard_tp_toggled then
+			local guards = GameUtils.getPlayerGuards()
+			local myRoot = Utils.getLocalRoot()
+
+			if myRoot then
+				for i, v in pairs(guards) do
+					local root = v and v:FindFirstChild("HumanoidRootPart")
+					if root and GameUtils.isAlive(root) then
+						root.CFrame = myRoot.CFrame * CFrame.new(0, 0, -10)
+					end
+				end
+			end
+		end
+	end
+end)
+
+task.spawn(function()
+	while task.wait() do
+		if M.State.npc_guard_tp_toggled then
+			local guards = GameUtils.getNPCGuards()
 			local myRoot = Utils.getLocalRoot()
 
 			if myRoot then
