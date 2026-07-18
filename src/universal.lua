@@ -186,6 +186,16 @@ task.spawn(function()
 	end)
 end)
 
+UniversalTab:CreateSection("Aimlock")
+
+local AimLockKeybind = UniversalTab:CreateKeybind({
+	Name = "Toggle Aimlock",
+	CurrentKeybind = "Z",
+	HoldToInteract = false,
+	Flag = "AimLockKeybind",
+	Callback = Utils.Aimlock.toggleLock,
+})
+
 local UniversalESPSection = UniversalTab:CreateSection("Universal ESP")
 
 local function updateUniversalESP(enabled)

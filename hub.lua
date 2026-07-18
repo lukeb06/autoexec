@@ -7,102 +7,111 @@ end end end b=g.Stepped:Connect(NoclipLoop)end function e.disable()if d then ret
 g,h in pairs(f.Character:GetDescendants())do if h:IsA'BasePart'then local i=h:FindFirstChild'CouldCollide'if i then h.CanCollide=i.Value i:Destroy()end local j=
 h:FindFirstChild'Transparency'if j then h.Transparency=j.Value j:Destroy()end end end end c=true end function e.toggleNoclip()if c then e.enable()else e.
 disable()end end return e end function a.a():typeof(__modImpl())local b=a.cache.a if not b then b={c=__modImpl()}a.cache.a=b end return b.c end end do local 
-function __modImpl()local b,c=a.a(),{}function c.WaitForGameAndPlayer()local d,e=false,false while not(d and e)do if game:IsLoaded()then d=true end if game:
-GetService'Players'.LocalPlayer then e=true end task.wait()end end function c.diff3d(d,e)return e-d end function c.dist3d(d,e)return c.diff3d(d,e).Magnitude end
-function c.dir3d(d,e)return c.diff3d(d,e).Unit end function c.isDev()local d,e='pathwise',game:GetService'Players'.LocalPlayer if string.sub(e.Name,1,#d)==d
-then return true end return false end function c.isKBM()local d=game:GetService'UserInputService'return d.KeyboardEnabled and d.MouseEnabled end c.Noclip=b
-function c.breakVelocity(d)task.spawn(function()local e,f,g=game:GetService'Players'.LocalPlayer,false,Vector3.new(0,0,0)task.spawn(function()task.wait(d)f=true
-end)while not f do for h,i in ipairs(e.Character:GetDescendants())do if i:IsA'BasePart'then i.Velocity,i.RotVelocity=g,g end end task.wait()end end)end local d,
-e=20,false function c.get_safeTweening()return e end function c.set_safeTweening(f)e=f end function c.set_safeTweenSpeed(f)d=f end function c.safeTweenToPos(f)
-local g,h=game:GetService'TweenService',game:GetService'Players'.LocalPlayer local i=h and h.Character local j,k=i and i:FindFirstChild'HumanoidRootPart',i and
-i:FindFirstChildOfClass'Humanoid'local l=c.dist3d(j.Position,f.Position)local m=l/d e=true if k and k.SeatPart then k.Sit=false task.wait(0.1)end task.wait(0.1)
-g:Create(j,TweenInfo.new(m,Enum.EasingStyle.Linear),{CFrame=f}):Play()task.delay(m,function()e=false end)c.breakVelocity(m)end function c.safeTweenToPart(f,g)if
-f:IsA'BasePart'then local h=game:GetService'Players'.LocalPlayer local i=h and h.Character local j,k=i and i:FindFirstChild'HumanoidRootPart',i and i:
-FindFirstChildWhichIsA'Humanoid'e=true if k and k.SeatPart then k.Sit=false task.wait(0.1)end local l c.Noclip.enable()game.Workspace.Gravity=0 l=game:
-GetService'RunService'.Heartbeat:Connect(function(m)c.breakVelocity(0.1)if not j or not f or not f.Parent or(g and g(f))then l:Disconnect()e=false c.Noclip.
-disable()game.Workspace.Gravity=196.21 if k then k:ChangeState(Enum.HumanoidStateType.GettingUp)end return end local n,o=j.Position,f.Position local p,q=c.
-dist3d(n,o),d*m if p<=q then j.CFrame=f.CFrame l:Disconnect()e=false c.Noclip.disable()if k then k:ChangeState(Enum.HumanoidStateType.GettingUp)end game.
-Workspace.Gravity=196.21 else local r=c.dir3d(n,o)local s=n+(r*q)if k then k:ChangeState(Enum.HumanoidStateType.Physics)end j.CFrame=CFrame.new(s)*(f.CFrame-f.
-CFrame.Position)end end)end end function c.flingCharacter(f)local g=game:GetService'Players'.LocalPlayer local h=g and g.Character local i,j=h and h:
-FindFirstChild'HumanoidRootPart',f and f:FindFirstChild'HumanoidRootPart'if i and j then c.Noclip.enable()task.wait(0.2)local k=i.CFrame task.wait(0.1)for l,m
-in pairs(h:GetDescendants())do if m:IsA'BasePart'then m.CustomPhysicalProperties=PhysicalProperties.new(100,0.3,0.5)end end for l,m in h:GetChildren()do if m:
-IsA'BasePart'then m.CanCollide=false m.Massless=true m.Velocity=Vector3.new(0,0,0)end end local l=99999 local m,n=l n=game:GetService'RunService'.Heartbeat:
-Connect(function(o)if not j or not j.Parent then return end local p,q=math.random(-100,100),j.AssemblyLinearVelocity if q.Magnitude>500 then n:Disconnect()end
-local r=j.Position+(q*0.08)if r.Y<=game.Workspace.FallenPartsDestroyHeight+50 then return end i.CFrame=(CFrame.new(r+Vector3.new(0.1,0,0.1)))*(i.CFrame-i.CFrame
-.Position)i.AssemblyLinearVelocity=Vector3.new(l+p,-100,l+p)i.AssemblyAngularVelocity=Vector3.new(0,m,0)end)task.spawn(function()while n.Connected do m=l task.
-wait(0.2)m=0 task.wait(0.1)end end)task.delay(3,function()for o,p in pairs(h:GetDescendants())do if p.ClassName=='Part'or p.ClassName=='MeshPart'then p.
-CustomPhysicalProperties=PhysicalProperties.new(0.7,0.3,0.5)end end c.Noclip.disable()n:Disconnect()c.breakVelocity(0.2)task.wait(0.1)i.CFrame=k end)end end
-function c.flingPlayer(f)local g=f and f.Character c.flingCharacter(g)end function c.isFriendsWith(f)local g=game:GetService'Players'.LocalPlayer return g:
-IsFriendsWith(f.UserId)end function c.updateESP(f,g,h)local i=f:FindFirstChild'ESPHL'if i then if not h then i:Destroy()elseif g~=i.FillColor then i.FillColor=g
-i.OutlineColor=g end elseif h then local j=Instance.new'Highlight'j.Name='ESPHL'j.Adornee=f j.FillColor=g j.OutlineColor=g j.Parent=f end end c.esp_players={}c.
-esp_show_names=false c.esp_show_health=false function c.updatePlayerESP(f,g,h,i)local j=f and f.Character local k=j and j:FindFirstChildWhichIsA'Humanoid'local
-l,m=k and k.Health>0,(c.isFriendsWith(f)and(i or g))or g c.esp_players[f]={enabled=h and l,color=m}if j then c.updateESP(j,m,h and l)end end task.spawn(function
-()local f=Instance.new('Folder',game.CoreGui)while task.wait()do if c.esp_show_names or c.esp_show_health then if not f or not f.Parent then f=Instance.new(
-'Folder',game.CoreGui)end for g,h in pairs(c.esp_players)do local i,j,k=h.enabled,h.color,f:FindFirstChild(g.Name..'_ESP')local function getHealth()local l=g
-and g.Character local m=l and l:FindFirstChildWhichIsA'Humanoid'if m then local n=m.Health/m.MaxHealth local o,p=math.floor(n*100),Color3.fromHSV(n*(
-0.2777777777777778),0.8,0.8)return{health=o,color=p}else return{health=0,color=Color3.fromRGB(0,0,0)}end end if i then local l=g and g.Character local m=l and l
-:FindFirstChild'Head'if not k then if m then local n=Instance.new('Folder',f)n.Name=g.Name..'_ESP'local o=Instance.new('BillboardGui',n)local p,q=Instance.new(
-'TextLabel',o),Instance.new('TextLabel',o)o.Adornee=m o.Size=UDim2.new(0,100,0,40)o.StudsOffset=Vector3.new(0,2,0)o.AlwaysOnTop=true p.Name='NameLabel'p.
-BackgroundTransparency=1 p.Position=UDim2.new(0,0,0,0)p.Size=UDim2.new(0,100,0,20)p.Font=Enum.Font.SourceSansSemibold p.TextSize=20 p.TextColor3=j p.
-TextStrokeTransparency=0 p.TextStrokeColor3=Color3.new(0,0,0)p.TextYAlignment=Enum.TextYAlignment.Bottom p.Text=''p.ZIndex=10 q.Name='HealthLabel'q.
-BackgroundTransparency=1 q.Position=UDim2.new(0,0,0,20)q.Size=UDim2.new(0,100,0,20)q.Font=Enum.Font.SourceSansSemibold q.TextSize=20 q.TextColor3=j q.
-TextStrokeTransparency=0 q.TextStrokeColor3=Color3.new(0,0,0)q.TextYAlignment=Enum.TextYAlignment.Bottom q.Text=''q.ZIndex=10 end else local n=k:FindFirstChild
-'BillboardGui'if n and m then n.Adornee=m local o=n:FindFirstChild'NameLabel'if o then if c.esp_show_names then o.Text=g.Name o.TextColor3=j else o.Text=''end
-end local p=n:FindFirstChild'HealthLabel'if p then if c.esp_show_health then local q=getHealth()local r,s=q.health,q.color p.Text=r..'%'p.TextColor3=s else p.
-Text=''end end end end else if k then k:Destroy()end end end else f:Destroy()end end end)function c.getLocalPlayer()return game:GetService'Players'.LocalPlayer
-end function c.getLocalChar()local f=c.getLocalPlayer()return f and f.Character end function c.getLocalRoot()local f=c.getLocalChar()return f and f:
-FindFirstChild'HumanoidRootPart'end function c.getLocalHumanoid()local f=c.getLocalChar()return f and f:FindFirstChildWhichIsA'Humanoid'end return c end
-function a.b():typeof(__modImpl())local b=a.cache.b if not b then b={c=__modImpl()}a.cache.b=b end return b.c end end do local function __modImpl()local b={
-Default={TextColor=Color3.fromRGB(240,240,240),Background=Color3.fromRGB(25,25,25),Topbar=Color3.fromRGB(34,34,34),Shadow=Color3.fromRGB(20,20,20),
-NotificationBackground=Color3.fromRGB(20,20,20),NotificationActionsBackground=Color3.fromRGB(230,230,230),TabBackground=Color3.fromRGB(80,80,80),TabStroke=
-Color3.fromRGB(85,85,85),TabBackgroundSelected=Color3.fromRGB(210,210,210),TabTextColor=Color3.fromRGB(240,240,240),SelectedTabTextColor=Color3.fromRGB(50,50,50
-),ElementBackground=Color3.fromRGB(35,35,35),ElementBackgroundHover=Color3.fromRGB(40,40,40),SecondaryElementBackground=Color3.fromRGB(25,25,25),ElementStroke=
-Color3.fromRGB(50,50,50),SecondaryElementStroke=Color3.fromRGB(40,40,40),SliderBackground=Color3.fromRGB(50,138,220),SliderProgress=Color3.fromRGB(50,138,220),
-SliderStroke=Color3.fromRGB(58,163,255),ToggleBackground=Color3.fromRGB(30,30,30),ToggleEnabled=Color3.fromRGB(0,146,214),ToggleDisabled=Color3.fromRGB(100,100,
-100),ToggleEnabledStroke=Color3.fromRGB(0,170,255),ToggleDisabledStroke=Color3.fromRGB(125,125,125),ToggleEnabledOuterStroke=Color3.fromRGB(100,100,100),
-ToggleDisabledOuterStroke=Color3.fromRGB(65,65,65),DropdownSelected=Color3.fromRGB(40,40,40),DropdownUnselected=Color3.fromRGB(30,30,30),InputBackground=Color3.
-fromRGB(30,30,30),InputStroke=Color3.fromRGB(65,65,65),PlaceholderColor=Color3.fromRGB(178,178,178)},Ocean={TextColor=Color3.fromRGB(230,240,240),Background=
-Color3.fromRGB(20,30,30),Topbar=Color3.fromRGB(25,40,40),Shadow=Color3.fromRGB(15,20,20),NotificationBackground=Color3.fromRGB(25,35,35),
-NotificationActionsBackground=Color3.fromRGB(230,240,240),TabBackground=Color3.fromRGB(40,60,60),TabStroke=Color3.fromRGB(50,70,70),TabBackgroundSelected=Color3
-.fromRGB(100,180,180),TabTextColor=Color3.fromRGB(210,230,230),SelectedTabTextColor=Color3.fromRGB(20,50,50),ElementBackground=Color3.fromRGB(30,50,50),
-ElementBackgroundHover=Color3.fromRGB(40,60,60),SecondaryElementBackground=Color3.fromRGB(30,45,45),ElementStroke=Color3.fromRGB(45,70,70),
-SecondaryElementStroke=Color3.fromRGB(40,65,65),SliderBackground=Color3.fromRGB(0,110,110),SliderProgress=Color3.fromRGB(0,140,140),SliderStroke=Color3.fromRGB(
-0,160,160),ToggleBackground=Color3.fromRGB(30,50,50),ToggleEnabled=Color3.fromRGB(0,130,130),ToggleDisabled=Color3.fromRGB(70,90,90),ToggleEnabledStroke=Color3.
-fromRGB(0,160,160),ToggleDisabledStroke=Color3.fromRGB(85,105,105),ToggleEnabledOuterStroke=Color3.fromRGB(50,100,100),ToggleDisabledOuterStroke=Color3.fromRGB(
-45,65,65),DropdownSelected=Color3.fromRGB(30,60,60),DropdownUnselected=Color3.fromRGB(25,40,40),InputBackground=Color3.fromRGB(30,50,50),InputStroke=Color3.
-fromRGB(50,70,70),PlaceholderColor=Color3.fromRGB(140,160,160)},AmberGlow={TextColor=Color3.fromRGB(255,245,230),Background=Color3.fromRGB(45,30,20),Topbar=
-Color3.fromRGB(55,40,25),Shadow=Color3.fromRGB(35,25,15),NotificationBackground=Color3.fromRGB(50,35,25),NotificationActionsBackground=Color3.fromRGB(245,230,
-215),TabBackground=Color3.fromRGB(75,50,35),TabStroke=Color3.fromRGB(90,60,45),TabBackgroundSelected=Color3.fromRGB(230,180,100),TabTextColor=Color3.fromRGB(250
-,220,200),SelectedTabTextColor=Color3.fromRGB(50,30,10),ElementBackground=Color3.fromRGB(60,45,35),ElementBackgroundHover=Color3.fromRGB(70,50,40),
-SecondaryElementBackground=Color3.fromRGB(55,40,30),ElementStroke=Color3.fromRGB(85,60,45),SecondaryElementStroke=Color3.fromRGB(75,50,35),SliderBackground=
-Color3.fromRGB(220,130,60),SliderProgress=Color3.fromRGB(250,150,75),SliderStroke=Color3.fromRGB(255,170,85),ToggleBackground=Color3.fromRGB(55,40,30),
-ToggleEnabled=Color3.fromRGB(240,130,30),ToggleDisabled=Color3.fromRGB(90,70,60),ToggleEnabledStroke=Color3.fromRGB(255,160,50),ToggleDisabledStroke=Color3.
-fromRGB(110,85,75),ToggleEnabledOuterStroke=Color3.fromRGB(200,100,50),ToggleDisabledOuterStroke=Color3.fromRGB(75,60,55),DropdownSelected=Color3.fromRGB(70,50,
-40),DropdownUnselected=Color3.fromRGB(55,40,30),InputBackground=Color3.fromRGB(60,45,35),InputStroke=Color3.fromRGB(90,65,50),PlaceholderColor=Color3.fromRGB(
-190,150,130)},Light={TextColor=Color3.fromRGB(40,40,40),Background=Color3.fromRGB(245,245,245),Topbar=Color3.fromRGB(230,230,230),Shadow=Color3.fromRGB(200,200,
-200),NotificationBackground=Color3.fromRGB(250,250,250),NotificationActionsBackground=Color3.fromRGB(240,240,240),TabBackground=Color3.fromRGB(235,235,235),
-TabStroke=Color3.fromRGB(215,215,215),TabBackgroundSelected=Color3.fromRGB(255,255,255),TabTextColor=Color3.fromRGB(80,80,80),SelectedTabTextColor=Color3.
-fromRGB(0,0,0),ElementBackground=Color3.fromRGB(240,240,240),ElementBackgroundHover=Color3.fromRGB(225,225,225),SecondaryElementBackground=Color3.fromRGB(235,
-235,235),ElementStroke=Color3.fromRGB(210,210,210),SecondaryElementStroke=Color3.fromRGB(210,210,210),SliderBackground=Color3.fromRGB(150,180,220),
-SliderProgress=Color3.fromRGB(100,150,200),SliderStroke=Color3.fromRGB(120,170,220),ToggleBackground=Color3.fromRGB(220,220,220),ToggleEnabled=Color3.fromRGB(0,
-146,214),ToggleDisabled=Color3.fromRGB(150,150,150),ToggleEnabledStroke=Color3.fromRGB(0,170,255),ToggleDisabledStroke=Color3.fromRGB(170,170,170),
-ToggleEnabledOuterStroke=Color3.fromRGB(100,100,100),ToggleDisabledOuterStroke=Color3.fromRGB(180,180,180),DropdownSelected=Color3.fromRGB(230,230,230),
-DropdownUnselected=Color3.fromRGB(220,220,220),InputBackground=Color3.fromRGB(240,240,240),InputStroke=Color3.fromRGB(180,180,180),PlaceholderColor=Color3.
-fromRGB(140,140,140)},Amethyst={TextColor=Color3.fromRGB(240,240,240),Background=Color3.fromRGB(30,20,40),Topbar=Color3.fromRGB(40,25,50),Shadow=Color3.fromRGB(
-20,15,30),NotificationBackground=Color3.fromRGB(35,20,40),NotificationActionsBackground=Color3.fromRGB(240,240,250),TabBackground=Color3.fromRGB(60,40,80),
-TabStroke=Color3.fromRGB(70,45,90),TabBackgroundSelected=Color3.fromRGB(180,140,200),TabTextColor=Color3.fromRGB(230,230,240),SelectedTabTextColor=Color3.
-fromRGB(50,20,50),ElementBackground=Color3.fromRGB(45,30,60),ElementBackgroundHover=Color3.fromRGB(50,35,70),SecondaryElementBackground=Color3.fromRGB(40,30,55)
-,ElementStroke=Color3.fromRGB(70,50,85),SecondaryElementStroke=Color3.fromRGB(65,45,80),SliderBackground=Color3.fromRGB(100,60,150),SliderProgress=Color3.
-fromRGB(130,80,180),SliderStroke=Color3.fromRGB(150,100,200),ToggleBackground=Color3.fromRGB(45,30,55),ToggleEnabled=Color3.fromRGB(120,60,150),ToggleDisabled=
-Color3.fromRGB(94,47,117),ToggleEnabledStroke=Color3.fromRGB(140,80,170),ToggleDisabledStroke=Color3.fromRGB(124,71,150),ToggleEnabledOuterStroke=Color3.
-fromRGB(90,40,120),ToggleDisabledOuterStroke=Color3.fromRGB(80,50,110),DropdownSelected=Color3.fromRGB(50,35,70),DropdownUnselected=Color3.fromRGB(35,25,50),
-InputBackground=Color3.fromRGB(45,30,60),InputStroke=Color3.fromRGB(80,50,110),PlaceholderColor=Color3.fromRGB(178,150,200)},Green={TextColor=Color3.fromRGB(30,
-60,30),Background=Color3.fromRGB(235,245,235),Topbar=Color3.fromRGB(210,230,210),Shadow=Color3.fromRGB(200,220,200),NotificationBackground=Color3.fromRGB(240,
-250,240),NotificationActionsBackground=Color3.fromRGB(220,235,220),TabBackground=Color3.fromRGB(215,235,215),TabStroke=Color3.fromRGB(190,210,190),
-TabBackgroundSelected=Color3.fromRGB(245,255,245),TabTextColor=Color3.fromRGB(50,80,50),SelectedTabTextColor=Color3.fromRGB(20,60,20),ElementBackground=Color3.
-fromRGB(225,240,225),ElementBackgroundHover=Color3.fromRGB(210,225,210),SecondaryElementBackground=Color3.fromRGB(235,245,235),ElementStroke=Color3.fromRGB(180,
-200,180),SecondaryElementStroke=Color3.fromRGB(180,200,180),SliderBackground=Color3.fromRGB(90,160,90),SliderProgress=Color3.fromRGB(70,130,70),SliderStroke=
-Color3.fromRGB(100,180,100),ToggleBackground=Color3.fromRGB(215,235,215),ToggleEnabled=Color3.fromRGB(60,130,60),ToggleDisabled=Color3.fromRGB(150,175,150),
+function __modImpl()local b={}b.target=nil b.locked=false function b.findTarget()local c=game:GetService'Players'.LocalPlayer local d,e,f=c and c.Character,c
+and c:GetMouse(),workspace.CurrentCamera local g,h=f:ScreenPointToRay(e.X,e.Y),RaycastParams.new()h.FilterDescendantsInstances={d}h.FilterType=Enum.
+RaycastFilterType.Exclude local i=workspace:Raycast(g.Origin,g.Direction*500,h)if i and i.Instance then local j=i.Instance:FindFirstAncestorOfClass'Model'if j
+and j:FindFirstChild'Humanoid'and j~=d then return j end end local k,j=math.huge for l,m in game:GetService'Players':GetPlayers()do if m~=c and m.Character and
+m.Character:FindFirstChild'Head'then local n=m.Character.Head local o,p=f:WorldToViewportPoint(n.Position)if p then local q=(Vector2.new(o.X,o.Y)-Vector2.new(e.
+X,e.Y)).Magnitude if q<k then k=q j=m.Character end end end end return j end function b.toggleLock()if b.locked then local c=b.findTarget()if c then b.target=c:
+WaitForChild'Head'else b.locked=false end else b.target=nil end end game:GetService'RunService'.RenderStepped:Connect(function()if b.locked and b.target and b.
+target.Parent then local c=workspace.CurrentCamera c.CFrame=CFrame.new(c.CFrame.Position,b.target.Position)end end)return b end function a.b():typeof(__modImpl(
+))local b=a.cache.b if not b then b={c=__modImpl()}a.cache.b=b end return b.c end end do local function __modImpl()local b,c,d=a.a(),a.b(),{}function d.
+WaitForGameAndPlayer()local e,f=false,false while not(e and f)do if game:IsLoaded()then e=true end if game:GetService'Players'.LocalPlayer then f=true end task.
+wait()end end function d.diff3d(e,f)return f-e end function d.dist3d(e,f)return d.diff3d(e,f).Magnitude end function d.dir3d(e,f)return d.diff3d(e,f).Unit end
+function d.isDev()local e,f='pathwise',game:GetService'Players'.LocalPlayer if string.sub(f.Name,1,#e)==e then return true end return false end function d.isKBM
+()local e=game:GetService'UserInputService'return e.KeyboardEnabled and e.MouseEnabled end d.Noclip=b d.Aimlock=c function d.breakVelocity(e)task.spawn(function
+()local f,g,h=game:GetService'Players'.LocalPlayer,false,Vector3.new(0,0,0)task.spawn(function()task.wait(e)g=true end)while not g do for i,j in ipairs(f.
+Character:GetDescendants())do if j:IsA'BasePart'then j.Velocity,j.RotVelocity=h,h end end task.wait()end end)end local e,f=20,false function d.get_safeTweening(
+)return f end function d.set_safeTweening(g)f=g end function d.set_safeTweenSpeed(g)e=g end function d.safeTweenToPos(g)local h,i=game:GetService'TweenService',
+game:GetService'Players'.LocalPlayer local j=i and i.Character local k,l=j and j:FindFirstChild'HumanoidRootPart',j and j:FindFirstChildOfClass'Humanoid'local m
+=d.dist3d(k.Position,g.Position)local n=m/e f=true if l and l.SeatPart then l.Sit=false task.wait(0.1)end task.wait(0.1)h:Create(k,TweenInfo.new(n,Enum.
+EasingStyle.Linear),{CFrame=g}):Play()task.delay(n,function()f=false end)d.breakVelocity(n)end function d.safeTweenToPart(g,h)if g:IsA'BasePart'then local i=
+game:GetService'Players'.LocalPlayer local j=i and i.Character local k,l=j and j:FindFirstChild'HumanoidRootPart',j and j:FindFirstChildWhichIsA'Humanoid'f=true
+if l and l.SeatPart then l.Sit=false task.wait(0.1)end local m d.Noclip.enable()game.Workspace.Gravity=0 m=game:GetService'RunService'.Heartbeat:Connect(
+function(n)d.breakVelocity(0.1)if not k or not g or not g.Parent or(h and h(g))then m:Disconnect()f=false d.Noclip.disable()game.Workspace.Gravity=196.21 if l
+then l:ChangeState(Enum.HumanoidStateType.GettingUp)end return end local o,p=k.Position,g.Position local q,r=d.dist3d(o,p),e*n if q<=r then k.CFrame=g.CFrame m:
+Disconnect()f=false d.Noclip.disable()if l then l:ChangeState(Enum.HumanoidStateType.GettingUp)end game.Workspace.Gravity=196.21 else local s=d.dir3d(o,p)local
+t=o+(s*r)if l then l:ChangeState(Enum.HumanoidStateType.Physics)end k.CFrame=CFrame.new(t)*(g.CFrame-g.CFrame.Position)end end)end end function d.flingCharacter
+(g)local h=game:GetService'Players'.LocalPlayer local i=h and h.Character local j,k=i and i:FindFirstChild'HumanoidRootPart',g and g:FindFirstChild
+'HumanoidRootPart'if j and k then d.Noclip.enable()task.wait(0.2)local l=j.CFrame task.wait(0.1)for m,n in pairs(i:GetDescendants())do if n:IsA'BasePart'then n.
+CustomPhysicalProperties=PhysicalProperties.new(100,0.3,0.5)end end for m,n in i:GetChildren()do if n:IsA'BasePart'then n.CanCollide=false n.Massless=true n.
+Velocity=Vector3.new(0,0,0)end end local m=99999 local n,o=m o=game:GetService'RunService'.Heartbeat:Connect(function(p)if not k or not k.Parent then return end
+local q,r=math.random(-100,100),k.AssemblyLinearVelocity if r.Magnitude>500 then o:Disconnect()end local s=k.Position+(r*0.08)if s.Y<=game.Workspace.
+FallenPartsDestroyHeight+50 then return end j.CFrame=(CFrame.new(s+Vector3.new(0.1,0,0.1)))*(j.CFrame-j.CFrame.Position)j.AssemblyLinearVelocity=Vector3.new(m+q
+,-100,m+q)j.AssemblyAngularVelocity=Vector3.new(0,n,0)end)task.spawn(function()while o.Connected do n=m task.wait(0.2)n=0 task.wait(0.1)end end)task.delay(3,
+function()for p,q in pairs(i:GetDescendants())do if q.ClassName=='Part'or q.ClassName=='MeshPart'then q.CustomPhysicalProperties=PhysicalProperties.new(0.7,0.3,
+0.5)end end d.Noclip.disable()o:Disconnect()d.breakVelocity(0.2)task.wait(0.1)j.CFrame=l end)end end function d.flingPlayer(g)local h=g and g.Character d.
+flingCharacter(h)end function d.isFriendsWith(g)local h=game:GetService'Players'.LocalPlayer return h:IsFriendsWith(g.UserId)end function d.updateESP(g,h,i)
+local j=g:FindFirstChild'ESPHL'if j then if not i then j:Destroy()elseif h~=j.FillColor then j.FillColor=h j.OutlineColor=h end elseif i then local k=Instance.
+new'Highlight'k.Name='ESPHL'k.Adornee=g k.FillColor=h k.OutlineColor=h k.Parent=g end end d.esp_players={}d.esp_show_names=false d.esp_show_health=false
+function d.updatePlayerESP(g,h,i,j)local k=g and g.Character local l=k and k:FindFirstChildWhichIsA'Humanoid'local m,n=l and l.Health>0,(d.isFriendsWith(g)and(j
+or h))or h d.esp_players[g]={enabled=i and m,color=n}if k then d.updateESP(k,n,i and m)end end task.spawn(function()local g=Instance.new('Folder',game.CoreGui)
+while task.wait()do if d.esp_show_names or d.esp_show_health then if not g or not g.Parent then g=Instance.new('Folder',game.CoreGui)end for h,i in pairs(d.
+esp_players)do local j,k,l=i.enabled,i.color,g:FindFirstChild(h.Name..'_ESP')local function getHealth()local m=h and h.Character local n=m and m:
+FindFirstChildWhichIsA'Humanoid'if n then local o=n.Health/n.MaxHealth local p,q=math.floor(o*100),Color3.fromHSV(o*(0.2777777777777778),0.8,0.8)return{health=p
+,color=q}else return{health=0,color=Color3.fromRGB(0,0,0)}end end if j then local m=h and h.Character local n=m and m:FindFirstChild'Head'if not l then if n
+then local o=Instance.new('Folder',g)o.Name=h.Name..'_ESP'local p=Instance.new('BillboardGui',o)local q,r=Instance.new('TextLabel',p),Instance.new('TextLabel',p
+)p.Adornee=n p.Size=UDim2.new(0,100,0,40)p.StudsOffset=Vector3.new(0,2,0)p.AlwaysOnTop=true q.Name='NameLabel'q.BackgroundTransparency=1 q.Position=UDim2.new(0,
+0,0,0)q.Size=UDim2.new(0,100,0,20)q.Font=Enum.Font.SourceSansSemibold q.TextSize=20 q.TextColor3=k q.TextStrokeTransparency=0 q.TextStrokeColor3=Color3.new(0,0,
+0)q.TextYAlignment=Enum.TextYAlignment.Bottom q.Text=''q.ZIndex=10 r.Name='HealthLabel'r.BackgroundTransparency=1 r.Position=UDim2.new(0,0,0,20)r.Size=UDim2.
+new(0,100,0,20)r.Font=Enum.Font.SourceSansSemibold r.TextSize=20 r.TextColor3=k r.TextStrokeTransparency=0 r.TextStrokeColor3=Color3.new(0,0,0)r.TextYAlignment=
+Enum.TextYAlignment.Bottom r.Text=''r.ZIndex=10 end else local o=l:FindFirstChild'BillboardGui'if o and n then o.Adornee=n local p=o:FindFirstChild'NameLabel'if
+p then if d.esp_show_names then p.Text=h.Name p.TextColor3=k else p.Text=''end end local q=o:FindFirstChild'HealthLabel'if q then if d.esp_show_health then
+local r=getHealth()local s,t=r.health,r.color q.Text=s..'%'q.TextColor3=t else q.Text=''end end end end else if l then l:Destroy()end end end else g:Destroy()
+end end end)function d.getLocalPlayer()return game:GetService'Players'.LocalPlayer end function d.getLocalChar()local g=d.getLocalPlayer()return g and g.
+Character end function d.getLocalRoot()local g=d.getLocalChar()return g and g:FindFirstChild'HumanoidRootPart'end function d.getLocalHumanoid()local g=d.
+getLocalChar()return g and g:FindFirstChildWhichIsA'Humanoid'end return d end function a.c():typeof(__modImpl())local b=a.cache.c if not b then b={c=__modImpl()
+}a.cache.c=b end return b.c end end do local function __modImpl()local b={Default={TextColor=Color3.fromRGB(240,240,240),Background=Color3.fromRGB(25,25,25),
+Topbar=Color3.fromRGB(34,34,34),Shadow=Color3.fromRGB(20,20,20),NotificationBackground=Color3.fromRGB(20,20,20),NotificationActionsBackground=Color3.fromRGB(230
+,230,230),TabBackground=Color3.fromRGB(80,80,80),TabStroke=Color3.fromRGB(85,85,85),TabBackgroundSelected=Color3.fromRGB(210,210,210),TabTextColor=Color3.
+fromRGB(240,240,240),SelectedTabTextColor=Color3.fromRGB(50,50,50),ElementBackground=Color3.fromRGB(35,35,35),ElementBackgroundHover=Color3.fromRGB(40,40,40),
+SecondaryElementBackground=Color3.fromRGB(25,25,25),ElementStroke=Color3.fromRGB(50,50,50),SecondaryElementStroke=Color3.fromRGB(40,40,40),SliderBackground=
+Color3.fromRGB(50,138,220),SliderProgress=Color3.fromRGB(50,138,220),SliderStroke=Color3.fromRGB(58,163,255),ToggleBackground=Color3.fromRGB(30,30,30),
+ToggleEnabled=Color3.fromRGB(0,146,214),ToggleDisabled=Color3.fromRGB(100,100,100),ToggleEnabledStroke=Color3.fromRGB(0,170,255),ToggleDisabledStroke=Color3.
+fromRGB(125,125,125),ToggleEnabledOuterStroke=Color3.fromRGB(100,100,100),ToggleDisabledOuterStroke=Color3.fromRGB(65,65,65),DropdownSelected=Color3.fromRGB(40,
+40,40),DropdownUnselected=Color3.fromRGB(30,30,30),InputBackground=Color3.fromRGB(30,30,30),InputStroke=Color3.fromRGB(65,65,65),PlaceholderColor=Color3.
+fromRGB(178,178,178)},Ocean={TextColor=Color3.fromRGB(230,240,240),Background=Color3.fromRGB(20,30,30),Topbar=Color3.fromRGB(25,40,40),Shadow=Color3.fromRGB(15,
+20,20),NotificationBackground=Color3.fromRGB(25,35,35),NotificationActionsBackground=Color3.fromRGB(230,240,240),TabBackground=Color3.fromRGB(40,60,60),
+TabStroke=Color3.fromRGB(50,70,70),TabBackgroundSelected=Color3.fromRGB(100,180,180),TabTextColor=Color3.fromRGB(210,230,230),SelectedTabTextColor=Color3.
+fromRGB(20,50,50),ElementBackground=Color3.fromRGB(30,50,50),ElementBackgroundHover=Color3.fromRGB(40,60,60),SecondaryElementBackground=Color3.fromRGB(30,45,45)
+,ElementStroke=Color3.fromRGB(45,70,70),SecondaryElementStroke=Color3.fromRGB(40,65,65),SliderBackground=Color3.fromRGB(0,110,110),SliderProgress=Color3.
+fromRGB(0,140,140),SliderStroke=Color3.fromRGB(0,160,160),ToggleBackground=Color3.fromRGB(30,50,50),ToggleEnabled=Color3.fromRGB(0,130,130),ToggleDisabled=
+Color3.fromRGB(70,90,90),ToggleEnabledStroke=Color3.fromRGB(0,160,160),ToggleDisabledStroke=Color3.fromRGB(85,105,105),ToggleEnabledOuterStroke=Color3.fromRGB(
+50,100,100),ToggleDisabledOuterStroke=Color3.fromRGB(45,65,65),DropdownSelected=Color3.fromRGB(30,60,60),DropdownUnselected=Color3.fromRGB(25,40,40),
+InputBackground=Color3.fromRGB(30,50,50),InputStroke=Color3.fromRGB(50,70,70),PlaceholderColor=Color3.fromRGB(140,160,160)},AmberGlow={TextColor=Color3.fromRGB(
+255,245,230),Background=Color3.fromRGB(45,30,20),Topbar=Color3.fromRGB(55,40,25),Shadow=Color3.fromRGB(35,25,15),NotificationBackground=Color3.fromRGB(50,35,25)
+,NotificationActionsBackground=Color3.fromRGB(245,230,215),TabBackground=Color3.fromRGB(75,50,35),TabStroke=Color3.fromRGB(90,60,45),TabBackgroundSelected=
+Color3.fromRGB(230,180,100),TabTextColor=Color3.fromRGB(250,220,200),SelectedTabTextColor=Color3.fromRGB(50,30,10),ElementBackground=Color3.fromRGB(60,45,35),
+ElementBackgroundHover=Color3.fromRGB(70,50,40),SecondaryElementBackground=Color3.fromRGB(55,40,30),ElementStroke=Color3.fromRGB(85,60,45),
+SecondaryElementStroke=Color3.fromRGB(75,50,35),SliderBackground=Color3.fromRGB(220,130,60),SliderProgress=Color3.fromRGB(250,150,75),SliderStroke=Color3.
+fromRGB(255,170,85),ToggleBackground=Color3.fromRGB(55,40,30),ToggleEnabled=Color3.fromRGB(240,130,30),ToggleDisabled=Color3.fromRGB(90,70,60),
+ToggleEnabledStroke=Color3.fromRGB(255,160,50),ToggleDisabledStroke=Color3.fromRGB(110,85,75),ToggleEnabledOuterStroke=Color3.fromRGB(200,100,50),
+ToggleDisabledOuterStroke=Color3.fromRGB(75,60,55),DropdownSelected=Color3.fromRGB(70,50,40),DropdownUnselected=Color3.fromRGB(55,40,30),InputBackground=Color3.
+fromRGB(60,45,35),InputStroke=Color3.fromRGB(90,65,50),PlaceholderColor=Color3.fromRGB(190,150,130)},Light={TextColor=Color3.fromRGB(40,40,40),Background=Color3
+.fromRGB(245,245,245),Topbar=Color3.fromRGB(230,230,230),Shadow=Color3.fromRGB(200,200,200),NotificationBackground=Color3.fromRGB(250,250,250),
+NotificationActionsBackground=Color3.fromRGB(240,240,240),TabBackground=Color3.fromRGB(235,235,235),TabStroke=Color3.fromRGB(215,215,215),TabBackgroundSelected=
+Color3.fromRGB(255,255,255),TabTextColor=Color3.fromRGB(80,80,80),SelectedTabTextColor=Color3.fromRGB(0,0,0),ElementBackground=Color3.fromRGB(240,240,240),
+ElementBackgroundHover=Color3.fromRGB(225,225,225),SecondaryElementBackground=Color3.fromRGB(235,235,235),ElementStroke=Color3.fromRGB(210,210,210),
+SecondaryElementStroke=Color3.fromRGB(210,210,210),SliderBackground=Color3.fromRGB(150,180,220),SliderProgress=Color3.fromRGB(100,150,200),SliderStroke=Color3.
+fromRGB(120,170,220),ToggleBackground=Color3.fromRGB(220,220,220),ToggleEnabled=Color3.fromRGB(0,146,214),ToggleDisabled=Color3.fromRGB(150,150,150),
+ToggleEnabledStroke=Color3.fromRGB(0,170,255),ToggleDisabledStroke=Color3.fromRGB(170,170,170),ToggleEnabledOuterStroke=Color3.fromRGB(100,100,100),
+ToggleDisabledOuterStroke=Color3.fromRGB(180,180,180),DropdownSelected=Color3.fromRGB(230,230,230),DropdownUnselected=Color3.fromRGB(220,220,220),
+InputBackground=Color3.fromRGB(240,240,240),InputStroke=Color3.fromRGB(180,180,180),PlaceholderColor=Color3.fromRGB(140,140,140)},Amethyst={TextColor=Color3.
+fromRGB(240,240,240),Background=Color3.fromRGB(30,20,40),Topbar=Color3.fromRGB(40,25,50),Shadow=Color3.fromRGB(20,15,30),NotificationBackground=Color3.fromRGB(
+35,20,40),NotificationActionsBackground=Color3.fromRGB(240,240,250),TabBackground=Color3.fromRGB(60,40,80),TabStroke=Color3.fromRGB(70,45,90),
+TabBackgroundSelected=Color3.fromRGB(180,140,200),TabTextColor=Color3.fromRGB(230,230,240),SelectedTabTextColor=Color3.fromRGB(50,20,50),ElementBackground=
+Color3.fromRGB(45,30,60),ElementBackgroundHover=Color3.fromRGB(50,35,70),SecondaryElementBackground=Color3.fromRGB(40,30,55),ElementStroke=Color3.fromRGB(70,50,
+85),SecondaryElementStroke=Color3.fromRGB(65,45,80),SliderBackground=Color3.fromRGB(100,60,150),SliderProgress=Color3.fromRGB(130,80,180),SliderStroke=Color3.
+fromRGB(150,100,200),ToggleBackground=Color3.fromRGB(45,30,55),ToggleEnabled=Color3.fromRGB(120,60,150),ToggleDisabled=Color3.fromRGB(94,47,117),
+ToggleEnabledStroke=Color3.fromRGB(140,80,170),ToggleDisabledStroke=Color3.fromRGB(124,71,150),ToggleEnabledOuterStroke=Color3.fromRGB(90,40,120),
+ToggleDisabledOuterStroke=Color3.fromRGB(80,50,110),DropdownSelected=Color3.fromRGB(50,35,70),DropdownUnselected=Color3.fromRGB(35,25,50),InputBackground=Color3
+.fromRGB(45,30,60),InputStroke=Color3.fromRGB(80,50,110),PlaceholderColor=Color3.fromRGB(178,150,200)},Green={TextColor=Color3.fromRGB(30,60,30),Background=
+Color3.fromRGB(235,245,235),Topbar=Color3.fromRGB(210,230,210),Shadow=Color3.fromRGB(200,220,200),NotificationBackground=Color3.fromRGB(240,250,240),
+NotificationActionsBackground=Color3.fromRGB(220,235,220),TabBackground=Color3.fromRGB(215,235,215),TabStroke=Color3.fromRGB(190,210,190),TabBackgroundSelected=
+Color3.fromRGB(245,255,245),TabTextColor=Color3.fromRGB(50,80,50),SelectedTabTextColor=Color3.fromRGB(20,60,20),ElementBackground=Color3.fromRGB(225,240,225),
+ElementBackgroundHover=Color3.fromRGB(210,225,210),SecondaryElementBackground=Color3.fromRGB(235,245,235),ElementStroke=Color3.fromRGB(180,200,180),
+SecondaryElementStroke=Color3.fromRGB(180,200,180),SliderBackground=Color3.fromRGB(90,160,90),SliderProgress=Color3.fromRGB(70,130,70),SliderStroke=Color3.
+fromRGB(100,180,100),ToggleBackground=Color3.fromRGB(215,235,215),ToggleEnabled=Color3.fromRGB(60,130,60),ToggleDisabled=Color3.fromRGB(150,175,150),
 ToggleEnabledStroke=Color3.fromRGB(80,150,80),ToggleDisabledStroke=Color3.fromRGB(130,150,130),ToggleEnabledOuterStroke=Color3.fromRGB(100,160,100),
 ToggleDisabledOuterStroke=Color3.fromRGB(160,180,160),DropdownSelected=Color3.fromRGB(225,240,225),DropdownUnselected=Color3.fromRGB(210,225,210),
 InputBackground=Color3.fromRGB(235,245,235),InputStroke=Color3.fromRGB(180,200,180),PlaceholderColor=Color3.fromRGB(120,140,120)},Bloom={TextColor=Color3.
@@ -132,8 +141,8 @@ SliderBackground=Color3.fromRGB(200,220,235),SliderProgress=Color3.fromRGB(70,13
 210,220,230),ToggleEnabled=Color3.fromRGB(70,160,210),ToggleDisabled=Color3.fromRGB(180,180,180),ToggleEnabledStroke=Color3.fromRGB(60,150,200),
 ToggleDisabledStroke=Color3.fromRGB(140,140,140),ToggleEnabledOuterStroke=Color3.fromRGB(100,120,140),ToggleDisabledOuterStroke=Color3.fromRGB(120,120,130),
 DropdownSelected=Color3.fromRGB(220,230,240),DropdownUnselected=Color3.fromRGB(200,210,220),InputBackground=Color3.fromRGB(220,230,240),InputStroke=Color3.
-fromRGB(180,190,200),PlaceholderColor=Color3.fromRGB(150,150,150)}}return b end function a.c():typeof(__modImpl())local b=a.cache.c if not b then b={c=
-__modImpl()}a.cache.c=b end return b.c end end do local function __modImpl()local b,c,e,d=a.c(),{},'EZUI'local f,g=e..'/Configurations','.ez'local function 
+fromRGB(180,190,200),PlaceholderColor=Color3.fromRGB(150,150,150)}}return b end function a.d():typeof(__modImpl())local b=a.cache.d if not b then b={c=
+__modImpl()}a.cache.d=b end return b.c end end do local function __modImpl()local b,c,e,d=a.d(),{},'EZUI'local f,g=e..'/Configurations','.ez'local function 
 callSafely(h,...)if h then local i,j=pcall(h,...)if not i then warn('Function failed with error: ',j)return false else return j end end end local function 
 ensureFolder(h)if isfolder and not callSafely(isfolder,h)then callSafely(makefolder,h)end end local function SaveConfig()print'Saving Config'local h={}for i,j
 in pairs(c.Flags)do print(j)if typeof(j)=='boolean'then if j==false then h[i]=false else h[i]=j end else h[i]=j end end callSafely(writefile,f..'/'..d..g,
@@ -266,12 +275,12 @@ BackgroundTransparency=1 ac.Size=UDim2.new(0,0,0,30)ac.Text=ab ac.AutomaticSize=
 end end T.CreateDropdown=function(aa,ab)end T.CreateLabel=function(aa,ab)local ac=Instance.new'TextLabel'ac.BorderSizePixel=0 ac.TextSize=18 ac.FontFace=Font.
 new('rbxasset://fonts/families/SourceSansPro.json',Enum.FontWeight.Regular,Enum.FontStyle.Normal)ac.TextColor3=l.TextColor ac.BackgroundTransparency=1 ac.Size=
 UDim2.new(0,0,0,30)ac.Text=ab ac.AutomaticSize=Enum.AutomaticSize.X table.insert(aa.Content,ac)if aa.Active then ac.Parent=G end end table.insert(K.Tabs,T)if K.
-Tabs[1].Name==M then selectTab()end return T end k.Frame=m h.Window=k return k end}return c end function a.d():typeof(__modImpl())local aa=a.cache.d if not aa
-then aa={c=__modImpl()}a.cache.d=aa end return aa.c end end do local function __modImpl()local aa,ab,ac=a.b(),{Name="Luke's Script Hub",Icon=0,LoadingTitle=
+Tabs[1].Name==M then selectTab()end return T end k.Frame=m h.Window=k return k end}return c end function a.e():typeof(__modImpl())local aa=a.cache.e if not aa
+then aa={c=__modImpl()}a.cache.e=aa end return aa.c end end do local function __modImpl()local aa,ab,ac=a.c(),{Name="Luke's Script Hub",Icon=0,LoadingTitle=
 "Luke's Script Hub",LoadingSubtitle='by @actuallyluke',ShowText='Menu',Theme='Default',ToggleUIKeybind='K',DisableRayfieldPrompts=true,DisableBuildWarnings=
-false,ConfigurationSaving={Enabled=true,FolderName=nil,FileName='Lukes Script Hub'},KeySystem=false},{}if aa.isKBM()then ac.Library=a.d()else ac.Library=
-loadstring(game:HttpGet'https://sirius.menu/rayfield')()end ac.Window=ac.Library:CreateWindow(ab)return ac end function a.e():typeof(__modImpl())local aa=a.
-cache.e if not aa then aa={c=__modImpl()}a.cache.e=aa end return aa.c end end do local function __modImpl()local aa,ab=a.e(),a.b()local ac=aa.Window:CreateTab(
+false,ConfigurationSaving={Enabled=true,FolderName=nil,FileName='Lukes Script Hub'},KeySystem=false},{}if aa.isKBM()then ac.Library=a.e()else ac.Library=
+loadstring(game:HttpGet'https://sirius.menu/rayfield')()end ac.Window=ac.Library:CreateWindow(ab)return ac end function a.f():typeof(__modImpl())local aa=a.
+cache.f if not aa then aa={c=__modImpl()}a.cache.f=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),a.c()local ac=aa.Window:CreateTab(
 'Universal','globe')ac:CreateSection'Noclip'local ae=ac:CreateToggle{Name='Toggle Noclip',CurrentValue=false,Flag=nil,Callback=function(ae)if ae then ab.Noclip.
 enable()ab.Noclip.set_manual(ae)else ab.Noclip.set_manual(ae)ab.Noclip.disable()end end}ac:CreateKeybind{Name='Toggle Noclip',CurrentKeybind='V',HoldToInteract=
 false,Flag='NoClipKeybind',Callback=function()if ae.CurrentValue then aa.Library:Notify{Title='Noclip Disabled',Content='Noclip is now disabled.',Duration=3,
@@ -290,38 +299,39 @@ function isControlDown()local ar=game:GetService'UserInputService'return ar:IsKe
 Button1Down:Connect(function()if al and isControlDown()and ao.Target then inc()local ar=Instance.new('ObjectValue',ap)ar.Value=ao.Target ar.Name=''..get()local
 as=Instance.new('Vector3Value',ar)as.Value=ao.Target.Position as.Name='pos'ao.Target.Position=Vector3.new(100000000,100000000,100000000)end end)ao.Button2Down:
 Connect(function()if al and isControlDown()then local ar=ap:FindFirstChild(tostring(get()))if ar and ar.Value then local as=ar:FindFirstChild'pos'if as and as.
-Value then ar.Value.Position=as.Value ar:Destroy()dec()end end end end)end)ac:CreateSection'Universal ESP'local function updateUniversalESP(ao)for ap,aq in
-pairs(game:GetService'Players':GetPlayers())do if aq~=game:GetService'Players'.LocalPlayer then ab.updatePlayerESP(aq,Color3.fromRGB(255,0,0),ao,Color3.fromRGB(
-255,0,255))end end end local ao=false ac:CreateToggle{Name='Universal ESP',CurrentValue=false,Flag=nil,Callback=function(ap)ao=ap updateUniversalESP(ao)end}game
-:GetService'RunService'.RenderStepped:Connect(function()if ao then updateUniversalESP(ao)end end)ac:CreateToggle{Name='Show Player Names',CurrentValue=ab.
-esp_show_names,Flag='EspShowNames',Callback=function(aq)ab.esp_show_names=aq end}ac:CreateToggle{Name='Show Player Health',CurrentValue=ab.esp_show_health,Flag=
-'EspShowHealth',Callback=function(ar)ab.esp_show_health=ar end}local as=game:GetService'Players'.LocalPlayer local b=as and as.Character local c=b and b:
-FindFirstChild'Humanoid'local d=(c and c.WalkSpeed)or 16 ac:CreateSection'Speed'local f=ac:CreateSlider{Name='Speed',Range={0,100},Increment=1,Suffix='',
-CurrentValue=d,Flag=nil,Callback=function(f)local g=game:GetService'Players'.LocalPlayer local h=g and g.Character local i=h and h:FindFirstChildWhichIsA
-'Humanoid'if i then i.WalkSpeed=f end end}ac:CreateButton{Name='Set to 16',Callback=function()f:Set(16)end}ac:CreateButton{Name='Set to 18',Callback=function()f
-:Set(18)end}ac:CreateButton{Name='Set to 20',Callback=function()f:Set(20)end}local g,h ac:CreateToggle{Name='Loop Speed',CurrentValue=false,Flag=nil,Callback=
-function(i)local j=game:GetService'Players'.LocalPlayer local k=j and j.Character local l=k and k:FindFirstChildWhichIsA'Humanoid'if i and l then local function 
-SetWalkspeed()local m=game:GetService'Players'.LocalPlayer local n=m and m.Character local o=n and n:FindFirstChildWhichIsA'Humanoid'if o then o.WalkSpeed=f.
-CurrentValue end end SetWalkspeed()g=(g and g:Disconnect()and false)or l:GetPropertyChangedSignal'WalkSpeed':Connect(SetWalkspeed)h=(h and h:Disconnect()and
-false)or j.CharacterAdded:Connect(function(m)l=m:WaitForChild'Humanoid'SetWalkspeed()g=(g and g:Disconnect()and false)or l:GetPropertyChangedSignal'WalkSpeed':
-Connect(SetWalkspeed)end)else g=(g and g:Disconnect()and false)or nil h=(h and h:Disconnect()and false)or nil end end}return true end function a.f():typeof(
-__modImpl())local aa=a.cache.f if not aa then aa={c=__modImpl()}a.cache.f=aa end return aa.c end end do local function __modImpl()a.b()local ab={}function ab.
+Value then ar.Value.Position=as.Value ar:Destroy()dec()end end end end)end)ac:CreateSection'Aimlock'ac:CreateKeybind{Name='Toggle Aimlock',CurrentKeybind='Z',
+HoldToInteract=false,Flag='AimLockKeybind',Callback=ab.Aimlock.toggleLock}ac:CreateSection'Universal ESP'local function updateUniversalESP(ap)for aq,ar in
+pairs(game:GetService'Players':GetPlayers())do if ar~=game:GetService'Players'.LocalPlayer then ab.updatePlayerESP(ar,Color3.fromRGB(255,0,0),ap,Color3.fromRGB(
+255,0,255))end end end local ap=false ac:CreateToggle{Name='Universal ESP',CurrentValue=false,Flag=nil,Callback=function(aq)ap=aq updateUniversalESP(ap)end}game
+:GetService'RunService'.RenderStepped:Connect(function()if ap then updateUniversalESP(ap)end end)ac:CreateToggle{Name='Show Player Names',CurrentValue=ab.
+esp_show_names,Flag='EspShowNames',Callback=function(ar)ab.esp_show_names=ar end}ac:CreateToggle{Name='Show Player Health',CurrentValue=ab.esp_show_health,Flag=
+'EspShowHealth',Callback=function(as)ab.esp_show_health=as end}local b=game:GetService'Players'.LocalPlayer local c=b and b.Character local d=c and c:
+FindFirstChild'Humanoid'local e=(d and d.WalkSpeed)or 16 ac:CreateSection'Speed'local g=ac:CreateSlider{Name='Speed',Range={0,100},Increment=1,Suffix='',
+CurrentValue=e,Flag=nil,Callback=function(g)local h=game:GetService'Players'.LocalPlayer local i=h and h.Character local j=i and i:FindFirstChildWhichIsA
+'Humanoid'if j then j.WalkSpeed=g end end}ac:CreateButton{Name='Set to 16',Callback=function()g:Set(16)end}ac:CreateButton{Name='Set to 18',Callback=function()g
+:Set(18)end}ac:CreateButton{Name='Set to 20',Callback=function()g:Set(20)end}local h,i ac:CreateToggle{Name='Loop Speed',CurrentValue=false,Flag=nil,Callback=
+function(j)local k=game:GetService'Players'.LocalPlayer local l=k and k.Character local m=l and l:FindFirstChildWhichIsA'Humanoid'if j and m then local function 
+SetWalkspeed()local n=game:GetService'Players'.LocalPlayer local o=n and n.Character local p=o and o:FindFirstChildWhichIsA'Humanoid'if p then p.WalkSpeed=g.
+CurrentValue end end SetWalkspeed()h=(h and h:Disconnect()and false)or m:GetPropertyChangedSignal'WalkSpeed':Connect(SetWalkspeed)i=(i and i:Disconnect()and
+false)or k.CharacterAdded:Connect(function(n)m=n:WaitForChild'Humanoid'SetWalkspeed()h=(h and h:Disconnect()and false)or m:GetPropertyChangedSignal'WalkSpeed':
+Connect(SetWalkspeed)end)else h=(h and h:Disconnect()and false)or nil i=(i and i:Disconnect()and false)or nil end end}return true end function a.g():typeof(
+__modImpl())local aa=a.cache.g if not aa then aa={c=__modImpl()}a.cache.g=aa end return aa.c end end do local function __modImpl()a.c()local ab={}function ab.
 getMap()local ac=game.Workspace:FindFirstChild'Map'return ac end function ab.getFunctionals()local ac=ab.getMap()local ad=ac and ac:FindFirstChild'Functionals'
 return ad end function ab.getComputers()local ac=ab.getFunctionals()local ad=ac and ac:FindFirstChild'Computers'if ad then return ad:GetChildren()else return{}
 end end function ab.getComputerModel(ac)local ad=ac and ac:FindFirstChild'ComputerModel'return ad end function ab.getComputerScreen(ac)local ad=ac and ac:
 FindFirstChild'Screen'return ad end function ab.getComputerColor(ac)local ad=ab.getComputerScreen(ac)local ae=(ad and ad.Color)or Color3.fromRGB(0,0,255)return
 ae end function ab.getBeasts()local ac=game.Workspace:FindFirstChild'Beasts'if ac then return ac:GetChildren()else return{}end end function ab.getSurvivors()
-local ac=game.Workspace:FindFirstChild'Survivors'if ac then return ac:GetChildren()else return{}end end return ab end function a.g():typeof(__modImpl())local aa
-=a.cache.g if not aa then aa={c=__modImpl()}a.cache.g=aa end return aa.c end end do local function __modImpl()local function init()local aa,ab,ac=a.e(),a.b(),a.
-g()local ad=aa.Window:CreateTab('Agoraphobia','gamepad-2')ad:CreateSection'ESP'local ae=true local function updateSurvivorESP()local af=ac.getSurvivors()for ag,
+local ac=game.Workspace:FindFirstChild'Survivors'if ac then return ac:GetChildren()else return{}end end return ab end function a.h():typeof(__modImpl())local aa
+=a.cache.h if not aa then aa={c=__modImpl()}a.cache.h=aa end return aa.c end end do local function __modImpl()local function init()local aa,ab,ac=a.f(),a.c(),a.
+h()local ad=aa.Window:CreateTab('Agoraphobia','gamepad-2')ad:CreateSection'ESP'local ae=true local function updateSurvivorESP()local af=ac.getSurvivors()for ag,
 ah in pairs(af)do local ai=game:GetService'Players':FindFirstChild(ah.Name)ab.updatePlayerESP(ai,Color3.fromRGB(0,255,0),ae,Color3.fromRGB(255,0,255))end end
 local function updateBeastESP()local af=ac.getBeasts()for ag,ah in pairs(af)do local ai=game:GetService'Players':FindFirstChild(ah.Name)ab.updatePlayerESP(ai,
 Color3.fromRGB(255,0,0),ae,Color3.fromRGB(255,0,255))end end local function updatePlayerESP()updateSurvivorESP()updateBeastESP()end local af=true local function 
 updateComputerESP()local ag=ac.getComputers()for ah,ai in pairs(ag)do local aj,ak=ac.getComputerModel(ai),ac.getComputerColor(ai)if aj then ab.updateESP(aj,ak,
 af)end end end ad:CreateToggle{Name='Player ESP',CurrentValue=true,Flag=nil,Callback=function(ag)ae=ag updatePlayerESP()end}ad:CreateToggle{Name='Computer ESP',
 CurrentValue=true,Flag=nil,Callback=function(ah)af=ah updateComputerESP()end}task.spawn(function()while task.wait(1)do updatePlayerESP()updateComputerESP()end
-updatePlayerESP()updateComputerESP()end)end return init end function a.h():typeof(__modImpl())local aa=a.cache.h if not aa then aa={c=__modImpl()}a.cache.h=aa
-end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}ab.Queue={running=false,items={},add=function(ac,ad,ae)table.insert(ac.items,{item=ad,
+updatePlayerESP()updateComputerESP()end)end return init end function a.i():typeof(__modImpl())local aa=a.cache.i if not aa then aa={c=__modImpl()}a.cache.i=aa
+end return aa.c end end do local function __modImpl()local aa,ab=a.c(),{}ab.Queue={running=false,items={},add=function(ac,ad,ae)table.insert(ac.items,{item=ad,
 onDone=ae})end,update=function(ac)if not ac.running and#ac.items>0 then local ad=table.remove(ac.items,1)ac.running=true ad.item()ac.running=false if ad.onDone
 then ad.onDone()end end end}task.spawn(function()while task.wait()do ab.Queue:update()end end)function ab.getItemFolders()if ab.ItemFolders then return ab.
 ItemFolders end local ac={}for ad,ae in pairs(game.Workspace:GetChildren())do if ae.Name=='Model'then local af=ae:FindFirstChild'Items'if af then table.insert(
@@ -339,24 +349,24 @@ Queue:add(function()ab.fireProximityPrompt(ae,af)end)end end end function ab.get
 FindFirstChild'CheckIn'local ae=ad and ad:FindFirstChild('CheckStepHighlight',true)return ae end function ab.getNPCHL()local ac=game.Workspace:FindFirstChild
 'NPCs'local ad=ac and(ac:FindFirstChild('CheckStepHighlight',true)or ac:FindFirstChild('PatientHighlight',true))return ad end function ab.getMedicalHL()local ac
 =game.Workspace:FindFirstChild'Rooms'local ad=ac and ac:FindFirstChild'Medical'local ae=ad and ad:FindFirstChild('PatientHighlight',true)return ae end function
-ab.getPPFromHL(ac)return ac.Parent.Parent:FindFirstChild'PP2'or ac.Parent:FindFirstChild'PP'end return ab end function a.i():typeof(__modImpl())local aa=a.cache
-.i if not aa then aa={c=__modImpl()}a.cache.i=aa end return aa.c end end do local function __modImpl()local aa,ab=a.i(),{}function ab.getEyeDrops()aa.grabItem
+ab.getPPFromHL(ac)return ac.Parent.Parent:FindFirstChild'PP2'or ac.Parent:FindFirstChild'PP'end return ab end function a.j():typeof(__modImpl())local aa=a.cache
+.j if not aa then aa={c=__modImpl()}a.cache.j=aa end return aa.c end end do local function __modImpl()local aa,ab=a.j(),{}function ab.getEyeDrops()aa.grabItem
 'Eye Drops'end function ab.getIVDrops()aa.grabItem'IV Drops'end function ab.getMedkit()aa.grabItem'Medkit'end function ab.getThermo()aa.grabItem'Thermo'end
 function ab.getOintment()aa.grabItem'Ointment'end function ab.getBandages()aa.grabItem'Bandages'end function ab.getMapleSyrup()aa.grabItem'Maple Syrup'end
 function ab.getCoughSyrup()aa.grabItem'Cough Syrup'end function ab.getMedicine()aa.grabItem'Medicine'end function ab.getHerbs()aa.grabItem'Herbs'end local ac=
 false function ab.toggleAutoCheckIn(ad)ac=ad end local ad=false function ab.toggleAutoNPC(ae)ad=ae end local ae=false function ab.toggleAutoMedical(af)ae=af end
 task.spawn(function()local af=true while task.wait()do if(ac or ad or ae)and af then local ag=(ac and aa.getCheckInHL())or(ad and aa.getNPCHL())or(ae and aa.
 getMedicalHL())if ag then local ah=aa.getPPFromHL(ag)if ah then local ai=ah.Parent local aj=ai.PrimaryPart or ai:FindFirstChildWhichIsA'BasePart'if aj then af=
-false aa.Queue:add(function()aa.fireProximityPrompt(ah,aj)end,function()af=true end)end end end end end end)return ab end function a.j():typeof(__modImpl())
-local aa=a.cache.j if not aa then aa={c=__modImpl()}a.cache.j=aa end return aa.c end end do local function __modImpl()local function init()local aa,ab=a.e(),a.
-j()local ac=aa.Window:CreateTab('Animal Hospital','gamepad-2')ac:CreateSection'Utils'ac:CreateToggle{Name='Auto Check-In',CurrentValue=false,Flag=nil,Callback=
+false aa.Queue:add(function()aa.fireProximityPrompt(ah,aj)end,function()af=true end)end end end end end end)return ab end function a.k():typeof(__modImpl())
+local aa=a.cache.k if not aa then aa={c=__modImpl()}a.cache.k=aa end return aa.c end end do local function __modImpl()local function init()local aa,ab=a.f(),a.
+k()local ac=aa.Window:CreateTab('Animal Hospital','gamepad-2')ac:CreateSection'Utils'ac:CreateToggle{Name='Auto Check-In',CurrentValue=false,Flag=nil,Callback=
 ab.toggleAutoCheckIn}ac:CreateToggle{Name='Auto NPC',CurrentValue=false,Flag=nil,Callback=ab.toggleAutoNPC}ac:CreateToggle{Name='Auto Medical',CurrentValue=
 false,Flag=nil,Callback=ab.toggleAutoMedical}ac:CreateSection'Items'ac:CreateButton{Name='Bandages',Callback=ab.getBandages}ac:CreateButton{Name='Cough Syrup',
 Callback=ab.getCoughSyrup}ac:CreateButton{Name='Eye Drops',Callback=ab.getEyeDrops}ac:CreateButton{Name='Herbs',Callback=ab.getHerbs}ac:CreateButton{Name=
 'IV Drops',Callback=ab.getIVDrops}ac:CreateButton{Name='Maple Syrup',Callback=ab.getMapleSyrup}ac:CreateButton{Name='Medicine',Callback=ab.getMedicine}ac:
 CreateButton{Name='Medkit',Callback=ab.getMedkit}ac:CreateButton{Name='Ointment',Callback=ab.getOintment}ac:CreateButton{Name='Thermo',Callback=ab.getThermo}end
-return init end function a.k():typeof(__modImpl())local aa=a.cache.k if not aa then aa={c=__modImpl()}a.cache.k=aa end return aa.c end end do local function 
-__modImpl()local aa,ab=a.b(),{}function ab.getCurrentMap()for ac,ad in pairs(game.Workspace:GetChildren())do if ad:FindFirstChild'ComputerTable'then return ad
+return init end function a.l():typeof(__modImpl())local aa=a.cache.l if not aa then aa={c=__modImpl()}a.cache.l=aa end return aa.c end end do local function 
+__modImpl()local aa,ab=a.c(),{}function ab.getCurrentMap()for ac,ad in pairs(game.Workspace:GetChildren())do if ad:FindFirstChild'ComputerTable'then return ad
 end end return nil end function ab.getCurrentMapChildren()local ac=ab.getCurrentMap()if not ac then return{}end return ac:GetChildren()end function ab.getExits(
 )local ac,ad={},ab.getCurrentMapChildren()for ae,af in pairs(ad)do if af.Name=='ExitDoor'then table.insert(ac,af)end end return ac end function ab.getExitArea(
 ac)local ad=ac:FindFirstChild'ExitArea'return ad end function ab.getExitTrigger(ac)local ad=ac:FindFirstChild'ExitDoorTrigger'return ad end function ab.
@@ -432,8 +442,8 @@ ar then local as=ar.Instance if as then if as:IsDescendantOf(aj)then return true
 GetService'Players'.LocalPlayer local ai=ah and ah.Character local aj,ak,al,am=ai and ai:FindFirstChild'HumanoidRootPart',ai and ai:FindFirstChild'Head',ai and
 ai:FindFirstChild'Left Leg',ai and ai:FindFirstChild'Right Leg'local an={aj,ak,al,am}for ao,ap in pairs(an)do if ap then if ab.doBeastRaycast(ap)then return
 true end end end return false end function ab.isInDanger()return ab.getDistToBeast()<=ag and ab.LOSToBeast()end function ab.shouldEasyHack()return ab.
-getDistToBeast()>30 or not ab.LOSToBeast()end return ab end function a.l():typeof(__modImpl())local aa=a.cache.l if not aa then aa={c=__modImpl()}a.cache.l=aa
-end return aa.c end end do local function __modImpl()local function init()local aa,ab,ac=a.e(),a.b(),a.l()local ad,ae=aa.Window:CreateTab'ESP',true function
+getDistToBeast()>30 or not ab.LOSToBeast()end return ab end function a.m():typeof(__modImpl())local aa=a.cache.m if not aa then aa={c=__modImpl()}a.cache.m=aa
+end return aa.c end end do local function __modImpl()local function init()local aa,ab,ac=a.f(),a.c(),a.m()local ad,ae=aa.Window:CreateTab'ESP',true function
 UpdateBeastESP()for af,ag in pairs(game.Players:GetPlayers())do if ag.Character and ag.Character:FindFirstChild'BeastPowers'and ag~=game.Players.LocalPlayer
 then ab.updatePlayerESP(ag,Color3.fromRGB(255,0,0),ae,Color3.fromRGB(255,0,255))end end end ad:CreateToggle{Name='Beast ESP',CurrentValue=true,Flag=nil,Callback
 =function(af)ae=af UpdateBeastESP()end}local ag=true function UpdatePlrESP()for ah,ai in pairs(game.Players:GetPlayers())do if ai.Character and not ai.Character
@@ -497,8 +507,8 @@ Position)if M>=ac.beast_max_dist then L.CFrame=D game.Workspace.Gravity=196.21 a
 for O,P in ipairs(K:GetDescendants())do if P:IsA'BasePart'then P.Velocity,P.RotVelocity=F,F end end end end elseif B then local G=game:GetService'Players'.
 LocalPlayer local H=G and G.Character local I=H and H:FindFirstChild'HumanoidRootPart'if I then I.CFrame=D end game.Workspace.Gravity=196.21 ab.Noclip.disable()
 B=false end end end)am:CreateSlider{Name='Chase Music Volume',Range={0,100},Increment=1,Suffix='%',CurrentValue=100,Flag='FTFChaseMusicVolume',Callback=function
-(D)ac.updateChaseVolume(D)end}end return init end function a.m():typeof(__modImpl())local aa=a.cache.m if not aa then aa={c=__modImpl()}a.cache.m=aa end return
-aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function ab.getCurrentGun()local ac=game:GetService'Players'.LocalPlayer local ad=ac and ac.
+(D)ac.updateChaseVolume(D)end}end return init end function a.n():typeof(__modImpl())local aa=a.cache.n if not aa then aa={c=__modImpl()}a.cache.n=aa end return
+aa.c end end do local function __modImpl()local aa,ab=a.c(),{}function ab.getCurrentGun()local ac=game:GetService'Players'.LocalPlayer local ad=ac and ac.
 Character local ae=ad and ad:FindFirstChildOfClass'Tool'return ae end function ab.getGunFireEvent()local ac=ab.getCurrentGun()local ad=ac and ac:FindFirstChild
 'Events'local ae=ad and ad:FindFirstChild'Fire'return ae end function ab.getGunReloadEvent()local ac=ab.getCurrentGun()local ad=ac and ac:FindFirstChild'Events'
 local ae=ad and ad:FindFirstChild'Reload'return ae end function ab.getGunAmmo()local ac=ab.getCurrentGun()local ad=ac and ac:FindFirstChild'GunServer'local ae=
@@ -510,22 +520,22 @@ aj),Seed=ak:NextInteger(0,100)}end end function ab.findClosestChar()local ac=gam
 ad:FindFirstChild'HumanoidRootPart'if ae then local ag,af=99999999 for ah,ai in pairs(game:GetService'Players':GetPlayers())do if ai~=ac then local aj=ai and ai
 .Character local ak,al,am=aj and aj:FindFirstChild'HumanoidRootPart',aj and aj:FindFirstChildOfClass'ForceField',aj and aj:FindFirstChildOfClass'Humanoid'if ak
 and not al and(am and am.Health>0)then local an=aa.dist3d(ae.Position,ak.Position)if an<ag then af=aj ag=an end end end end return af end return nil end return
-ab end function a.n():typeof(__modImpl())local aa=a.cache.n if not aa then aa={c=__modImpl()}a.cache.n=aa end return aa.c end end do local function __modImpl()
-local function init()local aa,ab=a.e(),a.n()local ac,ad=aa.Window:CreateTab('Granny Shooters','gamepad-2'),true ac:CreateToggle{Name='Auto Kill',CurrentValue=ad
+ab end function a.o():typeof(__modImpl())local aa=a.cache.o if not aa then aa={c=__modImpl()}a.cache.o=aa end return aa.c end end do local function __modImpl()
+local function init()local aa,ab=a.f(),a.o()local ac,ad=aa.Window:CreateTab('Granny Shooters','gamepad-2'),true ac:CreateToggle{Name='Auto Kill',CurrentValue=ad
 ,Flag=nil,Callback=function(ae)ad=ae end}task.spawn(function()while task.wait()do if ad then local af=ab.findClosestChar()ab.shootChar(af)end end end)local af=
 true ac:CreateToggle{Name='Auto Reload',CurrentValue=af,Flag=nil,Callback=function(ag)af=ag end}task.spawn(function()while task.wait()do if af then if ab.
-getGunAmmo()==0 then ab.reloadGun()task.wait(5)end end end end)end return init end function a.o():typeof(__modImpl())local aa=a.cache.o if not aa then aa={c=
-__modImpl()}a.cache.o=aa end return aa.c end end do local function __modImpl()local aa={}function aa.isSeeker(ab)local ac=ab and ab.Character local ad=ac and ac
-:FindFirstChild'ItScript'return ad~=nil end return aa end function a.p():typeof(__modImpl())local aa=a.cache.p if not aa then aa={c=__modImpl()}a.cache.p=aa end
-return aa.c end end do local function __modImpl()local function init()local aa,ab,ac=a.e(),a.b(),a.p()local ad=aa.Window:CreateTab('Hide and Seek','gamepad-2')
+getGunAmmo()==0 then ab.reloadGun()task.wait(5)end end end end)end return init end function a.p():typeof(__modImpl())local aa=a.cache.p if not aa then aa={c=
+__modImpl()}a.cache.p=aa end return aa.c end end do local function __modImpl()local aa={}function aa.isSeeker(ab)local ac=ab and ab.Character local ad=ac and ac
+:FindFirstChild'ItScript'return ad~=nil end return aa end function a.q():typeof(__modImpl())local aa=a.cache.q if not aa then aa={c=__modImpl()}a.cache.q=aa end
+return aa.c end end do local function __modImpl()local function init()local aa,ab,ac=a.f(),a.c(),a.q()local ad=aa.Window:CreateTab('Hide and Seek','gamepad-2')
 ad:CreateSection'ESP'local ae=true local function updatePlayerESP()for af,ag in pairs(game:GetService'Players':GetPlayers())do if ag~=game:GetService'Players'.
 LocalPlayer then local ah=(ac.isSeeker(ag)and Color3.fromRGB(255,0,0))or Color3.fromRGB(0,255,0)ab.updatePlayerESP(ag,ah,ae,Color3.fromRGB(255,0,255))end end
 end ad:CreateToggle{Name='Player ESP',CurrentValue=ae,Flag=nil,Callback=function(af)ae=af updatePlayerESP()end}task.spawn(function()while task.wait(1)do if ae
 then updatePlayerESP()end end end)ad:CreateSection'Utils'ad:CreateButton{Name='Kill All',Callback=function()local ag=game:GetService'Players'.LocalPlayer local
 ah=ag and ag.Character local ai=ah and ah:FindFirstChild'HumanoidRootPart'if ai then local aj=0 ab.Noclip.enable()while aj<10 do for ak,al in pairs(game:
 GetService'Players':GetPlayers())do if al~=ag then local am=al and al.Character local an=am and am:FindFirstChild'HumanoidRootPart'if an then an.CFrame=ai.
-CFrame end end end aj=aj+1 task.wait()end ab.Noclip.disable()end end}end return init end function a.q():typeof(__modImpl())local aa=a.cache.q if not aa then aa=
-{c=__modImpl()}a.cache.q=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function ab.updatePlayerESP(ac)local ad,ae=aa.
+CFrame end end end aj=aj+1 task.wait()end ab.Noclip.disable()end end}end return init end function a.r():typeof(__modImpl())local aa=a.cache.r if not aa then aa=
+{c=__modImpl()}a.cache.r=aa end return aa.c end end do local function __modImpl()local aa,ab=a.c(),{}function ab.updatePlayerESP(ac)local ad,ae=aa.
 getLocalPlayer(),ab.getCurrentGame()=='HideAndSeek'for af,ag in pairs(game:GetService'Players':GetPlayers())do local ah,ai=ag and ag.Character,ab.hasKnife(ag)
 local aj=(ab.isGuard(ah)and Color3.fromRGB(0,0,255))or((ae and((ai and Color3.fromRGB(255,0,0))or Color3.fromRGB(0,255,0)))or Color3.fromRGB(255,0,0))if ag~=ad
 then aa.updatePlayerESP(ag,aj,ac and ab.isAlive(ah),Color3.fromRGB(255,0,255))end end end function ab.updateGuardESP(ac)local ad=ab.getGuards()for ae,af in
@@ -551,8 +561,8 @@ ac,ad,ae,af,ag,ah,ai=ab.getMP5(),ab.getGunEvent(),CFrame.new(),Instance.new'Part
 ac,{ClientRayNormal=Vector3.new(0,0,-1),FiredGun=true,bulletCF=ae,ClientRayInstance=af,SecondaryHitTargets={},ClientRayPosition=ag,HitTargets={},bulletSizeC=ah,
 NoMuzzleFX=false,FirePosition=ai}}end end function ab.getDoll()local ac=game.Workspace:FindFirstChild'SQUIDDOLL123'return ac end function ab.gotoDoll()local ac=
 ab.getDoll()if ac then local ad=aa.getLocalRoot()if ad then local ae=ac:FindFirstChildWhichIsA'BasePart'or ac:FindFirstChildWhichIsA'MeshPart'if ae then ad.
-CFrame=ae.CFrame end end end end return ab end function a.r():typeof(__modImpl())local aa=a.cache.r if not aa then aa={c=__modImpl()}a.cache.r=aa end return aa.
-c end end do local function __modImpl()local aa,ab,ac=a.r(),a.b(),{}ac.State={player_esp_toggled=true,guard_esp_toggled=true,glass_bridge_esp_toggled=true,
+CFrame=ae.CFrame end end end end return ab end function a.s():typeof(__modImpl())local aa=a.cache.s if not aa then aa={c=__modImpl()}a.cache.s=aa end return aa.
+c end end do local function __modImpl()local aa,ab,ac=a.s(),a.c(),{}ac.State={player_esp_toggled=true,guard_esp_toggled=true,glass_bridge_esp_toggled=true,
 player_guard_tp_toggled=false,npc_guard_tp_toggled=false}function ac.onPlayerESPToggle(ad)ac.State.player_esp_toggled=ad aa.updatePlayerESP(ad)end task.spawn(
 function()while task.wait(1)do if ac.State.player_esp_toggled then aa.updatePlayerESP(ac.State.player_esp_toggled)end end end)function ac.onGuardESPToggle(ad)ac
 .State.guard_esp_toggled=ad aa.updateGuardESP(ad)end task.spawn(function()while task.wait(1)do if ac.State.guard_esp_toggled then aa.updateGuardESP(ac.State.
@@ -563,14 +573,14 @@ not ac.State.npc_guard_tp_toggled end task.spawn(function()while task.wait()do i
 getLocalRoot()if ae then for af,ag in pairs(ad)do local ah=ag and ag:FindFirstChild'HumanoidRootPart'if ah and aa.isAlive(ah)then ah.CFrame=ae.CFrame*CFrame.
 new(0,0,-10)end end end end end end)task.spawn(function()while task.wait()do if ac.State.npc_guard_tp_toggled then local ad,ae=aa.getNPCGuards(),ab.
 getLocalRoot()if ae then for af,ag in pairs(ad)do local ah=ag and ag:FindFirstChild'HumanoidRootPart'if ah and aa.isAlive(ah)then ah.CFrame=ae.CFrame*CFrame.
-new(0,0,-10)end end end end end end)return ac end function a.s():typeof(__modImpl())local aa=a.cache.s if not aa then aa={c=__modImpl()}a.cache.s=aa end return
-aa.c end end do local function __modImpl()local function init()local aa,ab=a.e(),a.s()local ac=aa.Window:CreateTab('Ink Game','gamepad-2')ac:CreateSection'ESP'
+new(0,0,-10)end end end end end end)return ac end function a.t():typeof(__modImpl())local aa=a.cache.t if not aa then aa={c=__modImpl()}a.cache.t=aa end return
+aa.c end end do local function __modImpl()local function init()local aa,ab=a.f(),a.t()local ac=aa.Window:CreateTab('Ink Game','gamepad-2')ac:CreateSection'ESP'
 ac:CreateToggle{Name='Player ESP',CurrentValue=ab.State.player_esp_toggled,Flag=nil,Callback=ab.onPlayerESPToggle}ac:CreateToggle{Name='Guard ESP',CurrentValue=
 ab.State.guard_esp_toggled,Flag=nil,Callback=ab.onGuardESPToggle}ac:CreateKeybind{Name='Bring Player Guards',CurrentKeybind='H',HoldToInteract=false,Flag=nil,
 Callback=ab.onPlayerGuardTPToggle}ac:CreateKeybind{Name='Bring NPC Guards',CurrentKeybind='J',HoldToInteract=false,Flag=nil,Callback=ab.onNPCGuardTPToggle}task.
 spawn(function()loadstring(game:HttpGet[[https://raw.githubusercontent.com/wefwef34/inkgames.github.io/refs/heads/main/ringta.lua]])()end)end return init end
-function a.t():typeof(__modImpl())local aa=a.cache.t if not aa then aa={c=__modImpl()}a.cache.t=aa end return aa.c end end do local function __modImpl()local aa
-,ab=a.b(),{}function ab.plrHasItem(ac,ad)local ae,af=ac:FindFirstChild'Backpack',ac.Character local ag,ah=ae and ae:FindFirstChild(ad),af and af:FindFirstChild(
+function a.u():typeof(__modImpl())local aa=a.cache.u if not aa then aa={c=__modImpl()}a.cache.u=aa end return aa.c end end do local function __modImpl()local aa
+,ab=a.c(),{}function ab.plrHasItem(ac,ad)local ae,af=ac:FindFirstChild'Backpack',ac.Character local ag,ah=ae and ae:FindFirstChild(ad),af and af:FindFirstChild(
 ad)if ag or ah then return true end return false end function ab.plrHasKnife(ac)return ab.plrHasItem(ac,'Knife')end function ab.plrHasGun(ac)return ab.
 plrHasItem(ac,'Gun')end local ac,ad task.spawn(function()game:GetService'ReplicatedStorage':WaitForChild'Remotes':WaitForChild'Gameplay':WaitForChild
 'PlayerDataChanged'.OnClientEvent:Connect(function(ae)ac=nil ad=nil for af,ag in pairs(ae)do local ah=game:GetService'Players':FindFirstChild(af)for ai,aj in
@@ -599,8 +609,8 @@ FindFirstChild'HumanoidRootPart'if ag then local ai=ae:FindFirstChild'Backpack'l
 local ak=ae.Character:FindFirstChild'Knife'if ak then task.spawn(function()local al=true task.spawn(function()task.wait(1)al=false end)while al do for am,an in
 pairs(game:GetService'Players':GetPlayers())do local ao=an.Character local ap=ao and ao:FindFirstChild'HumanoidRootPart'if ao and an~=game:GetService'Players'.
 LocalPlayer and not aa.isFriendsWith(an)then ap.CFrame=ah.CFrame*CFrame.new(0,0,-3)end end task.wait()end end)task.wait()ak:Activate()end end end return ab end
-function a.u():typeof(__modImpl())local aa=a.cache.u if not aa then aa={c=__modImpl()}a.cache.u=aa end return aa.c end end do local function __modImpl()local 
-function init()local aa,ab,ac=a.e(),a.b(),a.u()local ad=aa.Window:CreateTab('Murder Mystery 2','gamepad-2')ad:CreateSection'ESP'local af=true ad:CreateToggle{
+function a.v():typeof(__modImpl())local aa=a.cache.v if not aa then aa={c=__modImpl()}a.cache.v=aa end return aa.c end end do local function __modImpl()local 
+function init()local aa,ab,ac=a.f(),a.c(),a.v()local ad=aa.Window:CreateTab('Murder Mystery 2','gamepad-2')ad:CreateSection'ESP'local af=true ad:CreateToggle{
 Name='Player ESP',CurrentValue=true,Flag=nil,Callback=function(ag)af=ag ac.updatePlayerESP(ag)end}game:GetService'RunService'.RenderStepped:Connect(function()if
 af then ac.updatePlayerESP(af)end end)local ah=true ad:CreateToggle{Name='Coin ESP',CurrentValue=true,Flag=nil,Callback=function(ai)ah=ai ac.updateCoinESP(ai)
 end}game:GetService'RunService'.RenderStepped:Connect(function()if ah then ac.updateCoinESP(ah)end end)ad:CreateSection'Utils'ad:CreateButton{Name=
@@ -617,15 +627,15 @@ end return false end while task.wait()do if b and not ab.get_safeTweening()then 
 and e:FindFirstChild'HumanoidRootPart'if f then local g=game.Workspace:FindFirstChild('CoinContainer',true)if g then local i,h=99999999 for j,k in pairs(g:
 GetChildren())do if k.Name=='Coin_Server'and not coinCollected(k)then local l=ab.dist3d(f.Position,k.Position)if l<i and l>1 then i=l h=k end end end if h then
 ab.set_safeTweenSpeed(22)ab.safeTweenToPart(h,coinCollected)end end end end end end)task.spawn(function()while task.wait(0.1)do local d=game.Workspace:
-FindFirstChild('Base',true)local e=d and d:FindFirstChild'GlitchProof'if e then e:Destroy()end end end)end return init end function a.v():typeof(__modImpl())
-local aa=a.cache.v if not aa then aa={c=__modImpl()}a.cache.v=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function ab.getZombies
+FindFirstChild('Base',true)local e=d and d:FindFirstChild'GlitchProof'if e then e:Destroy()end end end)end return init end function a.w():typeof(__modImpl())
+local aa=a.cache.w if not aa then aa={c=__modImpl()}a.cache.w=aa end return aa.c end end do local function __modImpl()local aa,ab=a.c(),{}function ab.getZombies
 ()local ac=game.Workspace:FindFirstChild'Zombies'return(ac and ac:GetChildren())or{}end function ab.getBox()local ac=game.Workspace:FindFirstChild'Interactions'
 return ac and ac:FindFirstChild'Mystery'end function ab.getPack()local ac=game.Workspace:FindFirstChild'Interactions'return ac and ac:FindFirstChild
 'Pack-a-Punch'end function ab.getPowerups()local ac=game.Workspace:FindFirstChild'Power-ups'return(ac and ac:GetChildren())or{}end function ab.updateZombieESP(
 ac)local ad=ab.getZombies()for ae,af in pairs(ad)do aa.updateESP(af,Color3.fromRGB(255,0,255),ac)end end function ab.updateBoxESP(ac)local ad=ab.getBox()if ad
 then aa.updateESP(ad,Color3.fromRGB(255,255,0),ac)end end function ab.updatePowerupESP(ac)local ad=ab.getPowerups()for ae,af in pairs(ad)do aa.updateESP(af,
-Color3.fromRGB(107,176,255),ac)end end return ab end function a.w():typeof(__modImpl())local aa=a.cache.w if not aa then aa={c=__modImpl()}a.cache.w=aa end
-return aa.c end end do local function __modImpl()local function init()local aa,ab=a.e(),a.w()local ac=aa.Window:CreateTab('Reminiscence Zombies','gamepad-2')ac:
+Color3.fromRGB(107,176,255),ac)end end return ab end function a.x():typeof(__modImpl())local aa=a.cache.x if not aa then aa={c=__modImpl()}a.cache.x=aa end
+return aa.c end end do local function __modImpl()local function init()local aa,ab=a.f(),a.x()local ac=aa.Window:CreateTab('Reminiscence Zombies','gamepad-2')ac:
 CreateSection'ESP'local ae=true ac:CreateToggle{Name='Zombie ESP',CurrentValue=true,Flag=nil,Callback=function(af)ae=af ab.updateZombieESP(af)end}local ag=true
 ac:CreateToggle{Name='Box ESP',CurrentValue=true,Flag=nil,Callback=function(ah)ag=ah ab.updateBoxESP(ah)end}local ai=true ac:CreateToggle{Name='Powerup ESP',
 CurrentValue=true,Flag=nil,Callback=function(aj)ai=aj ab.updatePowerupESP(aj)end}game:GetService'RunService'.RenderStepped:Connect(function()if ae then ab.
@@ -642,8 +652,8 @@ FindFirstChild'HumanoidRootPart'or c.PrimaryPart if d then local e=game:GetServi
 'HumanoidRootPart'if g then d.CFrame=g.CFrame*CFrame.new(0,0,-5)end end end end end)end)local ap=true ac:CreateToggle{Name='Auto Grab Powerups',CurrentValue=
 true,Flag=nil,Callback=function(aq)ap=aq end}game:GetService'RunService'.RenderStepped:Connect(function()if ap then local ar=ab.getPowerups()for as,b in pairs(
 ar)do local c=game:GetService'Players'.LocalPlayer local d=c and c.Character local e,f=d and d:FindFirstChild'HumanoidRootPart',b.PrimaryPart or b:
-FindFirstChildWhichIsA'BasePart'if f and e then f.CFrame=e.CFrame end end end end)end return init end function a.x():typeof(__modImpl())local aa=a.cache.x if
-not aa then aa={c=__modImpl()}a.cache.x=aa end return aa.c end end do local function __modImpl()local aa,ab=a.b(),{}function ab.updateAnimalESP(ac)local ad=game
+FindFirstChildWhichIsA'BasePart'if f and e then f.CFrame=e.CFrame end end end end)end return init end function a.y():typeof(__modImpl())local aa=a.cache.y if
+not aa then aa={c=__modImpl()}a.cache.y=aa end return aa.c end end do local function __modImpl()local aa,ab=a.c(),{}function ab.updateAnimalESP(ac)local ad=game
 .Workspace:FindFirstChild'Gameplay'local ae=ad and ad:FindFirstChild'Dynamic'local af=ae and ae:FindFirstChild'Animals'local ag=af and af:GetChildren()for ah,ai
 in pairs(ag)do aa.updateESP(ai,Color3.fromRGB(0,128,255),ac)end end function ab.getTeam()local ac=game:GetService'Players'.LocalPlayer return(ac and ac.Team)or{
 Name='Not in game'}end function ab.isAnimal()return ab.getTeam().Name=='Animal'end function ab.isKeeper()return ab.getTeam().Name=='Keeper'end function ab.
@@ -654,8 +664,8 @@ and ak:FindFirstChild'HumanoidRootPart'if al and ae then local am=aa.dist3d(ae.P
 aj end end end return ag end function ab.getPlayersAnimal(ac)local ad=ac and ac.Character local ae=ad and ad:FindFirstChild'HumanoidRootPart'if ae then local af
 =game.Workspace:FindFirstChild'Gameplay'local ag=af and af:FindFirstChild'Dynamic'local ah=ag and ag:FindFirstChild'Animals'local ai=ah and ah:GetChildren()if
 ai then local ak,aj=99999999 for al,am in pairs(ai)do local an=am.PrimaryPart if an then local ao=aa.dist3d(ae.Position,an.Position)if ao<ak then ak=ao aj=am
-end end end return aj end end return nil end return ab end function a.y():typeof(__modImpl())local aa=a.cache.y if not aa then aa={c=__modImpl()}a.cache.y=aa
-end return aa.c end end do local function __modImpl()local function init()local aa,ab,ac=a.e(),a.b(),a.y()local ad=aa.Window:CreateTab('ZOO or OOF','gamepad-2')
+end end end return aj end end return nil end return ab end function a.z():typeof(__modImpl())local aa=a.cache.z if not aa then aa={c=__modImpl()}a.cache.z=aa
+end return aa.c end end do local function __modImpl()local function init()local aa,ab,ac=a.f(),a.c(),a.z()local ad=aa.Window:CreateTab('ZOO or OOF','gamepad-2')
 ad:CreateSection'ESP'local af=true ad:CreateToggle{Name='Animal ESP',CurrentValue=true,Flag=nil,Callback=function(ag)af=ag ac.updateAnimalESP(ag)end}game:
 GetService'RunService'.RenderStepped:Connect(function()if af then ac.updateAnimalESP(af)end end)ad:CreateSection'Farm'local ai=true ad:CreateToggle{Name=
 'Auto Farm',CurrentValue=true,Flag=nil,Callback=function(aj)ai=aj end}task.spawn(function()local ak=false while task.wait()do if ai then if ak and not ac.
@@ -668,10 +678,10 @@ ak=al end}task.spawn(function()while task.wait()do if ac.isKeeper()and ak then l
 ao,ap=an and an:FindFirstChild'HumanoidRootPart',ac.getClosestAnimal()if ap and ao then local aq=ac.getPlayersAnimal(ap)local ar=aq and aq.PrimaryPart if ar
 then local as={[1]='Shooting.shotPlayer',[2]=ao.CFrame,[3]=ar.CFrame,[4]=ap,[5]=ar,[6]=CFrame.new(0.8038291931152344,0.09816551208496094,-8.88824462890625E-4)*
 CFrame.Angles(3.1407759189605713,1.3910810947418213,3.129187822341919)}game:GetService'ReplicatedStorage'.Net:FireServer(unpack(as))end end end end end)end
-return init end function a.z():typeof(__modImpl())local aa=a.cache.z if not aa then aa={c=__modImpl()}a.cache.z=aa end return aa.c end end do local function 
-__modImpl()for aa,ab in pairs{{a.h(),7585283196},{a.k(),10148749921},{a.m(),372226183},{a.o(),10141757860},{a.q(),93740418},{a.t(),7008097940},{a.v(),66654135},
-{a.x(),1003981402},{a.z(),7785400752}}do if game.GameId==ab[2]then task.spawn(ab[1])break end end return true end function a.A():typeof(__modImpl())local aa=a.
-cache.A if not aa then aa={c=__modImpl()}a.cache.A=aa end return aa.c end end do local function __modImpl()local aa,ab=a.e(),{}local ac=aa.Window:CreateTab(
+return init end function a.A():typeof(__modImpl())local aa=a.cache.A if not aa then aa={c=__modImpl()}a.cache.A=aa end return aa.c end end do local function 
+__modImpl()for aa,ab in pairs{{a.i(),7585283196},{a.l(),10148749921},{a.n(),372226183},{a.p(),10141757860},{a.r(),93740418},{a.u(),7008097940},{a.w(),66654135},
+{a.y(),1003981402},{a.A(),7785400752}}do if game.GameId==ab[2]then task.spawn(ab[1])break end end return true end function a.B():typeof(__modImpl())local aa=a.
+cache.B if not aa then aa={c=__modImpl()}a.cache.B=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),{}local ac=aa.Window:CreateTab(
 'Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=false ab.iy_injected=false ab.rs_injected=false ac:CreateButton{Name='Inject Dex',Callback=function
 ()if ab.dex_injected then return end ab.dex_injected=true task.spawn(function()loadstring(game:HttpGet
 [[https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua]])()end)end}ab.DexToggle=ac:CreateToggle{Name='Load Dex on Startup',CurrentValue=
@@ -680,8 +690,8 @@ then return end ab.iy_injected=true task.spawn(function()loadstring(game:HttpGet
 end}ab.IYToggle=ac:CreateToggle{Name='Load IY on Startup',CurrentValue=false,Flag='LoadIYOnStartup',Callback=function(af)end}ac:CreateSection'Cobalt Spy'ac:
 CreateButton{Name='Inject Cobalt Spy',Callback=function()if ab.rs_injected then return end ab.rs_injected=true task.spawn(function()loadstring(game:HttpGet
 [[https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau]])()end)end}ab.RSToggle=ac:CreateToggle{Name='Load Cobalt on Startup',CurrentValue=
-false,Flag='LoadRSOnStartup',Callback=function(ag)end}return ab end function a.B():typeof(__modImpl())local aa=a.cache.B if not aa then aa={c=__modImpl()}a.
-cache.B=aa end return aa.c end end do local function __modImpl()local aa,ab=a.e(),a.b()local ac,ad=aa.Window:CreateTab'Emotes',{{Name='Take The L',Id=
+false,Flag='LoadRSOnStartup',Callback=function(ag)end}return ab end function a.C():typeof(__modImpl())local aa=a.cache.C if not aa then aa={c=__modImpl()}a.
+cache.C=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),a.c()local ac,ad=aa.Window:CreateTab'Emotes',{{Name='Take The L',Id=
 93090980853782},{Name='UFO',Id=120449791578755},{Name='Fake Dead',Id=73689381418785},{Name='67 Body',Id=82296043272517},{Name='Obby Head',Id=122814100170962},{
 Name='Floating',Id=131950236025472},{Name='Katseye',Id=100829635809504},{Name='Floating Headless',Id=98728517497209},{Name='Levitate',Id=111499780397123},{Name=
 '67',Id=88672473602461},{Name='Hide',Id=117450501566142},{Name='Biblically Accurate',Id=133596366979822},{Name='Best Mates',Id=113016438012253},{Name='Car',Id=
@@ -696,9 +706,9 @@ end)local ai=af:WaitForChild'HumanoidDescription'ai:AddEmote(ae.Name,ae.Id)af:Pl
 ag then ag:Disconnect()end return ah end local ae local function stopAnimations()if ae then ae:Stop()ae=nil end end ac:CreateButton{Name='Stop Emote',Callback=
 stopAnimations}ac:CreateSection'Emotes'for af,ag in pairs(ad)do ac:CreateButton{Name=ag.Name,Callback=function()local ah=ab.getLocalHumanoid()local ai=ah:
 FindFirstChild'Animator'stopAnimations()local aj,ak=Instance.new'Animation',getTrueId(ag)if ak then print(ak)aj.AnimationId=ak ae=ai:LoadAnimation(aj)ae.Looped=
-true ae.Priority=Enum.AnimationPriority.Action4 ae:Play()else warn'Failed to add emote'end end}end return true end function a.C():typeof(__modImpl())local aa=a.
-cache.C if not aa then aa={c=__modImpl()}a.cache.C=aa end return aa.c end end end local aa=a.b()aa.WaitForGameAndPlayer()local ab=a.e()a.f()a.A()local ac=a.B()a
-.C()ab.Library:LoadConfiguration()if ac.DexToggle.CurrentValue then ac.dex_injected=true task.spawn(function()loadstring(game:HttpGet
+true ae.Priority=Enum.AnimationPriority.Action4 ae:Play()else warn'Failed to add emote'end end}end return true end function a.D():typeof(__modImpl())local aa=a.
+cache.D if not aa then aa={c=__modImpl()}a.cache.D=aa end return aa.c end end end local aa=a.c()aa.WaitForGameAndPlayer()local ab=a.f()a.g()a.B()local ac=a.C()a
+.D()ab.Library:LoadConfiguration()if ac.DexToggle.CurrentValue then ac.dex_injected=true task.spawn(function()loadstring(game:HttpGet
 [[https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua]])()end)end if ac.IYToggle.CurrentValue then ac.iy_injected=true task.spawn(
 function()loadstring(game:HttpGet[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end)end if ac.RSToggle.CurrentValue then ac.
 rs_injected=true task.spawn(function()loadstring(game:HttpGet[[https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau]])()end)end

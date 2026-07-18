@@ -1,4 +1,5 @@
 local Noclip = require("./noclip")
+local Aimlock = require("./aimlock")
 
 local M = {}
 
@@ -49,6 +50,7 @@ function M.isKBM()
 end
 
 M.Noclip = Noclip
+M.Aimlock = Aimlock
 
 function M.breakVelocity(t)
 	task.spawn(function()
