@@ -67,7 +67,7 @@ task.spawn(function()
 			if myRoot then
 				for i, v in pairs(guards) do
 					local root = v and v:FindFirstChild("HumanoidRootPart")
-					if root and GameUtils.isAlive(root) then
+					if root and GameUtils.isAlive(v) then
 						root.CFrame = myRoot.CFrame * CFrame.new(0, 0, -10)
 					end
 				end
@@ -85,7 +85,7 @@ task.spawn(function()
 			if myRoot then
 				for i, v in pairs(guards) do
 					local root = v and v:FindFirstChild("HumanoidRootPart")
-					if root and GameUtils.isAlive(root) then
+					if root and GameUtils.isAlive(v) then
 						root.CFrame = myRoot.CFrame * CFrame.new(0, 0, -10)
 					end
 				end

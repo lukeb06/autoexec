@@ -570,9 +570,9 @@ guard_esp_toggled)end end end)function ac.onGlassBridgeESPToggle(ad)ac.State.gla
 while task.wait(1)do if ac.State.glass_bridge_esp_toggled then aa.updateGlassBridgeESP(ac.State.glass_bridge_esp_toggled)end end end)function ac.
 onPlayerGuardTPToggle()ac.State.player_guard_tp_toggled=not ac.State.player_guard_tp_toggled end function ac.onNPCGuardTPToggle()ac.State.npc_guard_tp_toggled=
 not ac.State.npc_guard_tp_toggled end task.spawn(function()while task.wait()do if ac.State.player_guard_tp_toggled then local ad,ae=aa.getPlayerGuards(),ab.
-getLocalRoot()if ae then for af,ag in pairs(ad)do local ah=ag and ag:FindFirstChild'HumanoidRootPart'if ah and aa.isAlive(ah)then ah.CFrame=ae.CFrame*CFrame.
+getLocalRoot()if ae then for af,ag in pairs(ad)do local ah=ag and ag:FindFirstChild'HumanoidRootPart'if ah and aa.isAlive(ag)then ah.CFrame=ae.CFrame*CFrame.
 new(0,0,-10)end end end end end end)task.spawn(function()while task.wait()do if ac.State.npc_guard_tp_toggled then local ad,ae=aa.getNPCGuards(),ab.
-getLocalRoot()if ae then for af,ag in pairs(ad)do local ah=ag and ag:FindFirstChild'HumanoidRootPart'if ah and aa.isAlive(ah)then ah.CFrame=ae.CFrame*CFrame.
+getLocalRoot()if ae then for af,ag in pairs(ad)do local ah=ag and ag:FindFirstChild'HumanoidRootPart'if ah and aa.isAlive(ag)then ah.CFrame=ae.CFrame*CFrame.
 new(0,0,-10)end end end end end end)return ac end function a.t():typeof(__modImpl())local aa=a.cache.t if not aa then aa={c=__modImpl()}a.cache.t=aa end return
 aa.c end end do local function __modImpl()local function init()local aa,ab=a.f(),a.t()local ac=aa.Window:CreateTab('Ink Game','gamepad-2')ac:CreateSection'ESP'
 ac:CreateToggle{Name='Player ESP',CurrentValue=ab.State.player_esp_toggled,Flag=nil,Callback=ab.onPlayerESPToggle}ac:CreateToggle{Name='Guard ESP',CurrentValue=
