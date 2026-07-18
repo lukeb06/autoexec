@@ -12,106 +12,106 @@ and c:GetMouse(),workspace.CurrentCamera local g,h=f:ScreenPointToRay(e.X,e.Y),R
 RaycastFilterType.Exclude local i=workspace:Raycast(g.Origin,g.Direction*500,h)if i and i.Instance then local j=i.Instance:FindFirstAncestorOfClass'Model'if j
 and j:FindFirstChild'Humanoid'and j~=d then return j end end local k,j=math.huge for l,m in game:GetService'Players':GetPlayers()do if m~=c and m.Character and
 m.Character:FindFirstChild'Head'then local n=m.Character.Head local o,p=f:WorldToViewportPoint(n.Position)if p then local q=(Vector2.new(o.X,o.Y)-Vector2.new(e.
-X,e.Y)).Magnitude if q<k then k=q j=m.Character end end end end return j end function b.toggleLock()if b.locked then local c=b.findTarget()if c then b.target=c:
-WaitForChild'Head'else b.locked=false end else b.target=nil end end game:GetService'RunService'.RenderStepped:Connect(function()if b.locked and b.target and b.
-target.Parent then local c=workspace.CurrentCamera c.CFrame=CFrame.new(c.CFrame.Position,b.target.Position)end end)return b end function a.b():typeof(__modImpl(
-))local b=a.cache.b if not b then b={c=__modImpl()}a.cache.b=b end return b.c end end do local function __modImpl()local b,c,d=a.a(),a.b(),{}function d.
-WaitForGameAndPlayer()local e,f=false,false while not(e and f)do if game:IsLoaded()then e=true end if game:GetService'Players'.LocalPlayer then f=true end task.
-wait()end end function d.diff3d(e,f)return f-e end function d.dist3d(e,f)return d.diff3d(e,f).Magnitude end function d.dir3d(e,f)return d.diff3d(e,f).Unit end
-function d.isDev()local e,f='pathwise',game:GetService'Players'.LocalPlayer if string.sub(f.Name,1,#e)==e then return true end return false end function d.isKBM
-()local e=game:GetService'UserInputService'return e.KeyboardEnabled and e.MouseEnabled end d.Noclip=b d.Aimlock=c function d.breakVelocity(e)task.spawn(function
-()local f,g,h=game:GetService'Players'.LocalPlayer,false,Vector3.new(0,0,0)task.spawn(function()task.wait(e)g=true end)while not g do for i,j in ipairs(f.
-Character:GetDescendants())do if j:IsA'BasePart'then j.Velocity,j.RotVelocity=h,h end end task.wait()end end)end local e,f=20,false function d.get_safeTweening(
-)return f end function d.set_safeTweening(g)f=g end function d.set_safeTweenSpeed(g)e=g end function d.safeTweenToPos(g)local h,i=game:GetService'TweenService',
-game:GetService'Players'.LocalPlayer local j=i and i.Character local k,l=j and j:FindFirstChild'HumanoidRootPart',j and j:FindFirstChildOfClass'Humanoid'local m
-=d.dist3d(k.Position,g.Position)local n=m/e f=true if l and l.SeatPart then l.Sit=false task.wait(0.1)end task.wait(0.1)h:Create(k,TweenInfo.new(n,Enum.
-EasingStyle.Linear),{CFrame=g}):Play()task.delay(n,function()f=false end)d.breakVelocity(n)end function d.safeTweenToPart(g,h)if g:IsA'BasePart'then local i=
-game:GetService'Players'.LocalPlayer local j=i and i.Character local k,l=j and j:FindFirstChild'HumanoidRootPart',j and j:FindFirstChildWhichIsA'Humanoid'f=true
-if l and l.SeatPart then l.Sit=false task.wait(0.1)end local m d.Noclip.enable()game.Workspace.Gravity=0 m=game:GetService'RunService'.Heartbeat:Connect(
-function(n)d.breakVelocity(0.1)if not k or not g or not g.Parent or(h and h(g))then m:Disconnect()f=false d.Noclip.disable()game.Workspace.Gravity=196.21 if l
-then l:ChangeState(Enum.HumanoidStateType.GettingUp)end return end local o,p=k.Position,g.Position local q,r=d.dist3d(o,p),e*n if q<=r then k.CFrame=g.CFrame m:
-Disconnect()f=false d.Noclip.disable()if l then l:ChangeState(Enum.HumanoidStateType.GettingUp)end game.Workspace.Gravity=196.21 else local s=d.dir3d(o,p)local
-t=o+(s*r)if l then l:ChangeState(Enum.HumanoidStateType.Physics)end k.CFrame=CFrame.new(t)*(g.CFrame-g.CFrame.Position)end end)end end function d.flingCharacter
-(g)local h=game:GetService'Players'.LocalPlayer local i=h and h.Character local j,k=i and i:FindFirstChild'HumanoidRootPart',g and g:FindFirstChild
-'HumanoidRootPart'if j and k then d.Noclip.enable()task.wait(0.2)local l=j.CFrame task.wait(0.1)for m,n in pairs(i:GetDescendants())do if n:IsA'BasePart'then n.
-CustomPhysicalProperties=PhysicalProperties.new(100,0.3,0.5)end end for m,n in i:GetChildren()do if n:IsA'BasePart'then n.CanCollide=false n.Massless=true n.
-Velocity=Vector3.new(0,0,0)end end local m=99999 local n,o=m o=game:GetService'RunService'.Heartbeat:Connect(function(p)if not k or not k.Parent then return end
-local q,r=math.random(-100,100),k.AssemblyLinearVelocity if r.Magnitude>500 then o:Disconnect()end local s=k.Position+(r*0.08)if s.Y<=game.Workspace.
-FallenPartsDestroyHeight+50 then return end j.CFrame=(CFrame.new(s+Vector3.new(0.1,0,0.1)))*(j.CFrame-j.CFrame.Position)j.AssemblyLinearVelocity=Vector3.new(m+q
-,-100,m+q)j.AssemblyAngularVelocity=Vector3.new(0,n,0)end)task.spawn(function()while o.Connected do n=m task.wait(0.2)n=0 task.wait(0.1)end end)task.delay(3,
-function()for p,q in pairs(i:GetDescendants())do if q.ClassName=='Part'or q.ClassName=='MeshPart'then q.CustomPhysicalProperties=PhysicalProperties.new(0.7,0.3,
-0.5)end end d.Noclip.disable()o:Disconnect()d.breakVelocity(0.2)task.wait(0.1)j.CFrame=l end)end end function d.flingPlayer(g)local h=g and g.Character d.
-flingCharacter(h)end function d.isFriendsWith(g)local h=game:GetService'Players'.LocalPlayer return h:IsFriendsWith(g.UserId)end function d.updateESP(g,h,i)
-local j=g:FindFirstChild'ESPHL'if j then if not i then j:Destroy()elseif h~=j.FillColor then j.FillColor=h j.OutlineColor=h end elseif i then local k=Instance.
-new'Highlight'k.Name='ESPHL'k.Adornee=g k.FillColor=h k.OutlineColor=h k.Parent=g end end d.esp_players={}d.esp_show_names=false d.esp_show_health=false
-function d.updatePlayerESP(g,h,i,j)local k=g and g.Character local l=k and k:FindFirstChildWhichIsA'Humanoid'local m,n=l and l.Health>0,(d.isFriendsWith(g)and(j
-or h))or h d.esp_players[g]={enabled=i and m,color=n}if k then d.updateESP(k,n,i and m)end end task.spawn(function()local g=Instance.new('Folder',game.CoreGui)
-while task.wait()do if d.esp_show_names or d.esp_show_health then if not g or not g.Parent then g=Instance.new('Folder',game.CoreGui)end for h,i in pairs(d.
-esp_players)do local j,k,l=i.enabled,i.color,g:FindFirstChild(h.Name..'_ESP')local function getHealth()local m=h and h.Character local n=m and m:
-FindFirstChildWhichIsA'Humanoid'if n then local o=n.Health/n.MaxHealth local p,q=math.floor(o*100),Color3.fromHSV(o*(0.2777777777777778),0.8,0.8)return{health=p
-,color=q}else return{health=0,color=Color3.fromRGB(0,0,0)}end end if j then local m=h and h.Character local n=m and m:FindFirstChild'Head'if not l then if n
-then local o=Instance.new('Folder',g)o.Name=h.Name..'_ESP'local p=Instance.new('BillboardGui',o)local q,r=Instance.new('TextLabel',p),Instance.new('TextLabel',p
-)p.Adornee=n p.Size=UDim2.new(0,100,0,40)p.StudsOffset=Vector3.new(0,2,0)p.AlwaysOnTop=true q.Name='NameLabel'q.BackgroundTransparency=1 q.Position=UDim2.new(0,
-0,0,0)q.Size=UDim2.new(0,100,0,20)q.Font=Enum.Font.SourceSansSemibold q.TextSize=20 q.TextColor3=k q.TextStrokeTransparency=0 q.TextStrokeColor3=Color3.new(0,0,
-0)q.TextYAlignment=Enum.TextYAlignment.Bottom q.Text=''q.ZIndex=10 r.Name='HealthLabel'r.BackgroundTransparency=1 r.Position=UDim2.new(0,0,0,20)r.Size=UDim2.
-new(0,100,0,20)r.Font=Enum.Font.SourceSansSemibold r.TextSize=20 r.TextColor3=k r.TextStrokeTransparency=0 r.TextStrokeColor3=Color3.new(0,0,0)r.TextYAlignment=
-Enum.TextYAlignment.Bottom r.Text=''r.ZIndex=10 end else local o=l:FindFirstChild'BillboardGui'if o and n then o.Adornee=n local p=o:FindFirstChild'NameLabel'if
-p then if d.esp_show_names then p.Text=h.Name p.TextColor3=k else p.Text=''end end local q=o:FindFirstChild'HealthLabel'if q then if d.esp_show_health then
-local r=getHealth()local s,t=r.health,r.color q.Text=s..'%'q.TextColor3=t else q.Text=''end end end end else if l then l:Destroy()end end end else g:Destroy()
-end end end)function d.getLocalPlayer()return game:GetService'Players'.LocalPlayer end function d.getLocalChar()local g=d.getLocalPlayer()return g and g.
-Character end function d.getLocalRoot()local g=d.getLocalChar()return g and g:FindFirstChild'HumanoidRootPart'end function d.getLocalHumanoid()local g=d.
-getLocalChar()return g and g:FindFirstChildWhichIsA'Humanoid'end return d end function a.c():typeof(__modImpl())local b=a.cache.c if not b then b={c=__modImpl()
-}a.cache.c=b end return b.c end end do local function __modImpl()local b={Default={TextColor=Color3.fromRGB(240,240,240),Background=Color3.fromRGB(25,25,25),
-Topbar=Color3.fromRGB(34,34,34),Shadow=Color3.fromRGB(20,20,20),NotificationBackground=Color3.fromRGB(20,20,20),NotificationActionsBackground=Color3.fromRGB(230
-,230,230),TabBackground=Color3.fromRGB(80,80,80),TabStroke=Color3.fromRGB(85,85,85),TabBackgroundSelected=Color3.fromRGB(210,210,210),TabTextColor=Color3.
-fromRGB(240,240,240),SelectedTabTextColor=Color3.fromRGB(50,50,50),ElementBackground=Color3.fromRGB(35,35,35),ElementBackgroundHover=Color3.fromRGB(40,40,40),
-SecondaryElementBackground=Color3.fromRGB(25,25,25),ElementStroke=Color3.fromRGB(50,50,50),SecondaryElementStroke=Color3.fromRGB(40,40,40),SliderBackground=
-Color3.fromRGB(50,138,220),SliderProgress=Color3.fromRGB(50,138,220),SliderStroke=Color3.fromRGB(58,163,255),ToggleBackground=Color3.fromRGB(30,30,30),
-ToggleEnabled=Color3.fromRGB(0,146,214),ToggleDisabled=Color3.fromRGB(100,100,100),ToggleEnabledStroke=Color3.fromRGB(0,170,255),ToggleDisabledStroke=Color3.
-fromRGB(125,125,125),ToggleEnabledOuterStroke=Color3.fromRGB(100,100,100),ToggleDisabledOuterStroke=Color3.fromRGB(65,65,65),DropdownSelected=Color3.fromRGB(40,
-40,40),DropdownUnselected=Color3.fromRGB(30,30,30),InputBackground=Color3.fromRGB(30,30,30),InputStroke=Color3.fromRGB(65,65,65),PlaceholderColor=Color3.
-fromRGB(178,178,178)},Ocean={TextColor=Color3.fromRGB(230,240,240),Background=Color3.fromRGB(20,30,30),Topbar=Color3.fromRGB(25,40,40),Shadow=Color3.fromRGB(15,
-20,20),NotificationBackground=Color3.fromRGB(25,35,35),NotificationActionsBackground=Color3.fromRGB(230,240,240),TabBackground=Color3.fromRGB(40,60,60),
-TabStroke=Color3.fromRGB(50,70,70),TabBackgroundSelected=Color3.fromRGB(100,180,180),TabTextColor=Color3.fromRGB(210,230,230),SelectedTabTextColor=Color3.
-fromRGB(20,50,50),ElementBackground=Color3.fromRGB(30,50,50),ElementBackgroundHover=Color3.fromRGB(40,60,60),SecondaryElementBackground=Color3.fromRGB(30,45,45)
-,ElementStroke=Color3.fromRGB(45,70,70),SecondaryElementStroke=Color3.fromRGB(40,65,65),SliderBackground=Color3.fromRGB(0,110,110),SliderProgress=Color3.
-fromRGB(0,140,140),SliderStroke=Color3.fromRGB(0,160,160),ToggleBackground=Color3.fromRGB(30,50,50),ToggleEnabled=Color3.fromRGB(0,130,130),ToggleDisabled=
-Color3.fromRGB(70,90,90),ToggleEnabledStroke=Color3.fromRGB(0,160,160),ToggleDisabledStroke=Color3.fromRGB(85,105,105),ToggleEnabledOuterStroke=Color3.fromRGB(
-50,100,100),ToggleDisabledOuterStroke=Color3.fromRGB(45,65,65),DropdownSelected=Color3.fromRGB(30,60,60),DropdownUnselected=Color3.fromRGB(25,40,40),
-InputBackground=Color3.fromRGB(30,50,50),InputStroke=Color3.fromRGB(50,70,70),PlaceholderColor=Color3.fromRGB(140,160,160)},AmberGlow={TextColor=Color3.fromRGB(
-255,245,230),Background=Color3.fromRGB(45,30,20),Topbar=Color3.fromRGB(55,40,25),Shadow=Color3.fromRGB(35,25,15),NotificationBackground=Color3.fromRGB(50,35,25)
-,NotificationActionsBackground=Color3.fromRGB(245,230,215),TabBackground=Color3.fromRGB(75,50,35),TabStroke=Color3.fromRGB(90,60,45),TabBackgroundSelected=
-Color3.fromRGB(230,180,100),TabTextColor=Color3.fromRGB(250,220,200),SelectedTabTextColor=Color3.fromRGB(50,30,10),ElementBackground=Color3.fromRGB(60,45,35),
-ElementBackgroundHover=Color3.fromRGB(70,50,40),SecondaryElementBackground=Color3.fromRGB(55,40,30),ElementStroke=Color3.fromRGB(85,60,45),
-SecondaryElementStroke=Color3.fromRGB(75,50,35),SliderBackground=Color3.fromRGB(220,130,60),SliderProgress=Color3.fromRGB(250,150,75),SliderStroke=Color3.
-fromRGB(255,170,85),ToggleBackground=Color3.fromRGB(55,40,30),ToggleEnabled=Color3.fromRGB(240,130,30),ToggleDisabled=Color3.fromRGB(90,70,60),
-ToggleEnabledStroke=Color3.fromRGB(255,160,50),ToggleDisabledStroke=Color3.fromRGB(110,85,75),ToggleEnabledOuterStroke=Color3.fromRGB(200,100,50),
-ToggleDisabledOuterStroke=Color3.fromRGB(75,60,55),DropdownSelected=Color3.fromRGB(70,50,40),DropdownUnselected=Color3.fromRGB(55,40,30),InputBackground=Color3.
-fromRGB(60,45,35),InputStroke=Color3.fromRGB(90,65,50),PlaceholderColor=Color3.fromRGB(190,150,130)},Light={TextColor=Color3.fromRGB(40,40,40),Background=Color3
-.fromRGB(245,245,245),Topbar=Color3.fromRGB(230,230,230),Shadow=Color3.fromRGB(200,200,200),NotificationBackground=Color3.fromRGB(250,250,250),
-NotificationActionsBackground=Color3.fromRGB(240,240,240),TabBackground=Color3.fromRGB(235,235,235),TabStroke=Color3.fromRGB(215,215,215),TabBackgroundSelected=
-Color3.fromRGB(255,255,255),TabTextColor=Color3.fromRGB(80,80,80),SelectedTabTextColor=Color3.fromRGB(0,0,0),ElementBackground=Color3.fromRGB(240,240,240),
-ElementBackgroundHover=Color3.fromRGB(225,225,225),SecondaryElementBackground=Color3.fromRGB(235,235,235),ElementStroke=Color3.fromRGB(210,210,210),
-SecondaryElementStroke=Color3.fromRGB(210,210,210),SliderBackground=Color3.fromRGB(150,180,220),SliderProgress=Color3.fromRGB(100,150,200),SliderStroke=Color3.
-fromRGB(120,170,220),ToggleBackground=Color3.fromRGB(220,220,220),ToggleEnabled=Color3.fromRGB(0,146,214),ToggleDisabled=Color3.fromRGB(150,150,150),
-ToggleEnabledStroke=Color3.fromRGB(0,170,255),ToggleDisabledStroke=Color3.fromRGB(170,170,170),ToggleEnabledOuterStroke=Color3.fromRGB(100,100,100),
-ToggleDisabledOuterStroke=Color3.fromRGB(180,180,180),DropdownSelected=Color3.fromRGB(230,230,230),DropdownUnselected=Color3.fromRGB(220,220,220),
-InputBackground=Color3.fromRGB(240,240,240),InputStroke=Color3.fromRGB(180,180,180),PlaceholderColor=Color3.fromRGB(140,140,140)},Amethyst={TextColor=Color3.
-fromRGB(240,240,240),Background=Color3.fromRGB(30,20,40),Topbar=Color3.fromRGB(40,25,50),Shadow=Color3.fromRGB(20,15,30),NotificationBackground=Color3.fromRGB(
-35,20,40),NotificationActionsBackground=Color3.fromRGB(240,240,250),TabBackground=Color3.fromRGB(60,40,80),TabStroke=Color3.fromRGB(70,45,90),
-TabBackgroundSelected=Color3.fromRGB(180,140,200),TabTextColor=Color3.fromRGB(230,230,240),SelectedTabTextColor=Color3.fromRGB(50,20,50),ElementBackground=
-Color3.fromRGB(45,30,60),ElementBackgroundHover=Color3.fromRGB(50,35,70),SecondaryElementBackground=Color3.fromRGB(40,30,55),ElementStroke=Color3.fromRGB(70,50,
-85),SecondaryElementStroke=Color3.fromRGB(65,45,80),SliderBackground=Color3.fromRGB(100,60,150),SliderProgress=Color3.fromRGB(130,80,180),SliderStroke=Color3.
-fromRGB(150,100,200),ToggleBackground=Color3.fromRGB(45,30,55),ToggleEnabled=Color3.fromRGB(120,60,150),ToggleDisabled=Color3.fromRGB(94,47,117),
-ToggleEnabledStroke=Color3.fromRGB(140,80,170),ToggleDisabledStroke=Color3.fromRGB(124,71,150),ToggleEnabledOuterStroke=Color3.fromRGB(90,40,120),
-ToggleDisabledOuterStroke=Color3.fromRGB(80,50,110),DropdownSelected=Color3.fromRGB(50,35,70),DropdownUnselected=Color3.fromRGB(35,25,50),InputBackground=Color3
-.fromRGB(45,30,60),InputStroke=Color3.fromRGB(80,50,110),PlaceholderColor=Color3.fromRGB(178,150,200)},Green={TextColor=Color3.fromRGB(30,60,30),Background=
-Color3.fromRGB(235,245,235),Topbar=Color3.fromRGB(210,230,210),Shadow=Color3.fromRGB(200,220,200),NotificationBackground=Color3.fromRGB(240,250,240),
-NotificationActionsBackground=Color3.fromRGB(220,235,220),TabBackground=Color3.fromRGB(215,235,215),TabStroke=Color3.fromRGB(190,210,190),TabBackgroundSelected=
-Color3.fromRGB(245,255,245),TabTextColor=Color3.fromRGB(50,80,50),SelectedTabTextColor=Color3.fromRGB(20,60,20),ElementBackground=Color3.fromRGB(225,240,225),
-ElementBackgroundHover=Color3.fromRGB(210,225,210),SecondaryElementBackground=Color3.fromRGB(235,245,235),ElementStroke=Color3.fromRGB(180,200,180),
-SecondaryElementStroke=Color3.fromRGB(180,200,180),SliderBackground=Color3.fromRGB(90,160,90),SliderProgress=Color3.fromRGB(70,130,70),SliderStroke=Color3.
-fromRGB(100,180,100),ToggleBackground=Color3.fromRGB(215,235,215),ToggleEnabled=Color3.fromRGB(60,130,60),ToggleDisabled=Color3.fromRGB(150,175,150),
+X,e.Y)).Magnitude if q<k then k=q j=m.Character end end end end return j end function b.toggleLock()b.locked=not b.locked if b.locked then local c=b.findTarget(
+)if c then b.target=c:WaitForChild'Head'else b.locked=false end else b.target=nil end end game:GetService'RunService'.RenderStepped:Connect(function()if b.
+locked and b.target and b.target.Parent then local c=workspace.CurrentCamera c.CFrame=CFrame.new(c.CFrame.Position,b.target.Position)end end)return b end
+function a.b():typeof(__modImpl())local b=a.cache.b if not b then b={c=__modImpl()}a.cache.b=b end return b.c end end do local function __modImpl()local b,c,d=a
+.a(),a.b(),{}function d.WaitForGameAndPlayer()local e,f=false,false while not(e and f)do if game:IsLoaded()then e=true end if game:GetService'Players'.
+LocalPlayer then f=true end task.wait()end end function d.diff3d(e,f)return f-e end function d.dist3d(e,f)return d.diff3d(e,f).Magnitude end function d.dir3d(e,
+f)return d.diff3d(e,f).Unit end function d.isDev()local e,f='pathwise',game:GetService'Players'.LocalPlayer if string.sub(f.Name,1,#e)==e then return true end
+return false end function d.isKBM()local e=game:GetService'UserInputService'return e.KeyboardEnabled and e.MouseEnabled end d.Noclip=b d.Aimlock=c function d.
+breakVelocity(e)task.spawn(function()local f,g,h=game:GetService'Players'.LocalPlayer,false,Vector3.new(0,0,0)task.spawn(function()task.wait(e)g=true end)while
+not g do for i,j in ipairs(f.Character:GetDescendants())do if j:IsA'BasePart'then j.Velocity,j.RotVelocity=h,h end end task.wait()end end)end local e,f=20,false
+function d.get_safeTweening()return f end function d.set_safeTweening(g)f=g end function d.set_safeTweenSpeed(g)e=g end function d.safeTweenToPos(g)local h,i=
+game:GetService'TweenService',game:GetService'Players'.LocalPlayer local j=i and i.Character local k,l=j and j:FindFirstChild'HumanoidRootPart',j and j:
+FindFirstChildOfClass'Humanoid'local m=d.dist3d(k.Position,g.Position)local n=m/e f=true if l and l.SeatPart then l.Sit=false task.wait(0.1)end task.wait(0.1)h:
+Create(k,TweenInfo.new(n,Enum.EasingStyle.Linear),{CFrame=g}):Play()task.delay(n,function()f=false end)d.breakVelocity(n)end function d.safeTweenToPart(g,h)if g
+:IsA'BasePart'then local i=game:GetService'Players'.LocalPlayer local j=i and i.Character local k,l=j and j:FindFirstChild'HumanoidRootPart',j and j:
+FindFirstChildWhichIsA'Humanoid'f=true if l and l.SeatPart then l.Sit=false task.wait(0.1)end local m d.Noclip.enable()game.Workspace.Gravity=0 m=game:
+GetService'RunService'.Heartbeat:Connect(function(n)d.breakVelocity(0.1)if not k or not g or not g.Parent or(h and h(g))then m:Disconnect()f=false d.Noclip.
+disable()game.Workspace.Gravity=196.21 if l then l:ChangeState(Enum.HumanoidStateType.GettingUp)end return end local o,p=k.Position,g.Position local q,r=d.
+dist3d(o,p),e*n if q<=r then k.CFrame=g.CFrame m:Disconnect()f=false d.Noclip.disable()if l then l:ChangeState(Enum.HumanoidStateType.GettingUp)end game.
+Workspace.Gravity=196.21 else local s=d.dir3d(o,p)local t=o+(s*r)if l then l:ChangeState(Enum.HumanoidStateType.Physics)end k.CFrame=CFrame.new(t)*(g.CFrame-g.
+CFrame.Position)end end)end end function d.flingCharacter(g)local h=game:GetService'Players'.LocalPlayer local i=h and h.Character local j,k=i and i:
+FindFirstChild'HumanoidRootPart',g and g:FindFirstChild'HumanoidRootPart'if j and k then d.Noclip.enable()task.wait(0.2)local l=j.CFrame task.wait(0.1)for m,n
+in pairs(i:GetDescendants())do if n:IsA'BasePart'then n.CustomPhysicalProperties=PhysicalProperties.new(100,0.3,0.5)end end for m,n in i:GetChildren()do if n:
+IsA'BasePart'then n.CanCollide=false n.Massless=true n.Velocity=Vector3.new(0,0,0)end end local m=99999 local n,o=m o=game:GetService'RunService'.Heartbeat:
+Connect(function(p)if not k or not k.Parent then return end local q,r=math.random(-100,100),k.AssemblyLinearVelocity if r.Magnitude>500 then o:Disconnect()end
+local s=k.Position+(r*0.08)if s.Y<=game.Workspace.FallenPartsDestroyHeight+50 then return end j.CFrame=(CFrame.new(s+Vector3.new(0.1,0,0.1)))*(j.CFrame-j.CFrame
+.Position)j.AssemblyLinearVelocity=Vector3.new(m+q,-100,m+q)j.AssemblyAngularVelocity=Vector3.new(0,n,0)end)task.spawn(function()while o.Connected do n=m task.
+wait(0.2)n=0 task.wait(0.1)end end)task.delay(3,function()for p,q in pairs(i:GetDescendants())do if q.ClassName=='Part'or q.ClassName=='MeshPart'then q.
+CustomPhysicalProperties=PhysicalProperties.new(0.7,0.3,0.5)end end d.Noclip.disable()o:Disconnect()d.breakVelocity(0.2)task.wait(0.1)j.CFrame=l end)end end
+function d.flingPlayer(g)local h=g and g.Character d.flingCharacter(h)end function d.isFriendsWith(g)local h=game:GetService'Players'.LocalPlayer return h:
+IsFriendsWith(g.UserId)end function d.updateESP(g,h,i)local j=g:FindFirstChild'ESPHL'if j then if not i then j:Destroy()elseif h~=j.FillColor then j.FillColor=h
+j.OutlineColor=h end elseif i then local k=Instance.new'Highlight'k.Name='ESPHL'k.Adornee=g k.FillColor=h k.OutlineColor=h k.Parent=g end end d.esp_players={}d.
+esp_show_names=false d.esp_show_health=false function d.updatePlayerESP(g,h,i,j)local k=g and g.Character local l=k and k:FindFirstChildWhichIsA'Humanoid'local
+m,n=l and l.Health>0,(d.isFriendsWith(g)and(j or h))or h d.esp_players[g]={enabled=i and m,color=n}if k then d.updateESP(k,n,i and m)end end task.spawn(function
+()local g=Instance.new('Folder',game.CoreGui)while task.wait()do if d.esp_show_names or d.esp_show_health then if not g or not g.Parent then g=Instance.new(
+'Folder',game.CoreGui)end for h,i in pairs(d.esp_players)do local j,k,l=i.enabled,i.color,g:FindFirstChild(h.Name..'_ESP')local function getHealth()local m=h
+and h.Character local n=m and m:FindFirstChildWhichIsA'Humanoid'if n then local o=n.Health/n.MaxHealth local p,q=math.floor(o*100),Color3.fromHSV(o*(
+0.2777777777777778),0.8,0.8)return{health=p,color=q}else return{health=0,color=Color3.fromRGB(0,0,0)}end end if j then local m=h and h.Character local n=m and m
+:FindFirstChild'Head'if not l then if n then local o=Instance.new('Folder',g)o.Name=h.Name..'_ESP'local p=Instance.new('BillboardGui',o)local q,r=Instance.new(
+'TextLabel',p),Instance.new('TextLabel',p)p.Adornee=n p.Size=UDim2.new(0,100,0,40)p.StudsOffset=Vector3.new(0,2,0)p.AlwaysOnTop=true q.Name='NameLabel'q.
+BackgroundTransparency=1 q.Position=UDim2.new(0,0,0,0)q.Size=UDim2.new(0,100,0,20)q.Font=Enum.Font.SourceSansSemibold q.TextSize=20 q.TextColor3=k q.
+TextStrokeTransparency=0 q.TextStrokeColor3=Color3.new(0,0,0)q.TextYAlignment=Enum.TextYAlignment.Bottom q.Text=''q.ZIndex=10 r.Name='HealthLabel'r.
+BackgroundTransparency=1 r.Position=UDim2.new(0,0,0,20)r.Size=UDim2.new(0,100,0,20)r.Font=Enum.Font.SourceSansSemibold r.TextSize=20 r.TextColor3=k r.
+TextStrokeTransparency=0 r.TextStrokeColor3=Color3.new(0,0,0)r.TextYAlignment=Enum.TextYAlignment.Bottom r.Text=''r.ZIndex=10 end else local o=l:FindFirstChild
+'BillboardGui'if o and n then o.Adornee=n local p=o:FindFirstChild'NameLabel'if p then if d.esp_show_names then p.Text=h.Name p.TextColor3=k else p.Text=''end
+end local q=o:FindFirstChild'HealthLabel'if q then if d.esp_show_health then local r=getHealth()local s,t=r.health,r.color q.Text=s..'%'q.TextColor3=t else q.
+Text=''end end end end else if l then l:Destroy()end end end else g:Destroy()end end end)function d.getLocalPlayer()return game:GetService'Players'.LocalPlayer
+end function d.getLocalChar()local g=d.getLocalPlayer()return g and g.Character end function d.getLocalRoot()local g=d.getLocalChar()return g and g:
+FindFirstChild'HumanoidRootPart'end function d.getLocalHumanoid()local g=d.getLocalChar()return g and g:FindFirstChildWhichIsA'Humanoid'end return d end
+function a.c():typeof(__modImpl())local b=a.cache.c if not b then b={c=__modImpl()}a.cache.c=b end return b.c end end do local function __modImpl()local b={
+Default={TextColor=Color3.fromRGB(240,240,240),Background=Color3.fromRGB(25,25,25),Topbar=Color3.fromRGB(34,34,34),Shadow=Color3.fromRGB(20,20,20),
+NotificationBackground=Color3.fromRGB(20,20,20),NotificationActionsBackground=Color3.fromRGB(230,230,230),TabBackground=Color3.fromRGB(80,80,80),TabStroke=
+Color3.fromRGB(85,85,85),TabBackgroundSelected=Color3.fromRGB(210,210,210),TabTextColor=Color3.fromRGB(240,240,240),SelectedTabTextColor=Color3.fromRGB(50,50,50
+),ElementBackground=Color3.fromRGB(35,35,35),ElementBackgroundHover=Color3.fromRGB(40,40,40),SecondaryElementBackground=Color3.fromRGB(25,25,25),ElementStroke=
+Color3.fromRGB(50,50,50),SecondaryElementStroke=Color3.fromRGB(40,40,40),SliderBackground=Color3.fromRGB(50,138,220),SliderProgress=Color3.fromRGB(50,138,220),
+SliderStroke=Color3.fromRGB(58,163,255),ToggleBackground=Color3.fromRGB(30,30,30),ToggleEnabled=Color3.fromRGB(0,146,214),ToggleDisabled=Color3.fromRGB(100,100,
+100),ToggleEnabledStroke=Color3.fromRGB(0,170,255),ToggleDisabledStroke=Color3.fromRGB(125,125,125),ToggleEnabledOuterStroke=Color3.fromRGB(100,100,100),
+ToggleDisabledOuterStroke=Color3.fromRGB(65,65,65),DropdownSelected=Color3.fromRGB(40,40,40),DropdownUnselected=Color3.fromRGB(30,30,30),InputBackground=Color3.
+fromRGB(30,30,30),InputStroke=Color3.fromRGB(65,65,65),PlaceholderColor=Color3.fromRGB(178,178,178)},Ocean={TextColor=Color3.fromRGB(230,240,240),Background=
+Color3.fromRGB(20,30,30),Topbar=Color3.fromRGB(25,40,40),Shadow=Color3.fromRGB(15,20,20),NotificationBackground=Color3.fromRGB(25,35,35),
+NotificationActionsBackground=Color3.fromRGB(230,240,240),TabBackground=Color3.fromRGB(40,60,60),TabStroke=Color3.fromRGB(50,70,70),TabBackgroundSelected=Color3
+.fromRGB(100,180,180),TabTextColor=Color3.fromRGB(210,230,230),SelectedTabTextColor=Color3.fromRGB(20,50,50),ElementBackground=Color3.fromRGB(30,50,50),
+ElementBackgroundHover=Color3.fromRGB(40,60,60),SecondaryElementBackground=Color3.fromRGB(30,45,45),ElementStroke=Color3.fromRGB(45,70,70),
+SecondaryElementStroke=Color3.fromRGB(40,65,65),SliderBackground=Color3.fromRGB(0,110,110),SliderProgress=Color3.fromRGB(0,140,140),SliderStroke=Color3.fromRGB(
+0,160,160),ToggleBackground=Color3.fromRGB(30,50,50),ToggleEnabled=Color3.fromRGB(0,130,130),ToggleDisabled=Color3.fromRGB(70,90,90),ToggleEnabledStroke=Color3.
+fromRGB(0,160,160),ToggleDisabledStroke=Color3.fromRGB(85,105,105),ToggleEnabledOuterStroke=Color3.fromRGB(50,100,100),ToggleDisabledOuterStroke=Color3.fromRGB(
+45,65,65),DropdownSelected=Color3.fromRGB(30,60,60),DropdownUnselected=Color3.fromRGB(25,40,40),InputBackground=Color3.fromRGB(30,50,50),InputStroke=Color3.
+fromRGB(50,70,70),PlaceholderColor=Color3.fromRGB(140,160,160)},AmberGlow={TextColor=Color3.fromRGB(255,245,230),Background=Color3.fromRGB(45,30,20),Topbar=
+Color3.fromRGB(55,40,25),Shadow=Color3.fromRGB(35,25,15),NotificationBackground=Color3.fromRGB(50,35,25),NotificationActionsBackground=Color3.fromRGB(245,230,
+215),TabBackground=Color3.fromRGB(75,50,35),TabStroke=Color3.fromRGB(90,60,45),TabBackgroundSelected=Color3.fromRGB(230,180,100),TabTextColor=Color3.fromRGB(250
+,220,200),SelectedTabTextColor=Color3.fromRGB(50,30,10),ElementBackground=Color3.fromRGB(60,45,35),ElementBackgroundHover=Color3.fromRGB(70,50,40),
+SecondaryElementBackground=Color3.fromRGB(55,40,30),ElementStroke=Color3.fromRGB(85,60,45),SecondaryElementStroke=Color3.fromRGB(75,50,35),SliderBackground=
+Color3.fromRGB(220,130,60),SliderProgress=Color3.fromRGB(250,150,75),SliderStroke=Color3.fromRGB(255,170,85),ToggleBackground=Color3.fromRGB(55,40,30),
+ToggleEnabled=Color3.fromRGB(240,130,30),ToggleDisabled=Color3.fromRGB(90,70,60),ToggleEnabledStroke=Color3.fromRGB(255,160,50),ToggleDisabledStroke=Color3.
+fromRGB(110,85,75),ToggleEnabledOuterStroke=Color3.fromRGB(200,100,50),ToggleDisabledOuterStroke=Color3.fromRGB(75,60,55),DropdownSelected=Color3.fromRGB(70,50,
+40),DropdownUnselected=Color3.fromRGB(55,40,30),InputBackground=Color3.fromRGB(60,45,35),InputStroke=Color3.fromRGB(90,65,50),PlaceholderColor=Color3.fromRGB(
+190,150,130)},Light={TextColor=Color3.fromRGB(40,40,40),Background=Color3.fromRGB(245,245,245),Topbar=Color3.fromRGB(230,230,230),Shadow=Color3.fromRGB(200,200,
+200),NotificationBackground=Color3.fromRGB(250,250,250),NotificationActionsBackground=Color3.fromRGB(240,240,240),TabBackground=Color3.fromRGB(235,235,235),
+TabStroke=Color3.fromRGB(215,215,215),TabBackgroundSelected=Color3.fromRGB(255,255,255),TabTextColor=Color3.fromRGB(80,80,80),SelectedTabTextColor=Color3.
+fromRGB(0,0,0),ElementBackground=Color3.fromRGB(240,240,240),ElementBackgroundHover=Color3.fromRGB(225,225,225),SecondaryElementBackground=Color3.fromRGB(235,
+235,235),ElementStroke=Color3.fromRGB(210,210,210),SecondaryElementStroke=Color3.fromRGB(210,210,210),SliderBackground=Color3.fromRGB(150,180,220),
+SliderProgress=Color3.fromRGB(100,150,200),SliderStroke=Color3.fromRGB(120,170,220),ToggleBackground=Color3.fromRGB(220,220,220),ToggleEnabled=Color3.fromRGB(0,
+146,214),ToggleDisabled=Color3.fromRGB(150,150,150),ToggleEnabledStroke=Color3.fromRGB(0,170,255),ToggleDisabledStroke=Color3.fromRGB(170,170,170),
+ToggleEnabledOuterStroke=Color3.fromRGB(100,100,100),ToggleDisabledOuterStroke=Color3.fromRGB(180,180,180),DropdownSelected=Color3.fromRGB(230,230,230),
+DropdownUnselected=Color3.fromRGB(220,220,220),InputBackground=Color3.fromRGB(240,240,240),InputStroke=Color3.fromRGB(180,180,180),PlaceholderColor=Color3.
+fromRGB(140,140,140)},Amethyst={TextColor=Color3.fromRGB(240,240,240),Background=Color3.fromRGB(30,20,40),Topbar=Color3.fromRGB(40,25,50),Shadow=Color3.fromRGB(
+20,15,30),NotificationBackground=Color3.fromRGB(35,20,40),NotificationActionsBackground=Color3.fromRGB(240,240,250),TabBackground=Color3.fromRGB(60,40,80),
+TabStroke=Color3.fromRGB(70,45,90),TabBackgroundSelected=Color3.fromRGB(180,140,200),TabTextColor=Color3.fromRGB(230,230,240),SelectedTabTextColor=Color3.
+fromRGB(50,20,50),ElementBackground=Color3.fromRGB(45,30,60),ElementBackgroundHover=Color3.fromRGB(50,35,70),SecondaryElementBackground=Color3.fromRGB(40,30,55)
+,ElementStroke=Color3.fromRGB(70,50,85),SecondaryElementStroke=Color3.fromRGB(65,45,80),SliderBackground=Color3.fromRGB(100,60,150),SliderProgress=Color3.
+fromRGB(130,80,180),SliderStroke=Color3.fromRGB(150,100,200),ToggleBackground=Color3.fromRGB(45,30,55),ToggleEnabled=Color3.fromRGB(120,60,150),ToggleDisabled=
+Color3.fromRGB(94,47,117),ToggleEnabledStroke=Color3.fromRGB(140,80,170),ToggleDisabledStroke=Color3.fromRGB(124,71,150),ToggleEnabledOuterStroke=Color3.
+fromRGB(90,40,120),ToggleDisabledOuterStroke=Color3.fromRGB(80,50,110),DropdownSelected=Color3.fromRGB(50,35,70),DropdownUnselected=Color3.fromRGB(35,25,50),
+InputBackground=Color3.fromRGB(45,30,60),InputStroke=Color3.fromRGB(80,50,110),PlaceholderColor=Color3.fromRGB(178,150,200)},Green={TextColor=Color3.fromRGB(30,
+60,30),Background=Color3.fromRGB(235,245,235),Topbar=Color3.fromRGB(210,230,210),Shadow=Color3.fromRGB(200,220,200),NotificationBackground=Color3.fromRGB(240,
+250,240),NotificationActionsBackground=Color3.fromRGB(220,235,220),TabBackground=Color3.fromRGB(215,235,215),TabStroke=Color3.fromRGB(190,210,190),
+TabBackgroundSelected=Color3.fromRGB(245,255,245),TabTextColor=Color3.fromRGB(50,80,50),SelectedTabTextColor=Color3.fromRGB(20,60,20),ElementBackground=Color3.
+fromRGB(225,240,225),ElementBackgroundHover=Color3.fromRGB(210,225,210),SecondaryElementBackground=Color3.fromRGB(235,245,235),ElementStroke=Color3.fromRGB(180,
+200,180),SecondaryElementStroke=Color3.fromRGB(180,200,180),SliderBackground=Color3.fromRGB(90,160,90),SliderProgress=Color3.fromRGB(70,130,70),SliderStroke=
+Color3.fromRGB(100,180,100),ToggleBackground=Color3.fromRGB(215,235,215),ToggleEnabled=Color3.fromRGB(60,130,60),ToggleDisabled=Color3.fromRGB(150,175,150),
 ToggleEnabledStroke=Color3.fromRGB(80,150,80),ToggleDisabledStroke=Color3.fromRGB(130,150,130),ToggleEnabledOuterStroke=Color3.fromRGB(100,160,100),
 ToggleDisabledOuterStroke=Color3.fromRGB(160,180,160),DropdownSelected=Color3.fromRGB(225,240,225),DropdownUnselected=Color3.fromRGB(210,225,210),
 InputBackground=Color3.fromRGB(235,245,235),InputStroke=Color3.fromRGB(180,200,180),PlaceholderColor=Color3.fromRGB(120,140,120)},Bloom={TextColor=Color3.

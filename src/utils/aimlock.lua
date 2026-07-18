@@ -41,6 +41,7 @@ function M.findTarget()
 end
 
 function M.toggleLock()
+	M.locked = not M.locked
 	if M.locked then
 		local targChar = M.findTarget()
 		if targChar then
