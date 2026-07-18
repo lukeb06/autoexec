@@ -24,7 +24,7 @@ local function init()
 		Name = "Bring Player Guards",
 		CurrentKeybind = "H",
 		HoldToInteract = false,
-		Flag = nil,
+		Flag = "BringPlayerGuards",
 		Callback = Funcs.onPlayerGuardTPToggle,
 	})
 
@@ -32,7 +32,7 @@ local function init()
 		Name = "Bring NPC Guards",
 		CurrentKeybind = "J",
 		HoldToInteract = false,
-		Flag = nil,
+		Flag = "BringNPCGuards",
 		Callback = Funcs.onNPCGuardTPToggle,
 	})
 
