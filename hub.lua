@@ -681,40 +681,46 @@ then local as={[1]='Shooting.shotPlayer',[2]=ao.CFrame,[3]=ar.CFrame,[4]=ap,[5]=
 CFrame.Angles(3.1407759189605713,1.3910810947418213,3.129187822341919)}game:GetService'ReplicatedStorage'.Net:FireServer(unpack(as))end end end end end)end
 return init end function a.A():typeof(__modImpl())local aa=a.cache.A if not aa then aa={c=__modImpl()}a.cache.A=aa end return aa.c end end do local function 
 __modImpl()local aa,ab=a.c(),{}function ab.updatePlayerESP(ac)local ad=aa.getLocalPlayer()for ae,af in pairs(game:GetService'Players':GetPlayers())do if af~=ad
-then aa.updatePlayerESP(af,af.TeamColor.Color,ac,Color3.fromRGB(255,0,255))end end end function ab.getGunRemotes()local ac=game:GetService'ReplicatedStorage'
-return ac:FindFirstChild'GunRemotes'end function ab.getShootEvent()local ac=ab.getGunRemotes()return ac and ac:FindFirstChild'ShootEvent'end function ab.
-getReloadEvent()local ac=ab.getGunRemotes()return ac and ac:FindFirstChild'FuncReload'end function ab.reload()local ac=ab.getReloadEvent()if ac then ac:
-InvokeServer()end end local ac=0 function ab.shootPart(ad)local ae,af=ab.getShootEvent(),aa.getLocalRoot()if ae then ae:FireServer{{af.Position,ad.Position,ad}}
-ac=ac+1 if ac>20 then ac=0 ab.reload()end end end function ab.shootPlayer(ad)local ae=ad and ad.Character local af=ae and ae:FindFirstChild'HumanoidRootPart'if
-af then ab.shootPart(af)end end function ab.shootPlayerIfVisible(ad)local ae=ad and ad.Character local af,ag,ah=ae and ae:FindFirstChild'HumanoidRootPart',aa.
-getLocalRoot(),aa.getLocalChar()if ah and ag and af then local ai,aj=ag.Position,af.Position local ak,al=(aj-ai),RaycastParams.new()al.FilterType=Enum.
-RaycastFilterType.Exclude al.FilterDescendantsInstances={ah}al.IgnoreWater=true local am=game.Workspace:Raycast(ai,ak,al)if am then if am.Instance:
-IsDescendantOf(ae)then ab.shootPlayer(ad)end end end end function ab.getAllOnTeam(ad)local ae,af={},aa.getLocalPlayer()for ag,ah in pairs(game:GetService
-'Players':GetPlayers())do if ah.Team.Name==ad and ah~=af then table.insert(ae,ah)end end return ae end function ab.getCriminals()return ab.getAllOnTeam
-'Criminals'end function ab.getGuards()return ab.getAllOnTeam'Guards'end function ab.getInmates()return ab.getAllOnTeam'Inmates'end function ab.shootAllCriminals
-()local ad=ab.getCriminals()for ae,af in pairs(ad)do ab.shootPlayerIfVisible(af)end end function ab.shootAllGuards()local ad=ab.getGuards()for ae,af in pairs(ad
-)do ab.shootPlayerIfVisible(af)end end function ab.shootAllInmates()local ad=ab.getInmates()for ae,af in pairs(ad)do ab.shootPlayerIfVisible(af)end end function
-ab.removeDoors()local ad=workspace:FindFirstChild'Doors'if ad then ad:Destroy()end end return ab end function a.B():typeof(__modImpl())local aa=a.cache.B if not
-aa then aa={c=__modImpl()}a.cache.B=aa end return aa.c end end do local function __modImpl()local aa,ab,ac=a.B(),a.c(),{}ac.player_esp_toggled=true ac.
-auto_shoot_criminals=false ac.auto_shoot_guards=false ac.teleports={{Name='Criminal Hideout',Position=Vector3.new(-989,94,2039)},{Name='Guard Guns',Position=
-Vector3.new(817,100,2234)},{Name='Prison Yard',Position=Vector3.new(813,98,2448)},{Name='Prison Wall',Position=Vector3.new(512,122,2326)}}function ac.teleportTo
-(ad)local ae=ab.getLocalRoot()if ae then ae.CFrame=CFrame.new(ad)end end function ac.onPlayerESPToggle(ad)ac.player_esp_toggled=ad aa.updatePlayerESP(ad)end
-task.spawn(function()while task.wait()do if ac.player_esp_toggled then aa.updatePlayerESP(ac.player_esp_toggled)end end end)function ac.
-onAutoShootCriminalsToggle(ad)ac.auto_shoot_criminals=ad end task.spawn(function()while task.wait(0.1)do if ac.auto_shoot_criminals then aa.shootAllCriminals()
-end end end)function ac.onAutoShootGuardsToggle(ad)ac.auto_shoot_guards=ad end task.spawn(function()while task.wait(0.1)do if ac.auto_shoot_guards then aa.
-shootAllGuards()end end end)function ac.removeDoors()aa.removeDoors()end return ac end function a.C():typeof(__modImpl())local aa=a.cache.C if not aa then aa={c
-=__modImpl()}a.cache.C=aa end return aa.c end end do local function __modImpl()local function init()local aa,ab=a.f(),a.C()local ac=aa.Window:CreateTab(
-'Prison Life','gamepad-2')ac:CreateSection'ESP'ac:CreateToggle{Name='Player ESP',CurrentValue=true,Flag=nil,Callback=ab.onPlayerESPToggle}ac:CreateSection
-'Utils'ac:CreateButton{Name='Remove Doors',Callback=ab.removeDoors}ac:CreateSection'Teleports'for ad,ae in pairs(ab.teleports)do ac:CreateButton{Name=ae.Name,
-Callback=function()ab.teleportTo(ae.Position)end}end end return init end function a.D():typeof(__modImpl())local aa=a.cache.D if not aa then aa={c=__modImpl()}a
-.cache.D=aa end return aa.c end end do local function __modImpl()for aa,ab in pairs{{a.i(),7585283196},{a.l(),10148749921},{a.n(),372226183},{a.p(),10141757860}
-,{a.r(),93740418},{a.u(),7008097940},{a.w(),66654135},{a.y(),1003981402},{a.A(),7785400752},{a.D(),73885730}}do if game.GameId==ab[2]then task.spawn(ab[1])break
-end end return true end function a.E():typeof(__modImpl())local aa=a.cache.E if not aa then aa={c=__modImpl()}a.cache.E=aa end return aa.c end end do local 
-function __modImpl()local aa,ab=a.f(),{}local ac=aa.Window:CreateTab('Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=false ab.iy_injected=false ab.
-rs_injected=false ac:CreateButton{Name='Inject Dex',Callback=function()if ab.dex_injected then return end ab.dex_injected=true task.spawn(function()loadstring(
-game:HttpGet[[https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua]])()end)end}ab.DexToggle=ac:CreateToggle{Name='Load Dex on Startup',
-CurrentValue=false,Flag='LoadDexOnStartup',Callback=function(ae)end}ac:CreateSection'Infinite Yield'ac:CreateButton{Name='Inject IY',Callback=function()if ab.
-iy_injected then return end ab.iy_injected=true task.spawn(function()loadstring(game:HttpGet
+then aa.updatePlayerESP(af,af.TeamColor.Color,ac,Color3.fromRGB(255,0,255))end end end if getrawmetatable and setreadonly and newcclosure and getnamecallmethod
+then local ac=game:GetService'ReplicatedStorage'local ad=ac:WaitForChild'GunRemotes'local ae,af=ad:WaitForChild'ShootEvent',getrawmetatable(game)local ag=af.
+__namecall setreadonly(af,false)local ah=aa.getLocalPlayer()local ai,aj=ah and ah:GetMouse(),false af.__namecall=newcclosure(function(ak,...)local al=
+getnamecallmethod()if al=='FireServer'and ak==ae and not aj then local am={...}local an,ao=pcall(function()if am and am[1]and am[1][1]then local an=am[1][1]
+local ao=an[1]print('Interception Active - Origin:',ao)if ai and ai.Target then local ap=ai.Target local aq=ap.Position local ar={{{ao,aq,ap}}}aj=true ag(ak,
+table.unpack(ar))aj=false end end end)if not an then warn('Error during argument handling:',ao)aj=false end return end return ag(ak,...)end)setreadonly(af,true)
+end function ab.getGunRemotes()local ac=game:GetService'ReplicatedStorage'return ac:FindFirstChild'GunRemotes'end function ab.getShootEvent()local ac=ab.
+getGunRemotes()return ac and ac:FindFirstChild'ShootEvent'end function ab.getReloadEvent()local ac=ab.getGunRemotes()return ac and ac:FindFirstChild'FuncReload'
+end function ab.reload()local ac=ab.getReloadEvent()if ac then ac:InvokeServer()end end local ac=0 function ab.shootPart(ad)local ae,af=ab.getShootEvent(),aa.
+getLocalChar()if af and ae then local ag=af:FindFirstChild'Head'if ag then ae:FireServer{{ag.Position,ad.Position,ad}}ac=ac+1 if ac>20 then ac=0 ab.reload()end
+end end end function ab.shootPlayer(ad)local ae=ad and ad.Character local af=ae and ae:FindFirstChild'HumanoidRootPart'if af then ab.shootPart(af)end end
+function ab.shootPlayerIfVisible(ad)local ae=ad and ad.Character local af,ag=ae and ae:FindFirstChild'HumanoidRootPart',aa.getLocalChar()if ag and af then local
+ah=ae and ae:FindFirstChild'Head'if ah then local ai,aj=ah.Position,af.Position local ak,al=(aj-ai),RaycastParams.new()al.FilterType=Enum.RaycastFilterType.
+Exclude al.FilterDescendantsInstances={ag}al.IgnoreWater=true local am=game.Workspace:Raycast(ai,ak,al)if am then if am.Instance:IsDescendantOf(ae)then ab.
+shootPlayer(ad)end end end end end function ab.getAllOnTeam(ad)local ae,af={},aa.getLocalPlayer()for ag,ah in pairs(game:GetService'Players':GetPlayers())do if
+ah.Team.Name==ad and ah~=af then table.insert(ae,ah)end end return ae end function ab.getCriminals()return ab.getAllOnTeam'Criminals'end function ab.getGuards()
+return ab.getAllOnTeam'Guards'end function ab.getInmates()return ab.getAllOnTeam'Inmates'end function ab.shootAllCriminals()local ad=ab.getCriminals()for ae,af
+in pairs(ad)do ab.shootPlayerIfVisible(af)end end function ab.shootAllGuards()local ad=ab.getGuards()for ae,af in pairs(ad)do ab.shootPlayerIfVisible(af)end end
+function ab.shootAllInmates()local ad=ab.getInmates()for ae,af in pairs(ad)do ab.shootPlayerIfVisible(af)end end function ab.removeDoors()local ad=workspace:
+FindFirstChild'Doors'if ad then ad:Destroy()end end return ab end function a.B():typeof(__modImpl())local aa=a.cache.B if not aa then aa={c=__modImpl()}a.cache.
+B=aa end return aa.c end end do local function __modImpl()local aa,ab,ac=a.B(),a.c(),{}ac.player_esp_toggled=true ac.auto_shoot_criminals=false ac.
+auto_shoot_guards=false ac.teleports={{Name='Criminal Hideout',Position=Vector3.new(-989,94,2039)},{Name='Guard Guns',Position=Vector3.new(817,100,2234)},{Name=
+'Prison Yard',Position=Vector3.new(813,98,2448)},{Name='Prison Wall',Position=Vector3.new(512,122,2326)}}function ac.teleportTo(ad)local ae=ab.getLocalRoot()if
+ae then ae.CFrame=CFrame.new(ad)end end function ac.onPlayerESPToggle(ad)ac.player_esp_toggled=ad aa.updatePlayerESP(ad)end task.spawn(function()while task.
+wait()do if ac.player_esp_toggled then aa.updatePlayerESP(ac.player_esp_toggled)end end end)function ac.onAutoShootCriminalsToggle(ad)ac.auto_shoot_criminals=ad
+end task.spawn(function()while task.wait(0.1)do if ac.auto_shoot_criminals then aa.shootAllCriminals()end end end)function ac.onAutoShootGuardsToggle(ad)ac.
+auto_shoot_guards=ad end task.spawn(function()while task.wait(0.1)do if ac.auto_shoot_guards then aa.shootAllGuards()end end end)function ac.removeDoors()aa.
+removeDoors()end return ac end function a.C():typeof(__modImpl())local aa=a.cache.C if not aa then aa={c=__modImpl()}a.cache.C=aa end return aa.c end end do
+local function __modImpl()local function init()local aa,ab=a.f(),a.C()local ac=aa.Window:CreateTab('Prison Life','gamepad-2')ac:CreateSection'ESP'ac:
+CreateToggle{Name='Player ESP',CurrentValue=true,Flag=nil,Callback=ab.onPlayerESPToggle}ac:CreateSection'Utils'ac:CreateButton{Name='Remove Doors',Callback=ab.
+removeDoors}if getrawmetatable and setreadonly and newcclosure and getnamecallmethod then end ac:CreateSection'Teleports'for ad,ae in pairs(ab.teleports)do ac:
+CreateButton{Name=ae.Name,Callback=function()ab.teleportTo(ae.Position)end}end end return init end function a.D():typeof(__modImpl())local aa=a.cache.D if not
+aa then aa={c=__modImpl()}a.cache.D=aa end return aa.c end end do local function __modImpl()for aa,ab in pairs{{a.i(),7585283196},{a.l(),10148749921},{a.n(),
+372226183},{a.p(),10141757860},{a.r(),93740418},{a.u(),7008097940},{a.w(),66654135},{a.y(),1003981402},{a.A(),7785400752},{a.D(),73885730}}do if game.GameId==ab
+[2]then task.spawn(ab[1])break end end return true end function a.E():typeof(__modImpl())local aa=a.cache.E if not aa then aa={c=__modImpl()}a.cache.E=aa end
+return aa.c end end do local function __modImpl()local aa,ab=a.f(),{}local ac=aa.Window:CreateTab('Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=
+false ab.iy_injected=false ab.rs_injected=false ac:CreateButton{Name='Inject Dex',Callback=function()if ab.dex_injected then return end ab.dex_injected=true
+task.spawn(function()loadstring(game:HttpGet[[https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua]])()end)end}ab.DexToggle=ac:
+CreateToggle{Name='Load Dex on Startup',CurrentValue=false,Flag='LoadDexOnStartup',Callback=function(ae)end}ac:CreateSection'Infinite Yield'ac:CreateButton{Name
+='Inject IY',Callback=function()if ab.iy_injected then return end ab.iy_injected=true task.spawn(function()loadstring(game:HttpGet
 [[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end)end}ab.IYToggle=ac:CreateToggle{Name='Load IY on Startup',CurrentValue=false,Flag
 ='LoadIYOnStartup',Callback=function(af)end}ac:CreateSection'Cobalt Spy'ac:CreateButton{Name='Inject Cobalt Spy',Callback=function()if ab.rs_injected then
 return end ab.rs_injected=true task.spawn(function()loadstring(game:HttpGet[[https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau]])()end)end}

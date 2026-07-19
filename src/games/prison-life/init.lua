@@ -20,6 +20,9 @@ local function init()
 		Callback = Funcs.removeDoors,
 	})
 
+	if getrawmetatable and setreadonly and newcclosure and getnamecallmethod then
+	end
+
 	-- PrisonLifeTab:CreateToggle({
 	-- 	Name = "Auto Shoot Criminals",
 	-- 	CurrentValue = Funcs.auto_shoot_criminals,
