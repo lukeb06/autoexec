@@ -680,19 +680,27 @@ ao,ap=an and an:FindFirstChild'HumanoidRootPart',ac.getClosestAnimal()if ap and 
 then local as={[1]='Shooting.shotPlayer',[2]=ao.CFrame,[3]=ar.CFrame,[4]=ap,[5]=ar,[6]=CFrame.new(0.8038291931152344,0.09816551208496094,-8.88824462890625E-4)*
 CFrame.Angles(3.1407759189605713,1.3910810947418213,3.129187822341919)}game:GetService'ReplicatedStorage'.Net:FireServer(unpack(as))end end end end end)end
 return init end function a.A():typeof(__modImpl())local aa=a.cache.A if not aa then aa={c=__modImpl()}a.cache.A=aa end return aa.c end end do local function 
-__modImpl()for aa,ab in pairs{{a.i(),7585283196},{a.l(),10148749921},{a.n(),372226183},{a.p(),10141757860},{a.r(),93740418},{a.u(),7008097940},{a.w(),66654135},
-{a.y(),1003981402},{a.A(),7785400752}}do if game.GameId==ab[2]then task.spawn(ab[1])break end end return true end function a.B():typeof(__modImpl())local aa=a.
-cache.B if not aa then aa={c=__modImpl()}a.cache.B=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),{}local ac=aa.Window:CreateTab(
-'Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=false ab.iy_injected=false ab.rs_injected=false ac:CreateButton{Name='Inject Dex',Callback=function
-()if ab.dex_injected then return end ab.dex_injected=true task.spawn(function()loadstring(game:HttpGet
+__modImpl()local aa,ab=a.c(),{}function ab.updatePlayerESP(ac)local ad=aa.getLocalPlayer()for ae,af in pairs(game:GetService'Players':GetPlayers())do if af~=ad
+then aa.updatePlayerESP(af,af.TeamColor.Color,ac,Color3.fromRGB(255,0,255))end end end return ab end function a.B():typeof(__modImpl())local aa=a.cache.B if not
+aa then aa={c=__modImpl()}a.cache.B=aa end return aa.c end end do local function __modImpl()local aa,ab=a.B(),{}ab.player_esp_toggled=true function ab.
+onPlayerESPToggle(ac)ab.player_esp_toggled=ac aa.updatePlayerESP(ac)end task.spawn(function()while task.wait()do if ab.player_esp_toggled then aa.
+updatePlayerESP(ab.player_esp_toggled)end end end)return ab end function a.C():typeof(__modImpl())local aa=a.cache.C if not aa then aa={c=__modImpl()}a.cache.C=
+aa end return aa.c end end do local function __modImpl()local function init()local aa,ab=a.f(),a.C()local ac=aa.Window:CreateTab('Prison Life','gamepad-2')ac:
+CreateSection'ESP'ac:CreateToggle{Name='Player ESP',CurrentValue=true,Flag=nil,Callback=ab.onPlayerESPToggle}end return init end function a.D():typeof(
+__modImpl())local aa=a.cache.D if not aa then aa={c=__modImpl()}a.cache.D=aa end return aa.c end end do local function __modImpl()for aa,ab in pairs{{a.i(),
+7585283196},{a.l(),10148749921},{a.n(),372226183},{a.p(),10141757860},{a.r(),93740418},{a.u(),7008097940},{a.w(),66654135},{a.y(),1003981402},{a.A(),7785400752}
+,{a.D(),73885730}}do if game.GameId==ab[2]then task.spawn(ab[1])break end end return true end function a.E():typeof(__modImpl())local aa=a.cache.E if not aa
+then aa={c=__modImpl()}a.cache.E=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),{}local ac=aa.Window:CreateTab('Externals',
+'telescope')ac:CreateSection'Dex'ab.dex_injected=false ab.iy_injected=false ab.rs_injected=false ac:CreateButton{Name='Inject Dex',Callback=function()if ab.
+dex_injected then return end ab.dex_injected=true task.spawn(function()loadstring(game:HttpGet
 [[https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua]])()end)end}ab.DexToggle=ac:CreateToggle{Name='Load Dex on Startup',CurrentValue=
 false,Flag='LoadDexOnStartup',Callback=function(ae)end}ac:CreateSection'Infinite Yield'ac:CreateButton{Name='Inject IY',Callback=function()if ab.iy_injected
 then return end ab.iy_injected=true task.spawn(function()loadstring(game:HttpGet[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end)
 end}ab.IYToggle=ac:CreateToggle{Name='Load IY on Startup',CurrentValue=false,Flag='LoadIYOnStartup',Callback=function(af)end}ac:CreateSection'Cobalt Spy'ac:
 CreateButton{Name='Inject Cobalt Spy',Callback=function()if ab.rs_injected then return end ab.rs_injected=true task.spawn(function()loadstring(game:HttpGet
 [[https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau]])()end)end}ab.RSToggle=ac:CreateToggle{Name='Load Cobalt on Startup',CurrentValue=
-false,Flag='LoadRSOnStartup',Callback=function(ag)end}return ab end function a.C():typeof(__modImpl())local aa=a.cache.C if not aa then aa={c=__modImpl()}a.
-cache.C=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),a.c()local ac,ad=aa.Window:CreateTab'Emotes',{{Name='Take The L',Id=
+false,Flag='LoadRSOnStartup',Callback=function(ag)end}return ab end function a.F():typeof(__modImpl())local aa=a.cache.F if not aa then aa={c=__modImpl()}a.
+cache.F=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),a.c()local ac,ad=aa.Window:CreateTab'Emotes',{{Name='Take The L',Id=
 93090980853782},{Name='UFO',Id=120449791578755},{Name='Fake Dead',Id=73689381418785},{Name='67 Body',Id=82296043272517},{Name='Obby Head',Id=122814100170962},{
 Name='Floating',Id=131950236025472},{Name='Katseye',Id=100829635809504},{Name='Floating Headless',Id=98728517497209},{Name='Levitate',Id=111499780397123},{Name=
 '67',Id=88672473602461},{Name='Hide',Id=117450501566142},{Name='Biblically Accurate',Id=133596366979822},{Name='Best Mates',Id=113016438012253},{Name='Car',Id=
@@ -707,9 +715,9 @@ end)local ai=af:WaitForChild'HumanoidDescription'ai:AddEmote(ae.Name,ae.Id)af:Pl
 ag then ag:Disconnect()end return ah end local ae local function stopAnimations()if ae then ae:Stop()ae=nil end end ac:CreateButton{Name='Stop Emote',Callback=
 stopAnimations}ac:CreateSection'Emotes'for af,ag in pairs(ad)do ac:CreateButton{Name=ag.Name,Callback=function()local ah=ab.getLocalHumanoid()local ai=ah:
 FindFirstChild'Animator'stopAnimations()local aj,ak=Instance.new'Animation',getTrueId(ag)if ak then print(ak)aj.AnimationId=ak ae=ai:LoadAnimation(aj)ae.Looped=
-true ae.Priority=Enum.AnimationPriority.Action4 ae:Play()else warn'Failed to add emote'end end}end return true end function a.D():typeof(__modImpl())local aa=a.
-cache.D if not aa then aa={c=__modImpl()}a.cache.D=aa end return aa.c end end end local aa=a.c()aa.WaitForGameAndPlayer()local ab=a.f()a.g()a.B()local ac=a.C()a
-.D()ab.Library:LoadConfiguration()if ac.DexToggle.CurrentValue then ac.dex_injected=true task.spawn(function()loadstring(game:HttpGet
+true ae.Priority=Enum.AnimationPriority.Action4 ae:Play()else warn'Failed to add emote'end end}end return true end function a.G():typeof(__modImpl())local aa=a.
+cache.G if not aa then aa={c=__modImpl()}a.cache.G=aa end return aa.c end end end local aa=a.c()aa.WaitForGameAndPlayer()local ab=a.f()a.g()a.E()local ac=a.F()a
+.G()ab.Library:LoadConfiguration()if ac.DexToggle.CurrentValue then ac.dex_injected=true task.spawn(function()loadstring(game:HttpGet
 [[https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua]])()end)end if ac.IYToggle.CurrentValue then ac.iy_injected=true task.spawn(
 function()loadstring(game:HttpGet[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end)end if ac.RSToggle.CurrentValue then ac.
 rs_injected=true task.spawn(function()loadstring(game:HttpGet[[https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau]])()end)end
