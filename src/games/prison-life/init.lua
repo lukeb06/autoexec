@@ -13,13 +13,34 @@ local function init()
 		Callback = Funcs.onPlayerESPToggle,
 	})
 
+	PrisonLifeTab:CreateSection("Utils")
+
+	PrisonLifeTab:CreateButton({
+		Name = "Remove Doors",
+		Callback = Funcs.removeDoors,
+	})
+
+	-- PrisonLifeTab:CreateToggle({
+	-- 	Name = "Auto Shoot Criminals",
+	-- 	CurrentValue = Funcs.auto_shoot_criminals,
+	-- 	Flag = nil,
+	-- 	Callback = Funcs.onAutoShootCriminalsToggle,
+	-- })
+
+	-- PrisonLifeTab:CreateToggle({
+	-- 	Name = "Auto Shoot Guards",
+	-- 	CurrentValue = Funcs.auto_shoot_guards,
+	-- 	Flag = nil,
+	-- 	Callback = Funcs.onAutoShootGuardsToggle,
+	-- })
+
 	PrisonLifeTab:CreateSection("Teleports")
 
 	for i, v in pairs(Funcs.teleports) do
 		PrisonLifeTab:CreateButton({
 			Name = v.Name,
 			Callback = function()
-				v:Callback()
+				Funcs.teleportTo(v.Position)
 			end,
 		})
 	end

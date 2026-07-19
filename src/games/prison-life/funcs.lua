@@ -4,15 +4,14 @@ local Utils = require("../../utils")
 local M = {}
 
 M.player_esp_toggled = true
+M.auto_shoot_criminals = false
+M.auto_shoot_guards = false
 
 M.teleports = {
-	{
-		Name = "Criminal Hideout",
-		Position = Vector3.new(-989, 94, 2039),
-		Callback = function(self)
-			M.teleportTo(self.Position)
-		end,
-	},
+	{ Name = "Criminal Hideout", Position = Vector3.new(-989, 94, 2039) },
+	{ Name = "Guard Guns", Position = Vector3.new(817, 100, 2234) },
+	{ Name = "Prison Yard", Position = Vector3.new(813, 98, 2448) },
+	{ Name = "Prison Wall", Position = Vector3.new(512, 122, 2326) },
 }
 
 function M.teleportTo(pos)
@@ -34,5 +33,33 @@ task.spawn(function()
 		end
 	end
 end)
+
+function M.onAutoShootCriminalsToggle(value)
+	M.auto_shoot_criminals = value
+end
+
+task.spawn(function()
+	while task.wait(0.1) do
+		if M.auto_shoot_criminals then
+			GameUtils.shootAllCriminals()
+		end
+	end
+end)
+
+function M.onAutoShootGuardsToggle(value)
+	M.auto_shoot_guards = value
+end
+
+task.spawn(function()
+	while task.wait(0.1) do
+		if M.auto_shoot_guards then
+			GameUtils.shootAllGuards()
+		end
+	end
+end)
+
+function M.removeDoors()
+	GameUtils.removeDoors()
+end
 
 return M
