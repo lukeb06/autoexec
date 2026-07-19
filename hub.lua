@@ -682,17 +682,19 @@ CFrame.Angles(3.1407759189605713,1.3910810947418213,3.129187822341919)}game:GetS
 return init end function a.A():typeof(__modImpl())local aa=a.cache.A if not aa then aa={c=__modImpl()}a.cache.A=aa end return aa.c end end do local function 
 __modImpl()local aa,ab=a.c(),{}function ab.updatePlayerESP(ac)local ad=aa.getLocalPlayer()for ae,af in pairs(game:GetService'Players':GetPlayers())do if af~=ad
 then aa.updatePlayerESP(af,af.TeamColor.Color,ac,Color3.fromRGB(255,0,255))end end end return ab end function a.B():typeof(__modImpl())local aa=a.cache.B if not
-aa then aa={c=__modImpl()}a.cache.B=aa end return aa.c end end do local function __modImpl()local aa,ab=a.B(),{}ab.player_esp_toggled=true function ab.
-onPlayerESPToggle(ac)ab.player_esp_toggled=ac aa.updatePlayerESP(ac)end task.spawn(function()while task.wait()do if ab.player_esp_toggled then aa.
-updatePlayerESP(ab.player_esp_toggled)end end end)return ab end function a.C():typeof(__modImpl())local aa=a.cache.C if not aa then aa={c=__modImpl()}a.cache.C=
-aa end return aa.c end end do local function __modImpl()local function init()local aa,ab=a.f(),a.C()local ac=aa.Window:CreateTab('Prison Life','gamepad-2')ac:
-CreateSection'ESP'ac:CreateToggle{Name='Player ESP',CurrentValue=true,Flag=nil,Callback=ab.onPlayerESPToggle}end return init end function a.D():typeof(
-__modImpl())local aa=a.cache.D if not aa then aa={c=__modImpl()}a.cache.D=aa end return aa.c end end do local function __modImpl()for aa,ab in pairs{{a.i(),
-7585283196},{a.l(),10148749921},{a.n(),372226183},{a.p(),10141757860},{a.r(),93740418},{a.u(),7008097940},{a.w(),66654135},{a.y(),1003981402},{a.A(),7785400752}
-,{a.D(),73885730}}do if game.GameId==ab[2]then task.spawn(ab[1])break end end return true end function a.E():typeof(__modImpl())local aa=a.cache.E if not aa
-then aa={c=__modImpl()}a.cache.E=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),{}local ac=aa.Window:CreateTab('Externals',
-'telescope')ac:CreateSection'Dex'ab.dex_injected=false ab.iy_injected=false ab.rs_injected=false ac:CreateButton{Name='Inject Dex',Callback=function()if ab.
-dex_injected then return end ab.dex_injected=true task.spawn(function()loadstring(game:HttpGet
+aa then aa={c=__modImpl()}a.cache.B=aa end return aa.c end end do local function __modImpl()local aa,ab,ac=a.B(),a.c(),{}ac.player_esp_toggled=true ac.teleports
+={{Name='Criminal Hideout',Position=Vector3.new(-989,94,2039),Callback=function(ad)ac.teleportTo(ad.Position)end}}function ac.teleportTo(ad)local ae=ab.
+getLocalRoot()if ae then ae.CFrame=CFrame.new(ad)end end function ac.onPlayerESPToggle(ad)ac.player_esp_toggled=ad aa.updatePlayerESP(ad)end task.spawn(function
+()while task.wait()do if ac.player_esp_toggled then aa.updatePlayerESP(ac.player_esp_toggled)end end end)return ac end function a.C():typeof(__modImpl())local
+aa=a.cache.C if not aa then aa={c=__modImpl()}a.cache.C=aa end return aa.c end end do local function __modImpl()local function init()local aa,ab=a.f(),a.C()
+local ac=aa.Window:CreateTab('Prison Life','gamepad-2')ac:CreateSection'ESP'ac:CreateToggle{Name='Player ESP',CurrentValue=true,Flag=nil,Callback=ab.
+onPlayerESPToggle}ac:CreateSection'Teleports'for ad,ae in pairs(ab.teleports)do ac:CreateButton{Name=ae.Name,Callback=function()ae:Callback()end}end end return
+init end function a.D():typeof(__modImpl())local aa=a.cache.D if not aa then aa={c=__modImpl()}a.cache.D=aa end return aa.c end end do local function __modImpl(
+)for aa,ab in pairs{{a.i(),7585283196},{a.l(),10148749921},{a.n(),372226183},{a.p(),10141757860},{a.r(),93740418},{a.u(),7008097940},{a.w(),66654135},{a.y(),
+1003981402},{a.A(),7785400752},{a.D(),73885730}}do if game.GameId==ab[2]then task.spawn(ab[1])break end end return true end function a.E():typeof(__modImpl())
+local aa=a.cache.E if not aa then aa={c=__modImpl()}a.cache.E=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),{}local ac=aa.Window:
+CreateTab('Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=false ab.iy_injected=false ab.rs_injected=false ac:CreateButton{Name='Inject Dex',
+Callback=function()if ab.dex_injected then return end ab.dex_injected=true task.spawn(function()loadstring(game:HttpGet
 [[https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua]])()end)end}ab.DexToggle=ac:CreateToggle{Name='Load Dex on Startup',CurrentValue=
 false,Flag='LoadDexOnStartup',Callback=function(ae)end}ac:CreateSection'Infinite Yield'ac:CreateButton{Name='Inject IY',Callback=function()if ab.iy_injected
 then return end ab.iy_injected=true task.spawn(function()loadstring(game:HttpGet[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end)

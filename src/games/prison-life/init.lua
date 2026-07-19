@@ -12,6 +12,17 @@ local function init()
 		Flag = nil,
 		Callback = Funcs.onPlayerESPToggle,
 	})
+
+	PrisonLifeTab:CreateSection("Teleports")
+
+	for i, v in pairs(Funcs.teleports) do
+		PrisonLifeTab:CreateButton({
+			Name = v.Name,
+			Callback = function()
+				v:Callback()
+			end,
+		})
+	end
 end
 
 return init
