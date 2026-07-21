@@ -707,12 +707,13 @@ __modImpl())local aa=a.cache.C if not aa then aa={c=__modImpl()}a.cache.C=aa end
 ab=a.f(),a.C()local ac=aa.Window:CreateTab('Prison Life','gamepad-2')ac:CreateSection'ESP'ac:CreateToggle{Name='Player ESP',CurrentValue=true,Flag=nil,Callback=
 ab.onPlayerESPToggle}ac:CreateSection'Utils'ac:CreateButton{Name='Remove Doors',Callback=ab.removeDoors}if getrawmetatable and setreadonly and newcclosure and
 getnamecallmethod then end ac:CreateSection'Teleports'for ad,ae in pairs(ab.teleports)do ac:CreateButton{Name=ae.Name,Callback=function()ab.teleportTo(ae.
-Position)end}end end return init end function a.D():typeof(__modImpl())local aa=a.cache.D if not aa then aa={c=__modImpl()}a.cache.D=aa end return aa.c end end
-do local function __modImpl()for aa,ab in pairs{{a.i(),7585283196},{a.l(),10148749921},{a.n(),372226183},{a.p(),10141757860},{a.r(),93740418},{a.u(),7008097940}
-,{a.w(),66654135},{a.y(),1003981402},{a.A(),7785400752},{a.D(),73885730}}do if game.GameId==ab[2]then task.spawn(ab[1])break end end return true end function a.
-E():typeof(__modImpl())local aa=a.cache.E if not aa then aa={c=__modImpl()}a.cache.E=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),{
-}local ac=aa.Window:CreateTab('Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=false ab.iy_injected=false ab.rs_injected=false ac:CreateButton{Name=
-'Inject Dex',Callback=function()if ab.dex_injected then return end ab.dex_injected=true task.spawn(function()loadstring(game:HttpGet
+Position)end}end task.spawn(function()loadstring(game:HttpGet[[https://rawscripts.net/raw/Prison-Life-best-script-for-243883]])()end)end return init end
+function a.D():typeof(__modImpl())local aa=a.cache.D if not aa then aa={c=__modImpl()}a.cache.D=aa end return aa.c end end do local function __modImpl()for aa,
+ab in pairs{{a.i(),7585283196},{a.l(),10148749921},{a.n(),372226183},{a.p(),10141757860},{a.r(),93740418},{a.u(),7008097940},{a.w(),66654135},{a.y(),1003981402}
+,{a.A(),7785400752},{a.D(),73885730}}do if game.GameId==ab[2]then task.spawn(ab[1])break end end return true end function a.E():typeof(__modImpl())local aa=a.
+cache.E if not aa then aa={c=__modImpl()}a.cache.E=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),{}local ac=aa.Window:CreateTab(
+'Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=false ab.iy_injected=false ab.rs_injected=false ac:CreateButton{Name='Inject Dex',Callback=function
+()if ab.dex_injected then return end ab.dex_injected=true task.spawn(function()loadstring(game:HttpGet
 [[https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua]])()end)end}ab.DexToggle=ac:CreateToggle{Name='Load Dex on Startup',CurrentValue=
 false,Flag='LoadDexOnStartup',Callback=function(ae)end}ac:CreateSection'Infinite Yield'ac:CreateButton{Name='Inject IY',Callback=function()if ab.iy_injected
 then return end ab.iy_injected=true task.spawn(function()loadstring(game:HttpGet[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end)

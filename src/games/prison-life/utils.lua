@@ -16,41 +16,41 @@ end
 -- 	local RS = game:GetService("ReplicatedStorage")
 -- 	local GUN_REMOTES = RS:WaitForChild("GunRemotes")
 -- 	local SHOOT_EVENT = GUN_REMOTES:WaitForChild("ShootEvent")
---
+
 -- 	local metatable = getrawmetatable(game)
 -- 	local originalNamecall = metatable.__namecall
---
+
 -- 	setreadonly(metatable, false)
---
+
 -- 	-- FIX 1: Fetch the player and mouse ONCE globally outside of the hook.
 -- 	-- This completely eliminates yielding inside the __namecall thread.
 -- 	local plr = Utils.getLocalPlayer()
 -- 	local mouse = plr and plr:GetMouse()
---
+
 -- 	local isModifying = false
---
+
 -- 	metatable.__namecall = newcclosure(function(self, ...)
 -- 		local method = getnamecallmethod()
---
+
 -- 		if method == "FireServer" and self == SHOOT_EVENT and not isModifying then
 -- 			local args = { ... }
---
+
 -- 			-- Wrap in a fast, non-yielding pcall
 -- 			local success, err = pcall(function()
 -- 				if args and args[1] and args[1][1] then
 -- 					local eArgs = args[1][1]
 -- 					local origin = eArgs[1]
---
+
 -- 					print("Interception Active - Origin:", origin)
---
+
 -- 					-- FIX 2: Check the pre-cached mouse object instantly
 -- 					if mouse and mouse.Target then
 -- 						local part = mouse.Target
 -- 						local target = part.Position
---
+
 -- 						-- Match your exact nested table structure
 -- 						local newArgs = { { { origin, target, part } } }
---
+
 -- 						-- Set the flag, fire via originalNamecall, and reset instantly
 -- 						isModifying = true
 -- 						originalNamecall(self, table.unpack(newArgs))
@@ -58,20 +58,20 @@ end
 -- 					end
 -- 				end
 -- 			end)
---
+
 -- 			if not success then
 -- 				warn("Error during argument handling:", err)
 -- 				isModifying = false -- Safeguard against flag locking up on error
 -- 			end
---
+
 -- 			-- Return empty to drop the client's original packet
 -- 			return
 -- 		end
---
+
 -- 		-- Pass through all normal network packets
 -- 		return originalNamecall(self, ...)
 -- 	end)
---
+
 -- 	setreadonly(metatable, true)
 -- end
 
