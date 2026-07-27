@@ -160,6 +160,36 @@ local function init()
 			return false
 		end
 
+		local function rankCoin(coin)
+			local murdDistBias = 0.6
+			local distBias = 0.2
+			local clumpBias = 0.2
+
+			local score = 0
+
+			local root = Utils.getLocalRoot()
+			if root then
+				local dist = Utils.dist3d(coin.Position, root.Position)
+				if dist <= 1 then
+					return -1
+				end
+				score = score + 1 / (dist * distBias)
+			end
+
+			local murderer = GameUtils.getMurderer()
+			local plr = Utils.getLocalPlayer()
+			if plr and murderer and murderer ~= plr then
+				local char = murderer.Character
+				local root = char and char:FindFirstChild("HumanoidRootPart")
+				if root then
+					local dist = Utils.dist3d(coin.Position, root.Position)
+					score = score + dist * murdDistBias
+				end
+			end
+
+			return score
+		end
+
 		while task.wait() do
 			if mm_collect_coin_toggled and not Utils.get_safeTweening() then
 				local plr = game:GetService("Players").LocalPlayer
@@ -171,13 +201,13 @@ local function init()
 
 					if coins then
 						local best = nil
-						local best_dist = 99999999
+						local best_score = 0
 
 						for _, v in pairs(coins:GetChildren()) do
 							if v.Name == "Coin_Server" and not coinCollected(v) then
-								local dist = Utils.dist3d(root.Position, v.Position)
-								if dist < best_dist and dist > 1 then
-									best_dist = dist
+								local score = rankCoin(v)
+								if score < best_score then
+									best_score = score
 									best = v
 								end
 							end
