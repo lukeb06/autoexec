@@ -160,9 +160,27 @@ local function init()
 			return false
 		end
 
+		local function clumpCount(coin)
+			local coins = game.Workspace:FindFirstChild("CoinContainer", true)
+			local count = 0
+			local clumpDist = 10
+
+			if coins then
+				for _, v in pairs(coins:GetChildren()) do
+					if v.Name == "Coin_Server" and not coinCollected(v) then
+						if Utils.dist3d(coin.Position, v.Position) < clumpDist then
+							count = count + 1
+						end
+					end
+				end
+			end
+
+			return count
+		end
+
 		local function rankCoin(coin)
-			local murdDistBias = 0.6
-			local distBias = 0.2
+			local murdDistBias = 0.5
+			local distBias = 0.3
 			local clumpBias = 0.2
 
 			local score = 0
@@ -186,6 +204,9 @@ local function init()
 					score = score + dist * murdDistBias
 				end
 			end
+
+			local clumpSize = clumpCount(coin)
+			score = score + clumpSize * clumpBias
 
 			return score
 		end
