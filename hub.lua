@@ -626,7 +626,7 @@ b=false ad:CreateToggle{Name='Collect Coins',CurrentValue=false,Flag=nil,Callbac
 =d:FindFirstChild'CoinVisual'if not e then return true end local f=e:FindFirstChild'MainCoin'if not f then return true end if f.Transparency>0 then return true
 end return false end local function clumpCount(d)local e,f,g=game.Workspace:FindFirstChild('CoinContainer',true),0,20 if e then for h,i in pairs(e:GetChildren()
 )do if i.Name=='Coin_Server'and not coinCollected(i)then if ab.dist3d(d.Position,i.Position)<g then f=f+1 end end end end return f end local function rankCoin(d
-)local e,f,g,h,i,j,k,l=0.1,50,2,0.5,0.3,0.2,0,ab.getLocalRoot()if l then local m=ab.dist3d(d.Position,l.Position)if m<=1 then return-1 end k=k+(1/m)*f*i end
+)local e,f,g,h,i,j,k,l=0.1,50,2,0.3,0.5,0.2,0,ab.getLocalRoot()if l then local m=ab.dist3d(d.Position,l.Position)if m<=1 then return-1 end k=k+(1/m)*f*i end
 local m,n=ac.getMurderer(),ab.getLocalPlayer()if n and m and m~=n then local o=m.Character local p=o and o:FindFirstChild'HumanoidRootPart'if p then local q=ab.
 dist3d(d.Position,p.Position)k=k+q*e*h end end local o=clumpCount(d)k=k+o*g*j return k end while task.wait()do if b and not ab.get_safeTweening()then local d=
 game:GetService'Players'.LocalPlayer local e=d and d.Character local f=e and e:FindFirstChild'HumanoidRootPart'if f then local g=game.Workspace:FindFirstChild(

@@ -183,8 +183,8 @@ local function init()
 			local distMult = 50
 			local clumpMult = 2
 
-			local murdDistBias = 0.5
-			local distBias = 0.3
+			local murdDistBias = 0.3
+			local distBias = 0.5
 			local clumpBias = 0.2
 
 			local score = 0
