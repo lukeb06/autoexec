@@ -180,8 +180,8 @@ local function init()
 
 		local function rankCoin(coin)
 			local murdDistBias = 0.5
-			local distBias = 0.3
-			local clumpBias = 0.2
+			local distBias = 2
+			local clumpBias = 0.05
 
 			local score = 0
 
@@ -191,7 +191,7 @@ local function init()
 				if dist <= 1 then
 					return -1
 				end
-				score = score + 1 / (dist * distBias)
+				score = score + (1 / dist) * distBias
 			end
 
 			local murderer = GameUtils.getMurderer()
