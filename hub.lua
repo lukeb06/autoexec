@@ -624,19 +624,19 @@ CurrentValue=true,Flag=nil,Callback=function(ap)ao=ap end}task.spawn(function()w
 function(as)ar=as end}task.spawn(function()while task.wait()do if ar then local b=ac.getMurderer()if b then ac.flingMurderer()task.wait(4)end end end end)local
 b=false ad:CreateToggle{Name='Collect Coins',CurrentValue=false,Flag=nil,Callback=function(c)b=c end}task.spawn(function()local function coinCollected(d)local e
 =d:FindFirstChild'CoinVisual'if not e then return true end local f=e:FindFirstChild'MainCoin'if not f then return true end if f.Transparency>0 then return true
-end return false end local function clumpCount(d)local e,f,g=game.Workspace:FindFirstChild('CoinContainer',true),0,10 if e then for h,i in pairs(e:GetChildren()
+end return false end local function clumpCount(d)local e,f,g=game.Workspace:FindFirstChild('CoinContainer',true),0,20 if e then for h,i in pairs(e:GetChildren()
 )do if i.Name=='Coin_Server'and not coinCollected(i)then if ab.dist3d(d.Position,i.Position)<g then f=f+1 end end end end return f end local function rankCoin(d
-)local e,f,g,h,i=0.5,2,0.05,0,ab.getLocalRoot()if i then local j=ab.dist3d(d.Position,i.Position)if j<=1 then return-1 end h=h+(1/j)*f end local j,k=ac.
-getMurderer(),ab.getLocalPlayer()if k and j and j~=k then local l=j.Character local m=l and l:FindFirstChild'HumanoidRootPart'if m then local n=ab.dist3d(d.
-Position,m.Position)h=h+n*e end end local l=clumpCount(d)h=h+l*g return h end while task.wait()do if b and not ab.get_safeTweening()then local d=game:GetService
-'Players'.LocalPlayer local e=d and d.Character local f=e and e:FindFirstChild'HumanoidRootPart'if f then local g=game.Workspace:FindFirstChild('CoinContainer',
-true)if g then local i,h=0 for j,k in pairs(g:GetChildren())do if k.Name=='Coin_Server'and not coinCollected(k)then local l=rankCoin(k)if l>i then i=l h=k end
-end end if h then ab.set_safeTweenSpeed(22)ab.safeTweenToPart(h,coinCollected)end end end end end end)task.spawn(function()while task.wait(0.1)do local d=game.
-Workspace:FindFirstChild('Base',true)local e=d and d:FindFirstChild'GlitchProof'if e then e:Destroy()end end end)end return init end function a.w():typeof(
-__modImpl())local aa=a.cache.w if not aa then aa={c=__modImpl()}a.cache.w=aa end return aa.c end end do local function __modImpl()local aa,ab=a.c(),{}function
-ab.getZombies()local ac=game.Workspace:FindFirstChild'Zombies'return(ac and ac:GetChildren())or{}end function ab.getBox()local ac=game.Workspace:FindFirstChild
-'Interactions'return ac and ac:FindFirstChild'Mystery'end function ab.getPack()local ac=game.Workspace:FindFirstChild'Interactions'return ac and ac:
-FindFirstChild'Pack-a-Punch'end function ab.getPowerups()local ac=game.Workspace:FindFirstChild'Power-ups'return(ac and ac:GetChildren())or{}end function ab.
+)local e,f,g,h,i,j,k,l=0.1,50,2,0.5,0.3,0.2,0,ab.getLocalRoot()if l then local m=ab.dist3d(d.Position,l.Position)if m<=1 then return-1 end k=k+(1/m)*f*i end
+local m,n=ac.getMurderer(),ab.getLocalPlayer()if n and m and m~=n then local o=m.Character local p=o and o:FindFirstChild'HumanoidRootPart'if p then local q=ab.
+dist3d(d.Position,p.Position)k=k+q*e*h end end local o=clumpCount(d)k=k+o*g*j return k end while task.wait()do if b and not ab.get_safeTweening()then local d=
+game:GetService'Players'.LocalPlayer local e=d and d.Character local f=e and e:FindFirstChild'HumanoidRootPart'if f then local g=game.Workspace:FindFirstChild(
+'CoinContainer',true)if g then local i,h=0 for j,k in pairs(g:GetChildren())do if k.Name=='Coin_Server'and not coinCollected(k)then local l=rankCoin(k)if l>i
+then i=l h=k end end end if h then ab.set_safeTweenSpeed(22)ab.safeTweenToPart(h,coinCollected)end end end end end end)task.spawn(function()while task.wait(0.1)
+do local d=game.Workspace:FindFirstChild('Base',true)local e=d and d:FindFirstChild'GlitchProof'if e then e:Destroy()end end end)end return init end function a.
+w():typeof(__modImpl())local aa=a.cache.w if not aa then aa={c=__modImpl()}a.cache.w=aa end return aa.c end end do local function __modImpl()local aa,ab=a.c(),{
+}function ab.getZombies()local ac=game.Workspace:FindFirstChild'Zombies'return(ac and ac:GetChildren())or{}end function ab.getBox()local ac=game.Workspace:
+FindFirstChild'Interactions'return ac and ac:FindFirstChild'Mystery'end function ab.getPack()local ac=game.Workspace:FindFirstChild'Interactions'return ac and
+ac:FindFirstChild'Pack-a-Punch'end function ab.getPowerups()local ac=game.Workspace:FindFirstChild'Power-ups'return(ac and ac:GetChildren())or{}end function ab.
 updateZombieESP(ac)local ad=ab.getZombies()for ae,af in pairs(ad)do aa.updateESP(af,Color3.fromRGB(255,0,255),ac)end end function ab.updateBoxESP(ac)local ad=ab
 .getBox()if ad then aa.updateESP(ad,Color3.fromRGB(255,255,0),ac)end end function ab.updatePowerupESP(ac)local ad=ab.getPowerups()for ae,af in pairs(ad)do aa.
 updateESP(af,Color3.fromRGB(107,176,255),ac)end end return ab end function a.x():typeof(__modImpl())local aa=a.cache.x if not aa then aa={c=__modImpl()}a.cache.

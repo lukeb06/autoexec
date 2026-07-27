@@ -163,7 +163,7 @@ local function init()
 		local function clumpCount(coin)
 			local coins = game.Workspace:FindFirstChild("CoinContainer", true)
 			local count = 0
-			local clumpDist = 10
+			local clumpDist = 20
 
 			if coins then
 				for _, v in pairs(coins:GetChildren()) do
@@ -179,9 +179,13 @@ local function init()
 		end
 
 		local function rankCoin(coin)
+			local murdDistMult = 0.1
+			local distMult = 50
+			local clumpMult = 2
+
 			local murdDistBias = 0.5
-			local distBias = 2
-			local clumpBias = 0.05
+			local distBias = 0.3
+			local clumpBias = 0.2
 
 			local score = 0
 
@@ -191,7 +195,7 @@ local function init()
 				if dist <= 1 then
 					return -1
 				end
-				score = score + (1 / dist) * distBias
+				score = score + (1 / dist) * distMult * distBias
 			end
 
 			local murderer = GameUtils.getMurderer()
@@ -201,12 +205,12 @@ local function init()
 				local root = char and char:FindFirstChild("HumanoidRootPart")
 				if root then
 					local dist = Utils.dist3d(coin.Position, root.Position)
-					score = score + dist * murdDistBias
+					score = score + dist * murdDistMult * murdDistBias
 				end
 			end
 
 			local clumpSize = clumpCount(coin)
-			score = score + clumpSize * clumpBias
+			score = score + clumpSize * clumpMult * clumpBias
 
 			return score
 		end
