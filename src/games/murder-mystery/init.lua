@@ -206,7 +206,7 @@ local function init()
 						for _, v in pairs(coins:GetChildren()) do
 							if v.Name == "Coin_Server" and not coinCollected(v) then
 								local score = rankCoin(v)
-								if score < best_score then
+								if score > best_score then
 									best_score = score
 									best = v
 								end
