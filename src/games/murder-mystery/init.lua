@@ -160,6 +160,48 @@ local function init()
 			return false
 		end
 
+		local function coinDistToMurderer(coin)
+			local murderer = GameUtils.getMurderer()
+			local char = murderer and murderer.Character
+			local root = char and char:FindFirstChild("HumanoidRootPart")
+
+			local plr = Utils.getLocalPlayer()
+
+			if plr and root and murderer ~= plr then
+				if root then
+					local dist = Utils.dist3d(coin.Position, root.Position)
+					return dist
+				end
+			end
+
+			return 0
+		end
+
+		local function plrDistToMurderer()
+			local murderer = GameUtils.getMurderer()
+			local mChar = murderer and murderer.Character
+			local mRoot = mChar and mChar:FindFirstChild("HumanoidRootPart")
+
+			local root = Utils.getLocalRoot()
+
+			if root and mRoot then
+				local dist = Utils.dist3d(root.Position, mRoot.Position)
+				return dist
+			end
+
+			return 0
+		end
+
+		local function murdDistScore(coin, mult, bias)
+			local dist = coinDistToMurderer(coin)
+
+			if dist <= 10 then
+				return -1
+			end
+
+			return dist * mult * bias
+		end
+
 		local function clumpCount(coin)
 			local coins = game.Workspace:FindFirstChild("CoinContainer", true)
 			local count = 0
@@ -179,9 +221,13 @@ local function init()
 		end
 
 		local function rankCoin(coin)
-			local murdDistMult = 10 / 100
-			local distMult = 10 / (1 / 10)
-			local clumpMult = 10 / 6
+			local idealMurdDist = 100
+			local idealDist = 10
+			local idealClumpCount = 6
+
+			local murdDistMult = 1 / idealMurdDist
+			local distMult = 1 / (1 / idealDist)
+			local clumpMult = 1 / idealClumpCount
 
 			local murdDistBias = 0.3
 			local distBias = 0.5
@@ -198,24 +244,23 @@ local function init()
 				score = score + (1 / dist) * distMult * distBias
 			end
 
-			local murderer = GameUtils.getMurderer()
-			local plr = Utils.getLocalPlayer()
-			if plr and murderer and murderer ~= plr then
-				local char = murderer.Character
-				local root = char and char:FindFirstChild("HumanoidRootPart")
-				if root then
-					local dist = Utils.dist3d(coin.Position, root.Position)
-					if dist <= 10 then
-						return -1
-					end
-					score = score + dist * murdDistMult * murdDistBias
-				end
-			end
+			local murdScore = murdDistScore(coin, murdDistMult, murdDistBias)
+			score = score + murdScore
 
 			local clumpSize = clumpCount(coin)
 			score = score + clumpSize * clumpMult * clumpBias
 
 			return score
+		end
+
+		local function cancelTween(coin)
+			if coinCollected(coin) then
+				return true
+			end
+
+			if plrDistToMurderer() <= 20 then
+				return true
+			end
 		end
 
 		while task.wait() do
@@ -243,7 +288,7 @@ local function init()
 
 						if best then
 							Utils.set_safeTweenSpeed(22)
-							Utils.safeTweenToPart(best, coinCollected)
+							Utils.safeTweenToPart(best, cancelTween)
 						end
 					end
 				end
