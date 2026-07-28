@@ -192,15 +192,7 @@ local function init()
 			return 0
 		end
 
-		local function murdDistScore(coin, mult, bias)
-			local dist = coinDistToMurderer(coin)
-
-			if dist <= 10 then
-				return -1
-			end
-
-			return dist * mult * bias
-		end
+		local function murdDistScore(coin, mult, bias) end
 
 		local function clumpCount(coin)
 			local coins = game.Workspace:FindFirstChild("CoinContainer", true)
@@ -244,8 +236,13 @@ local function init()
 				score = score + (1 / dist) * distMult * distBias
 			end
 
-			local murdScore = murdDistScore(coin, murdDistMult, murdDistBias)
-			score = score + math.max(murdScore, idealMurdDist)
+			local murdDist = math.max(coinDistToMurderer(coin), idealMurdDist)
+
+			if murdDist <= 10 then
+				return -1
+			end
+
+			score = score + murdDist * murdDistMult * murdDistBias
 
 			local clumpSize = clumpCount(coin)
 			score = score + clumpSize * clumpMult * clumpBias
