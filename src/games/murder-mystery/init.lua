@@ -234,12 +234,7 @@ local function init()
 				score = score + (1 / dist) * distMult * distBias
 			end
 
-			local murdDist = math.max(coinDistToMurderer(coin), idealMurdDist)
-
-			if murdDist <= 10 then
-				return -1
-			end
-
+			local murdDist = math.min(coinDistToMurderer(coin), idealMurdDist)
 			score = score + murdDist * murdDistMult * murdDistBias
 
 			local clumpSize = clumpCount(coin)
