@@ -174,7 +174,7 @@ local function init()
 				end
 			end
 
-			return 10
+			return 11
 		end
 
 		local function plrDistToMurderer()
@@ -189,7 +189,7 @@ local function init()
 				return dist
 			end
 
-			return 10
+			return 11
 		end
 
 		local function clumpCount(coin)
