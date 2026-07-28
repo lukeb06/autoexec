@@ -174,7 +174,7 @@ local function init()
 				end
 			end
 
-			return 11
+			return 10
 		end
 
 		local function plrDistToMurderer()
@@ -189,7 +189,7 @@ local function init()
 				return dist
 			end
 
-			return 11
+			return 10
 		end
 
 		local function clumpCount(coin)
@@ -248,12 +248,14 @@ local function init()
 				return true
 			end
 
+			local murderer = GameUtils.getMurderer()
+			local plr = Utils.getLocalPlayer()
+
 			local dist = plrDistToMurderer()
 
-			if dist < 20 then
+			if murderer and plr and murderer ~= plr and dist < 20 then
 				local root = Utils.getLocalRoot()
-				local murderer = GameUtils.getMurderer()
-				local mChar = murderer and murderer.Character
+				local mChar = murderer.Character
 				local mRoot = mChar and mChar:FindFirstChild("HumanoidRootPart")
 
 				if root and mRoot then
