@@ -256,6 +256,8 @@ local function init()
 			end
 
 			if plrDistToMurderer() <= 20 then
+				local root = Utils.getLocalRoot()
+				root.CFrame = root.CFrame * CFrame.new(0, 0, -10)
 				return true
 			end
 
