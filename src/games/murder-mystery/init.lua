@@ -250,7 +250,7 @@ local function init()
 
 			if plrDistToMurderer() <= 20 then
 				local root = Utils.getLocalRoot()
-				local murderer = Utils.getMurderer()
+				local murderer = GameUtils.getMurderer()
 				local mChar = murderer and murderer.Character
 				local mRoot = mChar and mChar:FindFirstChild("HumanoidRootPart")
 

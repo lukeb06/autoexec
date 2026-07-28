@@ -631,7 +631,7 @@ Position,f.Position)return h end return 11 end local function clumpCount(d)local
 i in pairs(e:GetChildren())do if i.Name=='Coin_Server'and not coinCollected(i)then if ab.dist3d(d.Position,i.Position)<g then f=f+1 end end end end return f end
 local function rankCoin(d)local e,f,g=20,10,8 local h,i,j,k,l,m,n,o=1/e,1/(1/f),1/g,0.3,0.5,0.2,0,ab.getLocalRoot()if o then local p=ab.dist3d(d.Position,o.
 Position)if p<=1 then return-1 end n=n+(1/p)*i*l end local p=math.min(coinDistToMurderer(d),e)n=n+p*h*k local q=clumpCount(d)n=n+q*j*m return n end local 
-function cancelTween(d)if coinCollected(d)then return true end if plrDistToMurderer()<=20 then local e,f=ab.getLocalRoot(),ab.getMurderer()local g=f and f.
+function cancelTween(d)if coinCollected(d)then return true end if plrDistToMurderer()<=20 then local e,f=ab.getLocalRoot(),ac.getMurderer()local g=f and f.
 Character local h=g and g:FindFirstChild'HumanoidRootPart'if e and h then local i=ab.dir3d(h.Position,e.Position)e.CFrame=e.CFrame*CFrame.new(i*10)end return
 true end return false end while task.wait()do if b and not ab.get_safeTweening()then local d=game:GetService'Players'.LocalPlayer local e=d and d.Character
 local f=e and e:FindFirstChild'HumanoidRootPart'if f then local g=game.Workspace:FindFirstChild('CoinContainer',true)if g then local i,h=0 for j,k in pairs(g:
