@@ -629,27 +629,27 @@ end return false end local function coinDistToMurderer(d)local e=ac.getMurderer(
 local d=ac.getMurderer()local e=d and d.Character local f,g=e and e:FindFirstChild'HumanoidRootPart',ab.getLocalRoot()if g and f then local h=ab.dist3d(g.
 Position,f.Position)return h end return 0 end local function murdDistScore(d,e,f)local g=coinDistToMurderer(d)if g<=10 then return-1 end return g*e*f end local 
 function clumpCount(d)local e,f,g=game.Workspace:FindFirstChild('CoinContainer',true),0,10 if e then for h,i in pairs(e:GetChildren())do if i.Name==
-'Coin_Server'and not coinCollected(i)then if ab.dist3d(d.Position,i.Position)<g then f=f+1 end end end end return f end local function rankCoin(d)local e,f,g=
-100,10,6 local h,i,j,k,l,m,n,o=1/e,1/(1/f),1/g,0.3,0.5,0.2,0,ab.getLocalRoot()if o then local p=ab.dist3d(d.Position,o.Position)if p<=1 then return-1 end n=n+(1
-/p)*i*l end local p=murdDistScore(d,h,k)n=n+p local q=clumpCount(d)n=n+q*j*m return n end local function cancelTween(d)if coinCollected(d)then return true end
-if plrDistToMurderer()<=20 then return true end return false end while task.wait()do if b and not ab.get_safeTweening()then local d=game:GetService'Players'.
-LocalPlayer local e=d and d.Character local f=e and e:FindFirstChild'HumanoidRootPart'if f then local g=game.Workspace:FindFirstChild('CoinContainer',true)if g
-then local i,h=0 for j,k in pairs(g:GetChildren())do if k.Name=='Coin_Server'and not coinCollected(k)then local l=rankCoin(k)if l>i then i=l h=k end end end if
-h then ab.set_safeTweenSpeed(22)ab.safeTweenToPart(h,cancelTween)end end end end end end)task.spawn(function()while task.wait(0.1)do local d=game.Workspace:
-FindFirstChild('Base',true)local e=d and d:FindFirstChild'GlitchProof'if e then e:Destroy()end end end)end return init end function a.w():typeof(__modImpl())
-local aa=a.cache.w if not aa then aa={c=__modImpl()}a.cache.w=aa end return aa.c end end do local function __modImpl()local aa,ab=a.c(),{}function ab.getZombies
-()local ac=game.Workspace:FindFirstChild'Zombies'return(ac and ac:GetChildren())or{}end function ab.getBox()local ac=game.Workspace:FindFirstChild'Interactions'
-return ac and ac:FindFirstChild'Mystery'end function ab.getPack()local ac=game.Workspace:FindFirstChild'Interactions'return ac and ac:FindFirstChild
-'Pack-a-Punch'end function ab.getPowerups()local ac=game.Workspace:FindFirstChild'Power-ups'return(ac and ac:GetChildren())or{}end function ab.updateZombieESP(
-ac)local ad=ab.getZombies()for ae,af in pairs(ad)do aa.updateESP(af,Color3.fromRGB(255,0,255),ac)end end function ab.updateBoxESP(ac)local ad=ab.getBox()if ad
-then aa.updateESP(ad,Color3.fromRGB(255,255,0),ac)end end function ab.updatePowerupESP(ac)local ad=ab.getPowerups()for ae,af in pairs(ad)do aa.updateESP(af,
-Color3.fromRGB(107,176,255),ac)end end return ab end function a.x():typeof(__modImpl())local aa=a.cache.x if not aa then aa={c=__modImpl()}a.cache.x=aa end
-return aa.c end end do local function __modImpl()local function init()local aa,ab=a.f(),a.x()local ac=aa.Window:CreateTab('Reminiscence Zombies','gamepad-2')ac:
-CreateSection'ESP'local ae=true ac:CreateToggle{Name='Zombie ESP',CurrentValue=true,Flag=nil,Callback=function(af)ae=af ab.updateZombieESP(af)end}local ag=true
-ac:CreateToggle{Name='Box ESP',CurrentValue=true,Flag=nil,Callback=function(ah)ag=ah ab.updateBoxESP(ah)end}local ai=true ac:CreateToggle{Name='Powerup ESP',
-CurrentValue=true,Flag=nil,Callback=function(aj)ai=aj ab.updatePowerupESP(aj)end}game:GetService'RunService'.RenderStepped:Connect(function()if ae then ab.
-updateZombieESP(ae)end if ag then ab.updateBoxESP(ag)end if ai then ab.updatePowerupESP(ai)end end)ac:CreateSection'Utils'ac:CreateKeybind{Name='TP to Box',
-CurrentKeybind='X',HoldToInteract=false,Flag='RZGotoBoxKeybind',Callback=function()local al=ab.getBox()if al then local am=al.PrimaryPart or al:
+'Coin_Server'and not coinCollected(i)then if ab.dist3d(d.Position,i.Position)<g then f=f+1 end end end end return f end local function rankCoin(d)local e,f,g=20
+,10,8 local h,i,j,k,l,m,n,o=1/e,1/(1/f),1/g,0.3,0.5,0.2,0,ab.getLocalRoot()if o then local p=ab.dist3d(d.Position,o.Position)if p<=1 then return-1 end n=n+(1/p)
+*i*l end local p=murdDistScore(d,h,k)n=n+math.max(p,e)local q=clumpCount(d)n=n+q*j*m return n end local function cancelTween(d)if coinCollected(d)then return
+true end if plrDistToMurderer()<=20 then return true end return false end while task.wait()do if b and not ab.get_safeTweening()then local d=game:GetService
+'Players'.LocalPlayer local e=d and d.Character local f=e and e:FindFirstChild'HumanoidRootPart'if f then local g=game.Workspace:FindFirstChild('CoinContainer',
+true)if g then local i,h=0 for j,k in pairs(g:GetChildren())do if k.Name=='Coin_Server'and not coinCollected(k)then local l=rankCoin(k)if l>i then i=l h=k end
+end end if h then ab.set_safeTweenSpeed(22)ab.safeTweenToPart(h,cancelTween)end end end end end end)task.spawn(function()while task.wait(0.1)do local d=game.
+Workspace:FindFirstChild('Base',true)local e=d and d:FindFirstChild'GlitchProof'if e then e:Destroy()end end end)end return init end function a.w():typeof(
+__modImpl())local aa=a.cache.w if not aa then aa={c=__modImpl()}a.cache.w=aa end return aa.c end end do local function __modImpl()local aa,ab=a.c(),{}function
+ab.getZombies()local ac=game.Workspace:FindFirstChild'Zombies'return(ac and ac:GetChildren())or{}end function ab.getBox()local ac=game.Workspace:FindFirstChild
+'Interactions'return ac and ac:FindFirstChild'Mystery'end function ab.getPack()local ac=game.Workspace:FindFirstChild'Interactions'return ac and ac:
+FindFirstChild'Pack-a-Punch'end function ab.getPowerups()local ac=game.Workspace:FindFirstChild'Power-ups'return(ac and ac:GetChildren())or{}end function ab.
+updateZombieESP(ac)local ad=ab.getZombies()for ae,af in pairs(ad)do aa.updateESP(af,Color3.fromRGB(255,0,255),ac)end end function ab.updateBoxESP(ac)local ad=ab
+.getBox()if ad then aa.updateESP(ad,Color3.fromRGB(255,255,0),ac)end end function ab.updatePowerupESP(ac)local ad=ab.getPowerups()for ae,af in pairs(ad)do aa.
+updateESP(af,Color3.fromRGB(107,176,255),ac)end end return ab end function a.x():typeof(__modImpl())local aa=a.cache.x if not aa then aa={c=__modImpl()}a.cache.
+x=aa end return aa.c end end do local function __modImpl()local function init()local aa,ab=a.f(),a.x()local ac=aa.Window:CreateTab('Reminiscence Zombies',
+'gamepad-2')ac:CreateSection'ESP'local ae=true ac:CreateToggle{Name='Zombie ESP',CurrentValue=true,Flag=nil,Callback=function(af)ae=af ab.updateZombieESP(af)end
+}local ag=true ac:CreateToggle{Name='Box ESP',CurrentValue=true,Flag=nil,Callback=function(ah)ag=ah ab.updateBoxESP(ah)end}local ai=true ac:CreateToggle{Name=
+'Powerup ESP',CurrentValue=true,Flag=nil,Callback=function(aj)ai=aj ab.updatePowerupESP(aj)end}game:GetService'RunService'.RenderStepped:Connect(function()if ae
+then ab.updateZombieESP(ae)end if ag then ab.updateBoxESP(ag)end if ai then ab.updatePowerupESP(ai)end end)ac:CreateSection'Utils'ac:CreateKeybind{Name=
+'TP to Box',CurrentKeybind='X',HoldToInteract=false,Flag='RZGotoBoxKeybind',Callback=function()local al=ab.getBox()if al then local am=al.PrimaryPart or al:
 FindFirstChildWhichIsA'BasePart'if am then local an=game:GetService'Players'.LocalPlayer local ao=an and an.Character local ap=ao and ao:FindFirstChild
 'HumanoidRootPart'if ap then ap.CFrame=am.CFrame end end end end}ac:CreateKeybind{Name='TP to Pack',CurrentKeybind='Z',HoldToInteract=false,Flag=
 'RZGotoPackKeybind',Callback=function()local am=ab.getPack()if am then local an=am.PrimaryPart or am:FindFirstChildWhichIsA'BasePart'if an then local ao=game:

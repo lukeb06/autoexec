@@ -221,9 +221,9 @@ local function init()
 		end
 
 		local function rankCoin(coin)
-			local idealMurdDist = 100
+			local idealMurdDist = 20
 			local idealDist = 10
-			local idealClumpCount = 6
+			local idealClumpCount = 8
 
 			local murdDistMult = 1 / idealMurdDist
 			local distMult = 1 / (1 / idealDist)
@@ -245,7 +245,7 @@ local function init()
 			end
 
 			local murdScore = murdDistScore(coin, murdDistMult, murdDistBias)
-			score = score + murdScore
+			score = score + math.max(murdScore, idealMurdDist)
 
 			local clumpSize = clumpCount(coin)
 			score = score + clumpSize * clumpMult * clumpBias
