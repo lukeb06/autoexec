@@ -174,7 +174,7 @@ local function init()
 				end
 			end
 
-			return 0
+			return 10
 		end
 
 		local function plrDistToMurderer()
@@ -189,10 +189,8 @@ local function init()
 				return dist
 			end
 
-			return 0
+			return 10
 		end
-
-		local function murdDistScore(coin, mult, bias) end
 
 		local function clumpCount(coin)
 			local coins = game.Workspace:FindFirstChild("CoinContainer", true)
