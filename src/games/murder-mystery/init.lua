@@ -248,7 +248,9 @@ local function init()
 				return true
 			end
 
-			if plrDistToMurderer() <= 20 then
+			local dist = plrDistToMurderer()
+
+			if dist < 20 then
 				local root = Utils.getLocalRoot()
 				local murderer = GameUtils.getMurderer()
 				local mChar = murderer and murderer.Character
@@ -256,7 +258,7 @@ local function init()
 
 				if root and mRoot then
 					local dir = Utils.dir3d(mRoot.Position, root.Position)
-					root.CFrame = root.CFrame * CFrame.new(dir * 10)
+					root.CFrame = root.CFrame * CFrame.new(dir * (20 - dist))
 				end
 				return true
 			end
