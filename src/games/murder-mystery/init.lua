@@ -261,6 +261,8 @@ local function init()
 			if plrDistToMurderer() <= 20 then
 				return true
 			end
+
+			return false
 		end
 
 		while task.wait() do
