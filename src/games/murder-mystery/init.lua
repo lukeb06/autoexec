@@ -250,7 +250,14 @@ local function init()
 
 			if plrDistToMurderer() <= 20 then
 				local root = Utils.getLocalRoot()
-				root.CFrame = root.CFrame * CFrame.new(0, 0, 10)
+				local murderer = Utils.getMurderer()
+				local mChar = murderer and murderer.Character
+				local mRoot = mChar and mChar:FindFirstChild("HumanoidRootPart")
+
+				if root and mRoot then
+					local dir = Utils.dir3d(mRoot.Position, root.Position)
+					root.CFrame = root.CFrame * CFrame.new(dir * 10)
+				end
 				return true
 			end
 
