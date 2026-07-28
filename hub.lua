@@ -625,10 +625,10 @@ function(as)ar=as end}task.spawn(function()while task.wait()do if ar then local 
 b=false ad:CreateToggle{Name='Collect Coins',CurrentValue=false,Flag=nil,Callback=function(c)b=c end}task.spawn(function()local function coinCollected(d)local e
 =d:FindFirstChild'CoinVisual'if not e then return true end local f=e:FindFirstChild'MainCoin'if not f then return true end if f.Transparency>0 then return true
 end return false end local function coinDistToMurderer(d)local e=ac.getMurderer()local f=e and e.Character local g,h=f and f:FindFirstChild'HumanoidRootPart',ab
-.getLocalPlayer()if h and g and e~=h then if g then local i=ab.dist3d(d.Position,g.Position)return i end end return 10 end local function plrDistToMurderer()
+.getLocalPlayer()if h and g and e~=h then if g then local i=ab.dist3d(d.Position,g.Position)return i end end return 0 end local function plrDistToMurderer()
 local d=ac.getMurderer()local e=d and d.Character local f,g=e and e:FindFirstChild'HumanoidRootPart',ab.getLocalRoot()if g and f then local h=ab.dist3d(g.
-Position,f.Position)return h end return 10 end local function clumpCount(d)local e,f,g=game.Workspace:FindFirstChild('CoinContainer',true),0,10 if e then for h,
-i in pairs(e:GetChildren())do if i.Name=='Coin_Server'and not coinCollected(i)then if ab.dist3d(d.Position,i.Position)<g then f=f+1 end end end end return f end
+Position,f.Position)return h end return 0 end local function clumpCount(d)local e,f,g=game.Workspace:FindFirstChild('CoinContainer',true),0,5 if e then for h,i
+in pairs(e:GetChildren())do if i.Name=='Coin_Server'and not coinCollected(i)then if ab.dist3d(d.Position,i.Position)<g then f=f+1 end end end end return f end
 local function rankCoin(d)local e,f,g=20,10,8 local h,i,j,k,l,m,n,o=1/e,1/(1/f),1/g,0.3,0.5,0.2,0,ab.getLocalRoot()if o then local p=ab.dist3d(d.Position,o.
 Position)if p<=1 then return-1 end n=n+(1/p)*i*l end local p=math.min(coinDistToMurderer(d),e)n=n+p*h*k local q=clumpCount(d)n=n+q*j*m return n end local 
 function cancelTween(d)if coinCollected(d)then return true end local e,f,g=ac.getMurderer(),ab.getLocalPlayer(),plrDistToMurderer()if e and f and e~=f and g<20

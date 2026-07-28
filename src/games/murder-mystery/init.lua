@@ -174,7 +174,7 @@ local function init()
 				end
 			end
 
-			return 10
+			return 0
 		end
 
 		local function plrDistToMurderer()
@@ -189,13 +189,13 @@ local function init()
 				return dist
 			end
 
-			return 10
+			return 0
 		end
 
 		local function clumpCount(coin)
 			local coins = game.Workspace:FindFirstChild("CoinContainer", true)
 			local count = 0
-			local clumpDist = 10
+			local clumpDist = 5
 
 			if coins then
 				for _, v in pairs(coins:GetChildren()) do
