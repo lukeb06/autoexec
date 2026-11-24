@@ -721,20 +721,21 @@ function a.D():typeof(__modImpl())local aa=a.cache.D if not aa then aa={c=__modI
 function init()loadstring(game:HttpGet[[https://api.luarmor.net/files/v4/loaders/dad0c804ba049dd0eb9db87898c22a5a.lua]])()end return init end function a.E():
 typeof(__modImpl())local aa=a.cache.E if not aa then aa={c=__modImpl()}a.cache.E=aa end return aa.c end end do local function __modImpl()local aa,ab=a.c(),{}ab.
 getDropsFolder=function()return workspace:FindFirstChild'Drops'end ab.getDrops=function()local ac=ab.getDropsFolder()if not ac then return{}end return ac:
-GetChildren()end ab.grabDrop=function(ac)local ad=ac:FindFirstChild'Touch'ad(ad)end ab.grabAllDrops=function()local ac=ab.getDrops()for ad,ae in pairs(ac)do ab.
-grabDrop(ae)end end ab.tycoon=nil ab.getTycoon=function()if ab.tycoon then return ab.tycoon end local ac=game:GetService'ReplicatedStorage':FindFirstChild
-'Remotes'local ad=ac and ac:FindFirstChild'GoHome'if not ad then return nil end ad:FireServer()task.wait(1)local ae=workspace:FindFirstChild'Tycoon'local af=ae
-and ae:FindFirstChild'Tycoons'local ag,ai,aj,ah=af and af:GetChildren(),99999999,(aa.getLocalRoot())for ak,al in pairs(ag)do local am=al:FindFirstChild'Spawner'
-if am then local an=aa.dist3d(am.Position,aj.Position)if an<ai then ai=an ah=al end end end if not ah then return nil end ab.tycoon=ah end task.spawn(function()
-while task.wait(1)do local ac=ab.getTycoon()if ac then print('Tycoon found: '..ac.Name)end end end)return ab end function a.F():typeof(__modImpl())local aa=a.
-cache.F if not aa then aa={c=__modImpl()}a.cache.F=aa end return aa.c end end do local function __modImpl()local aa,ab=a.F(),{}task.spawn(function()while task.
-wait()do aa.grabAllDrops()end end)return ab end function a.G():typeof(__modImpl())local aa=a.cache.G if not aa then aa={c=__modImpl()}a.cache.G=aa end return aa
-.c end end do local function __modImpl()local function init()local aa=a.f()a.G()aa.Window:CreateTab('My Pony Farm','gamepad-2')end return init end function a.H(
-):typeof(__modImpl())local aa=a.cache.H if not aa then aa={c=__modImpl()}a.cache.H=aa end return aa.c end end do local function __modImpl()for aa,ab in pairs{{a
-.i(),7585283196},{a.l(),10148749921},{a.n(),372226183},{a.p(),10141757860},{a.r(),93740418},{a.u(),7008097940},{a.w(),66654135},{a.y(),1003981402},{a.A(),
-7785400752},{a.D(),73885730},{a.E(),9837612476},{a.H(),10768419228}}do if game.GameId==ab[2]then task.spawn(ab[1])break end end return true end function a.I():
-typeof(__modImpl())local aa=a.cache.I if not aa then aa={c=__modImpl()}a.cache.I=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),{}
-local ac=aa.Window:CreateTab('Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=false ab.iy_injected=false ab.rs_injected=false ac:CreateButton{Name=
+GetChildren()end local function touch(ac)local ad=aa.getLocalRoot()if ac and ad then firetouchinterest(ac,ad,true)firetouchinterest(ac,ad,false)end end ab.
+grabDrop=function(ac)local ad=ac:FindFirstChild'Touch'touch(ad)end ab.grabAllDrops=function()local ac=ab.getDrops()for ad,ae in pairs(ac)do ab.grabDrop(ae)end
+end ab.tycoon=nil ab.getTycoon=function()if ab.tycoon then return ab.tycoon end local ac=game:GetService'ReplicatedStorage':FindFirstChild'Remotes'local ad=ac
+and ac:FindFirstChild'GoHome'if not ad then return nil end ad:FireServer()task.wait(1)local ae=workspace:FindFirstChild'Tycoon'local af=ae and ae:FindFirstChild
+'Tycoons'local ag,ai,aj,ah=af and af:GetChildren(),99999999,(aa.getLocalRoot())for ak,al in pairs(ag)do local am=al:FindFirstChild'Spawner'if am then local an=
+aa.dist3d(am.Position,aj.Position)if an<ai then ai=an ah=al end end end if not ah then return nil end ab.tycoon=ah end task.spawn(function()while task.wait(1)do
+local ac=ab.getTycoon()if ac then print('Tycoon found: '..ac.Name)end end end)return ab end function a.F():typeof(__modImpl())local aa=a.cache.F if not aa then
+aa={c=__modImpl()}a.cache.F=aa end return aa.c end end do local function __modImpl()local aa,ab=a.F(),{}task.spawn(function()while task.wait()do aa.
+grabAllDrops()end end)return ab end function a.G():typeof(__modImpl())local aa=a.cache.G if not aa then aa={c=__modImpl()}a.cache.G=aa end return aa.c end end
+do local function __modImpl()local function init()local aa=a.f()a.G()aa.Window:CreateTab('My Pony Farm','gamepad-2')end return init end function a.H():typeof(
+__modImpl())local aa=a.cache.H if not aa then aa={c=__modImpl()}a.cache.H=aa end return aa.c end end do local function __modImpl()for aa,ab in pairs{{a.i(),
+7585283196},{a.l(),10148749921},{a.n(),372226183},{a.p(),10141757860},{a.r(),93740418},{a.u(),7008097940},{a.w(),66654135},{a.y(),1003981402},{a.A(),7785400752}
+,{a.D(),73885730},{a.E(),9837612476},{a.H(),10768419228}}do if game.GameId==ab[2]then task.spawn(ab[1])break end end return true end function a.I():typeof(
+__modImpl())local aa=a.cache.I if not aa then aa={c=__modImpl()}a.cache.I=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),{}local ac=
+aa.Window:CreateTab('Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=false ab.iy_injected=false ab.rs_injected=false ac:CreateButton{Name=
 'Inject Dex',Callback=function()if ab.dex_injected then return end ab.dex_injected=true task.spawn(function()loadstring(game:HttpGet
 [[https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua]])()end)end}ab.DexToggle=ac:CreateToggle{Name='Load Dex on Startup',CurrentValue=
 false,Flag='LoadDexOnStartup',Callback=function(ae)end}ac:CreateSection'Infinite Yield'ac:CreateButton{Name='Inject IY',Callback=function()if ab.iy_injected

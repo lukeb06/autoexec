@@ -35,9 +35,9 @@ local function touch(part)
 end
 
 M.grabDrop = function(drop)
-	local touch = drop:FindFirstChild("Touch")
+	local t = drop:FindFirstChild("Touch")
 
-	touch(touch)
+	touch(t)
 end
 
 M.grabAllDrops = function()
