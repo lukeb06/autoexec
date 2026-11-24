@@ -27,11 +27,14 @@ end
 
 M.grabDrop = function(drop)
 	local remotes = game:GetService("ReplicatedStorage"):FindFirstChild("Remotes")
-	local Event = remotes:FindFirstChild("DropPickup")
+	local Event = remotes and remotes:FindFirstChild("DropPickup")
+
+	-- game:GetService("ReplicatedStorage").Remotes.DropPickup
 
 	if Event then
 		local dropNumStr = split(drop.Name, "_")[2]
 		local dropNum = tonumber(dropNumStr)
+		print("Grabbing drop: " .. dropNum)
 		Event:FireServer(dropNum)
 	end
 end
@@ -40,6 +43,7 @@ M.grabAllDrops = function()
 	local drops = M.getDrops()
 
 	for _, drop in pairs(drops) do
+		-- print("Grabbing drop: " .. drop.Name)
 		M.grabDrop(drop)
 	end
 end
