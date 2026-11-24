@@ -94,13 +94,41 @@ M.getTycoon = function()
 	M.tycoon = best
 end
 
+M.getTycoonEssentials = function()
+	local tycoon = M.getTycoon()
+	local essentials = tycoon and tycoon:FindFirstChild("Essentials")
+
+	return essentials
+end
+
+M.getMultText = function()
+	local essentials = M.getTycoonEssentials()
+	local shop = essentials and essentials:FindFirstChild("Shop")
+	local marketDisplay = shop and shop:FindFirstChild("MarketDisplay")
+	local surfaceGui = marketDisplay and marketDisplay:FindFirstChild("SurfaceGui")
+	local frame = surfaceGui and surfaceGui:FindFirstChild("Frame")
+	local multipleFrame = frame and frame:FindFirstChild("MultipleFrame")
+	local multipleText = multipleFrame and multipleFrame:FindFirstChild("MultipleText")
+
+	if multipleText then
+		return multipleText.Text
+	end
+
+	return "0.00x"
+end
+
+M.getMult = function()
+	local multText = M.getMultText()
+	local multStr = split(multText, "x")[1]
+	local mult = tonumber(multStr)
+
+	return mult
+end
+
 task.spawn(function()
 	while task.wait(1) do
-		local tycoon = M.getTycoon()
-
-		if tycoon then
-			print("Tycoon found: " .. tycoon.Name)
-		end
+		local mult = M.getMult()
+		print("Multiplier: " .. mult)
 	end
 end)
 
