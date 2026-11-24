@@ -10,6 +10,7 @@ for _, v in pairs({
 	{ require("./zoo-or-oof"), 7785400752 },
 	{ require("./prison-life"), 73885730 },
 	{ require("./mini-war"), 9837612476 },
+	{ require("./my-pony-farm"), 10768419228 },
 }) do
 	if game.GameId == v[2] then
 		task.spawn(v[1])
