@@ -735,7 +735,7 @@ ad=split(ac,'x')[1]local ae=tonumber(ad)return ae end ab.getTycoonButtons=functi
 end ab.touchButton=function(ac)local ad=ac and ac:FindFirstChild'Head'touch(ad)end ab.getTycoonDepositButton=function()local ac=ab.getTycoonButtons()local ad=ac
 and ac:FindFirstChild'Deposit'return ad end ab.touchDepositButton=function()local ac=ab.getTycoonDepositButton()ab.touchButton(ac)end return ab end function a.F
 ():typeof(__modImpl())local aa=a.cache.F if not aa then aa={c=__modImpl()}a.cache.F=aa end return aa.c end end do local function __modImpl()local aa,ab=a.F(),{}
-task.spawn(function()while task.wait()do aa.grabAllDrops()end end)task.spawn(function()while task.wait()do local ac=aa.getMult()if ac>1 then aa.
+task.spawn(function()while task.wait()do aa.grabAllDrops()end end)task.spawn(function()while task.wait()do local ac=aa.getMult()if ac>1.9 then aa.
 touchDepositButton()end end end)return ab end function a.G():typeof(__modImpl())local aa=a.cache.G if not aa then aa={c=__modImpl()}a.cache.G=aa end return aa.c
 end end do local function __modImpl()local function init()local aa=a.f()a.G()aa.Window:CreateTab('My Pony Farm','gamepad-2')end return init end function a.H():
 typeof(__modImpl())local aa=a.cache.H if not aa then aa={c=__modImpl()}a.cache.H=aa end return aa.c end end do local function __modImpl()for aa,ab in pairs{{a.
