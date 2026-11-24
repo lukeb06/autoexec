@@ -27,13 +27,14 @@ end
 
 M.grabDrop = function(drop)
 	local touch = drop:FindFirstChild("Touch")
-	local touchi = touch and touch:FindFirstChild("TouchInterest")
 
 	local root = Utils.getLocalRoot()
 
-	firetouchinterest(touch, root, true)
-	task.wait()
-	firetouchinterest(touch, root, false)
+	if drop and root then
+		firetouchinterest(touch, root, true)
+		task.wait()
+		firetouchinterest(touch, root, false)
+	end
 
 	-- local remotes = game:GetService("ReplicatedStorage"):FindFirstChild("Remotes")
 	-- local Event = remotes and remotes:FindFirstChild("DropPickup")

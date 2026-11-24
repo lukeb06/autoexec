@@ -3,7 +3,7 @@ local GameUtils = require("./utils")
 local M = {}
 
 task.spawn(function()
-	while task.wait(0.5) do
+	while task.wait() do
 		GameUtils.grabAllDrops()
 	end
 end)
