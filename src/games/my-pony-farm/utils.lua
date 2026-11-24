@@ -26,17 +26,26 @@ local function split(str, sep)
 end
 
 M.grabDrop = function(drop)
-	local remotes = game:GetService("ReplicatedStorage"):FindFirstChild("Remotes")
-	local Event = remotes and remotes:FindFirstChild("DropPickup")
+	local touch = drop:FindFirstChild("Touch")
+	local touchi = touch and touch:FindFirstChild("TouchInterest")
 
-	-- game:GetService("ReplicatedStorage").Remotes.DropPickup
+	local root = Utils.getLocalRoot()
 
-	if Event then
-		local dropNumStr = split(drop.Name, "_")[2]
-		local dropNum = tonumber(dropNumStr)
-		print("Grabbing drop: " .. dropNum)
-		Event:FireServer(dropNum)
-	end
+	firetouchinterest(touchi, root, true)
+	task.wait()
+	firetouchinterest(touchi, root, false)
+
+	-- local remotes = game:GetService("ReplicatedStorage"):FindFirstChild("Remotes")
+	-- local Event = remotes and remotes:FindFirstChild("DropPickup")
+
+	-- -- game:GetService("ReplicatedStorage").Remotes.DropPickup
+
+	-- if Event then
+	-- 	local dropNumStr = split(drop.Name, "_")[2]
+	-- 	local dropNum = tonumber(dropNumStr)
+	-- 	print("Grabbing drop: " .. dropNum)
+	-- 	Event:FireServer(dropNum)
+	-- end
 end
 
 M.grabAllDrops = function()
