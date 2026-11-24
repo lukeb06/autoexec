@@ -161,6 +161,18 @@ M.touchCollectButton = function()
 	M.touchButton(collectButton)
 end
 
+M.getTycoonAdd100Button = function()
+	local buttons = M.getTycoonButtons()
+	local add100Button = buttons and buttons:FindFirstChild("Add100")
+
+	return add100Button
+end
+
+M.touchAdd100Button = function()
+	local add100Button = M.getTycoonAdd100Button()
+	M.touchButton(add100Button)
+end
+
 -- workspace.Tycoon.Tycoons.A.Buttons.Cashier.Head
 -- workspace.Tycoon.Tycoons.A.Buttons.Merge.Head
 -- workspace.Tycoon.Tycoons.A.Essentials.Shop.MarketDisplay.SurfaceGui.Frame.MultipleFrame.MultipleText

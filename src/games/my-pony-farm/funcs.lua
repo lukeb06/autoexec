@@ -24,4 +24,10 @@ task.spawn(function()
 	end
 end)
 
+task.spawn(function()
+	while task.wait() do
+		GameUtils.touchAdd100Button()
+	end
+end)
+
 return M
