@@ -149,6 +149,18 @@ M.touchDepositButton = function()
 	M.touchButton(depositButton)
 end
 
+M.getTycoonCollectButton = function()
+	local buttons = M.getTycoonButtons()
+	local collectButton = buttons and buttons:FindFirstChild("Cashier")
+
+	return collectButton
+end
+
+M.touchCollectButton = function()
+	local collectButton = M.getTycoonCollectButton()
+	M.touchButton(collectButton)
+end
+
 -- workspace.Tycoon.Tycoons.A.Buttons.Cashier.Head
 -- workspace.Tycoon.Tycoons.A.Buttons.Merge.Head
 -- workspace.Tycoon.Tycoons.A.Essentials.Shop.MarketDisplay.SurfaceGui.Frame.MultipleFrame.MultipleText

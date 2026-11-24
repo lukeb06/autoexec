@@ -733,17 +733,19 @@ ad and ad:FindFirstChild'MarketDisplay'local af=ae and ae:FindFirstChild'Surface
 'MultipleFrame'local ai=ah and ah:FindFirstChild'MultipleText'if ai then return ai.Text end return'0.00x'end ab.getMult=function()local ac=ab.getMultText()local
 ad=split(ac,'x')[1]local ae=tonumber(ad)return ae end ab.getTycoonButtons=function()local ac=ab.getTycoon()local ad=ac and ac:FindFirstChild'Buttons'return ad
 end ab.touchButton=function(ac)local ad=ac and ac:FindFirstChild'Head'touch(ad)end ab.getTycoonDepositButton=function()local ac=ab.getTycoonButtons()local ad=ac
-and ac:FindFirstChild'Deposit'return ad end ab.touchDepositButton=function()local ac=ab.getTycoonDepositButton()ab.touchButton(ac)end return ab end function a.F
-():typeof(__modImpl())local aa=a.cache.F if not aa then aa={c=__modImpl()}a.cache.F=aa end return aa.c end end do local function __modImpl()local aa,ab=a.F(),{}
-task.spawn(function()while task.wait()do aa.grabAllDrops()end end)task.spawn(function()while task.wait()do local ac=aa.getMult()if ac>1.9 then aa.
-touchDepositButton()end end end)return ab end function a.G():typeof(__modImpl())local aa=a.cache.G if not aa then aa={c=__modImpl()}a.cache.G=aa end return aa.c
-end end do local function __modImpl()local function init()local aa=a.f()a.G()aa.Window:CreateTab('My Pony Farm','gamepad-2')end return init end function a.H():
-typeof(__modImpl())local aa=a.cache.H if not aa then aa={c=__modImpl()}a.cache.H=aa end return aa.c end end do local function __modImpl()for aa,ab in pairs{{a.
-i(),7585283196},{a.l(),10148749921},{a.n(),372226183},{a.p(),10141757860},{a.r(),93740418},{a.u(),7008097940},{a.w(),66654135},{a.y(),1003981402},{a.A(),
-7785400752},{a.D(),73885730},{a.E(),9837612476},{a.H(),10768419228}}do if game.GameId==ab[2]then task.spawn(ab[1])break end end return true end function a.I():
-typeof(__modImpl())local aa=a.cache.I if not aa then aa={c=__modImpl()}a.cache.I=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),{}
-local ac=aa.Window:CreateTab('Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=false ab.iy_injected=false ab.rs_injected=false ac:CreateButton{Name=
-'Inject Dex',Callback=function()if ab.dex_injected then return end ab.dex_injected=true task.spawn(function()loadstring(game:HttpGet
+and ac:FindFirstChild'Deposit'return ad end ab.touchDepositButton=function()local ac=ab.getTycoonDepositButton()ab.touchButton(ac)end ab.getTycoonCollectButton=
+function()local ac=ab.getTycoonButtons()local ad=ac and ac:FindFirstChild'Cashier'return ad end ab.touchCollectButton=function()local ac=ab.
+getTycoonCollectButton()ab.touchButton(ac)end return ab end function a.F():typeof(__modImpl())local aa=a.cache.F if not aa then aa={c=__modImpl()}a.cache.F=aa
+end return aa.c end end do local function __modImpl()local aa,ab=a.F(),{}task.spawn(function()while task.wait()do aa.grabAllDrops()end end)task.spawn(function()
+while task.wait()do local ac=aa.getMult()if ac>1.9 then aa.touchDepositButton()end end end)task.spawn(function()while task.wait()do aa.touchCollectButton()end
+end)return ab end function a.G():typeof(__modImpl())local aa=a.cache.G if not aa then aa={c=__modImpl()}a.cache.G=aa end return aa.c end end do local function 
+__modImpl()local function init()local aa=a.f()a.G()aa.Window:CreateTab('My Pony Farm','gamepad-2')end return init end function a.H():typeof(__modImpl())local aa
+=a.cache.H if not aa then aa={c=__modImpl()}a.cache.H=aa end return aa.c end end do local function __modImpl()for aa,ab in pairs{{a.i(),7585283196},{a.l(),
+10148749921},{a.n(),372226183},{a.p(),10141757860},{a.r(),93740418},{a.u(),7008097940},{a.w(),66654135},{a.y(),1003981402},{a.A(),7785400752},{a.D(),73885730},{
+a.E(),9837612476},{a.H(),10768419228}}do if game.GameId==ab[2]then task.spawn(ab[1])break end end return true end function a.I():typeof(__modImpl())local aa=a.
+cache.I if not aa then aa={c=__modImpl()}a.cache.I=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),{}local ac=aa.Window:CreateTab(
+'Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=false ab.iy_injected=false ab.rs_injected=false ac:CreateButton{Name='Inject Dex',Callback=function
+()if ab.dex_injected then return end ab.dex_injected=true task.spawn(function()loadstring(game:HttpGet
 [[https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua]])()end)end}ab.DexToggle=ac:CreateToggle{Name='Load Dex on Startup',CurrentValue=
 false,Flag='LoadDexOnStartup',Callback=function(ae)end}ac:CreateSection'Infinite Yield'ac:CreateButton{Name='Inject IY',Callback=function()if ab.iy_injected
 then return end ab.iy_injected=true task.spawn(function()loadstring(game:HttpGet[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end)
