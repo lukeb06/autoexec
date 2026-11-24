@@ -32,7 +32,6 @@ M.grabDrop = function(drop)
 
 	if drop and root then
 		firetouchinterest(touch, root, true)
-		task.wait()
 		firetouchinterest(touch, root, false)
 	end
 
