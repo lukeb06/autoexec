@@ -125,12 +125,29 @@ M.getMult = function()
 	return mult
 end
 
-task.spawn(function()
-	while task.wait(1) do
-		local mult = M.getMult()
-		print("Multiplier: " .. mult)
-	end
-end)
+M.getTycoonButtons = function()
+	local tycoon = M.getTycoon()
+	local buttons = tycoon and tycoon:FindFirstChild("Buttons")
+
+	return buttons
+end
+
+M.touchButton = function(button)
+	local head = button and button:FindFirstChild("Head")
+	touch(head)
+end
+
+M.getTycoonDepositButton = function()
+	local buttons = M.getTycoonButtons()
+	local depositButton = buttons and buttons:FindFirstChild("Deposit")
+
+	return depositButton
+end
+
+M.touchDepositButton = function()
+	local depositButton = M.getTycoonDepositButton()
+	M.touchButton(depositButton)
+end
 
 -- workspace.Tycoon.Tycoons.A.Buttons.Cashier.Head
 -- workspace.Tycoon.Tycoons.A.Buttons.Merge.Head

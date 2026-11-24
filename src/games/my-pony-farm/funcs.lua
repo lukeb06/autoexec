@@ -8,4 +8,14 @@ task.spawn(function()
 	end
 end)
 
+task.spawn(function()
+	while task.wait() do
+		local mult = GameUtils.getMult()
+
+		if mult > 1.9 then
+			GameUtils.touchDepositButton()
+		end
+	end
+end)
+
 return M

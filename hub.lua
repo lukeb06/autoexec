@@ -731,42 +731,44 @@ aj.Position)if an<ai then ai=an ah=al end end end if not ah then return nil end 
 ad=ac and ac:FindFirstChild'Essentials'return ad end ab.getMultText=function()local ac=ab.getTycoonEssentials()local ad=ac and ac:FindFirstChild'Shop'local ae=
 ad and ad:FindFirstChild'MarketDisplay'local af=ae and ae:FindFirstChild'SurfaceGui'local ag=af and af:FindFirstChild'Frame'local ah=ag and ag:FindFirstChild
 'MultipleFrame'local ai=ah and ah:FindFirstChild'MultipleText'if ai then return ai.Text end return'0.00x'end ab.getMult=function()local ac=ab.getMultText()local
-ad=split(ac,'x')[1]local ae=tonumber(ad)return ae end task.spawn(function()while task.wait(1)do local ac=ab.getMult()print('Multiplier: '..ac)end end)return ab
-end function a.F():typeof(__modImpl())local aa=a.cache.F if not aa then aa={c=__modImpl()}a.cache.F=aa end return aa.c end end do local function __modImpl()
-local aa,ab=a.F(),{}task.spawn(function()while task.wait()do aa.grabAllDrops()end end)return ab end function a.G():typeof(__modImpl())local aa=a.cache.G if not
-aa then aa={c=__modImpl()}a.cache.G=aa end return aa.c end end do local function __modImpl()local function init()local aa=a.f()a.G()aa.Window:CreateTab(
-'My Pony Farm','gamepad-2')end return init end function a.H():typeof(__modImpl())local aa=a.cache.H if not aa then aa={c=__modImpl()}a.cache.H=aa end return aa.
-c end end do local function __modImpl()for aa,ab in pairs{{a.i(),7585283196},{a.l(),10148749921},{a.n(),372226183},{a.p(),10141757860},{a.r(),93740418},{a.u(),
-7008097940},{a.w(),66654135},{a.y(),1003981402},{a.A(),7785400752},{a.D(),73885730},{a.E(),9837612476},{a.H(),10768419228}}do if game.GameId==ab[2]then task.
-spawn(ab[1])break end end return true end function a.I():typeof(__modImpl())local aa=a.cache.I if not aa then aa={c=__modImpl()}a.cache.I=aa end return aa.c end
-end do local function __modImpl()local aa,ab=a.f(),{}local ac=aa.Window:CreateTab('Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=false ab.
-iy_injected=false ab.rs_injected=false ac:CreateButton{Name='Inject Dex',Callback=function()if ab.dex_injected then return end ab.dex_injected=true task.spawn(
-function()loadstring(game:HttpGet[[https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua]])()end)end}ab.DexToggle=ac:CreateToggle{Name=
-'Load Dex on Startup',CurrentValue=false,Flag='LoadDexOnStartup',Callback=function(ae)end}ac:CreateSection'Infinite Yield'ac:CreateButton{Name='Inject IY',
-Callback=function()if ab.iy_injected then return end ab.iy_injected=true task.spawn(function()loadstring(game:HttpGet
-[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end)end}ab.IYToggle=ac:CreateToggle{Name='Load IY on Startup',CurrentValue=false,Flag
-='LoadIYOnStartup',Callback=function(af)end}ac:CreateSection'Cobalt Spy'ac:CreateButton{Name='Inject Cobalt Spy',Callback=function()if ab.rs_injected then
-return end ab.rs_injected=true task.spawn(function()loadstring(game:HttpGet[[https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau]])()end)end}
-ab.RSToggle=ac:CreateToggle{Name='Load Cobalt on Startup',CurrentValue=false,Flag='LoadRSOnStartup',Callback=function(ag)end}return ab end function a.J():
-typeof(__modImpl())local aa=a.cache.J if not aa then aa={c=__modImpl()}a.cache.J=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),a.c()
-local ac,ad=aa.Window:CreateTab'Emotes',{{Name='Take The L',Id=93090980853782},{Name='UFO',Id=120449791578755},{Name='Fake Dead',Id=73689381418785},{Name=
-'67 Body',Id=82296043272517},{Name='Obby Head',Id=122814100170962},{Name='Floating',Id=131950236025472},{Name='Katseye',Id=100829635809504},{Name=
-'Floating Headless',Id=98728517497209},{Name='Levitate',Id=111499780397123},{Name='67',Id=88672473602461},{Name='Hide',Id=117450501566142},{Name=
-'Biblically Accurate',Id=133596366979822},{Name='Best Mates',Id=113016438012253},{Name='Car',Id=71229119391920},{Name='Dab',Id=114366486943553},{Name='Tank',Id=
-109896367267714},{Name='Heart',Id=100501857801770},{Name='Plane',Id=111917372615551},{Name='Headless',Id=74738520664045},{Name='NLE',Id=133293268056643},{Name=
-'Zesty Backflip',Id=91510776097850},{Name='Throw It In A Circle',Id=85405186226004},{Name='Cute Bouncy Jiggly Shake',Id=97975134806779},{Name='Hip',Id=
-98287740564271},{Name='Cute sitting with legs out',Id=89755161074689},{Name='Kawaii Sitting Cutely',Id=134682231294570},{Name='Cute Profile Pose',Id=
-129838364671769},{Name='Kicking Feet Sit',Id=92676668301699},{Name='Daydreaming',Id=89174456614428},{Name='Feet Kicking',Id=78224683906191},{Name=
-'Bouncy Circle Shake',Id=118582721407059},{Name='Nya San',Id=118688124889191},{Name='Splits',Id=137064024843676},{Name='Caramelldansen',Id=97847706148165},{Name
-='Kawaii Wiggling',Id=98074497797170},{Name='Iron Mouse',Id=96409366076000}}local function getTrueId(ae)local af,ag,ah=(ab.getLocalHumanoid())ag=af.
-AnimationPlayed:Connect(function(ai)if ai.Animation and ai.Animation.AnimationId~=''then ah=ai.Animation.AnimationId ai:Stop()end end)local ai=af:WaitForChild
-'HumanoidDescription'ai:AddEmote(ae.Name,ae.Id)af:PlayEmote(ae.Name)local aj=0 while not ah and aj<2 do task.wait(0.1)aj+=0.1 end if ag then ag:Disconnect()end
-return ah end local ae local function stopAnimations()if ae then ae:Stop()ae=nil end end ac:CreateButton{Name='Stop Emote',Callback=stopAnimations}ac:
-CreateSection'Emotes'for af,ag in pairs(ad)do ac:CreateButton{Name=ag.Name,Callback=function()local ah=ab.getLocalHumanoid()local ai=ah:FindFirstChild'Animator'
-stopAnimations()local aj,ak=Instance.new'Animation',getTrueId(ag)if ak then print(ak)aj.AnimationId=ak ae=ai:LoadAnimation(aj)ae.Looped=true ae.Priority=Enum.
-AnimationPriority.Action4 ae:Play()else warn'Failed to add emote'end end}end return true end function a.K():typeof(__modImpl())local aa=a.cache.K if not aa then
-aa={c=__modImpl()}a.cache.K=aa end return aa.c end end end local aa=a.c()aa.WaitForGameAndPlayer()local ab=a.f()a.g()a.I()local ac=a.J()a.K()ab.Library:
-LoadConfiguration()if ac.DexToggle.CurrentValue then ac.dex_injected=true task.spawn(function()loadstring(game:HttpGet
+ad=split(ac,'x')[1]local ae=tonumber(ad)return ae end ab.getTycoonButtons=function()local ac=ab.getTycoon()local ad=ac and ac:FindFirstChild'Buttons'return ad
+end ab.touchButton=function(ac)local ad=ac and ac:FindFirstChild'Head'touch(ad)end ab.getTycoonDepositButton=function()local ac=ab.getTycoonButtons()local ad=ac
+and ac:FindFirstChild'Deposit'return ad end ab.touchDepositButton=function()local ac=ab.getTycoonDepositButton()ab.touchButton(ac)end return ab end function a.F
+():typeof(__modImpl())local aa=a.cache.F if not aa then aa={c=__modImpl()}a.cache.F=aa end return aa.c end end do local function __modImpl()local aa,ab=a.F(),{}
+task.spawn(function()while task.wait()do aa.grabAllDrops()end end)task.spawn(function()while task.wait()do local ac=aa.getMult()if ac>1.9 then aa.
+touchDepositButton()end end end)return ab end function a.G():typeof(__modImpl())local aa=a.cache.G if not aa then aa={c=__modImpl()}a.cache.G=aa end return aa.c
+end end do local function __modImpl()local function init()local aa=a.f()a.G()aa.Window:CreateTab('My Pony Farm','gamepad-2')end return init end function a.H():
+typeof(__modImpl())local aa=a.cache.H if not aa then aa={c=__modImpl()}a.cache.H=aa end return aa.c end end do local function __modImpl()for aa,ab in pairs{{a.
+i(),7585283196},{a.l(),10148749921},{a.n(),372226183},{a.p(),10141757860},{a.r(),93740418},{a.u(),7008097940},{a.w(),66654135},{a.y(),1003981402},{a.A(),
+7785400752},{a.D(),73885730},{a.E(),9837612476},{a.H(),10768419228}}do if game.GameId==ab[2]then task.spawn(ab[1])break end end return true end function a.I():
+typeof(__modImpl())local aa=a.cache.I if not aa then aa={c=__modImpl()}a.cache.I=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),{}
+local ac=aa.Window:CreateTab('Externals','telescope')ac:CreateSection'Dex'ab.dex_injected=false ab.iy_injected=false ab.rs_injected=false ac:CreateButton{Name=
+'Inject Dex',Callback=function()if ab.dex_injected then return end ab.dex_injected=true task.spawn(function()loadstring(game:HttpGet
+[[https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua]])()end)end}ab.DexToggle=ac:CreateToggle{Name='Load Dex on Startup',CurrentValue=
+false,Flag='LoadDexOnStartup',Callback=function(ae)end}ac:CreateSection'Infinite Yield'ac:CreateButton{Name='Inject IY',Callback=function()if ab.iy_injected
+then return end ab.iy_injected=true task.spawn(function()loadstring(game:HttpGet[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end)
+end}ab.IYToggle=ac:CreateToggle{Name='Load IY on Startup',CurrentValue=false,Flag='LoadIYOnStartup',Callback=function(af)end}ac:CreateSection'Cobalt Spy'ac:
+CreateButton{Name='Inject Cobalt Spy',Callback=function()if ab.rs_injected then return end ab.rs_injected=true task.spawn(function()loadstring(game:HttpGet
+[[https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau]])()end)end}ab.RSToggle=ac:CreateToggle{Name='Load Cobalt on Startup',CurrentValue=
+false,Flag='LoadRSOnStartup',Callback=function(ag)end}return ab end function a.J():typeof(__modImpl())local aa=a.cache.J if not aa then aa={c=__modImpl()}a.
+cache.J=aa end return aa.c end end do local function __modImpl()local aa,ab=a.f(),a.c()local ac,ad=aa.Window:CreateTab'Emotes',{{Name='Take The L',Id=
+93090980853782},{Name='UFO',Id=120449791578755},{Name='Fake Dead',Id=73689381418785},{Name='67 Body',Id=82296043272517},{Name='Obby Head',Id=122814100170962},{
+Name='Floating',Id=131950236025472},{Name='Katseye',Id=100829635809504},{Name='Floating Headless',Id=98728517497209},{Name='Levitate',Id=111499780397123},{Name=
+'67',Id=88672473602461},{Name='Hide',Id=117450501566142},{Name='Biblically Accurate',Id=133596366979822},{Name='Best Mates',Id=113016438012253},{Name='Car',Id=
+71229119391920},{Name='Dab',Id=114366486943553},{Name='Tank',Id=109896367267714},{Name='Heart',Id=100501857801770},{Name='Plane',Id=111917372615551},{Name=
+'Headless',Id=74738520664045},{Name='NLE',Id=133293268056643},{Name='Zesty Backflip',Id=91510776097850},{Name='Throw It In A Circle',Id=85405186226004},{Name=
+'Cute Bouncy Jiggly Shake',Id=97975134806779},{Name='Hip',Id=98287740564271},{Name='Cute sitting with legs out',Id=89755161074689},{Name='Kawaii Sitting Cutely'
+,Id=134682231294570},{Name='Cute Profile Pose',Id=129838364671769},{Name='Kicking Feet Sit',Id=92676668301699},{Name='Daydreaming',Id=89174456614428},{Name=
+'Feet Kicking',Id=78224683906191},{Name='Bouncy Circle Shake',Id=118582721407059},{Name='Nya San',Id=118688124889191},{Name='Splits',Id=137064024843676},{Name=
+'Caramelldansen',Id=97847706148165},{Name='Kawaii Wiggling',Id=98074497797170},{Name='Iron Mouse',Id=96409366076000}}local function getTrueId(ae)local af,ag,ah=
+(ab.getLocalHumanoid())ag=af.AnimationPlayed:Connect(function(ai)if ai.Animation and ai.Animation.AnimationId~=''then ah=ai.Animation.AnimationId ai:Stop()end
+end)local ai=af:WaitForChild'HumanoidDescription'ai:AddEmote(ae.Name,ae.Id)af:PlayEmote(ae.Name)local aj=0 while not ah and aj<2 do task.wait(0.1)aj+=0.1 end if
+ag then ag:Disconnect()end return ah end local ae local function stopAnimations()if ae then ae:Stop()ae=nil end end ac:CreateButton{Name='Stop Emote',Callback=
+stopAnimations}ac:CreateSection'Emotes'for af,ag in pairs(ad)do ac:CreateButton{Name=ag.Name,Callback=function()local ah=ab.getLocalHumanoid()local ai=ah:
+FindFirstChild'Animator'stopAnimations()local aj,ak=Instance.new'Animation',getTrueId(ag)if ak then print(ak)aj.AnimationId=ak ae=ai:LoadAnimation(aj)ae.Looped=
+true ae.Priority=Enum.AnimationPriority.Action4 ae:Play()else warn'Failed to add emote'end end}end return true end function a.K():typeof(__modImpl())local aa=a.
+cache.K if not aa then aa={c=__modImpl()}a.cache.K=aa end return aa.c end end end local aa=a.c()aa.WaitForGameAndPlayer()local ab=a.f()a.g()a.I()local ac=a.J()a
+.K()ab.Library:LoadConfiguration()if ac.DexToggle.CurrentValue then ac.dex_injected=true task.spawn(function()loadstring(game:HttpGet
 [[https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua]])()end)end if ac.IYToggle.CurrentValue then ac.iy_injected=true task.spawn(
 function()loadstring(game:HttpGet[[https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source]])()end)end if ac.RSToggle.CurrentValue then ac.
 rs_injected=true task.spawn(function()loadstring(game:HttpGet[[https://github.com/notpoiu/cobalt/releases/latest/download/Cobalt.luau]])()end)end
