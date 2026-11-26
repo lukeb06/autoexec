@@ -2,6 +2,12 @@ local GameUtils = require("./utils")
 
 local M = {}
 
+M.autoBuy100Toggled = false
+
+M.toggleAutoBuy100 = function(value)
+	M.autoBuy100Toggled = value
+end
+
 task.spawn(function()
 	while task.wait() do
 		GameUtils.grabAllDrops()
@@ -26,7 +32,9 @@ end)
 
 task.spawn(function()
 	while task.wait() do
-		GameUtils.touchAdd100Button()
+		if M.autoBuy100Toggled then
+			GameUtils.touchAdd100Button()
+		end
 	end
 end)
 
